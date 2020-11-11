@@ -49,27 +49,29 @@ func (this* NationalMapMgr) Load() {
 			session.Commit()
 
 			db.MasterDB.Find(this.conf)
-			this.confArr = make([]model.NationalMap, len(this.conf))
-			for i, v := range this.conf {
-				this.confArr[i] = v
-			}
 			log.DefaultLog.Info("NationalMapMgr load", zap.Int("len", len(this.conf)))
 		}
+	}
 
+	this.confArr = make([]model.NationalMap, len(this.conf))
+	i := 0
+	for _, v := range this.conf {
+		this.confArr[i] = v
+		i++
 	}
 }
 
 func (this* NationalMapMgr) Scan(x, y int) []model.NationalMap {
 	this.mutex.RLock()
-	defer this.mutex.Unlock()
+	defer this.mutex.RUnlock()
 
-	minX := util.MinInt(0, x-7)
-	maxX := util.MaxInt(40, x+7)
+	minX := util.MaxInt(0, x-3)
+	maxX := util.MinInt(40, x+3)
 
-	minY := util.MinInt(0, y-7)
-	maxY := util.MaxInt(40, y+7)
+	minY := util.MaxInt(0, y-3)
+	maxY := util.MinInt(40, y+3)
 
-	c := (maxX-minY+1)*(maxY-minY+1)
+	c := (maxX-minX+1)*(maxY-minY+1)
 	r := make([]model.NationalMap, c)
 
 	index := 0
