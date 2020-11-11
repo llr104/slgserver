@@ -1004,3 +1004,5 @@
 {"level":"info","time":"2020-11-10T17:13:12.207+0800","caller":"E:/slgserver/main/server.go:54","msg":"client disconnect","addr":"192.168.0.33:63862"}
 {"level":"error","time":"2020-11-10T17:53:33.535+0800","caller":"E:/slgserver/server/entity/role_city_mgr.go:25","msg":"RoleCityMgr load role_city table error"}
 {"level":"info","time":"2020-11-10T17:53:33.535+0800","caller":"E:/slgserver/main/server.go:33","msg":"slg server starting"}
+{"level":"error","time":"2020-11-11T10:12:57.681+0800","caller":"E:/slgserver/server/entity/role_city_mgr.go:25","msg":"RoleCityMgr load role_city table error"}
+{"level":"info","time":"2020-11-11T10:12:57.682+0800","caller":"E:/slgserver/main/server.go:33","msg":"slg server starting"}
