@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
+	"os"
 	"slgserver/config"
 	"xorm.io/xorm"
 	"xorm.io/xorm/log"
@@ -14,25 +15,6 @@ import (
 var MasterDB *xorm.Engine
 
 var dns string
-
-func init() {
-	mysqlConfig, err := config.File.GetSection("mysql")
-	if err != nil {
-		panic("get mysql config error:")
-	}
-
-	fillDns(mysqlConfig)
-
-	// 启动时就打开数据库连接
-	if err = initEngine(); err != nil {
-		panic(err)
-	}
-
-	// 测试数据库连接是否 OK
-	if err = MasterDB.Ping(); err != nil {
-		panic(err)
-	}
-}
 
 var (
 	ConnectDBErr = errors.New("connect db error")
@@ -90,10 +72,9 @@ func Init() error {
 		return err
 	}
 
-	fillDns(mysqlConfig)
 
 	// 启动时就打开数据库连接
-	if err = initEngine(); err != nil {
+	if err = initEngine(mysqlConfig); err != nil {
 		fmt.Println("mysql is not open:", err)
 		return err
 	}
@@ -101,20 +82,20 @@ func Init() error {
 	return nil
 }
 
-func fillDns(mysqlConfig map[string]string) {
-	dns = fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s&parseTime=True&loc=Local",
+func fillDns(mysqlConfig map[string]string) string {
+	return fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s&parseTime=True&loc=Local",
 		mysqlConfig["user"],
 		mysqlConfig["password"],
 		mysqlConfig["host"],
 		mysqlConfig["port"],
 		mysqlConfig["dbname"],
 		mysqlConfig["charset"])
-
-	fmt.Println(dns)
 }
 
-func initEngine() error {
+func initEngine(mysqlConfig map[string]string) error {
+
 	var err error
+	dns := fillDns(mysqlConfig)
 
 	MasterDB, err = xorm.NewEngine("mysql", dns)
 	if err != nil {
@@ -129,9 +110,15 @@ func initEngine() error {
 
 	showSQL := config.File.MustBool("xorm", "show_sql", false)
 	logLevel := config.File.MustInt("xorm", "log_level", 1)
+	logFile := config.File.MustValue("xorm", "log_file", "")
 
+	if logFile != ""{
+		f, _ := os.Create(logFile)
+		MasterDB.SetLogger(log.NewSimpleLogger(f))
+	}
+
+	MasterDB.SetLogLevel(log.LogLevel(logLevel))
 	MasterDB.ShowSQL(showSQL)
-	MasterDB.Logger().SetLevel(log.LogLevel(logLevel))
 
 	return nil
 }

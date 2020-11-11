@@ -85,7 +85,7 @@ func reLogin(conn *websocket.Conn, session string)  {
 }
 
 func logout(conn *websocket.Conn)  {
-	l := &proto.LogoutReq{Uid: 5}
+	l := &proto.LogoutReq{UId: 5}
 	send(conn, "logout", l)
 }
 

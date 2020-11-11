@@ -51,5 +51,23 @@ func (this*NationMap) config(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 扫描地图
 */
 func (this*NationMap) scan(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+	reqObj := &proto.ScanReq{}
+	rspObj := &proto.ScanRsp{}
+	mapstructure.Decode(req.Body.Msg, reqObj)
+	rsp.Body.Msg = rspObj
+	rsp.Body.Code = constant.OK
+
+	x := reqObj.X
+	y := reqObj.Y
+
+	r := entity.NMMgr.Scan(x, y)
+	rspObj.BBuilds = make([]proto.BaseBuild, len(r))
+	for i, v := range r {
+		rspObj.BBuilds[i].X = v.X
+		rspObj.BBuilds[i].Y = v.Y
+		rspObj.BBuilds[i].Id = v.Id
+		rspObj.BBuilds[i].Type = v.Type
+		rspObj.BBuilds[i].Type = 100
+	}
 
 }
