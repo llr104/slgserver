@@ -1,0 +1,1006 @@
+{"level":"info","time":"2020-11-06T11:42:20.186+0800","caller":"E:/slgserver/main/server.go:37","msg":"slg server starting"}
+{"level":"info","time":"2020-11-06T11:43:08.395+0800","caller":"E:/slgserver/main/server.go:55","msg":"connect, current online","addr":"127.0.0.1:53497"}
+{"level":"info","time":"2020-11-06T11:43:08.409+0800","caller":"E:/slgserver/net/wsclient.go:255","msg":"handshake secretKey","secretKey":"rfBd56ti2SMtYvSg"}
+{"level":"info","time":"2020-11-06T11:43:18.400+0800","caller":"E:/slgserver/main/server.go:62","msg":"disconnect, current online","addr":"127.0.0.1:53497"}
+{"level":"info","time":"2020-11-06T11:43:47.018+0800","caller":"E:/slgserver/main/server.go:55","msg":"connect, current online","addr":"127.0.0.1:53501"}
+{"level":"info","time":"2020-11-06T11:43:47.018+0800","caller":"E:/slgserver/net/wsclient.go:255","msg":"handshake secretKey","secretKey":"D5xAV0YU99zampta"}
+{"level":"info","time":"2020-11-06T11:43:57.022+0800","caller":"E:/slgserver/main/server.go:62","msg":"disconnect, current online","addr":"127.0.0.1:53501"}
+{"level":"info","time":"2020-11-06T11:44:53.515+0800","caller":"E:/slgserver/main/server.go:37","msg":"slg server starting"}
+{"level":"info","time":"2020-11-06T11:44:58.840+0800","caller":"E:/slgserver/main/server.go:55","msg":"connect, current online","addr":"127.0.0.1:53512"}
+{"level":"info","time":"2020-11-06T11:44:58.841+0800","caller":"E:/slgserver/net/wsclient.go:255","msg":"handshake secretKey","secretKey":"rfBd56ti2SMtYvSg"}
+{"level":"info","time":"2020-11-06T11:45:08.844+0800","caller":"E:/slgserver/main/server.go:62","msg":"disconnect, current online","addr":"127.0.0.1:53512"}
+{"level":"info","time":"2020-11-06T11:48:08.962+0800","caller":"E:/slgserver/main/server.go:37","msg":"slg server starting"}
+{"level":"info","time":"2020-11-06T11:50:08.320+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"127.0.0.1:53565"}
+{"level":"info","time":"2020-11-06T11:50:08.340+0800","caller":"E:/slgserver/net/wsclient.go:255","msg":"handshake secretKey","secretKey":"rfBd56ti2SMtYvSg"}
+{"level":"info","time":"2020-11-06T11:50:18.325+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"127.0.0.1:53565"}
+{"level":"info","time":"2020-11-06T15:22:00.397+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"127.0.0.1:54575"}
+{"level":"info","time":"2020-11-06T15:22:00.398+0800","caller":"E:/slgserver/net/wsclient.go:255","msg":"handshake secretKey","secretKey":"D5xAV0YU99zampta"}
+{"level":"info","time":"2020-11-06T15:22:02.401+0800","caller":"E:/slgserver/net/router.go:47","msg":"router not found","router name":"reLogin"}
+{"level":"info","time":"2020-11-06T15:22:10.403+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"127.0.0.1:54575"}
+{"level":"info","time":"2020-11-06T15:23:54.132+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"127.0.0.1:54586"}
+{"level":"info","time":"2020-11-06T15:23:54.132+0800","caller":"E:/slgserver/net/wsclient.go:255","msg":"handshake secretKey","secretKey":"7Z7S575KLkIZ9PYk"}
+{"level":"info","time":"2020-11-06T15:23:56.135+0800","caller":"E:/slgserver/net/router.go:47","msg":"router not found","router name":"reLogin"}
+{"level":"info","time":"2020-11-06T15:24:24.934+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"127.0.0.1:54586"}
+{"level":"info","time":"2020-11-06T15:24:29.285+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"127.0.0.1:54589"}
+{"level":"info","time":"2020-11-06T15:24:29.285+0800","caller":"E:/slgserver/net/wsclient.go:255","msg":"handshake secretKey","secretKey":"L17LTlsVqMNTZyLK"}
+{"level":"info","time":"2020-11-06T15:24:31.288+0800","caller":"E:/slgserver/net/router.go:47","msg":"router not found","router name":"reLogin"}
+{"level":"info","time":"2020-11-06T15:25:08.674+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"127.0.0.1:54589"}
+{"level":"info","time":"2020-11-06T15:25:20.037+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"127.0.0.1:54592"}
+{"level":"info","time":"2020-11-06T15:25:20.037+0800","caller":"E:/slgserver/net/wsclient.go:255","msg":"handshake secretKey","secretKey":"MIFSD2x28MlgPJ0S"}
+{"level":"info","time":"2020-11-06T15:25:22.041+0800","caller":"E:/slgserver/net/router.go:47","msg":"router not found","router name":"reLogin"}
+{"level":"info","time":"2020-11-06T15:26:13.179+0800","caller":"E:/slgserver/main/server.go:37","msg":"slg server starting"}
+{"level":"info","time":"2020-11-06T15:26:19.554+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"127.0.0.1:54603"}
+{"level":"info","time":"2020-11-06T15:26:19.554+0800","caller":"E:/slgserver/net/wsclient.go:255","msg":"handshake secretKey","secretKey":"rfBd56ti2SMtYvSg"}
+{"level":"info","time":"2020-11-06T15:26:20.564+0800","caller":"E:/slgserver/server/controller/account.go:58","msg":"login","username":"test","session":"NDg3Nzg2MTQ2M2QzYzRiNWJlZWVlNGNjNDAwMjJhMDMzNTkyNTczNmYxN2RjNjkwYmEzYjg5M2M4MjkzZDM0Mg=="}
+{"level":"info","time":"2020-11-06T15:26:34.650+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"127.0.0.1:54603"}
+{"level":"info","time":"2020-11-06T15:26:52.370+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"127.0.0.1:54607"}
+{"level":"info","time":"2020-11-06T15:26:52.370+0800","caller":"E:/slgserver/net/wsclient.go:255","msg":"handshake secretKey","secretKey":"D5xAV0YU99zampta"}
+{"level":"info","time":"2020-11-06T15:26:53.374+0800","caller":"E:/slgserver/server/controller/account.go:58","msg":"login","username":"test","session":"NDg3Nzg2MTQ2M2QzYzRiNWJlZWVlNGNjNDAwMjJhMDMyYTQwODY0OWNlMTFiYzQ2OTUzNjg2MDRiNjFlN2FmOA=="}
+{"level":"info","time":"2020-11-06T15:26:55.373+0800","caller":"E:/slgserver/server/controller/account.go:141","msg":"logout","uid":5}
+{"level":"info","time":"2020-11-06T15:27:02.373+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"127.0.0.1:54607"}
+{"level":"info","time":"2020-11-06T15:39:25.056+0800","caller":"E:/slgserver/main/server.go:37","msg":"slg server starting"}
+{"level":"info","time":"2020-11-06T15:39:55.712+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"127.0.0.1:54852"}
+{"level":"info","time":"2020-11-06T15:39:55.737+0800","caller":"E:/slgserver/net/wsclient.go:255","msg":"handshake secretKey","secretKey":"rfBd56ti2SMtYvSg"}
+{"level":"info","time":"2020-11-06T15:39:56.722+0800","caller":"E:/slgserver/server/controller/account.go:58","msg":"login","username":"test","session":"NDg3Nzg2MTQ2M2QzYzRiNWJlZWVlNGNjNDAwMjJhMDNlNzAyZDA0ZGU5ZmU1NzI0ZDFlM2U3Njg0NTFlODFhYQ=="}
+{"level":"info","time":"2020-11-06T15:39:59.719+0800","caller":"E:/slgserver/server/controller/account.go:141","msg":"logout","uid":5}
+{"level":"info","time":"2020-11-06T15:40:05.717+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"127.0.0.1:54852"}
+{"level":"info","time":"2020-11-06T15:40:27.399+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"127.0.0.1:54858"}
+{"level":"info","time":"2020-11-06T15:40:27.399+0800","caller":"E:/slgserver/net/wsclient.go:255","msg":"handshake secretKey","secretKey":"D5xAV0YU99zampta"}
+{"level":"info","time":"2020-11-06T15:40:28.403+0800","caller":"E:/slgserver/server/controller/account.go:58","msg":"login","username":"test","session":"NDg3Nzg2MTQ2M2QzYzRiNWJlZWVlNGNjNDAwMjJhMDNmYjgzZWU3MjM5OTJjMTlkNGIwYmU2NTE4MTVmN2E5OA=="}
+{"level":"info","time":"2020-11-06T15:40:31.410+0800","caller":"E:/slgserver/server/controller/account.go:141","msg":"logout","uid":5}
+{"level":"info","time":"2020-11-06T15:40:37.402+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"127.0.0.1:54858"}
+{"level":"info","time":"2020-11-06T15:40:53.432+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"127.0.0.1:54861"}
+{"level":"info","time":"2020-11-06T15:40:53.432+0800","caller":"E:/slgserver/net/wsclient.go:255","msg":"handshake secretKey","secretKey":"7Z7S575KLkIZ9PYk"}
+{"level":"info","time":"2020-11-06T15:40:54.436+0800","caller":"E:/slgserver/server/controller/account.go:58","msg":"login","username":"test","session":"NDg3Nzg2MTQ2M2QzYzRiNWJlZWVlNGNjNDAwMjJhMDNjZWVjZWIwY2E0OTY5ZDJjOTAyNjA1Y2U5NTYwOWIyYQ=="}
+{"level":"info","time":"2020-11-06T15:43:12.757+0800","caller":"E:/slgserver/main/server.go:37","msg":"slg server starting"}
+{"level":"info","time":"2020-11-06T15:43:25.603+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"127.0.0.1:54880"}
+{"level":"info","time":"2020-11-06T15:43:25.604+0800","caller":"E:/slgserver/net/wsclient.go:255","msg":"handshake secretKey","secretKey":"rfBd56ti2SMtYvSg"}
+{"level":"info","time":"2020-11-06T15:43:26.613+0800","caller":"E:/slgserver/server/controller/account.go:58","msg":"login","username":"test","session":"NDg3Nzg2MTQ2M2QzYzRiNWJlZWVlNGNjNDAwMjJhMDM0ZDYxNDQwMDI1ZGY4MTY5NjEzMTg4OGVjNzljMjY3MQ=="}
+{"level":"info","time":"2020-11-06T15:43:30.861+0800","caller":"E:/slgserver/server/controller/account.go:141","msg":"logout","uid":5}
+{"level":"info","time":"2020-11-06T15:43:35.606+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"127.0.0.1:54880"}
+{"level":"info","time":"2020-11-06T15:44:15.472+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"127.0.0.1:54884"}
+{"level":"info","time":"2020-11-06T15:44:15.472+0800","caller":"E:/slgserver/net/wsclient.go:255","msg":"handshake secretKey","secretKey":"D5xAV0YU99zampta"}
+{"level":"info","time":"2020-11-06T15:44:16.477+0800","caller":"E:/slgserver/server/controller/account.go:58","msg":"login","username":"test","session":"NDg3Nzg2MTQ2M2QzYzRiNWJlZWVlNGNjNDAwMjJhMDMxZTliMGY0OTNiNjc1MTdmODRkOTI2MzQ5MmNkNTkzMg=="}
+{"level":"info","time":"2020-11-06T15:46:42.513+0800","caller":"E:/slgserver/main/server.go:37","msg":"slg server starting"}
+{"level":"info","time":"2020-11-06T15:46:48.622+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"127.0.0.1:54897"}
+{"level":"info","time":"2020-11-06T15:46:48.623+0800","caller":"E:/slgserver/net/wsclient.go:255","msg":"handshake secretKey","secretKey":"rfBd56ti2SMtYvSg"}
+{"level":"info","time":"2020-11-06T15:46:49.631+0800","caller":"E:/slgserver/server/controller/account.go:58","msg":"login","username":"test","session":"NDg3Nzg2MTQ2M2QzYzRiNWJlZWVlNGNjNDAwMjJhMDMxMDMzNWY5ZGY1MzFhMjUyNjM1MzhiOTkxMGE4MDgzOQ=="}
+{"level":"info","time":"2020-11-06T15:46:53.909+0800","caller":"E:/slgserver/server/controller/account.go:142","msg":"logout","uid":5}
+{"level":"info","time":"2020-11-06T15:46:58.624+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"127.0.0.1:54897"}
+{"level":"info","time":"2020-11-06T16:12:17.742+0800","caller":"E:/slgserver/main/server.go:37","msg":"slg server starting"}
+{"level":"info","time":"2020-11-06T16:21:32.815+0800","caller":"E:/slgserver/main/server.go:37","msg":"slg server starting"}
+{"level":"info","time":"2020-11-06T16:22:10.156+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"127.0.0.1:55138"}
+{"level":"info","time":"2020-11-06T16:22:10.158+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"rfBd56ti2SMtYvSg"}
+{"level":"info","time":"2020-11-06T16:22:11.166+0800","caller":"E:/slgserver/server/controller/account.go:58","msg":"login","username":"test","session":"OTcwZWI0YWMzNjY4ZTM2NTQxNjM4ZmVhNzQyNmYyY2UzNzVjNTY3ZGFkZjUxYTc4NWUzOTI3MmUyNDM1YmZkMA=="}
+{"level":"info","time":"2020-11-06T16:22:20.159+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"127.0.0.1:55138"}
+{"level":"info","time":"2020-11-06T16:23:40.077+0800","caller":"E:/slgserver/main/server.go:37","msg":"slg server starting"}
+{"level":"info","time":"2020-11-06T16:24:19.282+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"127.0.0.1:55154"}
+{"level":"info","time":"2020-11-06T16:24:19.289+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"rfBd56ti2SMtYvSg"}
+{"level":"info","time":"2020-11-06T16:24:20.291+0800","caller":"E:/slgserver/server/controller/account.go:58","msg":"login","username":"test","session":"OTcwZWI0YWMzNjY4ZTM2NTQxNjM4ZmVhNzQyNmYyY2VhZDBkZmNhMjlkOWIzZTViMDljNzZjYTdiN2YwZjdkYg=="}
+{"level":"info","time":"2020-11-06T16:24:23.965+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"127.0.0.1:55156"}
+{"level":"info","time":"2020-11-06T16:24:23.965+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"D5xAV0YU99zampta"}
+{"level":"info","time":"2020-11-06T16:24:24.968+0800","caller":"E:/slgserver/server/controller/account.go:58","msg":"login","username":"test","session":"OTcwZWI0YWMzNjY4ZTM2NTQxNjM4ZmVhNzQyNmYyY2U0NmRlMzE2ZmU2ZGQ4MWEwZmMxNTY3MzA0Nzk5Mzk5Zg=="}
+{"level":"info","time":"2020-11-06T16:24:29.286+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"127.0.0.1:55154"}
+{"level":"info","time":"2020-11-06T16:24:33.969+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"127.0.0.1:55156"}
+{"level":"info","time":"2020-11-06T16:24:56.204+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"127.0.0.1:55157"}
+{"level":"info","time":"2020-11-06T16:24:56.204+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"7Z7S575KLkIZ9PYk"}
+{"level":"info","time":"2020-11-06T16:24:57.207+0800","caller":"E:/slgserver/server/controller/account.go:58","msg":"login","username":"test","session":"OTcwZWI0YWMzNjY4ZTM2NTQxNjM4ZmVhNzQyNmYyY2UyMmY3NTg0MWVkY2YzYTNjYmM3NDQ2Y2EyZjc2MDBmNA=="}
+{"level":"error","time":"2020-11-06T16:24:59.060+0800","caller":"E:/slgserver/net/wsclient.go:98","msg":"wsReadLoop error"}
+{"level":"info","time":"2020-11-06T16:24:59.060+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"7Z7S575KLkIZ9PYk"}
+{"level":"info","time":"2020-11-06T16:25:02.080+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"127.0.0.1:55158"}
+{"level":"info","time":"2020-11-06T16:25:02.080+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"L17LTlsVqMNTZyLK"}
+{"level":"info","time":"2020-11-06T16:25:03.083+0800","caller":"E:/slgserver/server/controller/account.go:58","msg":"login","username":"test","session":"OTcwZWI0YWMzNjY4ZTM2NTQxNjM4ZmVhNzQyNmYyY2UxMTI5MTc1YjcwOTg5ZGY0MjQ2NjVhNjVlN2U3OGQ4Ng=="}
+{"level":"info","time":"2020-11-06T16:25:15.089+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"127.0.0.1:55158"}
+{"level":"info","time":"2020-11-06T16:25:30.108+0800","caller":"E:/slgserver/main/server.go:37","msg":"slg server starting"}
+{"level":"info","time":"2020-11-06T16:25:34.117+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"127.0.0.1:55165"}
+{"level":"info","time":"2020-11-06T16:25:34.117+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"rfBd56ti2SMtYvSg"}
+{"level":"info","time":"2020-11-06T16:25:35.125+0800","caller":"E:/slgserver/server/controller/account.go:58","msg":"login","username":"test","session":"OTcwZWI0YWMzNjY4ZTM2NTQxNjM4ZmVhNzQyNmYyY2U4YjMwMTczOGZmYjlmZjcwOTNlNmQzMDhhMTJmY2RmYg=="}
+{"level":"error","time":"2020-11-06T16:25:35.244+0800","caller":"E:/slgserver/net/wsclient.go:98","msg":"wsReadLoop error"}
+{"level":"info","time":"2020-11-06T16:25:35.244+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"rfBd56ti2SMtYvSg"}
+{"level":"info","time":"2020-11-06T16:25:38.565+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"127.0.0.1:55167"}
+{"level":"info","time":"2020-11-06T16:25:38.565+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"D5xAV0YU99zampta"}
+{"level":"info","time":"2020-11-06T16:25:39.568+0800","caller":"E:/slgserver/server/controller/account.go:58","msg":"login","username":"test","session":"OTcwZWI0YWMzNjY4ZTM2NTQxNjM4ZmVhNzQyNmYyY2U2ZDkxY2IwMjEwYmM4NTBiNmQ3MzFmOTJmNTQ4NjVmYQ=="}
+{"level":"error","time":"2020-11-06T16:25:39.718+0800","caller":"E:/slgserver/net/wsclient.go:98","msg":"wsReadLoop error"}
+{"level":"info","time":"2020-11-06T16:25:39.718+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"D5xAV0YU99zampta"}
+{"level":"info","time":"2020-11-06T16:25:51.843+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"127.0.0.1:55168"}
+{"level":"info","time":"2020-11-06T16:25:51.843+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"7Z7S575KLkIZ9PYk"}
+{"level":"info","time":"2020-11-06T16:25:52.846+0800","caller":"E:/slgserver/server/controller/account.go:58","msg":"login","username":"test","session":"OTcwZWI0YWMzNjY4ZTM2NTQxNjM4ZmVhNzQyNmYyY2VhNmQwNTIwODVkYzQwN2Q0ZDVkYzQ0NzNhNTYyOTZhMw=="}
+{"level":"error","time":"2020-11-06T16:25:53.012+0800","caller":"E:/slgserver/net/wsclient.go:98","msg":"wsReadLoop error"}
+{"level":"info","time":"2020-11-06T16:25:53.012+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"7Z7S575KLkIZ9PYk"}
+{"level":"info","time":"2020-11-06T16:26:13.438+0800","caller":"E:/slgserver/main/server.go:37","msg":"slg server starting"}
+{"level":"info","time":"2020-11-06T16:26:18.043+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"127.0.0.1:55178"}
+{"level":"info","time":"2020-11-06T16:26:18.044+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"rfBd56ti2SMtYvSg"}
+{"level":"info","time":"2020-11-06T16:26:19.051+0800","caller":"E:/slgserver/server/controller/account.go:58","msg":"login","username":"test","session":"OTcwZWI0YWMzNjY4ZTM2NTQxNjM4ZmVhNzQyNmYyY2U5NDkzZDBhMTIzNzE1ZjgyMTNlNmYyMzlmZmM5N2JjNw=="}
+{"level":"error","time":"2020-11-06T16:26:19.191+0800","caller":"E:/slgserver/net/wsclient.go:98","msg":"wsReadLoop error"}
+{"level":"info","time":"2020-11-06T16:26:19.191+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"rfBd56ti2SMtYvSg"}
+{"level":"info","time":"2020-11-06T16:26:41.226+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"127.0.0.1:55180"}
+{"level":"info","time":"2020-11-06T16:26:41.226+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"D5xAV0YU99zampta"}
+{"level":"info","time":"2020-11-06T16:26:42.229+0800","caller":"E:/slgserver/server/controller/account.go:58","msg":"login","username":"test","session":"OTcwZWI0YWMzNjY4ZTM2NTQxNjM4ZmVhNzQyNmYyY2VkMzlkZDNlM2MzODIwNGM2MWQ3YmI3ZmY5YjRkMWRkZQ=="}
+{"level":"info","time":"2020-11-06T16:27:27.701+0800","caller":"E:/slgserver/main/server.go:37","msg":"slg server starting"}
+{"level":"info","time":"2020-11-06T16:27:31.289+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"127.0.0.1:55187"}
+{"level":"info","time":"2020-11-06T16:27:31.290+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"rfBd56ti2SMtYvSg"}
+{"level":"info","time":"2020-11-06T16:27:32.297+0800","caller":"E:/slgserver/server/controller/account.go:58","msg":"login","username":"test","session":"OTcwZWI0YWMzNjY4ZTM2NTQxNjM4ZmVhNzQyNmYyY2U2NjQyZTM5MzczNWYwNWYwYzE2OGQ3MjBmMzRjZDA4ZQ=="}
+{"level":"error","time":"2020-11-06T16:27:34.795+0800","caller":"E:/slgserver/net/wsclient.go:98","msg":"wsReadLoop error"}
+{"level":"info","time":"2020-11-06T16:27:34.795+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"rfBd56ti2SMtYvSg"}
+{"level":"info","time":"2020-11-06T16:28:51.149+0800","caller":"E:/slgserver/main/server.go:37","msg":"slg server starting"}
+{"level":"info","time":"2020-11-06T16:28:53.931+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"127.0.0.1:55195"}
+{"level":"info","time":"2020-11-06T16:28:53.933+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"rfBd56ti2SMtYvSg"}
+{"level":"info","time":"2020-11-06T16:28:54.939+0800","caller":"E:/slgserver/server/controller/account.go:58","msg":"login","username":"test","session":"OTcwZWI0YWMzNjY4ZTM2NTQxNjM4ZmVhNzQyNmYyY2VjMzBiZmU2NzhlZDU1MWU2MDYzYWFmMWQxMzA2ZWYyNg=="}
+{"level":"info","time":"2020-11-06T16:28:57.943+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"127.0.0.1:55197"}
+{"level":"info","time":"2020-11-06T16:28:57.943+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"D5xAV0YU99zampta"}
+{"level":"info","time":"2020-11-06T16:28:58.946+0800","caller":"E:/slgserver/server/controller/account.go:58","msg":"login","username":"test","session":"OTcwZWI0YWMzNjY4ZTM2NTQxNjM4ZmVhNzQyNmYyY2ViMDIwYmJkMDdjMmI4ZGI0NWQyNDA0ZDhjMTg4YmE1MQ=="}
+{"level":"info","time":"2020-11-06T16:28:59.072+0800","caller":"E:/slgserver/server/connMgr.go:48","msg":"rob login","uid":5,"oldAddr":"127.0.0.1:55195","newAddr":"127.0.0.1:55197"}
+{"level":"info","time":"2020-11-06T16:29:03.935+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"127.0.0.1:55195"}
+{"level":"info","time":"2020-11-06T16:29:07.947+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"127.0.0.1:55197"}
+{"level":"info","time":"2020-11-06T16:29:09.340+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"127.0.0.1:55198"}
+{"level":"info","time":"2020-11-06T16:29:09.340+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"7Z7S575KLkIZ9PYk"}
+{"level":"info","time":"2020-11-06T16:29:10.343+0800","caller":"E:/slgserver/server/controller/account.go:58","msg":"login","username":"test","session":"OTcwZWI0YWMzNjY4ZTM2NTQxNjM4ZmVhNzQyNmYyY2UwMGU5ZjhhZmNiMWI1NzMzZjFjMWYwNjQwY2Q4MTgxNA=="}
+{"level":"info","time":"2020-11-06T16:29:11.739+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"127.0.0.1:55199"}
+{"level":"info","time":"2020-11-06T16:29:11.739+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"L17LTlsVqMNTZyLK"}
+{"level":"info","time":"2020-11-06T16:29:12.742+0800","caller":"E:/slgserver/server/controller/account.go:58","msg":"login","username":"test","session":"OTcwZWI0YWMzNjY4ZTM2NTQxNjM4ZmVhNzQyNmYyY2U5MmM2MGVkMTM4OGZmNzlmNWIyOTcyMjRkOWYyMjFlMg=="}
+{"level":"info","time":"2020-11-06T16:29:12.851+0800","caller":"E:/slgserver/server/connMgr.go:48","msg":"rob login","uid":5,"oldAddr":"127.0.0.1:55198","newAddr":"127.0.0.1:55199"}
+{"level":"info","time":"2020-11-06T16:29:19.343+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"127.0.0.1:55198"}
+{"level":"info","time":"2020-11-06T16:29:21.742+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"127.0.0.1:55199"}
+{"level":"info","time":"2020-11-06T16:29:28.718+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"127.0.0.1:55200"}
+{"level":"info","time":"2020-11-06T16:29:28.718+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"MIFSD2x28MlgPJ0S"}
+{"level":"info","time":"2020-11-06T16:29:29.720+0800","caller":"E:/slgserver/server/controller/account.go:58","msg":"login","username":"test","session":"OTcwZWI0YWMzNjY4ZTM2NTQxNjM4ZmVhNzQyNmYyY2VjODVlM2ExYTBiMDJjMjkyOWI2MmFmYzBlOTcwMDcwMQ=="}
+{"level":"info","time":"2020-11-06T16:29:30.401+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"127.0.0.1:55201"}
+{"level":"info","time":"2020-11-06T16:29:30.402+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"DZVHnHJPxMKi0tWx"}
+{"level":"info","time":"2020-11-06T16:29:31.404+0800","caller":"E:/slgserver/server/controller/account.go:58","msg":"login","username":"test","session":"OTcwZWI0YWMzNjY4ZTM2NTQxNjM4ZmVhNzQyNmYyY2U2ZTM5MjdjODQzZjVkMGIxYWU5ZjI3ZmQyNDYwOGE0Yw=="}
+{"level":"info","time":"2020-11-06T16:29:31.514+0800","caller":"E:/slgserver/server/connMgr.go:48","msg":"rob login","uid":5,"oldAddr":"127.0.0.1:55200","newAddr":"127.0.0.1:55201"}
+{"level":"info","time":"2020-11-06T16:29:38.721+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"127.0.0.1:55200"}
+{"level":"info","time":"2020-11-06T16:29:39.975+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"127.0.0.1:55201"}
+{"level":"info","time":"2020-11-06T16:29:41.212+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"127.0.0.1:55202"}
+{"level":"info","time":"2020-11-06T16:29:41.213+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"u3pQJ71N5GWfOIGT"}
+{"level":"info","time":"2020-11-06T16:29:42.084+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"127.0.0.1:55203"}
+{"level":"info","time":"2020-11-06T16:29:42.084+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"dSWXbRLGAwD1Ikzu"}
+{"level":"info","time":"2020-11-06T16:29:42.217+0800","caller":"E:/slgserver/server/controller/account.go:58","msg":"login","username":"test","session":"OTcwZWI0YWMzNjY4ZTM2NTQxNjM4ZmVhNzQyNmYyY2UxOGJkZjI1OTA1N2MyMzg1ZGQyMjQ5NzQ4ZWQ2ZGEwNQ=="}
+{"level":"info","time":"2020-11-06T16:29:43.087+0800","caller":"E:/slgserver/server/controller/account.go:58","msg":"login","username":"test","session":"OTcwZWI0YWMzNjY4ZTM2NTQxNjM4ZmVhNzQyNmYyY2VmZGFkNWFkMjA4OTg4MjhhNjkzZjVhMWIyNjJkNDMxYQ=="}
+{"level":"info","time":"2020-11-06T16:29:43.224+0800","caller":"E:/slgserver/server/connMgr.go:48","msg":"rob login","uid":5,"oldAddr":"127.0.0.1:55202","newAddr":"127.0.0.1:55203"}
+{"level":"info","time":"2020-11-06T16:29:50.105+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"127.0.0.1:55203"}
+{"level":"info","time":"2020-11-06T16:29:51.217+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"127.0.0.1:55202"}
+{"level":"info","time":"2020-11-06T17:28:19.875+0800","caller":"E:/slgserver/main/server.go:37","msg":"slg server starting"}
+{"level":"info","time":"2020-11-06T17:28:24.863+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"127.0.0.1:55534"}
+{"level":"info","time":"2020-11-06T17:28:24.865+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"rfBd56ti2SMtYvSg"}
+{"level":"info","time":"2020-11-06T17:28:25.874+0800","caller":"E:/slgserver/server/controller/account.go:59","msg":"login","username":"test","session":"MjliNjlhZjhlYjIyNWFkNjlhZGI0YjA0YjQ5NDkzMTkwOGMxNTkxYzAxOTA3Y2JiYWUwMDZjMzM0YjQ4ZjYxZA=="}
+{"level":"info","time":"2020-11-06T17:28:34.866+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"127.0.0.1:55534"}
+{"level":"info","time":"2020-11-06T17:34:17.890+0800","caller":"E:/slgserver/main/server.go:37","msg":"slg server starting"}
+{"level":"info","time":"2020-11-06T17:34:23.065+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"127.0.0.1:55550"}
+{"level":"info","time":"2020-11-06T17:34:23.066+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"rfBd56ti2SMtYvSg"}
+{"level":"info","time":"2020-11-06T17:34:24.075+0800","caller":"E:/slgserver/server/controller/account.go:59","msg":"login","username":"test","session":"MjliNjlhZjhlYjIyNWFkNjlhZGI0YjA0YjQ5NDkzMTljMjFlNzAxNTBlYTk3YmQ2OWY4MTdkYWQ2ZDI3ODNmOQ=="}
+{"level":"info","time":"2020-11-06T17:34:33.069+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"127.0.0.1:55550"}
+{"level":"info","time":"2020-11-06T17:35:15.514+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"127.0.0.1:55556"}
+{"level":"info","time":"2020-11-06T17:35:15.514+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"D5xAV0YU99zampta"}
+{"level":"info","time":"2020-11-06T17:35:16.518+0800","caller":"E:/slgserver/server/controller/account.go:59","msg":"login","username":"test","session":"MjliNjlhZjhlYjIyNWFkNjlhZGI0YjA0YjQ5NDkzMTk3OTMwNWIxMmI5MDUzNzAzM2ViZDk2YmJiN2Q2YWQ4Nw=="}
+{"level":"info","time":"2020-11-06T17:35:25.517+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"127.0.0.1:55556"}
+{"level":"info","time":"2020-11-06T18:04:54.466+0800","caller":"E:/slgserver/main/server.go:37","msg":"slg server starting"}
+{"level":"info","time":"2020-11-06T18:05:00.234+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"127.0.0.1:60551"}
+{"level":"info","time":"2020-11-06T18:05:00.235+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"rfBd56ti2SMtYvSg"}
+{"level":"info","time":"2020-11-06T18:05:01.241+0800","caller":"E:/slgserver/server/controller/account.go:59","msg":"login","username":"test","session":"YmVjNjEwZDdiY2JiODRkYjJmYTNmMGZhMWYyNDdiMzRmOWNhMDFlOGMwMzg4MWY4ZDI4MDEwZWViOGE0OWY4YQ=="}
+{"level":"info","time":"2020-11-06T18:05:10.236+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"127.0.0.1:60551"}
+{"level":"info","time":"2020-11-06T18:13:35.392+0800","caller":"E:/slgserver/main/server.go:37","msg":"slg server starting"}
+{"level":"info","time":"2020-11-06T18:13:39.134+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"127.0.0.1:61766"}
+{"level":"info","time":"2020-11-06T18:13:39.135+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"rfBd56ti2SMtYvSg"}
+{"level":"info","time":"2020-11-06T18:13:40.145+0800","caller":"E:/slgserver/server/controller/account.go:64","msg":"login","username":"test","session":"YmVjNjEwZDdiY2JiODRkYjJmYTNmMGZhMWYyNDdiMzQ1NDU4ZjIxNTEwZWU3Yzg4NDIwYTcxMWQyYjA4MDVlMA=="}
+{"level":"info","time":"2020-11-06T18:13:49.137+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"127.0.0.1:61766"}
+{"level":"info","time":"2020-11-06T18:14:14.348+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"127.0.0.1:61830"}
+{"level":"info","time":"2020-11-06T18:14:14.348+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"D5xAV0YU99zampta"}
+{"level":"info","time":"2020-11-06T18:14:17.283+0800","caller":"E:/slgserver/server/controller/account.go:64","msg":"login","username":"test","session":"YmVjNjEwZDdiY2JiODRkYjJmYTNmMGZhMWYyNDdiMzRmZmQ5ZGMyZWMwNTQyMzNmMWIzMWVjYjM1MGU1YTE4ZQ=="}
+{"level":"error","time":"2020-11-06T18:14:18.275+0800","caller":"E:/slgserver/net/wsclient.go:98","msg":"wsReadLoop error"}
+{"level":"info","time":"2020-11-06T18:14:18.275+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"D5xAV0YU99zampta"}
+{"level":"info","time":"2020-11-06T18:15:01.331+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"127.0.0.1:61968"}
+{"level":"info","time":"2020-11-06T18:15:01.331+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"7Z7S575KLkIZ9PYk"}
+{"level":"info","time":"2020-11-06T18:15:09.346+0800","caller":"E:/slgserver/server/controller/account.go:64","msg":"login","username":"test","session":"YmVjNjEwZDdiY2JiODRkYjJmYTNmMGZhMWYyNDdiMzQxMTVlOGEwMzU3YTVkZDBjMzdjYjlmMDU1Njg2OTc1Mg=="}
+{"level":"info","time":"2020-11-06T18:15:09.522+0800","caller":"E:/slgserver/server/connMgr.go:48","msg":"rob login","uid":5,"oldAddr":"127.0.0.1:61830","newAddr":"127.0.0.1:61968"}
+{"level":"error","time":"2020-11-06T18:15:13.832+0800","caller":"E:/slgserver/net/wsclient.go:98","msg":"wsReadLoop error"}
+{"level":"info","time":"2020-11-06T18:15:13.832+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"7Z7S575KLkIZ9PYk"}
+{"level":"info","time":"2020-11-06T18:15:13.838+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"127.0.0.1:61830"}
+{"level":"info","time":"2020-11-06T18:15:13.839+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"127.0.0.1:61968"}
+{"level":"info","time":"2020-11-06T18:15:31.182+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"127.0.0.1:62046"}
+{"level":"info","time":"2020-11-06T18:15:31.182+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"L17LTlsVqMNTZyLK"}
+{"level":"info","time":"2020-11-06T18:15:36.905+0800","caller":"E:/slgserver/server/controller/account.go:64","msg":"login","username":"test","session":"YmVjNjEwZDdiY2JiODRkYjJmYTNmMGZhMWYyNDdiMzQyZmEwZTk3Yjg1ZTJmMjFlYzM0Yjk0OGYxYjc5YmM3Nw=="}
+{"level":"error","time":"2020-11-06T18:15:45.018+0800","caller":"E:/slgserver/net/wsclient.go:98","msg":"wsReadLoop error"}
+{"level":"info","time":"2020-11-06T18:15:45.018+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"L17LTlsVqMNTZyLK"}
+{"level":"info","time":"2020-11-06T18:15:45.019+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"127.0.0.1:62046"}
+{"level":"info","time":"2020-11-09T09:56:29.968+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:64645"}
+{"level":"info","time":"2020-11-09T09:56:29.968+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"MIFSD2x28MlgPJ0S"}
+{"level":"info","time":"2020-11-09T09:59:42.845+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:64693"}
+{"level":"info","time":"2020-11-09T09:59:42.845+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:64743"}
+{"level":"info","time":"2020-11-09T09:59:42.845+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"DZVHnHJPxMKi0tWx"}
+{"level":"info","time":"2020-11-09T09:59:42.845+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"u3pQJ71N5GWfOIGT"}
+{"level":"error","time":"2020-11-09T09:59:42.826+0800","caller":"E:/slgserver/net/wsclient.go:98","msg":"wsReadLoop error"}
+{"level":"info","time":"2020-11-09T09:59:42.853+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"MIFSD2x28MlgPJ0S"}
+{"level":"info","time":"2020-11-09T09:59:42.854+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:64693"}
+{"level":"info","time":"2020-11-09T09:59:42.854+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:64912"}
+{"level":"info","time":"2020-11-09T09:59:42.854+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"dSWXbRLGAwD1Ikzu"}
+{"level":"info","time":"2020-11-09T09:59:42.854+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:64780"}
+{"level":"info","time":"2020-11-09T09:59:42.854+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"Z5G1pEDzqqm3sncC"}
+{"level":"info","time":"2020-11-09T09:59:42.854+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:64780"}
+{"level":"info","time":"2020-11-09T09:59:42.856+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:64743"}
+{"level":"info","time":"2020-11-09T09:59:42.867+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:64800"}
+{"level":"info","time":"2020-11-09T09:59:42.867+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"Yry01AuHiK7FDcCc"}
+{"level":"info","time":"2020-11-09T09:59:42.868+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:64800"}
+{"level":"info","time":"2020-11-09T10:00:04.520+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:64912"}
+{"level":"info","time":"2020-11-09T10:00:05.412+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:64943"}
+{"level":"info","time":"2020-11-09T10:00:05.412+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"35S4IzoOjgm2v8Ky"}
+{"level":"error","time":"2020-11-09T10:00:05.563+0800","caller":"E:/slgserver/net/wsclient.go:98","msg":"wsReadLoop error"}
+{"level":"info","time":"2020-11-09T10:00:05.564+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"35S4IzoOjgm2v8Ky"}
+{"level":"info","time":"2020-11-09T10:00:55.215+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:64999"}
+{"level":"info","time":"2020-11-09T10:00:55.215+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"BpNlS52DyhMEXiJe"}
+{"level":"error","time":"2020-11-09T10:00:55.351+0800","caller":"E:/slgserver/net/wsclient.go:98","msg":"wsReadLoop error"}
+{"level":"info","time":"2020-11-09T10:00:55.352+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"BpNlS52DyhMEXiJe"}
+{"level":"info","time":"2020-11-09T10:01:05.868+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"127.0.0.1:54281"}
+{"level":"info","time":"2020-11-09T10:01:05.869+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"v6e8bqQKRMnD4MR6"}
+{"level":"info","time":"2020-11-09T10:01:06.896+0800","caller":"E:/slgserver/server/controller/account.go:64","msg":"login","username":"test","session":"NWRhNjkzMDExN2JmZjI5ZWZjNTAzZWIzMTY5YWMwZTUzNDY5NGRhOGE5MTIzM2QyYzM5MDM1OTVlYzFmZTU3Nw=="}
+{"level":"info","time":"2020-11-09T10:01:15.875+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"127.0.0.1:54281"}
+{"level":"info","time":"2020-11-09T10:01:19.909+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:65033"}
+{"level":"info","time":"2020-11-09T10:01:19.909+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"36KLtiuMzXX0NXjB"}
+{"level":"error","time":"2020-11-09T10:01:20.051+0800","caller":"E:/slgserver/net/wsclient.go:98","msg":"wsReadLoop error"}
+{"level":"info","time":"2020-11-09T10:01:20.051+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"36KLtiuMzXX0NXjB"}
+{"level":"info","time":"2020-11-09T10:01:50.317+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:65070"}
+{"level":"info","time":"2020-11-09T10:01:50.317+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"vzYUgOKWKhDY2j42"}
+{"level":"error","time":"2020-11-09T10:01:50.460+0800","caller":"E:/slgserver/net/wsclient.go:98","msg":"wsReadLoop error"}
+{"level":"info","time":"2020-11-09T10:01:50.460+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"vzYUgOKWKhDY2j42"}
+{"level":"info","time":"2020-11-09T10:04:20.902+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:65214"}
+{"level":"info","time":"2020-11-09T10:04:20.902+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"mPjVIUp97tQjNHJc"}
+{"level":"error","time":"2020-11-09T10:04:24.205+0800","caller":"E:/slgserver/net/wsclient.go:98","msg":"wsReadLoop error"}
+{"level":"info","time":"2020-11-09T10:04:24.205+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"mPjVIUp97tQjNHJc"}
+{"level":"info","time":"2020-11-09T10:04:44.479+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:65245"}
+{"level":"info","time":"2020-11-09T10:04:44.479+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"aOAGeDZRvcMdGIAS"}
+{"level":"error","time":"2020-11-09T10:05:06.114+0800","caller":"E:/slgserver/net/wsclient.go:98","msg":"wsReadLoop error"}
+{"level":"info","time":"2020-11-09T10:05:06.114+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"aOAGeDZRvcMdGIAS"}
+{"level":"info","time":"2020-11-09T10:05:41.956+0800","caller":"E:/slgserver/main/server.go:37","msg":"slg server starting"}
+{"level":"info","time":"2020-11-09T10:06:07.184+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:65334"}
+{"level":"info","time":"2020-11-09T10:06:07.194+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"rfBd56ti2SMtYvSg"}
+{"level":"info","time":"2020-11-09T10:06:12.616+0800","caller":"E:/slgserver/main/server.go:37","msg":"slg server starting"}
+{"level":"info","time":"2020-11-09T10:06:13.093+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:65347"}
+{"level":"info","time":"2020-11-09T10:06:13.095+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"rfBd56ti2SMtYvSg"}
+{"level":"error","time":"2020-11-09T10:06:15.503+0800","caller":"E:/slgserver/net/wsclient.go:98","msg":"wsReadLoop error"}
+{"level":"info","time":"2020-11-09T10:06:15.503+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"rfBd56ti2SMtYvSg"}
+{"level":"info","time":"2020-11-09T10:06:44.922+0800","caller":"E:/slgserver/main/server.go:37","msg":"slg server starting"}
+{"level":"info","time":"2020-11-09T10:06:45.396+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:65385"}
+{"level":"info","time":"2020-11-09T10:06:45.397+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"rfBd56ti2SMtYvSg"}
+{"level":"info","time":"2020-11-09T10:06:59.052+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:65385"}
+{"level":"info","time":"2020-11-09T10:06:59.824+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:65413"}
+{"level":"info","time":"2020-11-09T10:07:02.873+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"D5xAV0YU99zampta"}
+{"level":"info","time":"2020-11-09T10:07:33.453+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:65413"}
+{"level":"info","time":"2020-11-09T10:07:34.286+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:65452"}
+{"level":"info","time":"2020-11-09T10:07:34.286+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"7Z7S575KLkIZ9PYk"}
+{"level":"error","time":"2020-11-09T10:08:12.577+0800","caller":"E:/slgserver/net/wsclient.go:98","msg":"wsReadLoop error"}
+{"level":"info","time":"2020-11-09T10:08:12.577+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"7Z7S575KLkIZ9PYk"}
+{"level":"info","time":"2020-11-09T10:09:19.390+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:49181"}
+{"level":"info","time":"2020-11-09T10:09:19.390+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"L17LTlsVqMNTZyLK"}
+{"level":"error","time":"2020-11-09T10:09:39.734+0800","caller":"E:/slgserver/net/wsclient.go:98","msg":"wsReadLoop error"}
+{"level":"info","time":"2020-11-09T10:09:39.736+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"L17LTlsVqMNTZyLK"}
+{"level":"info","time":"2020-11-09T10:10:56.498+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:49288"}
+{"level":"info","time":"2020-11-09T10:10:59.773+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"MIFSD2x28MlgPJ0S"}
+{"level":"error","time":"2020-11-09T10:11:54.510+0800","caller":"E:/slgserver/net/wsclient.go:98","msg":"wsReadLoop error"}
+{"level":"info","time":"2020-11-09T10:11:54.512+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"MIFSD2x28MlgPJ0S"}
+{"level":"info","time":"2020-11-09T10:12:19.769+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:49378"}
+{"level":"info","time":"2020-11-09T10:12:21.416+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"DZVHnHJPxMKi0tWx"}
+{"level":"error","time":"2020-11-09T10:12:42.445+0800","caller":"E:/slgserver/net/wsclient.go:98","msg":"wsReadLoop error"}
+{"level":"info","time":"2020-11-09T10:12:42.445+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"DZVHnHJPxMKi0tWx"}
+{"level":"info","time":"2020-11-09T10:13:39.035+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:49465"}
+{"level":"info","time":"2020-11-09T10:13:41.632+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"u3pQJ71N5GWfOIGT"}
+{"level":"error","time":"2020-11-09T10:13:52.574+0800","caller":"E:/slgserver/net/wsclient.go:98","msg":"wsReadLoop error"}
+{"level":"info","time":"2020-11-09T10:13:52.575+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"u3pQJ71N5GWfOIGT"}
+{"level":"info","time":"2020-11-09T10:14:43.229+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:49537"}
+{"level":"info","time":"2020-11-09T10:14:43.229+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"dSWXbRLGAwD1Ikzu"}
+{"level":"info","time":"2020-11-09T10:15:00.355+0800","caller":"E:/slgserver/main/server.go:37","msg":"slg server starting"}
+{"level":"info","time":"2020-11-09T10:15:02.922+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:49576"}
+{"level":"info","time":"2020-11-09T10:15:02.922+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"rfBd56ti2SMtYvSg"}
+{"level":"info","time":"2020-11-09T10:15:08.456+0800","caller":"E:/slgserver/main/server.go:37","msg":"slg server starting"}
+{"level":"info","time":"2020-11-09T10:15:10.229+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:49587"}
+{"level":"info","time":"2020-11-09T10:15:10.231+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"rfBd56ti2SMtYvSg"}
+{"level":"info","time":"2020-11-09T10:15:30.540+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:49587"}
+{"level":"info","time":"2020-11-09T10:15:31.432+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:49615"}
+{"level":"info","time":"2020-11-09T10:15:31.433+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"D5xAV0YU99zampta"}
+{"level":"info","time":"2020-11-09T10:16:00.459+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:49615"}
+{"level":"info","time":"2020-11-09T10:16:15.581+0800","caller":"E:/slgserver/main/server.go:37","msg":"slg server starting"}
+{"level":"info","time":"2020-11-09T10:16:22.627+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:49681"}
+{"level":"info","time":"2020-11-09T10:16:22.627+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"rfBd56ti2SMtYvSg"}
+{"level":"error","time":"2020-11-09T10:16:24.426+0800","caller":"E:/slgserver/net/wsclient.go:98","msg":"wsReadLoop error"}
+{"level":"info","time":"2020-11-09T10:16:24.426+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:49681"}
+{"level":"info","time":"2020-11-09T10:17:21.521+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:49765"}
+{"level":"info","time":"2020-11-09T10:17:21.521+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"D5xAV0YU99zampta"}
+{"level":"error","time":"2020-11-09T10:17:23.067+0800","caller":"E:/slgserver/net/wsclient.go:98","msg":"wsReadLoop error"}
+{"level":"info","time":"2020-11-09T10:17:23.067+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:49765"}
+{"level":"info","time":"2020-11-09T10:18:19.769+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:49844"}
+{"level":"info","time":"2020-11-09T10:18:19.769+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"7Z7S575KLkIZ9PYk"}
+{"level":"error","time":"2020-11-09T10:18:21.978+0800","caller":"E:/slgserver/net/wsclient.go:98","msg":"wsReadLoop error"}
+{"level":"info","time":"2020-11-09T10:18:21.978+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:49844"}
+{"level":"info","time":"2020-11-09T10:19:08.670+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:49902"}
+{"level":"info","time":"2020-11-09T10:19:08.671+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"L17LTlsVqMNTZyLK"}
+{"level":"error","time":"2020-11-09T10:19:10.306+0800","caller":"E:/slgserver/net/wsclient.go:98","msg":"wsReadLoop error"}
+{"level":"info","time":"2020-11-09T10:19:10.306+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:49902"}
+{"level":"info","time":"2020-11-09T10:19:12.320+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:49906"}
+{"level":"info","time":"2020-11-09T10:19:12.320+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"MIFSD2x28MlgPJ0S"}
+{"level":"info","time":"2020-11-09T10:19:41.989+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:49906"}
+{"level":"info","time":"2020-11-09T10:19:42.873+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:49951"}
+{"level":"info","time":"2020-11-09T10:19:42.873+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"DZVHnHJPxMKi0tWx"}
+{"level":"error","time":"2020-11-09T10:19:45.137+0800","caller":"E:/slgserver/net/wsclient.go:98","msg":"wsReadLoop error"}
+{"level":"info","time":"2020-11-09T10:19:45.137+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:49951"}
+{"level":"info","time":"2020-11-09T10:19:47.151+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:49955"}
+{"level":"info","time":"2020-11-09T10:19:47.151+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"u3pQJ71N5GWfOIGT"}
+{"level":"info","time":"2020-11-09T10:20:19.291+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:49955"}
+{"level":"info","time":"2020-11-09T10:20:20.136+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:49994"}
+{"level":"info","time":"2020-11-09T10:20:20.136+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"dSWXbRLGAwD1Ikzu"}
+{"level":"error","time":"2020-11-09T10:20:24.912+0800","caller":"E:/slgserver/net/wsclient.go:98","msg":"wsReadLoop error"}
+{"level":"info","time":"2020-11-09T10:20:24.912+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:49994"}
+{"level":"info","time":"2020-11-09T10:20:26.926+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:50001"}
+{"level":"info","time":"2020-11-09T10:20:26.926+0800","caller":"E:/slgserver/net/wsclient.go:265","msg":"handshake secretKey","secretKey":"Z5G1pEDzqqm3sncC"}
+{"level":"error","time":"2020-11-09T10:20:32.667+0800","caller":"E:/slgserver/net/wsclient.go:98","msg":"wsReadLoop error"}
+{"level":"info","time":"2020-11-09T10:20:32.668+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:50001"}
+{"level":"info","time":"2020-11-09T10:21:03.770+0800","caller":"E:/slgserver/main/server.go:37","msg":"slg server starting"}
+{"level":"info","time":"2020-11-09T10:23:00.438+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:50167"}
+{"level":"info","time":"2020-11-09T10:23:00.438+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"rfBd56ti2SMtYvSg"}
+{"level":"info","time":"2020-11-09T10:23:16.564+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:50167"}
+{"level":"info","time":"2020-11-09T10:23:17.511+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:50194"}
+{"level":"info","time":"2020-11-09T10:23:17.511+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"D5xAV0YU99zampta"}
+{"level":"info","time":"2020-11-09T10:30:05.094+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:50194"}
+{"level":"info","time":"2020-11-09T10:30:10.142+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:50595"}
+{"level":"info","time":"2020-11-09T10:30:10.142+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"7Z7S575KLkIZ9PYk"}
+{"level":"info","time":"2020-11-09T10:30:12.468+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:50595"}
+{"level":"info","time":"2020-11-09T10:31:06.076+0800","caller":"E:/slgserver/main/server.go:37","msg":"slg server starting"}
+{"level":"info","time":"2020-11-09T10:31:08.938+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:50667"}
+{"level":"info","time":"2020-11-09T10:31:08.940+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"rfBd56ti2SMtYvSg"}
+{"level":"warn","time":"2020-11-09T10:31:09.089+0800","caller":"E:/slgserver/net/router.go:40","msg":"Group has not applyMiddleware","msgName":"test"}
+{"level":"warn","time":"2020-11-09T10:31:09.096+0800","caller":"E:/slgserver/net/router.go:40","msg":"Group has not applyMiddleware","msgName":"test"}
+{"level":"warn","time":"2020-11-09T10:31:09.101+0800","caller":"E:/slgserver/net/router.go:40","msg":"Group has not applyMiddleware","msgName":"test"}
+{"level":"info","time":"2020-11-09T10:31:15.242+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:50667"}
+{"level":"info","time":"2020-11-09T11:04:53.709+0800","caller":"E:/slgserver/main/server.go:37","msg":"slg server starting"}
+{"level":"info","time":"2020-11-09T11:04:59.868+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"127.0.0.1:55732"}
+{"level":"info","time":"2020-11-09T11:04:59.869+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"rfBd56ti2SMtYvSg"}
+{"level":"info","time":"2020-11-09T11:05:00.877+0800","caller":"E:/slgserver/server/controller/account.go:64","msg":"login","username":"test","session":"ODBkOGRhNzUwY2JiYTIyODEyYWJiNGQ1N2Y5ZmU0NGFiYzA4MDk5NGFkNjY3NjhlOTk2MzJiYmNmZDY3MTQyNw=="}
+{"level":"info","time":"2020-11-09T11:05:09.872+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"127.0.0.1:55732"}
+{"level":"info","time":"2020-11-09T11:19:29.924+0800","caller":"E:/slgserver/http/controller/account.go:22","msg":"register"}
+{"level":"info","time":"2020-11-09T11:26:15.097+0800","caller":"E:/slgserver/http/controller/account.go:22","msg":"register"}
+{"level":"info","time":"2020-11-09T11:26:22.479+0800","caller":"E:/slgserver/http/controller/account.go:22","msg":"register"}
+{"level":"info","time":"2020-11-09T12:02:30.363+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-09T12:02:44.358+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-09T12:03:30.570+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-09T12:04:44.815+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-09T12:06:13.837+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-09T12:06:18.681+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-09T12:06:19.798+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-09T12:06:20.979+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-09T12:11:54.782+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-09T13:01:31.446+0800","caller":"E:/slgserver/main/server.go:37","msg":"slg server starting"}
+{"level":"info","time":"2020-11-09T13:31:05.973+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:56246"}
+{"level":"info","time":"2020-11-09T13:31:05.983+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"rfBd56ti2SMtYvSg"}
+{"level":"info","time":"2020-11-09T13:31:18.701+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:56246"}
+{"level":"info","time":"2020-11-09T13:31:19.643+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:56264"}
+{"level":"info","time":"2020-11-09T13:31:19.643+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"D5xAV0YU99zampta"}
+{"level":"info","time":"2020-11-09T13:31:21.339+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:56264"}
+{"level":"info","time":"2020-11-09T13:32:05.886+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:56291"}
+{"level":"info","time":"2020-11-09T13:32:05.887+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"7Z7S575KLkIZ9PYk"}
+{"level":"info","time":"2020-11-09T13:32:34.820+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:56291"}
+{"level":"info","time":"2020-11-09T13:32:34.822+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:56319"}
+{"level":"info","time":"2020-11-09T13:32:34.822+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"L17LTlsVqMNTZyLK"}
+{"level":"info","time":"2020-11-09T13:32:37.820+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:56319"}
+{"level":"info","time":"2020-11-09T13:32:37.823+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:56328"}
+{"level":"info","time":"2020-11-09T13:32:37.823+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"MIFSD2x28MlgPJ0S"}
+{"level":"info","time":"2020-11-09T13:32:40.820+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:56328"}
+{"level":"info","time":"2020-11-09T13:32:40.822+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:56340"}
+{"level":"info","time":"2020-11-09T13:32:40.822+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"DZVHnHJPxMKi0tWx"}
+{"level":"info","time":"2020-11-09T13:34:29.393+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:56340"}
+{"level":"info","time":"2020-11-09T13:35:21.064+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-09T13:36:03.494+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-09T13:36:37.948+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-09T13:37:59.619+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-09T13:42:24.166+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-09T13:43:23.987+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-09T13:43:27.313+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-09T13:43:28.441+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-09T13:43:28.609+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-09T13:43:28.777+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-09T13:43:28.946+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-09T13:43:29.098+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-09T13:43:29.259+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-09T13:43:29.405+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-09T13:43:29.546+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-09T13:43:29.698+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-09T14:04:07.322+0800","caller":"E:/slgserver/main/server.go:37","msg":"slg server starting"}
+{"level":"info","time":"2020-11-09T14:04:18.472+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"127.0.0.1:60311"}
+{"level":"info","time":"2020-11-09T14:04:18.473+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"rfBd56ti2SMtYvSg"}
+{"level":"info","time":"2020-11-09T14:04:19.475+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"msg req","msgName":"login","data":"map[ip:127.0.0.1 password:123456 username:test]"}
+{"level":"info","time":"2020-11-09T14:04:19.482+0800","caller":"E:/slgserver/server/controller/account.go:61","msg":"login","username":"test","session":"MjE1YmFiYmM1YjRmMGM3M2ZkOTYzZmI5ZmY2OGY2YzM3ZGM3YTU1ZGM3NzNkY2M1Y2U5N2YwYjBjNDVkOTBhZA=="}
+{"level":"info","time":"2020-11-09T14:04:20.476+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"msg req","msgName":"reLogin","data":"map[ip: session:MjE1YmFiYmM1YjRmMGM3M2ZkOTYzZmI5ZmY2OGY2YzM3ZGM3YTU1ZGM3NzNkY2M1Y2U5N2YwYjBjNDVkOTBhZA==]"}
+{"level":"info","time":"2020-11-09T14:04:28.476+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"127.0.0.1:60311"}
+{"level":"info","time":"2020-11-09T14:04:35.484+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"127.0.0.1:60328"}
+{"level":"info","time":"2020-11-09T14:04:35.484+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"D5xAV0YU99zampta"}
+{"level":"info","time":"2020-11-09T14:04:38.530+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"msg req","msgName":"login","data":"map[ip:127.0.0.1 password:123456 username:test]"}
+{"level":"info","time":"2020-11-09T14:04:39.814+0800","caller":"E:/slgserver/server/controller/account.go:61","msg":"login","username":"test","session":"MjE1YmFiYmM1YjRmMGM3M2ZkOTYzZmI5ZmY2OGY2YzNmMTQ0Zjc3MTE5MzM4MWVlYTFkZmQ4YjkxMmYxOTEwMA=="}
+{"level":"info","time":"2020-11-09T14:04:42.970+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"msg req","msgName":"reLogin","data":"map[ip: session:]"}
+{"level":"error","time":"2020-11-09T14:04:42.970+0800","caller":"E:/slgserver/net/wsclient.go:98","msg":"wsReadLoop error"}
+{"level":"info","time":"2020-11-09T14:04:42.970+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"127.0.0.1:60328"}
+{"level":"info","time":"2020-11-09T14:05:07.838+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"127.0.0.1:60357"}
+{"level":"info","time":"2020-11-09T14:05:07.838+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"7Z7S575KLkIZ9PYk"}
+{"level":"info","time":"2020-11-09T14:05:08.840+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"msg req","msgName":"login","data":"map[ip:127.0.0.1 password:123456 username:test]"}
+{"level":"info","time":"2020-11-09T14:05:08.843+0800","caller":"E:/slgserver/server/controller/account.go:61","msg":"login","username":"test","session":"MjE1YmFiYmM1YjRmMGM3M2ZkOTYzZmI5ZmY2OGY2YzM1Y2ZhMTNiNDY3YzNlZDYyNGE5OWQ2YTAzNDJjODA2ZA=="}
+{"level":"info","time":"2020-11-09T14:05:09.842+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"msg req","msgName":"reLogin","data":"map[ip: session:MjE1YmFiYmM1YjRmMGM3M2ZkOTYzZmI5ZmY2OGY2YzM1Y2ZhMTNiNDY3YzNlZDYyNGE5OWQ2YTAzNDJjODA2ZA==]"}
+{"level":"info","time":"2020-11-09T14:05:17.839+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"127.0.0.1:60357"}
+{"level":"info","time":"2020-11-09T14:05:39.138+0800","caller":"E:/slgserver/main/server.go:37","msg":"slg server starting"}
+{"level":"info","time":"2020-11-09T14:24:44.774+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:57335"}
+{"level":"info","time":"2020-11-09T14:24:44.792+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"rfBd56ti2SMtYvSg"}
+{"level":"info","time":"2020-11-09T14:25:13.874+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:57335"}
+{"level":"info","time":"2020-11-09T14:25:13.877+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:57361"}
+{"level":"info","time":"2020-11-09T14:25:13.877+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"D5xAV0YU99zampta"}
+{"level":"info","time":"2020-11-09T14:25:16.875+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:57361"}
+{"level":"info","time":"2020-11-09T14:25:16.877+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:57365"}
+{"level":"info","time":"2020-11-09T14:25:16.877+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"7Z7S575KLkIZ9PYk"}
+{"level":"info","time":"2020-11-09T14:25:19.874+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:57365"}
+{"level":"info","time":"2020-11-09T14:25:19.876+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:57369"}
+{"level":"info","time":"2020-11-09T14:25:19.876+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"L17LTlsVqMNTZyLK"}
+{"level":"info","time":"2020-11-09T14:25:57.663+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:57369"}
+{"level":"info","time":"2020-11-09T14:25:58.834+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:57415"}
+{"level":"info","time":"2020-11-09T14:25:58.834+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"MIFSD2x28MlgPJ0S"}
+{"level":"info","time":"2020-11-09T14:26:16.265+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:57415"}
+{"level":"info","time":"2020-11-09T14:26:17.618+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:57439"}
+{"level":"info","time":"2020-11-09T14:26:17.618+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"DZVHnHJPxMKi0tWx"}
+{"level":"info","time":"2020-11-09T14:26:19.311+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-09T14:26:45.875+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:57439"}
+{"level":"info","time":"2020-11-09T14:26:45.879+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:57469"}
+{"level":"info","time":"2020-11-09T14:26:45.879+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"u3pQJ71N5GWfOIGT"}
+{"level":"info","time":"2020-11-09T14:26:48.875+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:57469"}
+{"level":"info","time":"2020-11-09T14:26:48.877+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:57472"}
+{"level":"info","time":"2020-11-09T14:26:48.878+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"dSWXbRLGAwD1Ikzu"}
+{"level":"info","time":"2020-11-09T14:26:51.875+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:57472"}
+{"level":"info","time":"2020-11-09T14:26:51.877+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:57480"}
+{"level":"info","time":"2020-11-09T14:26:51.877+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"Z5G1pEDzqqm3sncC"}
+{"level":"info","time":"2020-11-09T14:26:55.612+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:57480"}
+{"level":"info","time":"2020-11-09T14:26:56.593+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:57492"}
+{"level":"info","time":"2020-11-09T14:26:56.593+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"Yry01AuHiK7FDcCc"}
+{"level":"info","time":"2020-11-09T14:26:57.603+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-09T14:27:25.876+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:57492"}
+{"level":"info","time":"2020-11-09T14:27:25.881+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:57521"}
+{"level":"info","time":"2020-11-09T14:27:25.881+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"35S4IzoOjgm2v8Ky"}
+{"level":"info","time":"2020-11-09T14:27:28.876+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:57521"}
+{"level":"info","time":"2020-11-09T14:27:28.878+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:57527"}
+{"level":"info","time":"2020-11-09T14:27:28.878+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"BpNlS52DyhMEXiJe"}
+{"level":"info","time":"2020-11-09T14:27:31.876+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:57527"}
+{"level":"info","time":"2020-11-09T14:27:31.879+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:57531"}
+{"level":"info","time":"2020-11-09T14:27:31.879+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"v6e8bqQKRMnD4MR6"}
+{"level":"info","time":"2020-11-09T14:41:03.252+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:57531"}
+{"level":"info","time":"2020-11-09T14:41:06.558+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:58249"}
+{"level":"info","time":"2020-11-09T14:41:06.558+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"36KLtiuMzXX0NXjB"}
+{"level":"info","time":"2020-11-09T14:41:11.698+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:58249"}
+{"level":"info","time":"2020-11-09T14:41:11.903+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:58254"}
+{"level":"info","time":"2020-11-09T14:41:11.904+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"vzYUgOKWKhDY2j42"}
+{"level":"info","time":"2020-11-09T14:41:14.764+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:58254"}
+{"level":"info","time":"2020-11-09T14:48:10.514+0800","caller":"E:/slgserver/main/server.go:37","msg":"slg server starting"}
+{"level":"info","time":"2020-11-09T15:36:10.676+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:59573"}
+{"level":"info","time":"2020-11-09T15:36:10.695+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"rfBd56ti2SMtYvSg"}
+{"level":"info","time":"2020-11-09T15:36:37.841+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:59573"}
+{"level":"info","time":"2020-11-09T15:36:37.843+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:59585"}
+{"level":"info","time":"2020-11-09T15:36:37.843+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"D5xAV0YU99zampta"}
+{"level":"info","time":"2020-11-09T15:36:39.842+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:59585"}
+{"level":"info","time":"2020-11-09T15:36:39.844+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:59587"}
+{"level":"info","time":"2020-11-09T15:36:39.844+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"7Z7S575KLkIZ9PYk"}
+{"level":"info","time":"2020-11-09T15:36:41.844+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:59587"}
+{"level":"info","time":"2020-11-09T15:36:41.849+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:59588"}
+{"level":"info","time":"2020-11-09T15:36:41.849+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"L17LTlsVqMNTZyLK"}
+{"level":"info","time":"2020-11-09T15:39:05.127+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:59588"}
+{"level":"info","time":"2020-11-09T15:40:11.662+0800","caller":"E:/slgserver/main/server.go:37","msg":"slg server starting"}
+{"level":"info","time":"2020-11-09T15:40:20.594+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-09T15:41:02.445+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:59768"}
+{"level":"info","time":"2020-11-09T15:41:02.447+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"rfBd56ti2SMtYvSg"}
+{"level":"info","time":"2020-11-09T15:41:16.448+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-09T15:41:39.956+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:59768"}
+{"level":"info","time":"2020-11-09T15:41:39.960+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:59816"}
+{"level":"info","time":"2020-11-09T15:41:39.960+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"D5xAV0YU99zampta"}
+{"level":"info","time":"2020-11-09T15:41:42.954+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:59816"}
+{"level":"info","time":"2020-11-09T15:41:42.961+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:59820"}
+{"level":"info","time":"2020-11-09T15:41:42.961+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"7Z7S575KLkIZ9PYk"}
+{"level":"info","time":"2020-11-09T15:41:44.958+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:59820"}
+{"level":"info","time":"2020-11-09T15:41:44.961+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:59824"}
+{"level":"info","time":"2020-11-09T15:41:44.961+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"L17LTlsVqMNTZyLK"}
+{"level":"info","time":"2020-11-09T15:42:35.619+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:59824"}
+{"level":"info","time":"2020-11-09T15:42:36.653+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:59885"}
+{"level":"info","time":"2020-11-09T15:42:36.654+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"MIFSD2x28MlgPJ0S"}
+{"level":"info","time":"2020-11-09T15:43:04.955+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:59885"}
+{"level":"info","time":"2020-11-09T15:43:04.958+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:59911"}
+{"level":"info","time":"2020-11-09T15:43:04.958+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"DZVHnHJPxMKi0tWx"}
+{"level":"info","time":"2020-11-09T15:43:07.955+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:59911"}
+{"level":"info","time":"2020-11-09T15:43:07.959+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:59916"}
+{"level":"info","time":"2020-11-09T15:43:07.959+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"u3pQJ71N5GWfOIGT"}
+{"level":"info","time":"2020-11-09T15:43:10.955+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:59916"}
+{"level":"info","time":"2020-11-09T15:43:10.958+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:59920"}
+{"level":"info","time":"2020-11-09T15:43:10.958+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"dSWXbRLGAwD1Ikzu"}
+{"level":"info","time":"2020-11-09T15:43:39.415+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:59920"}
+{"level":"info","time":"2020-11-09T15:43:40.610+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:59961"}
+{"level":"info","time":"2020-11-09T15:43:40.610+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"Z5G1pEDzqqm3sncC"}
+{"level":"info","time":"2020-11-09T15:43:48.048+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-09T15:44:09.526+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:59961"}
+{"level":"info","time":"2020-11-09T15:44:09.528+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:59992"}
+{"level":"info","time":"2020-11-09T15:44:09.528+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"Yry01AuHiK7FDcCc"}
+{"level":"info","time":"2020-11-09T15:44:11.527+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:59992"}
+{"level":"info","time":"2020-11-09T15:44:11.530+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:59999"}
+{"level":"info","time":"2020-11-09T15:44:11.530+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"35S4IzoOjgm2v8Ky"}
+{"level":"info","time":"2020-11-09T15:44:13.529+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:59999"}
+{"level":"info","time":"2020-11-09T15:44:13.540+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:60001"}
+{"level":"info","time":"2020-11-09T15:44:13.540+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"BpNlS52DyhMEXiJe"}
+{"level":"info","time":"2020-11-09T15:45:47.758+0800","caller":"E:/slgserver/main/server.go:37","msg":"slg server starting"}
+{"level":"info","time":"2020-11-09T15:45:51.736+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:60110"}
+{"level":"info","time":"2020-11-09T15:45:51.737+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"rfBd56ti2SMtYvSg"}
+{"level":"warn","time":"2020-11-09T15:46:00.731+0800","caller":"E:/slgserver/net/router.go:43","msg":"Group has not applyMiddleware","msgName":"account.login"}
+{"level":"info","time":"2020-11-09T15:46:18.894+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:60110"}
+{"level":"info","time":"2020-11-09T15:46:18.897+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:60136"}
+{"level":"info","time":"2020-11-09T15:46:18.897+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"D5xAV0YU99zampta"}
+{"level":"info","time":"2020-11-09T15:46:20.896+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:60136"}
+{"level":"info","time":"2020-11-09T15:46:20.898+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:60139"}
+{"level":"info","time":"2020-11-09T15:46:20.898+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"7Z7S575KLkIZ9PYk"}
+{"level":"info","time":"2020-11-09T15:46:22.898+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:60139"}
+{"level":"info","time":"2020-11-09T15:46:22.905+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:60142"}
+{"level":"info","time":"2020-11-09T15:46:22.906+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"L17LTlsVqMNTZyLK"}
+{"level":"info","time":"2020-11-09T15:47:46.416+0800","caller":"E:/slgserver/main/server.go:37","msg":"slg server starting"}
+{"level":"info","time":"2020-11-09T15:47:54.227+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:60237"}
+{"level":"info","time":"2020-11-09T15:47:54.229+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"rfBd56ti2SMtYvSg"}
+{"level":"info","time":"2020-11-09T15:48:01.234+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:60237"}
+{"level":"info","time":"2020-11-09T15:48:02.348+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:60253"}
+{"level":"info","time":"2020-11-09T15:48:02.349+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"D5xAV0YU99zampta"}
+{"level":"info","time":"2020-11-09T15:48:08.545+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"warn","time":"2020-11-09T15:48:10.476+0800","caller":"E:/slgserver/net/router.go:43","msg":"Group has not applyMiddleware","msgName":"account.login"}
+{"level":"warn","time":"2020-11-09T15:49:03.246+0800","caller":"E:/slgserver/net/router.go:43","msg":"Group has not applyMiddleware","msgName":"account.login"}
+{"level":"info","time":"2020-11-09T15:49:38.200+0800","caller":"E:/slgserver/main/server.go:37","msg":"slg server starting"}
+{"level":"info","time":"2020-11-09T15:49:38.464+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:60349"}
+{"level":"info","time":"2020-11-09T15:49:38.466+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"rfBd56ti2SMtYvSg"}
+{"level":"info","time":"2020-11-09T15:49:45.897+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"account.login","data":"map[hardware:u8uxJzQX-zlLW-Rfuu-jSqW-bL52V5JPbEyM password:8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92 username:123456]"}
+{"level":"info","time":"2020-11-09T15:49:48.044+0800","caller":"E:/slgserver/server/controller/account.go:62","msg":"login","username":"123456","session":"Y2FlYmJiOTkxZTAyMDlhODQwNzkzNzVjY2VjZGY4YzMwOThmNzdlZjI2NTUyMGFmYjMyMTA5ZjE0ZTgxMmQ5Ng=="}
+{"level":"info","time":"2020-11-09T15:52:25.216+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:60349"}
+{"level":"info","time":"2020-11-09T15:52:26.308+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:60511"}
+{"level":"info","time":"2020-11-09T15:52:26.308+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"D5xAV0YU99zampta"}
+{"level":"info","time":"2020-11-09T15:52:34.001+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"account.login","data":"map[hardware:Az7fBCvo-GVZQ-LkSl-tD4E-58AXZRsKe0Wb password:bcb15f821479b4d5772bd0ca866c00ad5f926e3580720659cc80d39c9d09802a username:12345]"}
+{"level":"info","time":"2020-11-09T15:52:34.034+0800","caller":"E:/slgserver/server/controller/account.go:104","msg":"login username not found","username":"12345"}
+{"level":"info","time":"2020-11-09T15:52:53.471+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:60511"}
+{"level":"info","time":"2020-11-09T15:52:53.474+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:60536"}
+{"level":"info","time":"2020-11-09T15:52:53.474+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"7Z7S575KLkIZ9PYk"}
+{"level":"info","time":"2020-11-09T15:52:55.473+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:60536"}
+{"level":"info","time":"2020-11-09T15:52:55.476+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:60538"}
+{"level":"info","time":"2020-11-09T15:52:55.476+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"L17LTlsVqMNTZyLK"}
+{"level":"info","time":"2020-11-09T15:52:57.485+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:60538"}
+{"level":"info","time":"2020-11-09T15:52:57.488+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:60541"}
+{"level":"info","time":"2020-11-09T15:52:57.489+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"MIFSD2x28MlgPJ0S"}
+{"level":"info","time":"2020-11-09T15:54:08.193+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:60541"}
+{"level":"info","time":"2020-11-09T15:55:05.381+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:60678"}
+{"level":"info","time":"2020-11-09T15:55:05.382+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"DZVHnHJPxMKi0tWx"}
+{"level":"info","time":"2020-11-09T15:55:10.142+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:60684"}
+{"level":"info","time":"2020-11-09T15:55:10.142+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"u3pQJ71N5GWfOIGT"}
+{"level":"info","time":"2020-11-09T15:55:10.162+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:60678"}
+{"level":"info","time":"2020-11-09T15:55:12.143+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:60684"}
+{"level":"info","time":"2020-11-09T15:55:12.151+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:60688"}
+{"level":"info","time":"2020-11-09T15:55:12.151+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"dSWXbRLGAwD1Ikzu"}
+{"level":"info","time":"2020-11-09T15:55:14.144+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:60688"}
+{"level":"info","time":"2020-11-09T15:55:14.148+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:60690"}
+{"level":"info","time":"2020-11-09T15:55:14.148+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"Z5G1pEDzqqm3sncC"}
+{"level":"info","time":"2020-11-09T15:58:35.757+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:60690"}
+{"level":"info","time":"2020-11-09T15:58:36.820+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:60923"}
+{"level":"info","time":"2020-11-09T15:58:36.820+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"Yry01AuHiK7FDcCc"}
+{"level":"info","time":"2020-11-09T15:58:41.673+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:60923"}
+{"level":"info","time":"2020-11-09T15:58:41.678+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:60928"}
+{"level":"info","time":"2020-11-09T15:58:41.678+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"35S4IzoOjgm2v8Ky"}
+{"level":"info","time":"2020-11-09T15:58:43.687+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:60928"}
+{"level":"info","time":"2020-11-09T15:58:43.689+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:60931"}
+{"level":"info","time":"2020-11-09T15:58:43.689+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"BpNlS52DyhMEXiJe"}
+{"level":"info","time":"2020-11-09T15:58:45.688+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:60931"}
+{"level":"info","time":"2020-11-09T15:58:45.692+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:60935"}
+{"level":"info","time":"2020-11-09T15:58:45.693+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"v6e8bqQKRMnD4MR6"}
+{"level":"info","time":"2020-11-09T15:58:47.702+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:60935"}
+{"level":"info","time":"2020-11-09T15:58:47.706+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:60938"}
+{"level":"info","time":"2020-11-09T15:58:47.706+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"36KLtiuMzXX0NXjB"}
+{"level":"info","time":"2020-11-09T15:58:49.703+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:60938"}
+{"level":"info","time":"2020-11-09T15:58:49.707+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:60941"}
+{"level":"info","time":"2020-11-09T15:58:49.707+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"vzYUgOKWKhDY2j42"}
+{"level":"info","time":"2020-11-09T15:58:51.250+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:60941"}
+{"level":"info","time":"2020-11-09T16:00:07.053+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:60962"}
+{"level":"info","time":"2020-11-09T16:00:07.053+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"mPjVIUp97tQjNHJc"}
+{"level":"info","time":"2020-11-09T16:00:15.770+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"account.login","data":"map[hardware:FRedyuHg-6PCF-HTS8-YGY7-90jPLKBGMTbU password:8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92 username:123456]"}
+{"level":"info","time":"2020-11-09T16:00:15.773+0800","caller":"E:/slgserver/server/controller/account.go:62","msg":"login","username":"123456","session":"NDVjMzJmZjFhMTQ2OThmNTE3MTg5MDYzNGFlMzc4ZTI0MmFhNTI4OWVjYTg3MmFlMDlhNGE4MDE3NWE0ODMxNQ=="}
+{"level":"info","time":"2020-11-09T16:00:40.356+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:60962"}
+{"level":"info","time":"2020-11-09T16:00:40.357+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:61006"}
+{"level":"info","time":"2020-11-09T16:00:40.358+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"aOAGeDZRvcMdGIAS"}
+{"level":"info","time":"2020-11-09T16:01:25.062+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:61006"}
+{"level":"info","time":"2020-11-09T16:01:26.227+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:61055"}
+{"level":"info","time":"2020-11-09T16:01:26.227+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"mHsVKxASAgqjn9FS"}
+{"level":"info","time":"2020-11-09T16:01:30.400+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:61055"}
+{"level":"info","time":"2020-11-09T16:03:10.966+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:61169"}
+{"level":"info","time":"2020-11-09T16:03:10.967+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"PctR9jjTp6hVC4K9"}
+{"level":"info","time":"2020-11-09T16:03:20.849+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"account.login","data":"map[hardware:AMoEcljV-KPkm-odws-UqNo-woi3Dzm9lXPB password:8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92 username:123456]"}
+{"level":"info","time":"2020-11-09T16:03:20.852+0800","caller":"E:/slgserver/server/controller/account.go:62","msg":"login","username":"123456","session":"NDVjMzJmZjFhMTQ2OThmNTE3MTg5MDYzNGFlMzc4ZTI1NDM3ZGE2ZWQ3Y2RiNWFhYTA2MGY0M2Y3OTFkNDc5ZA=="}
+{"level":"info","time":"2020-11-09T16:06:39.979+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:61169"}
+{"level":"info","time":"2020-11-09T16:06:41.570+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:61546"}
+{"level":"info","time":"2020-11-09T16:06:41.570+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"eq92EZ0pCcjKTOjl"}
+{"level":"info","time":"2020-11-09T16:08:34.724+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:61546"}
+{"level":"info","time":"2020-11-09T16:08:35.898+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:61719"}
+{"level":"info","time":"2020-11-09T16:08:35.899+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"QFXEFccID0YX3Wji"}
+{"level":"info","time":"2020-11-09T16:11:22.602+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:61719"}
+{"level":"info","time":"2020-11-09T16:12:07.968+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:61961"}
+{"level":"info","time":"2020-11-09T16:12:07.969+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"j0noVd02dzrIkvfE"}
+{"level":"info","time":"2020-11-09T16:12:08.520+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:61961"}
+{"level":"info","time":"2020-11-09T16:12:08.934+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:61963"}
+{"level":"info","time":"2020-11-09T16:12:08.934+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"7oyNuWFzQt7KaBNg"}
+{"level":"info","time":"2020-11-09T16:13:00.560+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:61963"}
+{"level":"info","time":"2020-11-09T16:13:02.565+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:62024"}
+{"level":"info","time":"2020-11-09T16:13:02.565+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"OOduDkdg3imfJmUK"}
+{"level":"info","time":"2020-11-09T16:14:07.424+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:62024"}
+{"level":"info","time":"2020-11-09T16:14:08.737+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:62104"}
+{"level":"info","time":"2020-11-09T16:14:08.737+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"twtISTcIFOAXlck1"}
+{"level":"info","time":"2020-11-09T16:14:55.502+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:62104"}
+{"level":"info","time":"2020-11-09T16:14:57.517+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:62157"}
+{"level":"info","time":"2020-11-09T16:14:57.517+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"SNYkNykWvD2z9qHG"}
+{"level":"info","time":"2020-11-09T16:15:38.942+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:62157"}
+{"level":"info","time":"2020-11-09T16:15:40.946+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:62200"}
+{"level":"info","time":"2020-11-09T16:15:40.947+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"JSHL7LhjRTFW8Vns"}
+{"level":"info","time":"2020-11-09T16:16:57.017+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:62200"}
+{"level":"info","time":"2020-11-09T16:16:59.021+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:62279"}
+{"level":"info","time":"2020-11-09T16:16:59.021+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"hBVv2Tw2kxsQTa0k"}
+{"level":"info","time":"2020-11-09T16:17:15.818+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:62279"}
+{"level":"info","time":"2020-11-09T16:17:16.819+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:62304"}
+{"level":"info","time":"2020-11-09T16:17:16.820+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"dqJKFHx9wckLcnxi"}
+{"level":"info","time":"2020-11-09T16:17:20.085+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:62304"}
+{"level":"info","time":"2020-11-09T16:17:22.103+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:62310"}
+{"level":"info","time":"2020-11-09T16:17:22.103+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"oppr1oEedgLKItAQ"}
+{"level":"info","time":"2020-11-09T16:18:18.858+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:62310"}
+{"level":"info","time":"2020-11-09T16:18:25.183+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:62375"}
+{"level":"info","time":"2020-11-09T16:18:25.183+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"LW5vCJkFs3MfZG5k"}
+{"level":"info","time":"2020-11-09T16:18:32.625+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:62375"}
+{"level":"info","time":"2020-11-09T16:18:34.629+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:62384"}
+{"level":"info","time":"2020-11-09T16:18:34.629+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"MM86T4V6NxXShYDu"}
+{"level":"info","time":"2020-11-09T16:20:26.979+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:62384"}
+{"level":"info","time":"2020-11-09T16:20:28.207+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:62500"}
+{"level":"info","time":"2020-11-09T16:20:28.207+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"bsdgiwmLgoJ4sj3H"}
+{"level":"info","time":"2020-11-09T16:20:52.344+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:62500"}
+{"level":"info","time":"2020-11-09T16:21:02.562+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:62531"}
+{"level":"info","time":"2020-11-09T16:21:02.562+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"bvSY7BPUPIWKZDbK"}
+{"level":"info","time":"2020-11-09T16:22:13.969+0800","caller":"E:/slgserver/main/server.go:37","msg":"slg server starting"}
+{"level":"info","time":"2020-11-09T16:22:14.001+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:62595"}
+{"level":"info","time":"2020-11-09T16:22:14.002+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"rfBd56ti2SMtYvSg"}
+{"level":"info","time":"2020-11-09T16:25:30.202+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:62595"}
+{"level":"info","time":"2020-11-09T16:25:43.698+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:62782"}
+{"level":"info","time":"2020-11-09T16:25:43.698+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"D5xAV0YU99zampta"}
+{"level":"info","time":"2020-11-09T16:28:11.043+0800","caller":"E:/slgserver/main/server.go:37","msg":"slg server starting"}
+{"level":"info","time":"2020-11-09T16:28:11.512+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:62957"}
+{"level":"info","time":"2020-11-09T16:28:11.513+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"rfBd56ti2SMtYvSg"}
+{"level":"info","time":"2020-11-09T16:38:12.975+0800","caller":"E:/slgserver/main/server.go:37","msg":"slg server starting"}
+{"level":"info","time":"2020-11-09T16:38:13.016+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:63478"}
+{"level":"info","time":"2020-11-09T16:38:13.017+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"rfBd56ti2SMtYvSg"}
+{"level":"info","time":"2020-11-09T17:27:28.268+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:63478"}
+{"level":"info","time":"2020-11-09T18:11:43.056+0800","caller":"E:/slgserver/main/server.go:37","msg":"slg server starting"}
+{"level":"info","time":"2020-11-10T10:11:52.355+0800","caller":"E:/slgserver/main/server.go:37","msg":"slg server starting"}
+{"level":"info","time":"2020-11-10T10:11:57.480+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:52456"}
+{"level":"info","time":"2020-11-10T10:11:57.482+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"rfBd56ti2SMtYvSg"}
+{"level":"info","time":"2020-11-10T10:12:34.739+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"account.login","data":"map[hardware:GfLhrHVe-D8oC-9dk0-ISTw-mGrzaYArrYCr password:8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92 username:123456]"}
+{"level":"error","time":"2020-11-10T10:12:34.745+0800","caller":"E:/slgserver/server/controller/account.go:42","msg":"login db error","username":"123456","error":"Error 1054: Unknown column 'u_id' in 'field list'"}
+{"level":"info","time":"2020-11-10T10:14:38.004+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:52456"}
+{"level":"info","time":"2020-11-10T10:14:39.074+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:52616"}
+{"level":"info","time":"2020-11-10T10:14:39.074+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"D5xAV0YU99zampta"}
+{"level":"info","time":"2020-11-10T10:15:28.714+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:52616"}
+{"level":"info","time":"2020-11-10T10:15:29.663+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:52672"}
+{"level":"info","time":"2020-11-10T10:15:29.663+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"7Z7S575KLkIZ9PYk"}
+{"level":"info","time":"2020-11-10T10:16:18.978+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:52672"}
+{"level":"info","time":"2020-11-10T10:17:19.776+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:52793"}
+{"level":"info","time":"2020-11-10T10:17:19.776+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"L17LTlsVqMNTZyLK"}
+{"level":"info","time":"2020-11-10T10:17:42.941+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:52793"}
+{"level":"info","time":"2020-11-10T10:17:43.943+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:52827"}
+{"level":"info","time":"2020-11-10T10:17:43.943+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"MIFSD2x28MlgPJ0S"}
+{"level":"info","time":"2020-11-10T10:18:17.650+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:52827"}
+{"level":"info","time":"2020-11-10T10:18:27.909+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:52870"}
+{"level":"info","time":"2020-11-10T10:18:27.909+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"DZVHnHJPxMKi0tWx"}
+{"level":"info","time":"2020-11-10T10:18:27.922+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"account.login","data":"map[hardware:XIc324qv-ZMpr-4Nwd-ACdb-JXc8zw7dtkeX password:8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92 username:123456]"}
+{"level":"error","time":"2020-11-10T10:18:27.924+0800","caller":"E:/slgserver/server/controller/account.go:42","msg":"login db error","username":"123456","error":"Error 1054: Unknown column 'u_id' in 'field list'"}
+{"level":"info","time":"2020-11-10T10:18:51.680+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:52870"}
+{"level":"info","time":"2020-11-10T10:18:53.686+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:52897"}
+{"level":"info","time":"2020-11-10T10:18:53.686+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"u3pQJ71N5GWfOIGT"}
+{"level":"info","time":"2020-11-10T10:19:02.562+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:52897"}
+{"level":"info","time":"2020-11-10T10:19:03.387+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:52918"}
+{"level":"info","time":"2020-11-10T10:19:03.387+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"dSWXbRLGAwD1Ikzu"}
+{"level":"info","time":"2020-11-10T10:19:55.957+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:52918"}
+{"level":"info","time":"2020-11-10T10:19:57.962+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:52972"}
+{"level":"info","time":"2020-11-10T10:19:57.962+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"Z5G1pEDzqqm3sncC"}
+{"level":"info","time":"2020-11-10T10:20:35.904+0800","caller":"E:/slgserver/main/server.go:37","msg":"slg server starting"}
+{"level":"info","time":"2020-11-10T10:20:36.098+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:53012"}
+{"level":"info","time":"2020-11-10T10:20:36.100+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"rfBd56ti2SMtYvSg"}
+{"level":"info","time":"2020-11-10T10:20:43.823+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:53012"}
+{"level":"info","time":"2020-11-10T10:20:44.791+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:53029"}
+{"level":"info","time":"2020-11-10T10:20:44.792+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"D5xAV0YU99zampta"}
+{"level":"info","time":"2020-11-10T10:21:37.882+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:53029"}
+{"level":"info","time":"2020-11-10T10:21:38.835+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:53090"}
+{"level":"info","time":"2020-11-10T10:21:38.835+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"7Z7S575KLkIZ9PYk"}
+{"level":"info","time":"2020-11-10T10:21:47.672+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"account.login","data":"map[hardware:NaOYzNSa-CaAd-x4CX-O5NU-H7mysBpD9YtH password:8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92 username:123456]"}
+{"level":"error","time":"2020-11-10T10:21:47.679+0800","caller":"E:/slgserver/server/controller/account.go:42","msg":"login db error","username":"123456","error":"Error 1054: Unknown column 'u_id' in 'field list'"}
+{"level":"info","time":"2020-11-10T10:22:35.790+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:53090"}
+{"level":"info","time":"2020-11-10T10:22:36.662+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:53155"}
+{"level":"info","time":"2020-11-10T10:22:36.662+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"L17LTlsVqMNTZyLK"}
+{"level":"info","time":"2020-11-10T10:22:43.681+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"account.login","data":"map[hardware:8U4aLdB1-fVYp-fIzP-H3Xh-QV30hU2LyENv password:8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92 username:123456]"}
+{"level":"error","time":"2020-11-10T10:22:43.682+0800","caller":"E:/slgserver/server/controller/account.go:42","msg":"login db error","username":"123456","error":"Error 1054: Unknown column 'u_id' in 'field list'"}
+{"level":"info","time":"2020-11-10T10:23:38.284+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:53155"}
+{"level":"info","time":"2020-11-10T10:23:39.305+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:53223"}
+{"level":"info","time":"2020-11-10T10:23:39.305+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"MIFSD2x28MlgPJ0S"}
+{"level":"info","time":"2020-11-10T10:23:45.698+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"account.login","data":"map[hardware:AgrlbxEv-pn0U-2ChP-2kg8-WwXz6WreufSJ password:8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92 username:123456]"}
+{"level":"error","time":"2020-11-10T10:23:45.699+0800","caller":"E:/slgserver/server/controller/account.go:42","msg":"login db error","username":"123456","error":"Error 1054: Unknown column 'u_id' in 'field list'"}
+{"level":"info","time":"2020-11-10T10:24:21.630+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:53223"}
+{"level":"info","time":"2020-11-10T10:24:22.568+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:53276"}
+{"level":"info","time":"2020-11-10T10:24:22.569+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"DZVHnHJPxMKi0tWx"}
+{"level":"info","time":"2020-11-10T10:24:37.753+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:53276"}
+{"level":"info","time":"2020-11-10T10:24:39.408+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:53296"}
+{"level":"info","time":"2020-11-10T10:24:39.408+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"u3pQJ71N5GWfOIGT"}
+{"level":"info","time":"2020-11-10T10:24:56.090+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"account.login","data":"map[hardware:bWvPbUM1-BbtL-n9k2-94OY-0IHExwBL24Qg password:8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92 username:123456]"}
+{"level":"error","time":"2020-11-10T10:24:56.091+0800","caller":"E:/slgserver/server/controller/account.go:42","msg":"login db error","username":"123456","error":"Error 1054: Unknown column 'u_id' in 'field list'"}
+{"level":"info","time":"2020-11-10T10:26:06.595+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:53296"}
+{"level":"info","time":"2020-11-10T10:26:07.529+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:53392"}
+{"level":"info","time":"2020-11-10T10:26:07.529+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"dSWXbRLGAwD1Ikzu"}
+{"level":"info","time":"2020-11-10T10:26:16.427+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"account.login","data":"map[hardware:lM76uoD6-OWYO-VjPr-00bs-2f7zJc6QANnD password:8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92 username:123456]"}
+{"level":"error","time":"2020-11-10T10:26:16.428+0800","caller":"E:/slgserver/server/controller/account.go:42","msg":"login db error","username":"123456","error":"Error 1054: Unknown column 'u_id' in 'field list'"}
+{"level":"info","time":"2020-11-10T10:27:42.020+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:53392"}
+{"level":"info","time":"2020-11-10T10:27:44.929+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:53508"}
+{"level":"info","time":"2020-11-10T10:27:44.929+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"Z5G1pEDzqqm3sncC"}
+{"level":"info","time":"2020-11-10T10:27:52.950+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"account.login","data":"map[hardware:fylxa0OY-aQ77-JzBN-NAVi-lW1CSTnnPBpK password:8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92 username:123456]"}
+{"level":"error","time":"2020-11-10T10:27:52.952+0800","caller":"E:/slgserver/server/controller/account.go:42","msg":"login db error","username":"123456","error":"Error 1054: Unknown column 'u_id' in 'field list'"}
+{"level":"info","time":"2020-11-10T10:28:37.990+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:53508"}
+{"level":"info","time":"2020-11-10T10:28:38.870+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:53567"}
+{"level":"info","time":"2020-11-10T10:28:38.870+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"Yry01AuHiK7FDcCc"}
+{"level":"info","time":"2020-11-10T10:28:47.413+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"account.login","data":"map[hardware:QHHQjebx-7QeA-gagj-F814-Cd5G3xSAitDK password:8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92 username:123456]"}
+{"level":"error","time":"2020-11-10T10:28:47.414+0800","caller":"E:/slgserver/server/controller/account.go:42","msg":"login db error","username":"123456","error":"Error 1054: Unknown column 'u_id' in 'field list'"}
+{"level":"info","time":"2020-11-10T10:30:50.147+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:53567"}
+{"level":"info","time":"2020-11-10T10:30:51.481+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:53750"}
+{"level":"info","time":"2020-11-10T10:30:51.482+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"35S4IzoOjgm2v8Ky"}
+{"level":"info","time":"2020-11-10T10:30:58.585+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"account.login","data":"map[hardware:JGhq5Pwi-KrFh-fo34-opUW-B2ZMdcE7FiN3 password:8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92 username:123456]"}
+{"level":"error","time":"2020-11-10T10:30:58.587+0800","caller":"E:/slgserver/server/controller/account.go:42","msg":"login db error","username":"123456","error":"Error 1054: Unknown column 'u_id' in 'field list'"}
+{"level":"info","time":"2020-11-10T10:32:20.473+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:53750"}
+{"level":"info","time":"2020-11-10T10:32:21.514+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:53851"}
+{"level":"info","time":"2020-11-10T10:32:21.514+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"BpNlS52DyhMEXiJe"}
+{"level":"info","time":"2020-11-10T10:32:30.792+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"account.login","data":"map[hardware:rOcIvhet-Tmwy-G4BQ-zMwK-Sm9yT1fSjMQS password:8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92 username:123456]"}
+{"level":"error","time":"2020-11-10T10:32:30.794+0800","caller":"E:/slgserver/server/controller/account.go:42","msg":"login db error","username":"123456","error":"Error 1054: Unknown column 'u_id' in 'field list'"}
+{"level":"info","time":"2020-11-10T10:33:34.597+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"account.login","data":"map[hardware:SjT7gWDH-ff2Z-oqgH-tcyA-Te6IRupQyg8F password:8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92 username:123456]"}
+{"level":"error","time":"2020-11-10T10:33:34.599+0800","caller":"E:/slgserver/server/controller/account.go:42","msg":"login db error","username":"123456","error":"Error 1054: Unknown column 'u_id' in 'field list'"}
+{"level":"info","time":"2020-11-10T10:33:43.233+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:53851"}
+{"level":"info","time":"2020-11-10T10:33:44.146+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:53944"}
+{"level":"info","time":"2020-11-10T10:33:44.146+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"v6e8bqQKRMnD4MR6"}
+{"level":"info","time":"2020-11-10T10:33:51.913+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"account.login","data":"map[hardware:ogjvb6rU-ES2f-abtW-9D5M-4lWh1Sl1Janr password:8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92 username:123456]"}
+{"level":"error","time":"2020-11-10T10:33:51.914+0800","caller":"E:/slgserver/server/controller/account.go:42","msg":"login db error","username":"123456","error":"Error 1054: Unknown column 'u_id' in 'field list'"}
+{"level":"info","time":"2020-11-10T10:34:44.160+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:53944"}
+{"level":"info","time":"2020-11-10T10:34:44.937+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:54007"}
+{"level":"info","time":"2020-11-10T10:34:44.937+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"36KLtiuMzXX0NXjB"}
+{"level":"info","time":"2020-11-10T10:34:53.456+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"account.login","data":"map[hardware:zWmcBpr3-ZZjV-9rVw-u3iq-nYz42znKFVbl password:8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92 username:123456]"}
+{"level":"error","time":"2020-11-10T10:34:53.457+0800","caller":"E:/slgserver/server/controller/account.go:42","msg":"login db error","username":"123456","error":"Error 1054: Unknown column 'u_id' in 'field list'"}
+{"level":"info","time":"2020-11-10T10:35:35.058+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:54007"}
+{"level":"info","time":"2020-11-10T10:35:36.096+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:54069"}
+{"level":"info","time":"2020-11-10T10:35:36.097+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"vzYUgOKWKhDY2j42"}
+{"level":"info","time":"2020-11-10T10:35:45.584+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"account.login","data":"map[hardware:uAq8ZV2x-btFW-RvGu-238B-o2rCVkeRAxTL password:8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92 username:123456]"}
+{"level":"error","time":"2020-11-10T10:35:45.586+0800","caller":"E:/slgserver/server/controller/account.go:42","msg":"login db error","username":"123456","error":"Error 1054: Unknown column 'u_id' in 'field list'"}
+{"level":"info","time":"2020-11-10T10:36:01.288+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:54069"}
+{"level":"info","time":"2020-11-10T10:36:02.169+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:54102"}
+{"level":"info","time":"2020-11-10T10:36:02.169+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"mPjVIUp97tQjNHJc"}
+{"level":"info","time":"2020-11-10T10:36:08.881+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"account.login","data":"map[hardware:KVThScUC-IgIJ-bDVG-9ztW-J8M2Ad2R2jmg password:8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92 username:123456]"}
+{"level":"error","time":"2020-11-10T10:36:08.882+0800","caller":"E:/slgserver/server/controller/account.go:42","msg":"login db error","username":"123456","error":"Error 1054: Unknown column 'u_id' in 'field list'"}
+{"level":"info","time":"2020-11-10T10:36:27.339+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:54102"}
+{"level":"info","time":"2020-11-10T10:36:28.223+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:54139"}
+{"level":"info","time":"2020-11-10T10:36:28.223+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"aOAGeDZRvcMdGIAS"}
+{"level":"info","time":"2020-11-10T10:37:44.684+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:54139"}
+{"level":"info","time":"2020-11-10T10:37:45.559+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:54232"}
+{"level":"info","time":"2020-11-10T10:37:45.559+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"mHsVKxASAgqjn9FS"}
+{"level":"info","time":"2020-11-10T10:37:55.006+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-10T10:37:57.065+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-10T10:38:02.129+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-10T10:38:32.650+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-10T10:39:25.721+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-10T10:40:48.081+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-10T10:47:59.426+0800","caller":"E:/slgserver/main/server.go:37","msg":"slg server starting"}
+{"level":"info","time":"2020-11-10T10:48:00.123+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:54831"}
+{"level":"info","time":"2020-11-10T10:48:00.124+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"rfBd56ti2SMtYvSg"}
+{"level":"info","time":"2020-11-10T10:48:14.274+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:54831"}
+{"level":"info","time":"2020-11-10T10:48:15.380+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:54854"}
+{"level":"info","time":"2020-11-10T10:48:15.380+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"D5xAV0YU99zampta"}
+{"level":"info","time":"2020-11-10T10:48:24.184+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-10T10:49:03.560+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:54854"}
+{"level":"info","time":"2020-11-10T10:49:04.706+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:54908"}
+{"level":"info","time":"2020-11-10T10:49:04.706+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"7Z7S575KLkIZ9PYk"}
+{"level":"info","time":"2020-11-10T10:49:16.444+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-10T10:49:20.648+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-10T10:49:22.760+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-10T10:49:23.426+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-10T10:49:24.008+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-10T10:49:26.136+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:54908"}
+{"level":"info","time":"2020-11-10T10:49:26.912+0800","caller":"E:/slgserver/main/server.go:55","msg":"client connect","addr":"192.168.0.33:54939"}
+{"level":"info","time":"2020-11-10T10:49:26.912+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"L17LTlsVqMNTZyLK"}
+{"level":"info","time":"2020-11-10T10:49:33.241+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-10T10:49:35.546+0800","caller":"E:/slgserver/main/server.go:60","msg":"client disconnect","addr":"192.168.0.33:54939"}
+{"level":"info","time":"2020-11-10T14:13:45.569+0800","caller":"E:/slgserver/main/server.go:33","msg":"slg server starting"}
+{"level":"info","time":"2020-11-10T14:13:58.752+0800","caller":"E:/slgserver/main/server.go:33","msg":"slg server starting"}
+{"level":"info","time":"2020-11-10T14:40:29.376+0800","caller":"E:/slgserver/main/server.go:33","msg":"slg server starting"}
+{"level":"info","time":"2020-11-10T14:55:43.469+0800","caller":"E:/slgserver/main/server.go:33","msg":"slg server starting"}
+{"level":"info","time":"2020-11-10T14:56:19.883+0800","caller":"E:/slgserver/main/server.go:33","msg":"slg server starting"}
+{"level":"info","time":"2020-11-10T15:00:30.295+0800","caller":"E:/slgserver/main/server.go:33","msg":"slg server starting"}
+{"level":"info","time":"2020-11-10T15:09:46.881+0800","caller":"E:/slgserver/main/server.go:33","msg":"slg server starting"}
+{"level":"info","time":"2020-11-10T15:21:02.263+0800","caller":"E:/slgserver/main/server.go:49","msg":"client connect","addr":"192.168.0.33:56728"}
+{"level":"info","time":"2020-11-10T15:21:02.264+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"rfBd56ti2SMtYvSg"}
+{"level":"info","time":"2020-11-10T15:21:45.504+0800","caller":"E:/slgserver/main/server.go:54","msg":"client disconnect","addr":"192.168.0.33:56728"}
+{"level":"info","time":"2020-11-10T15:23:06.125+0800","caller":"E:/slgserver/main/server.go:49","msg":"client connect","addr":"192.168.0.33:56854"}
+{"level":"info","time":"2020-11-10T15:23:06.126+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"D5xAV0YU99zampta"}
+{"level":"info","time":"2020-11-10T15:23:52.312+0800","caller":"E:/slgserver/main/server.go:54","msg":"client disconnect","addr":"192.168.0.33:56854"}
+{"level":"info","time":"2020-11-10T15:23:54.392+0800","caller":"E:/slgserver/main/server.go:49","msg":"client connect","addr":"192.168.0.33:56910"}
+{"level":"info","time":"2020-11-10T15:23:54.393+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"7Z7S575KLkIZ9PYk"}
+{"level":"info","time":"2020-11-10T15:24:43.092+0800","caller":"E:/slgserver/main/server.go:54","msg":"client disconnect","addr":"192.168.0.33:56910"}
+{"level":"info","time":"2020-11-10T15:24:46.693+0800","caller":"E:/slgserver/main/server.go:49","msg":"client connect","addr":"192.168.0.33:56975"}
+{"level":"info","time":"2020-11-10T15:24:46.694+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"L17LTlsVqMNTZyLK"}
+{"level":"info","time":"2020-11-10T15:24:59.890+0800","caller":"E:/slgserver/main/server.go:54","msg":"client disconnect","addr":"192.168.0.33:56975"}
+{"level":"info","time":"2020-11-10T15:25:00.944+0800","caller":"E:/slgserver/main/server.go:49","msg":"client connect","addr":"192.168.0.33:56996"}
+{"level":"info","time":"2020-11-10T15:25:00.944+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"MIFSD2x28MlgPJ0S"}
+{"level":"info","time":"2020-11-10T15:25:37.314+0800","caller":"E:/slgserver/main/server.go:54","msg":"client disconnect","addr":"192.168.0.33:56996"}
+{"level":"info","time":"2020-11-10T15:25:40.443+0800","caller":"E:/slgserver/main/server.go:49","msg":"client connect","addr":"192.168.0.33:57046"}
+{"level":"info","time":"2020-11-10T15:25:40.443+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"DZVHnHJPxMKi0tWx"}
+{"level":"error","time":"2020-11-10T15:25:56.353+0800","caller":"E:/slgserver/server/entity/role_city_mgr.go:25","msg":"RoleCityMgr load role_city table error"}
+{"level":"info","time":"2020-11-10T15:25:56.353+0800","caller":"E:/slgserver/main/server.go:33","msg":"slg server starting"}
+{"level":"info","time":"2020-11-10T15:25:56.416+0800","caller":"E:/slgserver/main/server.go:49","msg":"client connect","addr":"192.168.0.33:57062"}
+{"level":"info","time":"2020-11-10T15:25:56.416+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"rfBd56ti2SMtYvSg"}
+{"level":"info","time":"2020-11-10T15:26:21.617+0800","caller":"E:/slgserver/main/server.go:54","msg":"client disconnect","addr":"192.168.0.33:57062"}
+{"level":"info","time":"2020-11-10T15:26:23.300+0800","caller":"E:/slgserver/main/server.go:49","msg":"client connect","addr":"192.168.0.33:57097"}
+{"level":"info","time":"2020-11-10T15:26:23.300+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"D5xAV0YU99zampta"}
+{"level":"info","time":"2020-11-10T15:30:39.094+0800","caller":"E:/slgserver/main/server.go:54","msg":"client disconnect","addr":"192.168.0.33:57097"}
+{"level":"info","time":"2020-11-10T15:38:15.162+0800","caller":"E:/slgserver/main/server.go:49","msg":"client connect","addr":"192.168.0.33:57940"}
+{"level":"info","time":"2020-11-10T15:38:15.162+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"7Z7S575KLkIZ9PYk"}
+{"level":"info","time":"2020-11-10T15:42:09.310+0800","caller":"E:/slgserver/main/server.go:54","msg":"client disconnect","addr":"192.168.0.33:57940"}
+{"level":"info","time":"2020-11-10T15:42:10.945+0800","caller":"E:/slgserver/main/server.go:49","msg":"client connect","addr":"192.168.0.33:58152"}
+{"level":"info","time":"2020-11-10T15:42:10.945+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"L17LTlsVqMNTZyLK"}
+{"level":"info","time":"2020-11-10T15:42:50.529+0800","caller":"E:/slgserver/main/server.go:54","msg":"client disconnect","addr":"192.168.0.33:58152"}
+{"level":"info","time":"2020-11-10T15:51:32.856+0800","caller":"E:/slgserver/server/entity/national_map_mgr.go:43","msg":"NationalMapMgr load","len":1600}
+{"level":"error","time":"2020-11-10T15:51:32.857+0800","caller":"E:/slgserver/server/entity/role_city_mgr.go:25","msg":"RoleCityMgr load role_city table error"}
+{"level":"info","time":"2020-11-10T15:51:32.858+0800","caller":"E:/slgserver/main/server.go:33","msg":"slg server starting"}
+{"level":"info","time":"2020-11-10T15:52:03.873+0800","caller":"E:/slgserver/main/server.go:49","msg":"client connect","addr":"192.168.0.33:58778"}
+{"level":"info","time":"2020-11-10T15:52:03.874+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"TJSZtoDlpznZqEEb"}
+{"level":"info","time":"2020-11-10T15:52:12.638+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"account.login","data":"map[hardware:8d88HKcO-N3OS-xEt1-NCWQ-zTrntSo5ocp5 password:8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92 username:123456]"}
+{"level":"info","time":"2020-11-10T15:52:12.641+0800","caller":"E:/slgserver/server/controller/account.go:61","msg":"login","username":"123456","session":"NTM5ZGU2YmZmZDU0MGRjNDNmNmE0YTk3MDYwMjQwZmU2MjMwN2Q5YWM3YTJmNDliNjQ1NThiODY4MWM2ODZiZA=="}
+{"level":"info","time":"2020-11-10T15:53:37.767+0800","caller":"E:/slgserver/main/server.go:54","msg":"client disconnect","addr":"192.168.0.33:58778"}
+{"level":"info","time":"2020-11-10T15:53:38.712+0800","caller":"E:/slgserver/main/server.go:49","msg":"client connect","addr":"192.168.0.33:58880"}
+{"level":"info","time":"2020-11-10T15:53:38.712+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"oA8d0gbuE9WSIPq1"}
+{"level":"info","time":"2020-11-10T15:53:46.461+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"account.login","data":"map[hardware:8d88HKcO-N3OS-xEt1-NCWQ-zTrntSo5ocp5 password:8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92 username:123456]"}
+{"level":"info","time":"2020-11-10T15:53:46.463+0800","caller":"E:/slgserver/server/controller/account.go:61","msg":"login","username":"123456","session":"NTM5ZGU2YmZmZDU0MGRjNDNmNmE0YTk3MDYwMjQwZmU5OWMzN2JlYWExMjRlYmQyOTQ5ZWY2YzY3N2Y2ZjRmMw=="}
+{"level":"info","time":"2020-11-10T15:54:20.216+0800","caller":"E:/slgserver/main/server.go:54","msg":"client disconnect","addr":"192.168.0.33:58880"}
+{"level":"info","time":"2020-11-10T15:54:21.156+0800","caller":"E:/slgserver/main/server.go:49","msg":"client connect","addr":"192.168.0.33:58933"}
+{"level":"info","time":"2020-11-10T15:54:21.156+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"9VuvTWWT2jHZ9kKf"}
+{"level":"info","time":"2020-11-10T15:54:49.198+0800","caller":"E:/slgserver/main/server.go:54","msg":"client disconnect","addr":"192.168.0.33:58933"}
+{"level":"info","time":"2020-11-10T15:54:50.140+0800","caller":"E:/slgserver/main/server.go:49","msg":"client connect","addr":"192.168.0.33:58977"}
+{"level":"info","time":"2020-11-10T15:54:50.140+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"6NGvkmJFvaPJnIgP"}
+{"level":"info","time":"2020-11-10T15:54:57.203+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"account.login","data":"map[hardware:8d88HKcO-N3OS-xEt1-NCWQ-zTrntSo5ocp5 password:8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92 username:123456]"}
+{"level":"info","time":"2020-11-10T15:54:57.205+0800","caller":"E:/slgserver/server/controller/account.go:61","msg":"login","username":"123456","session":"NTM5ZGU2YmZmZDU0MGRjNDNmNmE0YTk3MDYwMjQwZmU3Mzc4YjBkM2Y2NjlmNDE1OGQzMzRjZGQ1MWQ5ZWZhYQ=="}
+{"level":"info","time":"2020-11-10T15:55:44.069+0800","caller":"E:/slgserver/main/server.go:54","msg":"client disconnect","addr":"192.168.0.33:58977"}
+{"level":"info","time":"2020-11-10T15:55:44.984+0800","caller":"E:/slgserver/main/server.go:49","msg":"client connect","addr":"192.168.0.33:59044"}
+{"level":"info","time":"2020-11-10T15:55:44.984+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"drHYz7JUOB00mzRu"}
+{"level":"info","time":"2020-11-10T15:55:51.682+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"account.login","data":"map[hardware:8d88HKcO-N3OS-xEt1-NCWQ-zTrntSo5ocp5 password:8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92 username:123456]"}
+{"level":"info","time":"2020-11-10T15:55:51.684+0800","caller":"E:/slgserver/server/controller/account.go:61","msg":"login","username":"123456","session":"NTM5ZGU2YmZmZDU0MGRjNDNmNmE0YTk3MDYwMjQwZmVhN2U0ZjllMjJhMTEzN2U4MzFiYjY4MjQyMjAxMTNlMg=="}
+{"level":"info","time":"2020-11-10T15:56:33.434+0800","caller":"E:/slgserver/main/server.go:54","msg":"client disconnect","addr":"192.168.0.33:59044"}
+{"level":"info","time":"2020-11-10T15:56:34.395+0800","caller":"E:/slgserver/main/server.go:49","msg":"client connect","addr":"192.168.0.33:59110"}
+{"level":"info","time":"2020-11-10T15:56:34.395+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"suuqu9yiFSNzjlhI"}
+{"level":"info","time":"2020-11-10T15:56:42.292+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"account.login","data":"map[hardware:8d88HKcO-N3OS-xEt1-NCWQ-zTrntSo5ocp5 password:8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92 username:123456]"}
+{"level":"info","time":"2020-11-10T15:56:42.294+0800","caller":"E:/slgserver/server/controller/account.go:61","msg":"login","username":"123456","session":"NTM5ZGU2YmZmZDU0MGRjNDNmNmE0YTk3MDYwMjQwZmUwMzhhOTRmNDkyMmZlODcwNjZlMzkxOTNiYTViNDQzZg=="}
+{"level":"info","time":"2020-11-10T15:57:07.443+0800","caller":"E:/slgserver/main/server.go:54","msg":"client disconnect","addr":"192.168.0.33:59110"}
+{"level":"info","time":"2020-11-10T15:57:08.412+0800","caller":"E:/slgserver/main/server.go:49","msg":"client connect","addr":"192.168.0.33:59162"}
+{"level":"info","time":"2020-11-10T15:57:08.412+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"35nkO7eqWjs1w3pz"}
+{"level":"info","time":"2020-11-10T15:57:17.039+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"account.login","data":"map[hardware:8d88HKcO-N3OS-xEt1-NCWQ-zTrntSo5ocp5 password:8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92 username:123456]"}
+{"level":"info","time":"2020-11-10T15:57:17.042+0800","caller":"E:/slgserver/server/controller/account.go:61","msg":"login","username":"123456","session":"NTM5ZGU2YmZmZDU0MGRjNDNmNmE0YTk3MDYwMjQwZmUzZTQ3NGRmOTc3ZWM2NzkyNzhlMjViMDRmMjE4OTI1Zg=="}
+{"level":"info","time":"2020-11-10T16:00:46.001+0800","caller":"E:/slgserver/main/server.go:54","msg":"client disconnect","addr":"192.168.0.33:59162"}
+{"level":"info","time":"2020-11-10T16:00:46.957+0800","caller":"E:/slgserver/main/server.go:49","msg":"client connect","addr":"192.168.0.33:59418"}
+{"level":"info","time":"2020-11-10T16:00:46.958+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"D46AfKaDm0y2zL2q"}
+{"level":"info","time":"2020-11-10T16:00:49.600+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-10T16:01:00.930+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-10T16:02:30.543+0800","caller":"E:/slgserver/main/server.go:54","msg":"client disconnect","addr":"192.168.0.33:59418"}
+{"level":"info","time":"2020-11-10T16:02:31.697+0800","caller":"E:/slgserver/main/server.go:49","msg":"client connect","addr":"192.168.0.33:59531"}
+{"level":"info","time":"2020-11-10T16:02:31.697+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"iUnWhASfCnjF0PvG"}
+{"level":"info","time":"2020-11-10T16:02:43.403+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-10T16:03:10.152+0800","caller":"E:/slgserver/main/server.go:54","msg":"client disconnect","addr":"192.168.0.33:59531"}
+{"level":"info","time":"2020-11-10T16:03:11.168+0800","caller":"E:/slgserver/main/server.go:49","msg":"client connect","addr":"192.168.0.33:59583"}
+{"level":"info","time":"2020-11-10T16:03:11.168+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"rXGB9ZxzsOXUvz06"}
+{"level":"info","time":"2020-11-10T16:03:22.114+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-10T16:04:28.322+0800","caller":"E:/slgserver/main/server.go:54","msg":"client disconnect","addr":"192.168.0.33:59583"}
+{"level":"info","time":"2020-11-10T16:05:24.917+0800","caller":"E:/slgserver/main/server.go:49","msg":"client connect","addr":"192.168.0.33:59743"}
+{"level":"info","time":"2020-11-10T16:05:24.917+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"Xbro5gtPZBRsDgZc"}
+{"level":"info","time":"2020-11-10T16:09:43.059+0800","caller":"E:/slgserver/main/server.go:54","msg":"client disconnect","addr":"192.168.0.33:59743"}
+{"level":"info","time":"2020-11-10T16:09:46.975+0800","caller":"E:/slgserver/main/server.go:49","msg":"client connect","addr":"192.168.0.33:60051"}
+{"level":"info","time":"2020-11-10T16:09:46.976+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"UUwxd86LGNBgrGsI"}
+{"level":"info","time":"2020-11-10T16:09:54.061+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"account.login","data":"map[hardware:8d88HKcO-N3OS-xEt1-NCWQ-zTrntSo5ocp5 password:8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92 username:123456]"}
+{"level":"info","time":"2020-11-10T16:09:54.063+0800","caller":"E:/slgserver/server/controller/account.go:61","msg":"login","username":"123456","session":"MmMyYjk0ZjNhZGJmM2I3OTA2NGYzMDQxZmVhZGFmM2ViMGVlMDU3ZTcwZDY3ODBlM2YxZDc2M2U0NGViODEwMg=="}
+{"level":"info","time":"2020-11-10T16:09:54.211+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"role.enterServer","data":"map[sid:0]"}
+{"level":"info","time":"2020-11-10T16:12:22.465+0800","caller":"E:/slgserver/main/server.go:54","msg":"client disconnect","addr":"192.168.0.33:60051"}
+{"level":"info","time":"2020-11-10T16:12:23.383+0800","caller":"E:/slgserver/main/server.go:49","msg":"client connect","addr":"192.168.0.33:60229"}
+{"level":"info","time":"2020-11-10T16:12:23.384+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"LQT5vWVSJ2UfwswQ"}
+{"level":"info","time":"2020-11-10T16:12:29.762+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"account.login","data":"map[hardware:8d88HKcO-N3OS-xEt1-NCWQ-zTrntSo5ocp5 password:8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92 username:123456]"}
+{"level":"info","time":"2020-11-10T16:12:29.765+0800","caller":"E:/slgserver/server/controller/account.go:61","msg":"login","username":"123456","session":"MmMyYjk0ZjNhZGJmM2I3OTA2NGYzMDQxZmVhZGFmM2UwM2Q1Y2FlYzVjZGI2OTEyZWQ3YjliZTIwYTFiMDQxNw=="}
+{"level":"info","time":"2020-11-10T16:12:29.894+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"role.enterServer","data":"map[sid:0]"}
+{"level":"error","time":"2020-11-10T16:13:53.417+0800","caller":"E:/slgserver/server/entity/role_city_mgr.go:25","msg":"RoleCityMgr load role_city table error"}
+{"level":"info","time":"2020-11-10T16:13:53.418+0800","caller":"E:/slgserver/main/server.go:33","msg":"slg server starting"}
+{"level":"info","time":"2020-11-10T16:13:53.464+0800","caller":"E:/slgserver/main/server.go:49","msg":"client connect","addr":"192.168.0.33:60320"}
+{"level":"info","time":"2020-11-10T16:13:53.464+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"rfBd56ti2SMtYvSg"}
+{"level":"error","time":"2020-11-10T16:14:49.842+0800","caller":"E:/slgserver/server/entity/role_city_mgr.go:25","msg":"RoleCityMgr load role_city table error"}
+{"level":"info","time":"2020-11-10T16:14:49.843+0800","caller":"E:/slgserver/main/server.go:33","msg":"slg server starting"}
+{"level":"info","time":"2020-11-10T16:14:50.465+0800","caller":"E:/slgserver/main/server.go:49","msg":"client connect","addr":"192.168.0.33:60383"}
+{"level":"info","time":"2020-11-10T16:14:50.466+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"rfBd56ti2SMtYvSg"}
+{"level":"info","time":"2020-11-10T16:17:32.515+0800","caller":"E:/slgserver/server/entity/national_map_mgr.go:50","msg":"NationalMapMgr load","len":1600}
+{"level":"error","time":"2020-11-10T16:17:32.516+0800","caller":"E:/slgserver/server/entity/role_city_mgr.go:25","msg":"RoleCityMgr load role_city table error"}
+{"level":"info","time":"2020-11-10T16:17:32.517+0800","caller":"E:/slgserver/main/server.go:33","msg":"slg server starting"}
+{"level":"info","time":"2020-11-10T16:25:38.506+0800","caller":"E:/slgserver/main/server.go:49","msg":"client connect","addr":"192.168.0.33:61035"}
+{"level":"info","time":"2020-11-10T16:25:38.507+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"a4ZH7sY0UG8D4nGk"}
+{"level":"info","time":"2020-11-10T16:25:45.912+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"account.login","data":"map[hardware:8d88HKcO-N3OS-xEt1-NCWQ-zTrntSo5ocp5 password:8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92 username:123456]"}
+{"level":"info","time":"2020-11-10T16:25:45.916+0800","caller":"E:/slgserver/server/controller/account.go:61","msg":"login","username":"123456","session":"MmMyYjk0ZjNhZGJmM2I3OTA2NGYzMDQxZmVhZGFmM2UxZGRlYjVhMDA0MTQ3NmE2N2FlZTdlZTc2NGQzMmQyMQ=="}
+{"level":"info","time":"2020-11-10T16:25:46.062+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"role.enterServer","data":"map[sid:0]"}
+{"level":"info","time":"2020-11-10T16:26:02.208+0800","caller":"E:/slgserver/main/server.go:54","msg":"client disconnect","addr":"192.168.0.33:61035"}
+{"level":"info","time":"2020-11-10T16:26:03.426+0800","caller":"E:/slgserver/main/server.go:49","msg":"client connect","addr":"192.168.0.33:61067"}
+{"level":"info","time":"2020-11-10T16:26:03.426+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"HMDOL6oHS00h7KjV"}
+{"level":"info","time":"2020-11-10T16:26:10.359+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"account.login","data":"map[hardware:8d88HKcO-N3OS-xEt1-NCWQ-zTrntSo5ocp5 password:8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92 username:123456]"}
+{"level":"info","time":"2020-11-10T16:26:10.361+0800","caller":"E:/slgserver/server/controller/account.go:61","msg":"login","username":"123456","session":"MmMyYjk0ZjNhZGJmM2I3OTA2NGYzMDQxZmVhZGFmM2UwNDUwNzY2NTI4MzgwZjA1YWNmMWU3ODZhNWY3NGM0Yg=="}
+{"level":"info","time":"2020-11-10T16:26:10.477+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"role.enterServer","data":"map[sid:0]"}
+{"level":"info","time":"2020-11-10T16:26:14.417+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"role.create","data":"map[headId:0 nickName:111111 sex:0 sid:0 uid:1]"}
+{"level":"info","time":"2020-11-10T16:26:14.418+0800","caller":"E:/slgserver/server/controller/role.go:57","msg":"role  create error","uid":1,"sid":0,"error":"Error 1054: Unknown column 'nick_name' in 'field list'"}
+{"level":"info","time":"2020-11-10T16:28:18.739+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"role.create","data":"map[headId:0 nickName:111111 sex:0 sid:0 uid:1]"}
+{"level":"info","time":"2020-11-10T16:28:18.744+0800","caller":"E:/slgserver/server/controller/role.go:57","msg":"role  create error","uid":1,"sid":0,"error":"Error 1048: Column 'created_at' cannot be null"}
+{"level":"info","time":"2020-11-10T16:33:29.989+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"role.create","data":"map[headId:0 nickName:111111 sex:0 sid:0 uid:1]"}
+{"level":"info","time":"2020-11-10T16:33:29.995+0800","caller":"E:/slgserver/server/controller/role.go:57","msg":"role  create error","uid":1,"sid":0,"error":"Error 1048: Column 'created_at' cannot be null"}
+{"level":"error","time":"2020-11-10T16:34:39.095+0800","caller":"E:/slgserver/server/entity/role_city_mgr.go:25","msg":"RoleCityMgr load role_city table error"}
+{"level":"info","time":"2020-11-10T16:34:39.096+0800","caller":"E:/slgserver/main/server.go:33","msg":"slg server starting"}
+{"level":"info","time":"2020-11-10T16:34:39.486+0800","caller":"E:/slgserver/main/server.go:49","msg":"client connect","addr":"192.168.0.33:61841"}
+{"level":"info","time":"2020-11-10T16:34:39.487+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"rfBd56ti2SMtYvSg"}
+{"level":"info","time":"2020-11-10T16:34:47.164+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"role.create","data":"map[headId:0 nickName:111111 sex:0 sid:0 uid:1]"}
+{"level":"warn","time":"2020-11-10T16:34:47.165+0800","caller":"E:/slgserver/server/controller/role.go:37","msg":"roleList but connect not found uid"}
+{"level":"error","time":"2020-11-10T16:35:36.970+0800","caller":"E:/slgserver/server/entity/role_city_mgr.go:25","msg":"RoleCityMgr load role_city table error"}
+{"level":"info","time":"2020-11-10T16:35:36.971+0800","caller":"E:/slgserver/main/server.go:33","msg":"slg server starting"}
+{"level":"info","time":"2020-11-10T16:35:37.385+0800","caller":"E:/slgserver/main/server.go:49","msg":"client connect","addr":"192.168.0.33:61892"}
+{"level":"info","time":"2020-11-10T16:35:37.386+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"rfBd56ti2SMtYvSg"}
+{"level":"info","time":"2020-11-10T16:35:51.275+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"role.create","data":"map[headId:0 nickName:111111 sex:0 sid:0 uid:1]"}
+{"level":"warn","time":"2020-11-10T16:35:51.275+0800","caller":"E:/slgserver/server/controller/role.go:37","msg":"create but connect not found uid"}
+{"level":"info","time":"2020-11-10T16:36:17.408+0800","caller":"E:/slgserver/main/server.go:54","msg":"client disconnect","addr":"192.168.0.33:61892"}
+{"level":"info","time":"2020-11-10T16:36:18.451+0800","caller":"E:/slgserver/main/server.go:49","msg":"client connect","addr":"192.168.0.33:61935"}
+{"level":"info","time":"2020-11-10T16:36:18.451+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"D5xAV0YU99zampta"}
+{"level":"info","time":"2020-11-10T16:36:33.710+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"account.login","data":"map[hardware:8d88HKcO-N3OS-xEt1-NCWQ-zTrntSo5ocp5 password:8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92 username:123456]"}
+{"level":"info","time":"2020-11-10T16:36:33.713+0800","caller":"E:/slgserver/server/controller/account.go:61","msg":"login","username":"123456","session":"MmMyYjk0ZjNhZGJmM2I3OTA2NGYzMDQxZmVhZGFmM2VjNThlMDJiYzE1NjYxNWE4ZDcwZmQ3M2I5NmI1N2JmYg=="}
+{"level":"info","time":"2020-11-10T16:36:33.843+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"role.enterServer","data":"map[sid:0]"}
+{"level":"info","time":"2020-11-10T16:36:39.453+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"role.create","data":"map[headId:0 nickName:1111 sex:0 sid:0 uid:1]"}
+{"level":"info","time":"2020-11-10T16:41:03.388+0800","caller":"E:/slgserver/main/server.go:54","msg":"client disconnect","addr":"192.168.0.33:61935"}
+{"level":"info","time":"2020-11-10T16:41:04.670+0800","caller":"E:/slgserver/main/server.go:49","msg":"client connect","addr":"192.168.0.33:62226"}
+{"level":"info","time":"2020-11-10T16:41:04.670+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"7Z7S575KLkIZ9PYk"}
+{"level":"info","time":"2020-11-10T16:41:12.049+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"account.login","data":"map[hardware:8d88HKcO-N3OS-xEt1-NCWQ-zTrntSo5ocp5 password:8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92 username:123456]"}
+{"level":"info","time":"2020-11-10T16:41:12.051+0800","caller":"E:/slgserver/server/controller/account.go:61","msg":"login","username":"123456","session":"MmMyYjk0ZjNhZGJmM2I3OTA2NGYzMDQxZmVhZGFmM2VlMDVlYmQwMmIzNWZhZThiMzdlMDIzNGNiNDBlMTdjMQ=="}
+{"level":"info","time":"2020-11-10T16:41:12.166+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"role.enterServer","data":"map[sid:0]"}
+{"level":"info","time":"2020-11-10T16:41:25.339+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"role.create","data":"map[headId:0 nickName:111111 sex:0 sid:0 uid:1]"}
+{"level":"info","time":"2020-11-10T17:00:10.714+0800","caller":"E:/slgserver/main/server.go:54","msg":"client disconnect","addr":"192.168.0.33:62226"}
+{"level":"info","time":"2020-11-10T17:01:17.976+0800","caller":"E:/slgserver/main/server.go:49","msg":"client connect","addr":"192.168.0.33:63357"}
+{"level":"info","time":"2020-11-10T17:01:17.976+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"L17LTlsVqMNTZyLK"}
+{"level":"info","time":"2020-11-10T17:01:25.740+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"account.login","data":"map[hardware:8d88HKcO-N3OS-xEt1-NCWQ-zTrntSo5ocp5 password:8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92 username:123456]"}
+{"level":"info","time":"2020-11-10T17:01:25.741+0800","caller":"E:/slgserver/server/controller/account.go:61","msg":"login","username":"123456","session":"NTZkMWNhNjRjOTI1MzlkZjkxNWYzZTM0MDljYjY2MGEwODljMTYxYmUwMTEyOGE2MWJhZmI2NGQ3ZDg1OGRmNw=="}
+{"level":"info","time":"2020-11-10T17:01:25.890+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"role.enterServer","data":"map[sid:0]"}
+{"level":"info","time":"2020-11-10T17:01:48.580+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"account.login","data":"map[hardware:8d88HKcO-N3OS-xEt1-NCWQ-zTrntSo5ocp5 password:a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3 username:123]"}
+{"level":"info","time":"2020-11-10T17:01:48.582+0800","caller":"E:/slgserver/server/controller/account.go:104","msg":"login username not found","username":"123"}
+{"level":"info","time":"2020-11-10T17:02:00.551+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-10T17:02:24.672+0800","caller":"E:/slgserver/main/server.go:54","msg":"client disconnect","addr":"192.168.0.33:63357"}
+{"level":"info","time":"2020-11-10T17:02:25.471+0800","caller":"E:/slgserver/main/server.go:49","msg":"client connect","addr":"192.168.0.33:63439"}
+{"level":"info","time":"2020-11-10T17:02:25.471+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"MIFSD2x28MlgPJ0S"}
+{"level":"info","time":"2020-11-10T17:02:35.316+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"account.login","data":"map[hardware:8d88HKcO-N3OS-xEt1-NCWQ-zTrntSo5ocp5 password:a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3 username:123]"}
+{"level":"info","time":"2020-11-10T17:02:35.317+0800","caller":"E:/slgserver/server/controller/account.go:61","msg":"login","username":"123","session":"ZThlNTM2OTg4OTIyMjJlZDNjNTIyYjk1ZTVlYTkyNDU3ZDBkYWFmMzBhZjNiZTdlZGU4NGU4NGY2MzIxYzZlNA=="}
+{"level":"info","time":"2020-11-10T17:02:35.451+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"role.enterServer","data":"map[sid:0]"}
+{"level":"error","time":"2020-11-10T17:03:05.316+0800","caller":"E:/slgserver/server/entity/role_city_mgr.go:25","msg":"RoleCityMgr load role_city table error"}
+{"level":"info","time":"2020-11-10T17:03:05.317+0800","caller":"E:/slgserver/main/server.go:33","msg":"slg server starting"}
+{"level":"info","time":"2020-11-10T17:03:05.622+0800","caller":"E:/slgserver/main/server.go:49","msg":"client connect","addr":"192.168.0.33:63490"}
+{"level":"info","time":"2020-11-10T17:03:05.623+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"rfBd56ti2SMtYvSg"}
+{"level":"info","time":"2020-11-10T17:03:05.641+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"account.reLogin","data":"map[hardware:8d88HKcO-N3OS-xEt1-NCWQ-zTrntSo5ocp5 session:ZThlNTM2OTg4OTIyMjJlZDNjNTIyYjk1ZTVlYTkyNDU3ZDBkYWFmMzBhZjNiZTdlZGU4NGU4NGY2MzIxYzZlNA==]"}
+{"level":"info","time":"2020-11-10T17:04:08.733+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"role.create","data":"map[headId:0 nickName:111 sex:0 sid:0 uid:8]"}
+{"level":"info","time":"2020-11-10T17:04:28.008+0800","caller":"E:/slgserver/main/server.go:54","msg":"client disconnect","addr":"192.168.0.33:63490"}
+{"level":"info","time":"2020-11-10T17:04:28.832+0800","caller":"E:/slgserver/main/server.go:49","msg":"client connect","addr":"192.168.0.33:63584"}
+{"level":"info","time":"2020-11-10T17:04:28.832+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"D5xAV0YU99zampta"}
+{"level":"info","time":"2020-11-10T17:04:35.648+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-10T17:05:42.680+0800","caller":"E:/slgserver/main/server.go:54","msg":"client disconnect","addr":"192.168.0.33:63584"}
+{"level":"info","time":"2020-11-10T17:05:43.719+0800","caller":"E:/slgserver/main/server.go:49","msg":"client connect","addr":"192.168.0.33:63673"}
+{"level":"info","time":"2020-11-10T17:05:43.719+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"7Z7S575KLkIZ9PYk"}
+{"level":"info","time":"2020-11-10T17:05:51.541+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-10T17:06:25.020+0800","caller":"E:/slgserver/main/server.go:54","msg":"client disconnect","addr":"192.168.0.33:63673"}
+{"level":"info","time":"2020-11-10T17:06:26.060+0800","caller":"E:/slgserver/main/server.go:49","msg":"client connect","addr":"192.168.0.33:63722"}
+{"level":"info","time":"2020-11-10T17:06:26.060+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"L17LTlsVqMNTZyLK"}
+{"level":"info","time":"2020-11-10T17:06:31.320+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-10T17:08:12.232+0800","caller":"E:/slgserver/main/server.go:54","msg":"client disconnect","addr":"192.168.0.33:63722"}
+{"level":"info","time":"2020-11-10T17:08:13.249+0800","caller":"E:/slgserver/main/server.go:49","msg":"client connect","addr":"192.168.0.33:63862"}
+{"level":"info","time":"2020-11-10T17:08:13.249+0800","caller":"E:/slgserver/net/wsclient.go:266","msg":"handshake secretKey","secretKey":"MIFSD2x28MlgPJ0S"}
+{"level":"info","time":"2020-11-10T17:08:17.945+0800","caller":"E:/slgserver/http/controller/account.go:25","msg":"register"}
+{"level":"info","time":"2020-11-10T17:08:18.031+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"account.login","data":"map[hardware:8d88HKcO-N3OS-xEt1-NCWQ-zTrntSo5ocp5 password:4b227777d4dd1fc61c6f884f48641d02b4d121d3fd328cb08b5531fcacdabf8a username:4]"}
+{"level":"info","time":"2020-11-10T17:08:18.032+0800","caller":"E:/slgserver/server/controller/account.go:61","msg":"login","username":"4","session":"ZDA4Y2VhZWI4OWVkOGUxOWJkODdjMjJkYjg4NmVjMTU2ZTkzNTliNmQwZGVmNzNmNGY0ZTY5NzBlZWJjODJlOA=="}
+{"level":"info","time":"2020-11-10T17:08:18.164+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"role.enterServer","data":"map[sid:0]"}
+{"level":"info","time":"2020-11-10T17:08:22.345+0800","caller":"E:/slgserver/server/middleware/log.go:14","msg":"client req","msgName":"role.create","data":"map[headId:0 nickName:555 sex:0 sid:0 uid:12]"}
+{"level":"info","time":"2020-11-10T17:13:12.207+0800","caller":"E:/slgserver/main/server.go:54","msg":"client disconnect","addr":"192.168.0.33:63862"}
+{"level":"error","time":"2020-11-10T17:53:33.535+0800","caller":"E:/slgserver/server/entity/role_city_mgr.go:25","msg":"RoleCityMgr load role_city table error"}
+{"level":"info","time":"2020-11-10T17:53:33.535+0800","caller":"E:/slgserver/main/server.go:33","msg":"slg server starting"}
