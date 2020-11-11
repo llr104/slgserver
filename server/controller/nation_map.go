@@ -18,7 +18,7 @@ type NationMap struct {
 func (this*NationMap) InitRouter(r *net.Router) {
 	g := r.Group("nationMap").Use(middleware.Log())
 	g.AddRouter("config", this.config)
-	g.AddRouter("login", this.scan)
+	g.AddRouter("scan", this.scan)
 }
 
 /*
