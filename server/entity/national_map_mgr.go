@@ -1,19 +1,20 @@
 package entity
 
 import (
+	"encoding/json"
 	"go.uber.org/zap"
-	"math/rand"
-	"slgserver/db"
+	"io/ioutil"
+	"os"
+	"slgserver/config"
 	"slgserver/log"
 	"slgserver/model"
 	"slgserver/util"
 	"sort"
 	"sync"
-	"time"
 )
 
-const MapWith = 40
-const MapHeight = 40
+var MapWith = 40
+var MapHeight = 40
 const ScanWith = 3
 const ScanHeight = 3
 
@@ -39,6 +40,12 @@ func (this NMArray) Less(i, j int) bool {
 	}
 }
 
+type mapData struct {
+	Width	int 			`json:"w"`
+	Height	int				`json:"h"`
+	List	[][]int			`json:"list"`
+}
+
 type NationalMapMgr struct {
 	mutex sync.RWMutex
 	conf map[int]model.NationalMap
@@ -50,37 +57,36 @@ var NMMgr = &NationalMapMgr{
 }
 
 func (this* NationalMapMgr) Load() {
+
+	fileName := config.File.MustValue("logic", "map_data",
+		"./data/conf/map.json")
+
+	jdata, err := ioutil.ReadFile(fileName)
+	if err != nil {
+		log.DefaultLog.Error("NationalMapMgr load file error", zap.Error(err))
+		os.Exit(0)
+	}
+
+	m := &mapData{}
+	err = json.Unmarshal(jdata, m)
+	if err != nil {
+		log.DefaultLog.Error("NationalMapMgr Unmarshal json error", zap.Error(err))
+		os.Exit(0)
+	}
+
+	//转成服务用的结构
+	MapWith = m.Width
+	MapHeight = m.Height
+
 	this.mutex.Lock()
 	defer this.mutex.Unlock()
 
-	err := db.MasterDB.Find(this.conf)
-	if err != nil {
-		log.DefaultLog.Error("NationalMapMgr load national_map table error")
-	}else{
-		if len(this.conf) == 0 {
-			session := db.MasterDB.NewSession()
-			//随机初始化数据
-			rand.Seed(time.Now().UnixNano())
-			needInsert := MapWith*MapHeight
-			for i := 0; i < needInsert ; i++ {
-				x := i/MapWith
-				y := i%MapWith
-
-				t := rand.Intn(4)+1
-				m := &model.NationalMap{X: x, Y: y, Type: int8(t), Level: 1}
-				_, err := db.MasterDB.Table(m).InsertOne(m)
-				if err != nil{
-					session.Rollback()
-					return
-				}
-			}
-			session.Commit()
-
-			db.MasterDB.Find(this.conf)
-			log.DefaultLog.Info("NationalMapMgr load", zap.Int("len", len(this.conf)))
-		}
+	for i, v := range m.List {
+		t := v[0]
+		l := v[1]
+		this.conf[i] = model.NationalMap{X: i/MapWith, Y: i%MapWith, Id: i, Type: t, Level: l}
 	}
-
+	
 	this.confArr.arr = make([]model.NationalMap, len(this.conf))
 	i := 0
 	for _, v := range this.conf {
