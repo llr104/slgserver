@@ -74,6 +74,12 @@ func (this*NationMap) scan(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	rb := entity.RBMgr.Scan(x, y)
 	rspObj.RBuilds = make([]proto.RoleBuild, len(rb))
 	for i, v := range rb {
+		name := ""
+		vRole, err := entity.RMgr.Get(v.RId)
+		if err == nil {
+			name = vRole.NickName
+		}
+
 		rspObj.RBuilds[i].X = v.X
 		rspObj.RBuilds[i].Y = v.Y
 		rspObj.RBuilds[i].Id = v.Id
@@ -83,7 +89,7 @@ func (this*NationMap) scan(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		rspObj.RBuilds[i].RId = v.RId
 		rspObj.RBuilds[i].Name = v.Name
 		rspObj.RBuilds[i].Defender = v.Defender
-		rspObj.RBuilds[i].RNick = "玩家nick" //后面再赋值
+		rspObj.RBuilds[i].RNick = name
 	}
 
 	cb := entity.RCMgr.Scan(x, y)
