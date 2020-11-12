@@ -163,7 +163,7 @@ func (this*Role) myCity(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 			if entity.RBMgr.IsEmpty(x, y) && entity.RCMgr.IsEmpty(x, y){
 				//建立城市
 				c := model.RoleCity{RId: role.RId, X: x, Y: y, IsMain: 1,
-					Durable: 100, Level: 1, CreatedAt: time.Now()}
+					Durable: 100, Level: 1, Name: role.NickName, CreatedAt: time.Now()}
 
 				//插入
 				cityId, err := db.MasterDB.Table(c).Insert(c)
