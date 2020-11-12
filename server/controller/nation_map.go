@@ -68,6 +68,7 @@ func (this*NationMap) scan(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		rspObj.BBuilds[i].Id = v.Id
 		rspObj.BBuilds[i].Type = v.Type
 		rspObj.BBuilds[i].Durable = 100
+		rspObj.BBuilds[i].Level = v.Level
 	}
 
 }

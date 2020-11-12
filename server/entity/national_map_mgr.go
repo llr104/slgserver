@@ -7,14 +7,42 @@ import (
 	"slgserver/log"
 	"slgserver/model"
 	"slgserver/util"
+	"sort"
 	"sync"
 	"time"
 )
 
+const MapWith = 40
+const MapHeight = 40
+const ScanWith = 3
+const ScanHeight = 3
+
+type NMArray struct {
+	arr []model.NationalMap
+}
+
+func (this NMArray) Len() int {
+	return len(this.arr)
+}
+
+func (this NMArray) Swap(i, j int) {
+	this.arr[i], this.arr[j] = this.arr[j], this.arr[i]
+}
+
+func (this NMArray) Less(i, j int) bool {
+	if this.arr[i].X < this.arr[j].X{
+		return true
+	}else if this.arr[i].X == this.arr[j].X {
+		return this.arr[i].Y < this.arr[j].Y
+	}else{
+		return false
+	}
+}
+
 type NationalMapMgr struct {
 	mutex sync.RWMutex
 	conf map[int]model.NationalMap
-	confArr []model.NationalMap
+	confArr NMArray
 }
 
 var NMMgr = &NationalMapMgr{
@@ -33,10 +61,10 @@ func (this* NationalMapMgr) Load() {
 			session := db.MasterDB.NewSession()
 			//随机初始化数据
 			rand.Seed(time.Now().UnixNano())
-			needInsert := 1600
+			needInsert := MapWith*MapHeight
 			for i := 0; i < needInsert ; i++ {
-				x := i/40
-				y := i%40
+				x := i/MapWith
+				y := i%MapWith
 
 				t := rand.Intn(4)+1
 				m := &model.NationalMap{X: x, Y: y, Type: int8(t)}
@@ -53,31 +81,34 @@ func (this* NationalMapMgr) Load() {
 		}
 	}
 
-	this.confArr = make([]model.NationalMap, len(this.conf))
+	this.confArr.arr = make([]model.NationalMap, len(this.conf))
 	i := 0
 	for _, v := range this.conf {
-		this.confArr[i] = v
+		this.confArr.arr[i] = v
 		i++
 	}
+
+	sort.Sort(this.confArr)
+
 }
 
 func (this* NationalMapMgr) Scan(x, y int) []model.NationalMap {
 	this.mutex.RLock()
 	defer this.mutex.RUnlock()
 
-	minX := util.MaxInt(0, x-3)
-	maxX := util.MinInt(40, x+3)
+	minX := util.MaxInt(0, x-ScanWith)
+	maxX := util.MinInt(40, x+ScanWith)
 
-	minY := util.MaxInt(0, y-3)
-	maxY := util.MinInt(40, y+3)
+	minY := util.MaxInt(0, y-ScanHeight)
+	maxY := util.MinInt(40, y+ScanHeight)
 
 	c := (maxX-minX+1)*(maxY-minY+1)
 	r := make([]model.NationalMap, c)
 
 	index := 0
-	for i := minX; i < maxX; i++ {
-		for j := minY; j < maxY; j++ {
-			r[index] = this.confArr[i*40+j]
+	for i := minX; i <= maxX; i++ {
+		for j := minY; j <= maxY; j++ {
+			r[index] = this.confArr.arr[i*ScanWith+j]
 			index++
 		}
 	}

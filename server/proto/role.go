@@ -40,3 +40,21 @@ type EnterServerRsp struct {
 	Role		Role	`json:"role"`
 }
 
+type RoleCity struct {
+	CityId		int			`json:"cityId"`
+	RId			int			`json:"rid"`
+	Name		string		`json:"nickName"`
+	X			int			`json:"x"`
+	Y			int			`json:"y"`
+	IsMain		bool		`json:"is_main"`
+	Level		int8		`json:"level"`
+	Durable		int			`json:"durable"`
+}
+
+type MyCityReq struct {
+
+}
+
+type MyCityRsp struct {
+	Citys []RoleCity	`json:"citys"`
+}

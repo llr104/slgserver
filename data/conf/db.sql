@@ -56,8 +56,10 @@ CREATE TABLE IF NOT EXISTS `role_city` (
    `rid` int unsigned NOT NULL COMMENT 'roleId',
    `x` int unsigned NOT NULL COMMENT 'x坐标',
    `y` int unsigned NOT NULL COMMENT 'y坐标',
-   `name` varchar(100) COMMENT '城池名称',
+   `name` varchar(100) NOT NULL DEFAULT '城池' COMMENT '城池名称',
    `is_main` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否是主城',
+   `level` int unsigned NOT NULL DEFAULT 1 COMMENT 'level',
+   `durable` int unsigned NOT NULL DEFAULT 1 COMMENT '耐久',
    `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
    PRIMARY KEY (`cityId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '玩家城池';
@@ -73,6 +75,7 @@ CREATE TABLE IF NOT EXISTS `national_map` (
 CREATE TABLE IF NOT EXISTS `build_config` (
    `id` int unsigned NOT NULL AUTO_INCREMENT,
    `type` int unsigned NOT NULL COMMENT '建筑类型',
+   `level` int unsigned NOT NULL COMMENT '建筑等级',
    `name` varchar(100) NOT NULL COMMENT '名称',
    `wood` int unsigned NOT NULL COMMENT '木',
    `iron` int unsigned NOT NULL COMMENT '铁',

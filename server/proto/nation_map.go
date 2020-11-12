@@ -2,6 +2,7 @@ package proto
 
 type Conf struct {
 	Type		int8		`json:"type"`
+	Level		int			`json:"level"`
 	Name		string		`json:"name"`
 	Wood		int			`json:"Wood"`
 	Iron		int			`json:"iron"`
@@ -24,6 +25,7 @@ type BaseBuild struct {
 	X		int		`json:"x"`
 	Y		int		`json:"y"`
 	Type	int8	`json:"type"`
+	Level	int		`json:"level"`
 	Durable	int		`json:"durable"`
 }
 
@@ -35,6 +37,7 @@ type RoleBuild struct {
 	X		int    		`json:"x"`
 	Y		int    		`json:"y"`
 	Type	int8		`json:"type"`
+	Level	int			`json:"level"`
 	Durable	int			`json:"durable"`
 }
 

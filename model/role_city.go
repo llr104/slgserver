@@ -9,6 +9,8 @@ type RoleCity struct {
 	X			int			`json:"x"`
 	Y			int			`json:"y"`
 	IsMain		int8		`json:"is_main"`
+	Level		int8		`json:"level"`
+	Durable		int			`json:"durable"`
 	CreatedAt	time.Time	`json:"created_at"`
 }
 

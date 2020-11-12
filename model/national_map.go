@@ -5,9 +5,11 @@ type NationalMap struct {
 	X		int			`json:"x"`
 	Y		int			`json:"y"`
 	Type	int8		`json:"type"`
+	Level	int			`json:"level"`
 }
 
 func (this *NationalMap) TableName() string {
 	return "national_map"
 }
+
 

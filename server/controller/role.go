@@ -3,11 +3,13 @@ package controller
 import (
 	"github.com/goinggo/mapstructure"
 	"go.uber.org/zap"
+	"math/rand"
 	"slgserver/constant"
 	"slgserver/db"
 	"slgserver/log"
 	"slgserver/model"
 	"slgserver/net"
+	"slgserver/server/entity"
 	"slgserver/server/middleware"
 	"slgserver/server/proto"
 	"time"
@@ -20,10 +22,11 @@ type Role struct {
 }
 
 func (this*Role) InitRouter(r *net.Router) {
-	g := r.Group("role").Use(middleware.Log())
+	g := r.Group("role").Use(middleware.Log(), middleware.CheckLogin())
 	g.AddRouter("create", this.create)
 	g.AddRouter("roleList", this.roleList)
 	g.AddRouter("enterServer", this.enterServer)
+	g.AddRouter("myCity", this.myCity)
 }
 
 func (this*Role) create(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
@@ -32,12 +35,7 @@ func (this*Role) create(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	mapstructure.Decode(req.Body.Msg, reqObj)
 	rsp.Body.Msg = rspObj
 
-	uid, err := req.Conn.GetProperty("uid")
-	if err != nil {
-		log.DefaultLog.Warn("create but connect not found uid")
-		rsp.Body.Code = constant.InvalidParam
-		return
-	}
+	uid, _ := req.Conn.GetProperty("uid")
 	reqObj.UId = uid.(int)
 	rspObj.UId = reqObj.UId
 
@@ -80,16 +78,11 @@ func (this*Role) roleList(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	rsp.Body.Msg = rspObj
 	rsp.Body.Code = constant.OK
 
-	uid, err := req.Conn.GetProperty("uid")
-	if err != nil {
-		log.DefaultLog.Warn("roleList but connect not found uid")
-		rsp.Body.Code = constant.InvalidParam
-		return
-	}
-
+	uid, _ := req.Conn.GetProperty("uid")
+	uid = uid.(int)
 
 	r := make([]model.Role, 0)
-	err = db.MasterDB.Table(r).Where("uid=?", uid).Find(r)
+	err := db.MasterDB.Table(r).Where("uid=?", uid).Find(r)
 	if err == nil{
 		rl := make([]proto.Role, len(r))
 		for i, d := range r {
@@ -117,14 +110,9 @@ func (this*Role) enterServer(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	rsp.Body.Msg = rspObj
 	rsp.Body.Code = constant.OK
 
-	uid, err := req.Conn.GetProperty("uid")
-	if err != nil {
-		log.DefaultLog.Warn("enterServer but connect not found uid")
-		rsp.Body.Code = constant.InvalidParam
-		return
-	}
-
+	uid, _ := req.Conn.GetProperty("uid")
 	uid = uid.(int)
+
 	r := &model.Role{}
 	b, err := db.MasterDB.Table(r).Where("uid=? and sid=?", uid, reqObj.SId).Get(r)
 	if b && err == nil {
@@ -139,8 +127,69 @@ func (this*Role) enterServer(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		rspObj.Role.Profile = r.Profile
 
 		req.Conn.SetProperty("sid", r.SId)
+		req.Conn.SetProperty("role", r)
 	}else{
 		rsp.Body.Code = constant.RoleNotExist
+	}
+
+}
+
+func (this*Role) myCity(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+	reqObj := &proto.MyCityReq{}
+	rspObj := &proto.MyCityRsp{}
+
+	mapstructure.Decode(req.Body.Msg, reqObj)
+	rsp.Body.Msg = rspObj
+	rsp.Body.Code = constant.OK
+
+	r, err := req.Conn.GetProperty("role")
+	if err != nil{
+		if err != nil {
+			log.DefaultLog.Warn("myCity but connect not found sid")
+			rsp.Body.Code = constant.InvalidParam
+			return
+		}
+	}
+
+	role, _ := r.(*model.Role)
+	citys := make([]model.RoleCity, 0)
+	//查询是否有城市
+	db.MasterDB.Table(model.RoleCity{}).Where("rid=?", role.RId).Find(citys)
+	if len(citys) == 0 {
+		//随机生成一个城市
+		for true {
+			x := rand.Intn(entity.MapWith)
+			y := rand.Intn(entity.MapHeight)
+			if entity.RBMgr.IsEmpty(x, y) && entity.RCMgr.IsEmpty(x, y){
+				//建立城市
+				c := model.RoleCity{RId: role.RId, X: x, Y: y, IsMain: 1,
+					Durable: 100, Level: 1, CreatedAt: time.Now()}
+
+				//插入
+				cityId, err := db.MasterDB.Table(c).Insert(c)
+				if err != nil{
+					rsp.Body.Code = constant.DBError
+				}else{
+					c.CityId = int(cityId)
+					citys = append(citys, c)
+				}
+				break
+			}
+		}
+	}
+
+	//赋值发送
+	rspObj.Citys = make([]proto.RoleCity, len(citys))
+	for i, v := range citys {
+		rspObj.Citys[i].CityId = v.CityId
+		rspObj.Citys[i].RId = v.RId
+		rspObj.Citys[i].X = v.X
+		rspObj.Citys[i].Y = v.Y
+		rspObj.Citys[i].Level = v.Level
+		rspObj.Citys[i].IsMain = v.IsMain!=0
+		rspObj.Citys[i].Name = v.Name
+		rspObj.Citys[i].Durable = v.Durable
+
 	}
 
 }
