@@ -60,9 +60,9 @@ func (this*NationMap) scan(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	x := reqObj.X
 	y := reqObj.Y
 
-	r := entity.NMMgr.Scan(x, y)
-	rspObj.BBuilds = make([]proto.BaseBuild, len(r))
-	for i, v := range r {
+	bb := entity.NMMgr.Scan(x, y)
+	rspObj.BBuilds = make([]proto.BaseBuild, len(bb))
+	for i, v := range bb {
 		rspObj.BBuilds[i].X = v.X
 		rspObj.BBuilds[i].Y = v.Y
 		rspObj.BBuilds[i].Id = v.Id
@@ -71,4 +71,31 @@ func (this*NationMap) scan(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		rspObj.BBuilds[i].Level = v.Level
 	}
 
+	rb := entity.RBMgr.Scan(x, y)
+	rspObj.RBuilds = make([]proto.RoleBuild, len(rb))
+	for i, v := range rb {
+		rspObj.RBuilds[i].X = v.X
+		rspObj.RBuilds[i].Y = v.Y
+		rspObj.RBuilds[i].Id = v.Id
+		rspObj.RBuilds[i].Type = v.Type
+		rspObj.RBuilds[i].Durable = v.Durable
+		rspObj.RBuilds[i].Level = v.Level
+		rspObj.RBuilds[i].RId = v.RId
+		rspObj.RBuilds[i].Name = v.Name
+		rspObj.RBuilds[i].Defender = v.Defender
+		rspObj.RBuilds[i].RNick = "玩家nick" //后面再赋值
+	}
+
+	cb := entity.RCMgr.Scan(x, y)
+	rspObj.CBuilds = make([]proto.RoleCity, len(rb))
+	for i, v := range cb {
+		rspObj.CBuilds[i].X = v.X
+		rspObj.CBuilds[i].Y = v.Y
+		rspObj.CBuilds[i].CityId = v.CityId
+		rspObj.CBuilds[i].Durable = v.Durable
+		rspObj.CBuilds[i].Level = v.Level
+		rspObj.CBuilds[i].RId = v.RId
+		rspObj.CBuilds[i].Name = v.Name
+		rspObj.CBuilds[i].IsMain = v.IsMain == 1
+	}
 }

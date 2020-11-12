@@ -69,6 +69,7 @@ CREATE TABLE IF NOT EXISTS `national_map` (
    `x` int unsigned NOT NULL COMMENT 'x坐标',
    `y` int unsigned NOT NULL COMMENT 'y坐标',
    `type` int unsigned NOT NULL COMMENT '建筑类型',
+   `level` int unsigned NOT NULL DEFAULT 1 COMMENT 'level',
    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '全国地图';
 
@@ -90,6 +91,9 @@ CREATE TABLE IF NOT EXISTS `role_build` (
    `id` int unsigned NOT NULL AUTO_INCREMENT,
    `rid` int unsigned NOT NULL,
    `type` int unsigned NOT NULL COMMENT '建筑类型',
+   `level` int unsigned NOT NULL COMMENT '建筑等级',
+   `x` int unsigned NOT NULL COMMENT 'x坐标',
+   `y` int unsigned NOT NULL COMMENT 'y坐标',
    `name` int unsigned NOT NULL COMMENT 'name',
    `wood` int unsigned NOT NULL COMMENT '木',
    `iron` int unsigned NOT NULL COMMENT '铁',

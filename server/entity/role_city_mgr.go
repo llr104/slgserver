@@ -4,6 +4,7 @@ import (
 	"slgserver/db"
 	"slgserver/log"
 	"slgserver/model"
+	"slgserver/util"
 	"sync"
 )
 
@@ -43,4 +44,33 @@ func (this* RoleCityMgr) IsEmpty(x, y int) bool {
 	posId := MapWith*x+y
 	_, ok := this.posCity[posId]
 	return !ok
+}
+
+func (this* RoleCityMgr) Add(city *model.RoleCity) {
+	this.mutex.Lock()
+	defer this.mutex.Unlock()
+	this.dbCity[city.CityId] = city
+	this.posCity[city.X*MapWith+city.Y] = city
+}
+
+func (this* RoleCityMgr) Scan(x, y int) []*model.RoleCity{
+	this.mutex.RLock()
+	defer this.mutex.RUnlock()
+
+	minX := util.MaxInt(0, x-ScanWith)
+	maxX := util.MinInt(40, x+ScanWith)
+	minY := util.MaxInt(0, y-ScanHeight)
+	maxY := util.MinInt(40, y+ScanHeight)
+
+	cb := make([]*model.RoleCity, 0)
+	for i := minX; i <= maxX; i++ {
+		for j := minY; j <= maxY; j++ {
+			posId := i*ScanWith+j
+			v, ok := this.posCity[posId]
+			if ok {
+				cb = append(cb, v)
+			}
+		}
+	}
+	return cb
 }

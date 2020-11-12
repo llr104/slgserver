@@ -4,6 +4,7 @@ type RoleBuild struct {
 	Id			int			`json:"id" xorm:"id pk autoincr"`
 	RId			int			`json:"rid" xorm:"rid"`
 	Type		int8		`json:"type"`
+	Level		int			`json:"level"`
 	X			int			`json:"x"`
 	Y			int			`json:"y"`
 	Name		string		`json:"name"`

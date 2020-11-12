@@ -30,15 +30,16 @@ type BaseBuild struct {
 }
 
 type RoleBuild struct {
-	Id		int			`json:"id"`
-	RId		int			`json:"rid"`
-	RNick	string 		`json:"RNick"` //角色昵称
-	Name	string		`json:"name"`
-	X		int    		`json:"x"`
-	Y		int    		`json:"y"`
-	Type	int8		`json:"type"`
-	Level	int			`json:"level"`
-	Durable	int			`json:"durable"`
+	Id			int			`json:"id"`
+	RId			int			`json:"rid"`
+	RNick		string 		`json:"RNick"` //角色昵称
+	Name		string		`json:"name"`
+	X			int    		`json:"x"`
+	Y			int    		`json:"y"`
+	Type		int8		`json:"type"`
+	Level		int			`json:"level"`
+	Durable		int			`json:"durable"`
+	Defender	int			`json:"defender"`
 }
 
 
@@ -50,5 +51,6 @@ type ScanReq struct {
 type ScanRsp struct {
 	BBuilds	[]BaseBuild `json:"b_builds"` //基础建筑
 	RBuilds	[]RoleBuild `json:"r_builds"` //角色建筑，包含被占领的基础建筑
+	CBuilds	[]RoleCity	`json:"c_builds"` //角色城市
 }
 

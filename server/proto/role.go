@@ -43,7 +43,7 @@ type EnterServerRsp struct {
 type RoleCity struct {
 	CityId		int			`json:"cityId"`
 	RId			int			`json:"rid"`
-	Name		string		`json:"nickName"`
+	Name		string		`json:"name"`
 	X			int			`json:"x"`
 	Y			int			`json:"y"`
 	IsMain		bool		`json:"is_main"`

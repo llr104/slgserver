@@ -67,7 +67,7 @@ func (this* NationalMapMgr) Load() {
 				y := i%MapWith
 
 				t := rand.Intn(4)+1
-				m := &model.NationalMap{X: x, Y: y, Type: int8(t)}
+				m := &model.NationalMap{X: x, Y: y, Type: int8(t), Level: 1}
 				_, err := db.MasterDB.Table(m).InsertOne(m)
 				if err != nil{
 					session.Rollback()

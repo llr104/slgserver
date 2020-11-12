@@ -82,7 +82,7 @@ func (this*Role) roleList(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	uid = uid.(int)
 
 	r := make([]model.Role, 0)
-	err := db.MasterDB.Table(r).Where("uid=?", uid).Find(r)
+	err := db.MasterDB.Table(r).Where("uid=?", uid).Find(&r)
 	if err == nil{
 		rl := make([]proto.Role, len(r))
 		for i, d := range r {
@@ -154,7 +154,7 @@ func (this*Role) myCity(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	role, _ := r.(*model.Role)
 	citys := make([]model.RoleCity, 0)
 	//查询是否有城市
-	db.MasterDB.Table(model.RoleCity{}).Where("rid=?", role.RId).Find(citys)
+	db.MasterDB.Table(new(model.RoleCity)).Where("rid=?", role.RId).Find(&citys)
 	if len(citys) == 0 {
 		//随机生成一个城市
 		for true {
@@ -172,6 +172,8 @@ func (this*Role) myCity(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 				}else{
 					c.CityId = int(cityId)
 					citys = append(citys, c)
+					//更新城市缓存
+					entity.RCMgr.Add(&c)
 				}
 				break
 			}
@@ -189,7 +191,6 @@ func (this*Role) myCity(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		rspObj.Citys[i].IsMain = v.IsMain!=0
 		rspObj.Citys[i].Name = v.Name
 		rspObj.Citys[i].Durable = v.Durable
-
 	}
 
 }

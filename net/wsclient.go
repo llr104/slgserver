@@ -2,6 +2,7 @@ package net
 
 import (
 	"errors"
+	"fmt"
 	"github.com/forgoer/openssl"
 	"github.com/goinggo/mapstructure"
 	"github.com/gorilla/websocket"
@@ -95,7 +96,8 @@ func (conn *WSConn) Send(name string, data interface{}) {
 func (conn *WSConn) wsReadLoop() {
 	defer func() {
 		if err := recover(); err != nil {
-			log.DefaultLog.Error("wsReadLoop error")
+			e := fmt.Sprintf("%v", err)
+			log.DefaultLog.Error("wsReadLoop error", zap.String("err", e))
 			conn.Close()
 		}
 	}()
