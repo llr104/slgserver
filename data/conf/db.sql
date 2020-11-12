@@ -66,10 +66,12 @@ CREATE TABLE IF NOT EXISTS `role_city` (
 
 CREATE TABLE IF NOT EXISTS `national_map` (
    `id` int unsigned NOT NULL AUTO_INCREMENT,
+   `mid` int unsigned NOT NULL,
    `x` int unsigned NOT NULL COMMENT 'x坐标',
    `y` int unsigned NOT NULL COMMENT 'y坐标',
    `type` int unsigned NOT NULL COMMENT '建筑类型',
    `level` int unsigned NOT NULL DEFAULT 1 COMMENT 'level',
+    UNIQUE KEY (`mid`),
    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '全国地图';
 

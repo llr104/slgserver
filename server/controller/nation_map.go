@@ -60,16 +60,6 @@ func (this*NationMap) scan(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	x := reqObj.X
 	y := reqObj.Y
 
-	bb := entity.NMMgr.Scan(x, y)
-	rspObj.BBuilds = make([]proto.BaseBuild, len(bb))
-	for i, v := range bb {
-		rspObj.BBuilds[i].X = v.X
-		rspObj.BBuilds[i].Y = v.Y
-		rspObj.BBuilds[i].Id = v.Id
-		rspObj.BBuilds[i].Type = int8(v.Type)
-		rspObj.BBuilds[i].Durable = 100
-		rspObj.BBuilds[i].Level = v.Level
-	}
 
 	rb := entity.RBMgr.Scan(x, y)
 	rspObj.RBuilds = make([]proto.RoleBuild, len(rb))

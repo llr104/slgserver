@@ -6,10 +6,10 @@ import (
 	"io/ioutil"
 	"os"
 	"slgserver/config"
+	"slgserver/db"
 	"slgserver/log"
 	"slgserver/model"
 	"slgserver/util"
-	"sort"
 	"sync"
 )
 
@@ -22,23 +22,6 @@ type NMArray struct {
 	arr []model.NationalMap
 }
 
-func (this NMArray) Len() int {
-	return len(this.arr)
-}
-
-func (this NMArray) Swap(i, j int) {
-	this.arr[i], this.arr[j] = this.arr[j], this.arr[i]
-}
-
-func (this NMArray) Less(i, j int) bool {
-	if this.arr[i].X < this.arr[j].X{
-		return true
-	}else if this.arr[i].X == this.arr[j].X {
-		return this.arr[i].Y < this.arr[j].Y
-	}else{
-		return false
-	}
-}
 
 type mapData struct {
 	Width	int 			`json:"w"`
@@ -49,7 +32,6 @@ type mapData struct {
 type NationalMapMgr struct {
 	mutex sync.RWMutex
 	conf map[int]model.NationalMap
-	confArr NMArray
 }
 
 var NMMgr = &NationalMapMgr{
@@ -81,20 +63,22 @@ func (this* NationalMapMgr) Load() {
 	this.mutex.Lock()
 	defer this.mutex.Unlock()
 
+	temp := make([]model.NationalMap, 0)
+	isNeedDb := false
+	cnt, err := db.MasterDB.Table(new(model.NationalMap)).Count(&temp)
+	if cnt == 0 && err == nil{
+		isNeedDb = true
+	}
+
 	for i, v := range m.List {
 		t := v[0]
 		l := v[1]
-		this.conf[i] = model.NationalMap{X: i/MapWith, Y: i%MapWith, Id: i, Type: t, Level: l}
+		d := model.NationalMap{X: i/MapWith, Y: i%MapWith, MId: i, Type: t, Level: l}
+		this.conf[i] = d
+		if isNeedDb {
+			db.MasterDB.Insert(d)
+		}
 	}
-	
-	this.confArr.arr = make([]model.NationalMap, len(this.conf))
-	i := 0
-	for _, v := range this.conf {
-		this.confArr.arr[i] = v
-		i++
-	}
-
-	sort.Sort(this.confArr)
 
 }
 
@@ -114,7 +98,10 @@ func (this* NationalMapMgr) Scan(x, y int) []model.NationalMap {
 	index := 0
 	for i := minX; i <= maxX; i++ {
 		for j := minY; j <= maxY; j++ {
-			r[index] = this.confArr.arr[i*ScanWith+j]
+			v, ok := this.conf[i*ScanWith+j]
+			if ok {
+				r[index] = v
+			}
 			index++
 		}
 	}

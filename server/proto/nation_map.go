@@ -20,6 +20,7 @@ type ConfigRsp struct {
 	Confs []Conf
 }
 
+/*
 type BaseBuild struct {
 	Id		int		`json:"id"`
 	X		int		`json:"x"`
@@ -28,6 +29,7 @@ type BaseBuild struct {
 	Level	int		`json:"level"`
 	Durable	int		`json:"durable"`
 }
+ */
 
 type RoleBuild struct {
 	Id			int			`json:"id"`
@@ -49,7 +51,6 @@ type ScanReq struct {
 }
 
 type ScanRsp struct {
-	BBuilds	[]BaseBuild `json:"b_builds"` //基础建筑
 	RBuilds	[]RoleBuild `json:"r_builds"` //角色建筑，包含被占领的基础建筑
 	CBuilds	[]RoleCity	`json:"c_builds"` //角色城市
 }
