@@ -83,7 +83,7 @@ func (this*NationMap) scan(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	}
 
 	cb := entity.RCMgr.Scan(x, y)
-	rspObj.MCBuilds = make([]proto.RoleCity, len(rb))
+	rspObj.MCBuilds = make([]proto.MapRoleCity, len(rb))
 	for i, v := range cb {
 		rspObj.MCBuilds[i].X = v.X
 		rspObj.MCBuilds[i].Y = v.Y

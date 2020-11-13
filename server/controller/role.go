@@ -181,7 +181,7 @@ func (this*Role) myCity(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	}
 
 	//赋值发送
-	rspObj.Citys = make([]proto.RoleCity, len(citys))
+	rspObj.Citys = make([]proto.MapRoleCity, len(citys))
 	for i, v := range citys {
 		rspObj.Citys[i].CityId = v.CityId
 		rspObj.Citys[i].RId = v.RId

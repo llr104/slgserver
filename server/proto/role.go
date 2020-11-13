@@ -40,7 +40,7 @@ type EnterServerRsp struct {
 	Role		Role	`json:"role"`
 }
 
-type RoleCity struct {
+type MapRoleCity struct {
 	CityId		int			`json:"cityId"`
 	RId			int			`json:"rid"`
 	Name		string		`json:"name"`
@@ -56,5 +56,5 @@ type MyCityReq struct {
 }
 
 type MyCityRsp struct {
-	Citys []RoleCity	`json:"citys"`
+	Citys []MapRoleCity `json:"citys"`
 }
