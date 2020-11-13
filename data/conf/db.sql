@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `role` (
    PRIMARY KEY (`rid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '玩家表';
 
-CREATE TABLE IF NOT EXISTS `role_city` (
+CREATE TABLE IF NOT EXISTS `map_role_city` (
    `cityId` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'cityId',
    `rid` int unsigned NOT NULL COMMENT 'roleId',
    `x` int unsigned NOT NULL COMMENT 'x坐标',

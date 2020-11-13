@@ -10,13 +10,13 @@ import (
 
 type RoleCityMgr struct {
 	mutex  sync.RWMutex
-	dbCity map[int]*model.RoleCity
-	posCity map[int]*model.RoleCity
+	dbCity map[int]*model.MapRoleCity
+	posCity map[int]*model.MapRoleCity
 }
 
 var RCMgr = &RoleCityMgr{
-	dbCity: make(map[int]*model.RoleCity),
-	posCity: make(map[int]*model.RoleCity),
+	dbCity: make(map[int]*model.MapRoleCity),
+	posCity: make(map[int]*model.MapRoleCity),
 }
 
 func (this* RoleCityMgr) Load() {
@@ -46,14 +46,14 @@ func (this* RoleCityMgr) IsEmpty(x, y int) bool {
 	return !ok
 }
 
-func (this* RoleCityMgr) Add(city *model.RoleCity) {
+func (this* RoleCityMgr) Add(city *model.MapRoleCity) {
 	this.mutex.Lock()
 	defer this.mutex.Unlock()
 	this.dbCity[city.CityId] = city
 	this.posCity[city.X*MapWith+city.Y] = city
 }
 
-func (this* RoleCityMgr) Scan(x, y int) []*model.RoleCity{
+func (this* RoleCityMgr) Scan(x, y int) []*model.MapRoleCity {
 	this.mutex.RLock()
 	defer this.mutex.RUnlock()
 
@@ -62,7 +62,7 @@ func (this* RoleCityMgr) Scan(x, y int) []*model.RoleCity{
 	minY := util.MaxInt(0, y-ScanHeight)
 	maxY := util.MinInt(40, y+ScanHeight)
 
-	cb := make([]*model.RoleCity, 0)
+	cb := make([]*model.MapRoleCity, 0)
 	for i := minX; i <= maxX; i++ {
 		for j := minY; j <= maxY; j++ {
 			posId := i*ScanWith+j

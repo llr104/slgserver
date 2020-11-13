@@ -152,9 +152,9 @@ func (this*Role) myCity(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	}
 
 	role, _ := r.(*model.Role)
-	citys := make([]model.RoleCity, 0)
+	citys := make([]model.MapRoleCity, 0)
 	//查询是否有城市
-	db.MasterDB.Table(new(model.RoleCity)).Where("rid=?", role.RId).Find(&citys)
+	db.MasterDB.Table(new(model.MapRoleCity)).Where("rid=?", role.RId).Find(&citys)
 	if len(citys) == 0 {
 		//随机生成一个城市
 		for true {
@@ -162,7 +162,7 @@ func (this*Role) myCity(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 			y := rand.Intn(entity.MapHeight)
 			if entity.RBMgr.IsEmpty(x, y) && entity.RCMgr.IsEmpty(x, y){
 				//建立城市
-				c := model.RoleCity{RId: role.RId, X: x, Y: y, IsMain: 1,
+				c := model.MapRoleCity{RId: role.RId, X: x, Y: y, IsMain: 1,
 					Durable: 100, Level: 1, Name: role.NickName, CreatedAt: time.Now()}
 
 				//插入

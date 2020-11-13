@@ -2,7 +2,7 @@ package model
 
 import "time"
 
-type RoleCity struct {
+type MapRoleCity struct {
 	CityId		int			`json:"cityId" xorm:"cityId pk autoincr"`
 	RId			int			`json:"rid" xorm:"rid"`
 	Name		string		`json:"nickName" validate:"min=4,max=20,regexp=^[a-zA-Z0-9_]*$"`
@@ -14,6 +14,6 @@ type RoleCity struct {
 	CreatedAt	time.Time	`json:"created_at"`
 }
 
-func (this *RoleCity) TableName() string {
-	return "role_city"
+func (this *MapRoleCity) TableName() string {
+	return "map_role_city"
 }
