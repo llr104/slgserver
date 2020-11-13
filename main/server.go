@@ -1,9 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gorilla/websocket"
 	"go.uber.org/zap"
 	"net/http"
+	"os"
 	"slgserver/config"
 	"slgserver/log"
 	"slgserver/net"
@@ -28,7 +30,7 @@ func getServerAddr() string {
 
 
 func main() {
-
+	fmt.Println(os.Getwd())
 	run.Init()
 	log.DefaultLog.Info("slg server starting")
 	http.HandleFunc("/", wsHandler)

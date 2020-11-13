@@ -12,7 +12,7 @@ var DefaultLog *zap.Logger
 
 func init() {
 
-	file := config.File.MustValue("log", "fileName", "./log/run.log")
+	file := config.File.MustValue("log", "fileName", "../log/run.log")
 	maxSize := config.File.MustInt("log", "max_size", 128)
 	maxBackups := config.File.MustInt("log", "max_backups", 30)
 	maxAge := config.File.MustInt("log", "max_age", 7)
