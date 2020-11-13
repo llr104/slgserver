@@ -12,14 +12,14 @@ import (
 
 type RoleBuildMgr struct {
 	mutex sync.RWMutex
-	dbRB  map[int]*model.RoleBuild //key:dbId
-	posRB map[int]*model.RoleBuild //key:posId
+	dbRB  map[int]*model.MapRoleBuild //key:dbId
+	posRB map[int]*model.MapRoleBuild //key:posId
 }
 
 
 var RBMgr = &RoleBuildMgr{
-	dbRB: make(map[int]*model.RoleBuild),
-	posRB: make(map[int]*model.RoleBuild),
+	dbRB: make(map[int]*model.MapRoleBuild),
+	posRB: make(map[int]*model.MapRoleBuild),
 }
 
 func (this* RoleBuildMgr) Load() {
@@ -49,7 +49,7 @@ func (this* RoleBuildMgr) IsEmpty(x, y int) bool {
 	return !ok
 }
 
-func (this* RoleBuildMgr) Scan(x, y int) []*model.RoleBuild{
+func (this* RoleBuildMgr) Scan(x, y int) []*model.MapRoleBuild {
 	this.mutex.RLock()
 	defer this.mutex.RUnlock()
 
@@ -58,7 +58,7 @@ func (this* RoleBuildMgr) Scan(x, y int) []*model.RoleBuild{
 	minY := util.MaxInt(0, y-ScanHeight)
 	maxY := util.MinInt(40, y+ScanHeight)
 
-	rb := make([]*model.RoleBuild, 0)
+	rb := make([]*model.MapRoleBuild, 0)
 	for i := minX; i <= maxX; i++ {
 		for j := minY; j <= maxY; j++ {
 			posId := i*ScanWith+j

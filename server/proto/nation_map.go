@@ -21,7 +21,7 @@ type ConfigRsp struct {
 }
 
 /*
-type BaseBuild struct {
+type MapBaseBuild struct {
 	Id		int		`json:"id"`
 	X		int		`json:"x"`
 	Y		int		`json:"y"`
@@ -31,7 +31,7 @@ type BaseBuild struct {
 }
  */
 
-type RoleBuild struct {
+type MapRoleBuild struct {
 	Id			int			`json:"id"`
 	RId			int			`json:"rid"`
 	RNick		string 		`json:"RNick"` //角色昵称
@@ -51,7 +51,7 @@ type ScanReq struct {
 }
 
 type ScanRsp struct {
-	RBuilds	[]RoleBuild `json:"r_builds"` //角色建筑，包含被占领的基础建筑
-	CBuilds	[]RoleCity	`json:"c_builds"` //角色城市
+	MRBuilds []MapRoleBuild `json:"mr_builds"` //角色建筑，包含被占领的基础建筑
+	MCBuilds []RoleCity     `json:"mc_builds"` //角色城市
 }
 

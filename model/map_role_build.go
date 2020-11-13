@@ -1,8 +1,12 @@
 package model
 
-type BuildConfig struct {
+type MapRoleBuild struct {
 	Id			int			`json:"id" xorm:"id pk autoincr"`
+	RId			int			`json:"rid" xorm:"rid"`
 	Type		int8		`json:"type"`
+	Level		int			`json:"level"`
+	X			int			`json:"x"`
+	Y			int			`json:"y"`
 	Name		string		`json:"name"`
 	Wood		int			`json:"Wood"`
 	Iron		int			`json:"iron"`
@@ -12,7 +16,6 @@ type BuildConfig struct {
 	Defender	int			`json:"defender"`
 }
 
-func (this *BuildConfig) TableName() string {
-	return "build_config"
+func (this *MapRoleBuild) TableName() string {
+	return "map_role_build"
 }
-

@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS `national_map` (
    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '全国地图';
 
-CREATE TABLE IF NOT EXISTS `build_config` (
+CREATE TABLE IF NOT EXISTS `map_build_config` (
    `id` int unsigned NOT NULL AUTO_INCREMENT,
    `type` int unsigned NOT NULL COMMENT '建筑类型',
    `level` int unsigned NOT NULL COMMENT '建筑等级',
@@ -89,7 +89,7 @@ CREATE TABLE IF NOT EXISTS `build_config` (
    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '建筑类型配置';
 
-CREATE TABLE IF NOT EXISTS `role_build` (
+CREATE TABLE IF NOT EXISTS `map_role_build` (
    `id` int unsigned NOT NULL AUTO_INCREMENT,
    `rid` int unsigned NOT NULL,
    `type` int unsigned NOT NULL COMMENT '建筑类型',

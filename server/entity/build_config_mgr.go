@@ -9,11 +9,11 @@ import (
 
 type BuildConfigMgr struct {
 	mutex sync.RWMutex
-	conf map[int]model.BuildConfig
+	conf map[int]model.MapBuildConfig
 }
 
 var BCMgr = &BuildConfigMgr{
-	conf: make(map[int]model.BuildConfig),
+	conf: make(map[int]model.MapBuildConfig),
 }
 
 func (this* BuildConfigMgr) Load() {
@@ -26,6 +26,6 @@ func (this* BuildConfigMgr) Load() {
 	}
 }
 
-func (this* BuildConfigMgr) Maps() map[int]model.BuildConfig {
+func (this* BuildConfigMgr) Maps() map[int]model.MapBuildConfig {
 	return this.conf
 }
