@@ -79,10 +79,11 @@ func (this* FacilityMgr) Load() {
 func (this* FacilityMgr) Get(cid int) (*model.CityFacility, error){
 	this.mutex.RLock()
 	r, ok := this.facilities[cid]
+	this.mutex.RUnlock()
+
 	if ok {
 		return r, nil
 	}
-	this.mutex.RUnlock()
 
 	r = &model.CityFacility{}
 	ok, err := db.MasterDB.Table(r).Where("cityId=?", cid).Get(r)

@@ -80,10 +80,12 @@ func (this* RoleCityMgr) Scan(x, y int) []*model.MapRoleCity {
 func (this* RoleCityMgr) Get(cid int) (*model.MapRoleCity, error){
 	this.mutex.RLock()
 	r, ok := this.dbCity[cid]
+	this.mutex.RUnlock()
+
 	if ok {
 		return r, nil
 	}
-	this.mutex.RUnlock()
+
 
 	r = &model.MapRoleCity{}
 	ok, err := db.MasterDB.Table(r).Where("cityId=?", cid).Get(r)
