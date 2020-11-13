@@ -3,6 +3,7 @@ package model
 type MapBuildConfig struct {
 	Id			int			`json:"id" xorm:"id pk autoincr"`
 	Type		int8		`json:"type"`
+	Level		int			`json:"level"`
 	Name		string		`json:"name"`
 	Wood		int			`json:"Wood"`
 	Iron		int			`json:"iron"`

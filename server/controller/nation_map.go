@@ -37,6 +37,7 @@ func (this*NationMap) config(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	for _, v := range m {
 		rspObj.Confs[i].Type = v.Type
 		rspObj.Confs[i].Name = v.Name
+		rspObj.Confs[i].Level = v.Level
 		rspObj.Confs[i].Defender = v.Defender
 		rspObj.Confs[i].Durable = v.Durable
 		rspObj.Confs[i].Grain = v.Grain
