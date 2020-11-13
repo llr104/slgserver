@@ -1,25 +1,19 @@
 package middleware
 
 import (
-	"go.uber.org/zap"
 	"slgserver/constant"
-	"slgserver/log"
 	"slgserver/net"
 )
 
-func CheckLogin() net.MiddlewareFunc {
+func CheckRole() net.MiddlewareFunc {
 	return func(next net.HandlerFunc) net.HandlerFunc {
 		return func(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
-			_, err := req.Conn.GetProperty("uid")
+			_, err := req.Conn.GetProperty("role")
 			if err != nil {
-				log.DefaultLog.Warn("connect not found uid",
-					zap.String("msgName", req.Body.Name))
 				rsp.Body.Code = constant.InvalidParam
-				req.Conn.Send("account.pleaseLogin", nil)
 				return
 			}
-
 			next(req, rsp)
 		}
 	}

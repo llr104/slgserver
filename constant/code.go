@@ -12,3 +12,4 @@ const RoleAlreadyCreate = 8	//已经创建过角色了
 const RoleNotExist = 9		//角色不存在
 const CityNotExist = 10		//城市不存在
 const CityNotMe = 11		//城市不是自己的
+const UpError = 12			//升级失败

@@ -14,7 +14,7 @@ var nameArr = []string{	"校场", "募兵所", "疾风营", "铁壁营", "军机
 						"统帅厅", "汉点将台", "魏点将台", "蜀点将台", "吴点将台", "群点将台",
 						"兵营", "封禅台", "民居", "仓库", "伐木场", "炼铁场",
 						"磨坊", "采石场", "城墙", "集市", "警戒所", "女墙",
-						"烽火台", "守将府", "武神巨像", "沙盘阵图", "社稷坛",}
+						"烽火台", "守将府", "武神巨像", "沙盘阵图", "社稷坛"}
 
 const (
 	FacilityBEG		= iota
@@ -111,10 +111,10 @@ func (this* FacilityMgr) GetAndTryCreate(cid int) (*model.CityFacility, error){
 	}else{
 		if _, err:= RCMgr.Get(cid); err == nil {
 			//创建
-			fs := make([]Facility, 30)
-			for i := FacilityBEG; i < FacilityEND ; i++ {
-				f := Facility{Type: int8(i+1), CLevel: int8(1), MLevel: int8(10), Name: nameArr[i]}
-				fs[i] = f
+			fs := make([]Facility, FacilityEND-1)
+			for i := FacilityBEG+1; i < FacilityEND ; i++ {
+				f := Facility{Type: int8(i), CLevel: int8(1), MLevel: int8(10), Name: nameArr[i-1]}
+				fs[i-1] = f
 			}
 
 			sdata, _ := json.Marshal(fs)
@@ -130,5 +130,42 @@ func (this* FacilityMgr) GetAndTryCreate(cid int) (*model.CityFacility, error){
 			str := fmt.Sprintf("cid:%d not found", cid)
 			return nil, errors.New(str)
 		}
+	}
+}
+
+func (this* FacilityMgr) UpFacility(cid int, fType int8) (*Facility, error){
+	this.mutex.Lock()
+	defer this.mutex.Unlock()
+	f, ok := this.facilities[cid]
+	if ok == false{
+		str := fmt.Sprintf("UpFacility cityId %d not found", cid)
+		log.DefaultLog.Warn(str)
+		return nil, errors.New(str)
+	}else{
+		suss := false
+		fa := make([]Facility, 0)
+		var out *Facility
+		json.Unmarshal([]byte(f.Facilities), &fa)
+		for _, v := range fa {
+			if v.Type == fType && v.CLevel<v.MLevel{
+				v.CLevel+=1
+				suss = true
+				out = &v
+				break
+			}
+		}
+		if suss {
+			if t, err := json.Marshal(fa); err == nil{
+				f.Facilities = string(t)
+				return out, nil
+			}else{
+				return nil, err
+			}
+		}else{
+			str := fmt.Sprintf("UpFacility error")
+			log.DefaultLog.Warn(str)
+			return nil, errors.New(str)
+		}
+
 	}
 }
