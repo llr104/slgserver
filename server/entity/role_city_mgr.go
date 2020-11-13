@@ -1,6 +1,8 @@
 package entity
 
 import (
+	"errors"
+	"fmt"
 	"slgserver/db"
 	"slgserver/log"
 	"slgserver/model"
@@ -73,4 +75,29 @@ func (this* RoleCityMgr) Scan(x, y int) []*model.MapRoleCity {
 		}
 	}
 	return cb
+}
+
+func (this* RoleCityMgr) Get(cid int) (*model.MapRoleCity, error){
+	this.mutex.RLock()
+	r, ok := this.dbCity[cid]
+	if ok {
+		return r, nil
+	}
+	this.mutex.RUnlock()
+
+	r = &model.MapRoleCity{}
+	ok, err := db.MasterDB.Table(r).Where("cid=?", cid).Get(r)
+	if ok {
+		this.mutex.Lock()
+		this.dbCity[cid] = r
+		this.mutex.Unlock()
+		return r, nil
+	}else{
+		if err != nil{
+			return nil, err
+		}else{
+			str := fmt.Sprintf("cid:%d CityFacility not found", cid)
+			return nil, errors.New(str)
+		}
+	}
 }

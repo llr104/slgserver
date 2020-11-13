@@ -106,4 +106,13 @@ CREATE TABLE IF NOT EXISTS `map_role_build` (
    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '角色建筑';
 
+CREATE TABLE IF NOT EXISTS `city_facility` (
+   `id` int unsigned NOT NULL AUTO_INCREMENT,
+   `cityId` int unsigned NOT NULL COMMENT '城市id',
+   `facilities` varchar(4096) NOT NULL COMMENT '设施列表，格式为json结构',
+   UNIQUE KEY (`cityId`),
+   PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '城池设施';
+
+
 

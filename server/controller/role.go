@@ -175,6 +175,9 @@ func (this*Role) myCity(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 					//更新城市缓存
 					entity.RCMgr.Add(&c)
 				}
+
+				//生成城市里面的设施
+				entity.RFMgr.GetAndTryCreate(c.CityId)
 				break
 			}
 		}

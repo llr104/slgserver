@@ -17,11 +17,13 @@ func Init() {
 	entity.NMMgr.Load()
 	entity.RCMgr.Load()
 	entity.RBMgr.Load()
-
+	entity.RFMgr.Load()
+	entity.RFMgr.Get(111)
 }
 
 func initRouter() {
 	controller.DefaultAccount.InitRouter(MyRouter)
 	controller.DefaultRole.InitRouter(MyRouter)
 	controller.DefaultMap.InitRouter(MyRouter)
+	controller.DefaultCity.InitRouter(MyRouter)
 }
