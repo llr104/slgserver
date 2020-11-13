@@ -9,6 +9,7 @@ import (
 	"slgserver/model"
 	"slgserver/net"
 	"slgserver/server"
+	"slgserver/server/entity"
 	"slgserver/server/middleware"
 	"slgserver/server/proto"
 	"slgserver/util"
@@ -128,6 +129,12 @@ func (this*Account) reLogin(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 				if ll.Hardware == reqObj.Hardware {
 					rsp.Body.Code = constant.OK
 					server.DefaultConnMgr.UserLogin(req.Conn, reqObj.Session, ll.UId)
+
+					role, err := entity.RMgr.Get(reqObj.RId)
+					if err == nil && ll.UId == role.UId{
+						req.Conn.SetProperty("role", role)
+					}
+
 				}else{
 					rsp.Body.Code = constant.HardwareIncorrect
 				}

@@ -15,9 +15,10 @@ type LoginRsp struct {
 }
 
 type ReLoginReq struct {
-	Session 	string  `json:"session"`
+	Session 	string	`json:"session"`
 	Ip			string	`json:"ip"`
 	Hardware	string	`json:"hardware"`
+	RId			int		`json:"rid"`
 }
 
 type ReLoginRsp struct {

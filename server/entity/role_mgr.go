@@ -1,6 +1,8 @@
 package entity
 
 import (
+	"errors"
+	"fmt"
 	"slgserver/db"
 	"slgserver/model"
 	"sync"
@@ -32,7 +34,12 @@ func (this* RoleMgr) Get(rid int) (*model.Role, error){
 		this.mutex.Unlock()
 		return m, nil
 	}else{
-		return nil, err
+		if err == nil{
+			return nil, errors.New(fmt.Sprintf("role %d not found", rid))
+		}else{
+			return nil, err
+		}
+
 	}
 }
 
