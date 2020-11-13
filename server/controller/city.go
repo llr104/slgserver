@@ -63,6 +63,7 @@ func (this*City) facilities(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		rspObj.Facilities[i].Name = v.Name
 		rspObj.Facilities[i].CLevel = v.CLevel
 		rspObj.Facilities[i].MLevel = v.MLevel
+		rspObj.Facilities[i].Type = v.Type
 	}
 
 }
