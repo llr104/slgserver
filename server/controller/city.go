@@ -95,7 +95,7 @@ func (this*City) upFacility(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	out, err := entity.RFMgr.UpFacility(reqObj.CityId, reqObj.FacilityType)
+	out, err := entity.RFMgr.UpFacility(reqObj.CityId, int8(reqObj.FType))
 	if err != nil{
 		rsp.Body.Code = constant.UpError
 	}else{

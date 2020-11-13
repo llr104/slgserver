@@ -144,14 +144,14 @@ func (this* FacilityMgr) UpFacility(cid int, fType int8) (*Facility, error){
 		return nil, errors.New(str)
 	}else{
 		suss := false
-		fa := make([]Facility, 0)
+		fa := make([]*Facility, 0)
 		var out *Facility
 		json.Unmarshal([]byte(f.Facilities), &fa)
 		for _, v := range fa {
 			if v.Type == fType && v.CLevel<v.MLevel{
 				v.CLevel+=1
 				suss = true
-				out = &v
+				out = v
 				break
 			}
 		}
