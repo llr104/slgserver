@@ -162,18 +162,17 @@ func (this*Role) myCity(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 			y := rand.Intn(entity.MapHeight)
 			if entity.RBMgr.IsEmpty(x, y) && entity.RCMgr.IsEmpty(x, y){
 				//建立城市
-				c := model.MapRoleCity{RId: role.RId, X: x, Y: y, IsMain: 1,
+				c := &model.MapRoleCity{RId: role.RId, X: x, Y: y, IsMain: 1,
 					Durable: 100, Level: 1, Name: role.NickName, CreatedAt: time.Now()}
 
 				//插入
-				cityId, err := db.MasterDB.Table(c).Insert(c)
+				_, err := db.MasterDB.Table(c).Insert(c)
 				if err != nil{
 					rsp.Body.Code = constant.DBError
 				}else{
-					c.CityId = int(cityId)
-					citys = append(citys, c)
+					citys = append(citys, *c)
 					//更新城市缓存
-					entity.RCMgr.Add(&c)
+					entity.RCMgr.Add(c)
 				}
 
 				//生成城市里面的设施

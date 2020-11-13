@@ -19,7 +19,7 @@ type City struct {
 }
 
 func (this*City) InitRouter(r *net.Router) {
-	g := r.Group("role").Use(middleware.Log(), middleware.CheckLogin())
+	g := r.Group("city").Use(middleware.Log(), middleware.CheckLogin())
 	g.AddRouter("facilities", this.facilities)
 }
 
@@ -55,7 +55,14 @@ func (this*City) facilities(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	d,_ := json.Marshal(f)
-	rspObj.Facilities = string(d)
+	t := make([]entity.Facility, 0)
+	json.Unmarshal([]byte(f.Facilities), &t)
+
+	rspObj.Facilities = make([]proto.Facility, len(t))
+	for i, v := range t {
+		rspObj.Facilities[i].Name = v.Name
+		rspObj.Facilities[i].CLevel = v.CLevel
+		rspObj.Facilities[i].MLevel = v.MLevel
+	}
 
 }

@@ -86,7 +86,7 @@ func (this* RoleCityMgr) Get(cid int) (*model.MapRoleCity, error){
 	this.mutex.RUnlock()
 
 	r = &model.MapRoleCity{}
-	ok, err := db.MasterDB.Table(r).Where("cid=?", cid).Get(r)
+	ok, err := db.MasterDB.Table(r).Where("cityId=?", cid).Get(r)
 	if ok {
 		this.mutex.Lock()
 		this.dbCity[cid] = r
