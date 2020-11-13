@@ -134,25 +134,27 @@ func (conn *WSConn) wsReadLoop() {
 			}
 		}
 
-		if err := util.Unmarshal(data, body); err == nil {
-			req := &WsMsgReq{Conn: conn, Body: body}
-			rsp := &WsMsgRsp{Body: &RspBody{Name: body.Name, Seq: req.Body.Seq}}
+		go func() {
+			if err := util.Unmarshal(data, body); err == nil {
+				req := &WsMsgReq{Conn: conn, Body: body}
+				rsp := &WsMsgRsp{Body: &RspBody{Name: body.Name, Seq: req.Body.Seq}}
 
-			if req.Body.Name == HeartbeatMsg {
-				h := &Heartbeat{}
-				mapstructure.Decode(body.Msg, h)
-				h.STime = time.Now().UnixNano()/1e6
-				rsp.Body.Msg = h
-			}else{
-				if conn.router != nil {
-					conn.router.Run(req, rsp)
+				if req.Body.Name == HeartbeatMsg {
+					h := &Heartbeat{}
+					mapstructure.Decode(body.Msg, h)
+					h.STime = time.Now().UnixNano()/1e6
+					rsp.Body.Msg = h
+				}else{
+					if conn.router != nil {
+						conn.router.Run(req, rsp)
+					}
 				}
+				conn.outChan <- rsp
+			}else{
+				log.DefaultLog.Error("wsReadLoop Unmarshal error", zap.Error(err))
+				conn.Handshake()
 			}
-			conn.outChan <- rsp
-		}else{
-			log.DefaultLog.Error("wsReadLoop Unmarshal error", zap.Error(err))
-			conn.Handshake()
-		}
+		}()
 	}
 
 	conn.Close()
