@@ -11,28 +11,28 @@ import (
 	"slgserver/log"
 )
 
-//城内设施校场
-var FJC facilityJC
+//城内设施募兵所
+var FMBS facilityMBS
 
-type jcLevel struct {
+type mbsLevel struct {
 	levelNeedRes
-	Cnt		int8 `json:"cnt"`
+	Rate	int8 `json:"rate"`
 }
 
-type facilityJC struct {
+type facilityMBS struct {
 	Title	string				`json:"title"`
 	Name	string				`json:"name"`
 	Des		string				`json:"des"`
 	Type	int8				`json:"type"`
-	Levels	[]jcLevel			`json:"levels"`
+	Levels	[]mbsLevel			`json:"levels"`
 }
 
-func (this *facilityJC) Load()  {
+func (this *facilityMBS) Load()  {
 	jsonDir := config.File.MustValue("logic", "json_data", "../data/conf/")
-	fileName := path.Join(jsonDir, "facility_jc.json")
+	fileName := path.Join(jsonDir, "facility_mbs.json")
 	jdata, err := ioutil.ReadFile(fileName)
 	if err != nil {
-		log.DefaultLog.Error("facilityJC load file error", zap.Error(err), zap.String("file", fileName))
+		log.DefaultLog.Error("facility_mbs load file error", zap.Error(err), zap.String("file", fileName))
 		os.Exit(0)
 	}
 

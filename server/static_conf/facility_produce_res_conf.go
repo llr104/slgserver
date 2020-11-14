@@ -13,13 +13,17 @@ import (
 //城内生产资源设施配置
 var FPRC facilityProduceResConf
 
-type produceResLevel struct {
+type levelNeedRes struct {
 	Level      int8 `json:"level"`
 	NeedDecree int8 `json:"need_decree"`
 	NeedGrain  int  `json:"need_grain"`
 	NeedWood   int  `json:"need_wood"`
 	NeedIron   int  `json:"need_iron"`
 	NeedStone  int  `json:"need_stone"`
+}
+
+type produceResLevel struct {
+	levelNeedRes
 	Yield      int  `json:"yield"`
 }
 
