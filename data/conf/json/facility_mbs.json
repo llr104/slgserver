@@ -4,14 +4,14 @@
   "name": "募兵所",
   "type": 2,
   "levels": [
-    {"level": 1, "rate": -5, "need_decree": 0, "need_grain": 1000, "need_wood": 1000, "need_iron": 1000, "need_stone": 1000, "yield": 1000},
-    {"level": 2, "rate": -10, "need_decree": 0, "need_grain": 1000, "need_wood": 1000, "need_iron": 1000, "need_stone": 1000, "yield": 1000},
-    {"level": 3, "rate": -15, "need_decree": 0, "need_grain": 1000, "need_wood": 1000, "need_iron": 1000, "need_stone": 1000, "yield": 1000},
-    {"level": 4, "rate": -20, "need_decree": 0, "need_grain": 1000, "need_wood": 1000, "need_iron": 1000, "need_stone": 1000, "yield": 1000},
-    {"level": 5, "rate": -25, "need_decree": 0, "need_grain": 1000, "need_wood": 1000, "need_iron": 1000, "need_stone": 1000, "yield": 1000},
-    {"level": 6, "rate": -30, "need_decree": 0, "need_grain": 1000, "need_wood": 1000, "need_iron": 1000, "need_stone": 1000, "yield": 1000},
-    {"level": 7, "rate": -35, "need_decree": 0, "need_grain": 1000, "need_wood": 1000, "need_iron": 1000, "need_stone": 1000, "yield": 1000},
-    {"level": 8, "rate": -40, "need_decree": 0, "need_grain": 1000, "need_wood": 1000, "need_iron": 1000, "need_stone": 1000, "yield": 1000},
-    {"level": 9, "rate": -45, "need_decree": 0, "need_grain": 1000, "need_wood": 1000, "need_iron": 1000, "need_stone": 1000, "yield": 1000},
-    {"level": 10, "rate": -50, "need_decree": 0, "need_grain": 1000, "need_wood": 1000, "need_iron": 1000, "need_stone": 1000, "yield": 1000}]
+    {"level": 1, "rate": -5, "need_decree": 0, "need_grain": 1000, "need_wood": 1000, "need_iron": 1000, "need_stone": 1000},
+    {"level": 2, "rate": -10, "need_decree": 0, "need_grain": 1000, "need_wood": 1000, "need_iron": 1000, "need_stone": 1000},
+    {"level": 3, "rate": -15, "need_decree": 0, "need_grain": 1000, "need_wood": 1000, "need_iron": 1000, "need_stone": 1000},
+    {"level": 4, "rate": -20, "need_decree": 0, "need_grain": 1000, "need_wood": 1000, "need_iron": 1000, "need_stone": 1000},
+    {"level": 5, "rate": -25, "need_decree": 0, "need_grain": 1000, "need_wood": 1000, "need_iron": 1000, "need_stone": 1000},
+    {"level": 6, "rate": -30, "need_decree": 0, "need_grain": 1000, "need_wood": 1000, "need_iron": 1000, "need_stone": 1000},
+    {"level": 7, "rate": -35, "need_decree": 0, "need_grain": 1000, "need_wood": 1000, "need_iron": 1000, "need_stone": 1000},
+    {"level": 8, "rate": -40, "need_decree": 0, "need_grain": 1000, "need_wood": 1000, "need_iron": 1000, "need_stone": 1000},
+    {"level": 9, "rate": -45, "need_decree": 0, "need_grain": 1000, "need_wood": 1000, "need_iron": 1000, "need_stone": 1000},
+    {"level": 10, "rate": -50, "need_decree": 0, "need_grain": 1000, "need_wood": 1000, "need_iron": 1000, "need_stone": 10000}]
 }
