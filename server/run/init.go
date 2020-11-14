@@ -5,6 +5,7 @@ import (
 	"slgserver/net"
 	"slgserver/server/controller"
 	"slgserver/server/entity"
+	"slgserver/server/static_conf"
 )
 
 var MyRouter = &net.Router{}
@@ -13,12 +14,14 @@ func Init() {
 	db.TestDB()
 	initRouter()
 
+	static_conf.FPRC.Load()
+
 	entity.BCMgr.Load()
 	entity.NMMgr.Load()
 	entity.RCMgr.Load()
 	entity.RBMgr.Load()
 	entity.RFMgr.Load()
-	entity.RFMgr.Get(111)
+
 }
 
 func initRouter() {

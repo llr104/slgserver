@@ -39,7 +39,6 @@ func (this* RoleMgr) Get(rid int) (*model.Role, error){
 		}else{
 			return nil, err
 		}
-
 	}
 }
 

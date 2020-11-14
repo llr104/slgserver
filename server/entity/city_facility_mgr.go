@@ -67,6 +67,7 @@ type FacilityMgr struct {
 }
 
 func (this* FacilityMgr) Load() {
+
 	this.mutex.Lock()
 	defer this.mutex.Unlock()
 
