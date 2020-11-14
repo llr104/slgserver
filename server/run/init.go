@@ -14,7 +14,9 @@ func Init() {
 	db.TestDB()
 	initRouter()
 
+	static_conf.FJC.Load()
 	static_conf.FPRC.Load()
+
 
 	entity.BCMgr.Load()
 	entity.NMMgr.Load()
