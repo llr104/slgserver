@@ -26,7 +26,7 @@ func TestDB() error {
 	mysqlConfig, err := config.File.GetSection("mysql")
 	if err != nil {
 		fmt.Println("get mysql config error:", err)
-		return err
+		panic(err)
 	}
 
 	tmpDns := fmt.Sprintf("%s:%s@tcp(%s:%s)/?charset=%s&parseTime=True&loc=Local",
@@ -38,7 +38,7 @@ func TestDB() error {
 	egnine, err := xorm.NewEngine("mysql", tmpDns)
 	if err != nil {
 		fmt.Println("new engine error:", err)
-		return err
+		panic(err)
 	}
 	defer egnine.Close()
 
