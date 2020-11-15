@@ -117,5 +117,24 @@ CREATE TABLE IF NOT EXISTS `city_facility` (
    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '城池设施';
 
+CREATE TABLE IF NOT EXISTS `role_res` (
+   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+   `rid` int unsigned NOT NULL COMMENT "rid",
+   `wood` int unsigned NOT NULL COMMENT '木',
+   `iron` int unsigned NOT NULL COMMENT '铁',
+   `stone` int unsigned NOT NULL COMMENT '石头',
+   `grain` int unsigned NOT NULL COMMENT '粮食',
+   `gold` int unsigned NOT NULL COMMENT '金币',
+   `decree` int unsigned NOT NULL COMMENT '令牌',
+   `depot_capacity` int unsigned NOT NULL COMMENT '仓库容量',
+   
+   `wood_yield` int unsigned NOT NULL COMMENT '木产量',
+   `iron_yield` int unsigned NOT NULL COMMENT '铁产量',
+   `stone_yield` int unsigned NOT NULL COMMENT '石头产量',
+   `grain_yield` int unsigned NOT NULL COMMENT '粮食产量',
+   `gold_yield` int unsigned NOT NULL COMMENT '金币产量',
 
+   UNIQUE KEY (`rid`),
+   PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '角色资源表';
 
