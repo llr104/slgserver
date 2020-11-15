@@ -12,7 +12,7 @@ import (
 )
 
 //阵营配置
-var FCAMP facilityCamp
+var FCAMP facilityCampConf
 
 type campLevel struct {
 	Level	int8			`json:"level"`
@@ -27,7 +27,7 @@ type camp struct {
 	Levels	[]campLevel		`json:"levels"`
 }
 
-type facilityCamp struct {
+type facilityCampConf struct {
 	Title	string	`json:"title"`
 	Han		camp	`json:"han"`
 	Wei		camp	`json:"wei"`
@@ -36,12 +36,12 @@ type facilityCamp struct {
 	Qun		camp	`json:"qun"`
 }
 
-func (this *facilityCamp) Load()  {
+func (this *facilityCampConf) Load()  {
 	jsonDir := config.File.MustValue("logic", "json_data", "../data/conf/")
 	fileName := path.Join(jsonDir, "facility_camp.json")
 	jdata, err := ioutil.ReadFile(fileName)
 	if err != nil {
-		log.DefaultLog.Error("facilityCamp load file error", zap.Error(err), zap.String("file", fileName))
+		log.DefaultLog.Error("facilityCampConf load file error", zap.Error(err), zap.String("file", fileName))
 		os.Exit(0)
 	}
 

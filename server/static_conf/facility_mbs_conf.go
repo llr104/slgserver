@@ -12,7 +12,7 @@ import (
 )
 
 //城内设施募兵所
-var FMBS facilityMBS
+var FMBS facilityMBSConf
 
 type mbsLevel struct {
 	Level	int8			`json:"level"`
@@ -20,7 +20,7 @@ type mbsLevel struct {
 	Need	levelNeedRes	`json:"need"`
 }
 
-type facilityMBS struct {
+type facilityMBSConf struct {
 	Title	string				`json:"title"`
 	Name	string				`json:"name"`
 	Des		string				`json:"des"`
@@ -28,7 +28,7 @@ type facilityMBS struct {
 	Levels	[]mbsLevel			`json:"levels"`
 }
 
-func (this *facilityMBS) Load()  {
+func (this *facilityMBSConf) Load()  {
 	jsonDir := config.File.MustValue("logic", "json_data", "../data/conf/")
 	fileName := path.Join(jsonDir, "facility_mbs.json")
 	jdata, err := ioutil.ReadFile(fileName)

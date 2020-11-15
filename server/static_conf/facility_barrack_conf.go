@@ -12,7 +12,7 @@ import (
 )
 
 //兵营预备役配置
-var FBarrack facilityBarrack
+var FBarrack facilityBarrackConf
 
 type byLevel struct {
 	Level	int8			`json:"level"`
@@ -41,18 +41,18 @@ type yby struct {
 }
 
 
-type facilityBarrack struct {
+type facilityBarrackConf struct {
 	Title 	string		`json:"title"`
 	BY		by			`json:"by"`
 	YBY		yby			`json:"yby"`
 }
 
-func (this *facilityBarrack) Load()  {
+func (this *facilityBarrackConf) Load()  {
 	jsonDir := config.File.MustValue("logic", "json_data", "../data/conf/")
 	fileName := path.Join(jsonDir, "facility_barrack.json")
 	jdata, err := ioutil.ReadFile(fileName)
 	if err != nil {
-		log.DefaultLog.Error("facilityBarrack load file error", zap.Error(err), zap.String("file", fileName))
+		log.DefaultLog.Error("facilityBarrackConf load file error", zap.Error(err), zap.String("file", fileName))
 		os.Exit(0)
 	}
 

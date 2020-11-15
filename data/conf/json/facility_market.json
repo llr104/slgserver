@@ -1,0 +1,117 @@
+{
+  "title": "集市配置表",
+  "des": "提高交易兑换率",
+  "name": "集市",
+  "type": 2,
+  "levels": [{
+    "level": 1,
+    "rate": 5,
+    "need": {
+      "decree": 0,
+      "grain": 1000,
+      "wood": 1000,
+      "iron": 1000,
+      "stone": 1000
+    }
+  },
+    {
+      "level": 2,
+      "rate": 10,
+      "need": {
+        "decree": 0,
+        "grain": 1000,
+        "wood": 1000,
+        "iron": 1000,
+        "stone": 1000
+      }
+    },
+    {
+      "level": 3,
+      "rate": 15,
+      "need": {
+        "decree": 0,
+        "grain": 1000,
+        "wood": 1000,
+        "iron": 1000,
+        "stone": 1000
+      }
+    },
+    {
+      "level": 4,
+      "rate": 20,
+      "need": {
+        "decree": 0,
+        "grain": 1000,
+        "wood": 1000,
+        "iron": 1000,
+        "stone": 1000
+      }
+    },
+    {
+      "level": 5,
+      "rate": 25,
+      "need": {
+        "decree": 0,
+        "grain": 1000,
+        "wood": 1000,
+        "iron": 1000,
+        "stone": 1000
+      }
+    },
+    {
+      "level": 6,
+      "rate": 30,
+      "need": {
+        "decree": 0,
+        "grain": 1000,
+        "wood": 1000,
+        "iron": 1000,
+        "stone": 1000
+      }
+    },
+    {
+      "level": 7,
+      "rate": 35,
+      "need": {
+        "decree": 0,
+        "grain": 1000,
+        "wood": 1000,
+        "iron": 1000,
+        "stone": 1000
+      }
+    },
+    {
+      "level": 8,
+      "rate": 40,
+      "need": {
+        "decree": 0,
+        "grain": 1000,
+        "wood": 1000,
+        "iron": 1000,
+        "stone": 1000
+      }
+    },
+    {
+      "level": 9,
+      "rate": 45,
+      "need": {
+        "decree": 0,
+        "grain": 1000,
+        "wood": 1000,
+        "iron": 1000,
+        "stone": 1000
+      }
+    },
+    {
+      "level": 10,
+      "rate": 50,
+      "need": {
+        "decree": 0,
+        "grain": 1000,
+        "wood": 1000,
+        "iron": 1000,
+        "stone": 1000
+      }
+    }
+  ]
+}

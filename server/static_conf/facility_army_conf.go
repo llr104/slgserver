@@ -12,7 +12,7 @@ import (
 )
 
 //四营配置
-var FARMY facilityArmy
+var FARMY facilityArmyConf
 
 type armyLevel struct {
 	Level	int8			`json:"level"`
@@ -27,7 +27,7 @@ type army struct {
 	Levels	[]armyLevel		`json:"levels"`
 }
 
-type facilityArmy struct {
+type facilityArmyConf struct {
 	Title string	`json:"title"`
 	JFY   army		`json:"jfy"`
 	TBY   army		`json:"tby"`
@@ -35,12 +35,12 @@ type facilityArmy struct {
 	SWY   army		`json:"swy"`
 }
 
-func (this *facilityArmy) Load()  {
+func (this *facilityArmyConf) Load()  {
 	jsonDir := config.File.MustValue("logic", "json_data", "../data/conf/")
 	fileName := path.Join(jsonDir, "facility_army.json")
 	jdata, err := ioutil.ReadFile(fileName)
 	if err != nil {
-		log.DefaultLog.Error("facilityArmy load file error", zap.Error(err), zap.String("file", fileName))
+		log.DefaultLog.Error("facilityArmyConf load file error", zap.Error(err), zap.String("file", fileName))
 		os.Exit(0)
 	}
 

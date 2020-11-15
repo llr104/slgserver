@@ -12,7 +12,7 @@ import (
 )
 
 //兵营预备役配置
-var FFCT facilityFCT
+var FFCT facilityFCTConf
 
 
 type fctLevel struct {
@@ -22,7 +22,7 @@ type fctLevel struct {
 }
 
 
-type facilityFCT struct {
+type facilityFCTConf struct {
 	Title 	string		`json:"title"`
 	Name	string		`json:"name"`
 	Des		string		`json:"des"`
@@ -30,12 +30,12 @@ type facilityFCT struct {
 	Levels	[]fctLevel	`json:"levels"`
 }
 
-func (this *facilityFCT) Load()  {
+func (this *facilityFCTConf) Load()  {
 	jsonDir := config.File.MustValue("logic", "json_data", "../data/conf/")
 	fileName := path.Join(jsonDir, "facility_fct.json")
 	jdata, err := ioutil.ReadFile(fileName)
 	if err != nil {
-		log.DefaultLog.Error("facilityFCT load file error", zap.Error(err), zap.String("file", fileName))
+		log.DefaultLog.Error("facilityFCTConf load file error", zap.Error(err), zap.String("file", fileName))
 		os.Exit(0)
 	}
 

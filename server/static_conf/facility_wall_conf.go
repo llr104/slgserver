@@ -12,7 +12,7 @@ import (
 )
 
 //城墙女墙配置
-var FWALL facilityWall
+var FWALL facilityWallConf
 
 type wallLevel struct {
 	Level	int8			`json:"level"`
@@ -28,18 +28,18 @@ type wall struct {
 }
 
 
-type facilityWall struct {
+type facilityWallConf struct {
 	Title 	string		`json:"title"`
 	CQ		wall		`json:"cq"`
 	NQ		wall		`json:"nq"`
 }
 
-func (this *facilityWall) Load()  {
+func (this *facilityWallConf) Load()  {
 	jsonDir := config.File.MustValue("logic", "json_data", "../data/conf/")
 	fileName := path.Join(jsonDir, "facility_wall.json")
 	jdata, err := ioutil.ReadFile(fileName)
 	if err != nil {
-		log.DefaultLog.Error("facilityWall load file error", zap.Error(err), zap.String("file", fileName))
+		log.DefaultLog.Error("facilityWallConf load file error", zap.Error(err), zap.String("file", fileName))
 		os.Exit(0)
 	}
 

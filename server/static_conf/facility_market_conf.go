@@ -11,29 +11,29 @@ import (
 	"slgserver/log"
 )
 
-//城内设施校场
-var FJC facilityJCConf
+//城内设施集市
+var FMarket facilityMarketConf
 
-type jcLevel struct {
+type arketLevel struct {
 	Level	int8			`json:"level"`
-	Cnt		int8 			`json:"cnt"`
+	Rate	int8 			`json:"rate"`
 	Need	levelNeedRes	`json:"need"`
 }
 
-type facilityJCConf struct {
+type facilityMarketConf struct {
 	Title	string				`json:"title"`
 	Name	string				`json:"name"`
 	Des		string				`json:"des"`
 	Type	int8				`json:"type"`
-	Levels	[]jcLevel			`json:"levels"`
+	Levels	[]mbsLevel			`json:"levels"`
 }
 
-func (this *facilityJCConf) Load()  {
+func (this *facilityMarketConf) Load()  {
 	jsonDir := config.File.MustValue("logic", "json_data", "../data/conf/")
-	fileName := path.Join(jsonDir, "facility_jc.json")
+	fileName := path.Join(jsonDir, "facility_market.json")
 	jdata, err := ioutil.ReadFile(fileName)
 	if err != nil {
-		log.DefaultLog.Error("facilityJCConf load file error", zap.Error(err), zap.String("file", fileName))
+		log.DefaultLog.Error("facilityMarketConf load file error", zap.Error(err), zap.String("file", fileName))
 		os.Exit(0)
 	}
 
