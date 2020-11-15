@@ -4,11 +4,60 @@
   "type": 1,
   "des": "使本城可以配置部队，并提高本城可配置部队数量",
 
-  "levels": [
-    {"level": 1, "cnt": 1, "need_decree": 0, "need_grain": 1000, "need_wood": 1000, "need_iron": 1000, "need_stone": 1000, "yield": 1000},
-    {"level": 2, "cnt": 2, "need_decree": 0, "need_grain": 1000, "need_wood": 1000, "need_iron": 1000, "need_stone": 1000, "yield": 1000},
-    {"level": 3, "cnt": 3, "need_decree": 0, "need_grain": 1000, "need_wood": 1000, "need_iron": 1000, "need_stone": 1000, "yield": 1000},
-    {"level": 4, "cnt": 4, "need_decree": 0, "need_grain": 1000, "need_wood": 1000, "need_iron": 1000, "need_stone": 1000, "yield": 1000},
-    {"level": 5, "cnt": 5, "need_decree": 0, "need_grain": 1000, "need_wood": 1000, "need_iron": 1000, "need_stone": 1000, "yield": 1000}
+  "levels": [{
+    "level": 1,
+    "cnt": 1,
+    "need": {
+      "decree": 0,
+      "grain": 1000,
+      "wood": 1000,
+      "iron": 1000,
+      "stone": 1000
+    }
+  },
+    {
+      "level": 2,
+      "cnt": 2,
+      "need": {
+        "decree": 0,
+        "grain": 1000,
+        "wood": 1000,
+        "iron": 1000,
+        "stone": 1000
+      }
+    },
+    {
+      "level": 3,
+      "cnt": 3,
+      "need": {
+        "decree": 0,
+        "grain": 1000,
+        "wood": 1000,
+        "iron": 1000,
+        "stone": 1000
+      }
+    },
+    {
+      "level": 4,
+      "cnt": 4,
+      "need": {
+        "decree": 0,
+        "grain": 1000,
+        "wood": 1000,
+        "iron": 1000,
+        "stone": 1000
+      }
+    },
+    {
+      "level": 5,
+      "cnt": 5,
+      "need": {
+        "decree": 0,
+        "grain": 1000,
+        "wood": 1000,
+        "iron": 1000,
+        "stone": 1000
+      }
+    }
   ]
 }

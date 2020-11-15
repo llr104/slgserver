@@ -2,6 +2,7 @@ package static_conf
 
 import (
 	"encoding/json"
+	"fmt"
 	"go.uber.org/zap"
 	"io/ioutil"
 	"os"
@@ -14,17 +15,18 @@ import (
 var FPRC facilityProduceResConf
 
 type levelNeedRes struct {
-	Level      int8 `json:"level"`
-	NeedDecree int8 `json:"need_decree"`
-	NeedGrain  int  `json:"need_grain"`
-	NeedWood   int  `json:"need_wood"`
-	NeedIron   int  `json:"need_iron"`
-	NeedStone  int  `json:"need_stone"`
+	Decree 		int	`json:"decree"`
+	Grain		int `json:"grain"`
+	Wood		int `json:"wood"`
+	Iron		int `json:"iron"`
+	Stone		int `json:"stone"`
 }
 
 type produceResLevel struct {
-	levelNeedRes
-	Yield      int  `json:"yield"`
+	Level	int8			`json:"level"`
+	Yield	int  			`json:"yield"`
+	Need	levelNeedRes	`json:"need"`
+
 }
 
 type produceRes struct {
@@ -53,4 +55,5 @@ func (this *facilityProduceResConf) Load()  {
 	}
 
 	json.Unmarshal(jdata, this)
+	fmt.Println(this)
 }

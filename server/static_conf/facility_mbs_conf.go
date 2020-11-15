@@ -15,8 +15,9 @@ import (
 var FMBS facilityMBS
 
 type mbsLevel struct {
-	levelNeedRes
-	Rate	int8 `json:"rate"`
+	Level	int8			`json:"level"`
+	Rate	int8 			`json:"rate"`
+	Need	levelNeedRes	`json:"need"`
 }
 
 type facilityMBS struct {

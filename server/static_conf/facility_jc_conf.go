@@ -15,8 +15,9 @@ import (
 var FJC facilityJC
 
 type jcLevel struct {
-	levelNeedRes
-	Cnt		int8 `json:"cnt"`
+	Level	int8			`json:"level"`
+	Cnt		int8 			`json:"cnt"`
+	Need	levelNeedRes	`json:"need"`
 }
 
 type facilityJC struct {
