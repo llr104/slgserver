@@ -450,7 +450,7 @@
   "mj": {
     "name": "民居",
     "des": "提供税收",
-    "type": 15,
+    "type": 21,
     "levels": [{
       "level": 1,
       "yield": 1000,

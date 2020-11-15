@@ -2,7 +2,7 @@
   "title": "城内设施-四营配置表",
   "jfy": {
     "name": "疾风营",
-    "type": 3,
+    "type": 1,
     "des": "提高本城部队速度",
     "levels": [{
       "level": 1,
@@ -63,7 +63,7 @@
   },
   "tby": {
     "name": "铁壁营",
-    "type": 4,
+    "type": 2,
     "des": "提高本城部队防御",
     "levels": [{
       "level": 1,
@@ -124,7 +124,7 @@
   },
   "jjy": {
     "name": "军机营",
-    "type": 5,
+    "type": 3,
     "des": "提高本城部队谋略",
     "levels": [{
       "level": 1,
@@ -185,7 +185,7 @@
   },
   "swy": {
     "name": "尚武营",
-    "type": 6,
+    "type": 4,
     "des": "提高本城部队攻击",
     "levels": [{
       "level": 1,

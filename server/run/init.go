@@ -23,6 +23,7 @@ func Init() {
 	static_conf.FFCT.Load()
 	static_conf.FWALL.Load()
 	static_conf.FMarket.Load()
+	static_conf.FSJT.Load()
 
 
 	entity.BCMgr.Load()

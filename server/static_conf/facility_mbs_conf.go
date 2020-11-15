@@ -33,7 +33,7 @@ func (this *facilityMBSConf) Load()  {
 	fileName := path.Join(jsonDir, "facility_mbs.json")
 	jdata, err := ioutil.ReadFile(fileName)
 	if err != nil {
-		log.DefaultLog.Error("facility_mbs load file error", zap.Error(err), zap.String("file", fileName))
+		log.DefaultLog.Error("facility_mbs_conf load file error", zap.Error(err), zap.String("file", fileName))
 		os.Exit(0)
 	}
 
