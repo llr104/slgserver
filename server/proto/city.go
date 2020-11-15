@@ -2,8 +2,7 @@ package proto
 
 type Facility struct {
 	Name	string		`json:"name"`
-	MLevel	int8		`json:"mLevel"`
-	CLevel	int8		`json:"cLevel"`
+	Level	int8		`json:"level"`
 	Type	int8		`json:"type"`
 }
 

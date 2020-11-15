@@ -56,3 +56,19 @@ func (this *facilityProduceResConf) Load()  {
 	json.Unmarshal(jdata, this)
 	fmt.Println(this)
 }
+
+func (this *facilityProduceResConf) MaxLevel(fType int8) int8 {
+	if this.CSC.Type == fType{
+		return int8(len(this.CSC.Levels))
+	}else if this.FMC.Type == fType{
+		return int8(len(this.FMC.Levels))
+	}else if this.LTC.Type == fType{
+		return int8(len(this.LTC.Levels))
+	}else if this.MF.Type == fType{
+		return int8(len(this.MF.Levels))
+	}else if this.MJ.Type == fType{
+		return int8(len(this.MJ.Levels))
+	}else{
+		return 0
+	}
+}

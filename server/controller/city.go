@@ -61,8 +61,7 @@ func (this*City) facilities(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	rspObj.Facilities = make([]proto.Facility, len(t))
 	for i, v := range t {
 		rspObj.Facilities[i].Name = v.Name
-		rspObj.Facilities[i].CLevel = v.CLevel
-		rspObj.Facilities[i].MLevel = v.MLevel
+		rspObj.Facilities[i].Level = v.Level
 		rspObj.Facilities[i].Type = v.Type
 	}
 
@@ -99,8 +98,7 @@ func (this*City) upFacility(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	if err != nil{
 		rsp.Body.Code = constant.UpError
 	}else{
-		rspObj.Facility.CLevel = out.CLevel
-		rspObj.Facility.MLevel = out.MLevel
+		rspObj.Facility.Level = out.Level
 		rspObj.Facility.Type = out.Type
 		rspObj.Facility.Name = out.Name
 	}

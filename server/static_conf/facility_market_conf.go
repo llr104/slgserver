@@ -40,3 +40,11 @@ func (this *facilityMarketConf) Load()  {
 	json.Unmarshal(jdata, this)
 	fmt.Println(this)
 }
+
+func (this *facilityMarketConf) MaxLevel(fType int8) int8 {
+	if this.Type == fType{
+		return int8(len(this.Levels))
+	}else{
+		return 0
+	}
+}

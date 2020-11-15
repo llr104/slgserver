@@ -14,7 +14,8 @@ func Init() {
 	db.TestDB()
 	initRouter()
 
-	static_conf.FJC.Load()
+	static_conf.FConf.Load()
+	static_conf.FGEN.Load()
 	static_conf.FPRC.Load()
 	static_conf.FMBS.Load()
 	static_conf.FARMY.Load()

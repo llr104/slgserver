@@ -49,4 +49,19 @@ func (this *facilityCampConf) Load()  {
 	fmt.Println(this)
 }
 
+func (this *facilityCampConf) MaxLevel(fType int8) int8 {
+	if this.Han.Type == fType{
+		return int8(len(this.Han.Levels))
+	}else if this.Wei.Type == fType{
+		return int8(len(this.Wei.Levels))
+	}else if this.Shu.Type == fType{
+		return int8(len(this.Shu.Levels))
+	}else if this.Wu.Type == fType{
+		return int8(len(this.Wu.Levels))
+	}else if this.Qun.Type == fType{
+		return int8(len(this.Qun.Levels))
+	}else{
+		return 0
+	}
+}
 

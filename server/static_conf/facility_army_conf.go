@@ -48,4 +48,16 @@ func (this *facilityArmyConf) Load()  {
 	fmt.Println(this)
 }
 
-
+func (this *facilityArmyConf) MaxLevel(fType int8) int8 {
+	if this.JFY.Type == fType{
+		return int8(len(this.JFY.Levels))
+	}else if this.JJY.Type == fType{
+		return int8(len(this.JJY.Levels))
+	}else if this.SWY.Type == fType{
+		return int8(len(this.SWY.Levels))
+	}else if this.TBY.Type == fType{
+		return int8(len(this.TBY.Levels))
+	}else{
+		return 0
+	}
+}

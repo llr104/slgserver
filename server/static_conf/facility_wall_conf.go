@@ -47,4 +47,14 @@ func (this *facilityWallConf) Load()  {
 	fmt.Println(this)
 }
 
+func (this *facilityWallConf) MaxLevel(fType int8) int8 {
+	if this.CQ.Type == fType{
+		return int8(len(this.CQ.Levels))
+	}else if this.CQ.Type == fType{
+		return int8(len(this.NQ.Levels))
+	} else{
+		return 0
+	}
+}
+
 

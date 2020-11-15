@@ -43,4 +43,11 @@ func (this *facilityFCTConf) Load()  {
 	fmt.Println(this)
 }
 
+func (this *facilityFCTConf) MaxLevel(fType int8) int8 {
+	if this.Type == fType{
+		return int8(len(this.Levels))
+	}else{
+		return 0
+	}
+}
 

@@ -12,7 +12,7 @@ import (
 )
 
 //城内设施校场、统帅厅
-var FJC facilityGeneralConf
+var FGEN facilityGeneralConf
 
 type level struct {
 	Level	int8			`json:"level"`
@@ -44,4 +44,14 @@ func (this *facilityGeneralConf) Load()  {
 
 	json.Unmarshal(jdata, this)
 	fmt.Println(this)
+}
+
+func (this *facilityGeneralConf) MaxLevel(fType int8) int8 {
+	if this.JC.Type == fType{
+		return int8(len(this.JC.Levels))
+	}else if this.TST.Type == fType{
+		return int8(len(this.TST.Levels))
+	}else{
+		return 0
+	}
 }

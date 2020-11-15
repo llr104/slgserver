@@ -60,4 +60,14 @@ func (this *facilityBarrackConf) Load()  {
 	fmt.Println(this)
 }
 
+func (this *facilityBarrackConf) MaxLevel(fType int8) int8 {
+	if this.BY.Type == fType{
+		return int8(len(this.BY.Levels))
+	}else if this.YBY.Type == fType{
+		return int8(len(this.YBY.Levels))
+	}else{
+		return 0
+	}
+}
+
 
