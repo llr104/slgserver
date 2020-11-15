@@ -61,7 +61,6 @@ func (this*NationMap) scan(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	x := reqObj.X
 	y := reqObj.Y
 
-
 	rb := entity.RBMgr.Scan(x, y)
 	rspObj.MRBuilds = make([]proto.MapRoleBuild, len(rb))
 	for i, v := range rb {
@@ -73,7 +72,6 @@ func (this*NationMap) scan(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 		rspObj.MRBuilds[i].X = v.X
 		rspObj.MRBuilds[i].Y = v.Y
-		rspObj.MRBuilds[i].Id = v.Id
 		rspObj.MRBuilds[i].Type = v.Type
 		rspObj.MRBuilds[i].CurDurable = v.CurDurable
 		rspObj.MRBuilds[i].MaxDurable = v.MaxDurable

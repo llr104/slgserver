@@ -22,7 +22,6 @@ type ConfigRsp struct {
 
 /*
 type MapBaseBuild struct {
-	Id		int		`json:"id"`
 	X		int		`json:"x"`
 	Y		int		`json:"y"`
 	Type	int8	`json:"type"`
@@ -32,7 +31,6 @@ type MapBaseBuild struct {
  */
 
 type MapRoleBuild struct {
-	Id			int			`json:"id"`
 	RId			int			`json:"rid"`
 	RNick		string 		`json:"RNick"` //角色昵称
 	Name		string		`json:"name"`
