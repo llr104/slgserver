@@ -1,0 +1,125 @@
+{
+  "title": "城内设施-城墙、女墙配置",
+  "cq": {
+    "name": "城墙",
+    "type": 22,
+    "des": "提高本城耐久上限",
+    "levels": [{
+      "level": 1,
+      "limit": 100,
+      "need": {
+        "decree": 0,
+        "grain": 1000,
+        "wood": 1000,
+        "iron": 1000,
+        "stone": 1000
+      }
+    },
+      {
+        "level": 2,
+        "limit": 200,
+        "need": {
+          "decree": 0,
+          "grain": 1000,
+          "wood": 1000,
+          "iron": 1000,
+          "stone": 1000
+        }
+      },
+      {
+        "level": 3,
+        "limit": 300,
+        "need": {
+          "decree": 0,
+          "grain": 1000,
+          "wood": 1000,
+          "iron": 1000,
+          "stone": 1000
+        }
+      },
+      {
+        "level": 4,
+        "limit": 400,
+        "need": {
+          "decree": 0,
+          "grain": 1000,
+          "wood": 1000,
+          "iron": 1000,
+          "stone": 1000
+        }
+      },
+      {
+        "level": 5,
+        "limit": 500,
+        "need": {
+          "decree": 0,
+          "grain": 1000,
+          "wood": 1000,
+          "iron": 1000,
+          "stone": 1000
+        }
+      }
+    ]
+  },
+  "nq": {
+    "name": "女墙",
+    "type": 23,
+    "des": "提高本城耐久上限",
+    "levels": [{
+      "level": 1,
+      "limit": 100,
+      "need": {
+        "decree": 0,
+        "grain": 1000,
+        "wood": 1000,
+        "iron": 1000,
+        "stone": 1000
+      }
+    },
+      {
+        "level": 2,
+        "limit": 200,
+        "need": {
+          "decree": 0,
+          "grain": 1000,
+          "wood": 1000,
+          "iron": 1000,
+          "stone": 1000
+        }
+      },
+      {
+        "level": 3,
+        "limit": 300,
+        "need": {
+          "decree": 0,
+          "grain": 1000,
+          "wood": 1000,
+          "iron": 1000,
+          "stone": 1000
+        }
+      },
+      {
+        "level": 4,
+        "limit": 400,
+        "need": {
+          "decree": 0,
+          "grain": 1000,
+          "wood": 1000,
+          "iron": 1000,
+          "stone": 1000
+        }
+      },
+      {
+        "level": 5,
+        "limit": 500,
+        "need": {
+          "decree": 0,
+          "grain": 1000,
+          "wood": 1000,
+          "iron": 1000,
+          "stone": 1000
+        }
+      }
+    ]
+  }
+}

@@ -40,9 +40,9 @@ const (
 	FacilityMF		//磨坊
 	FacilityCSC		//采石场
 	FacilityCQ		//城墙
+	FacilityNQ		//女墙
 	FacilityJS		//集市
 	FacilityJJS		//警戒所
-	FacilityNQ		//女墙
 	FacilityFHT		//烽火台
 	FacilitySJH		//守将府
 	FacilityWSJX	//武神巨像
