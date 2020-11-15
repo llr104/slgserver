@@ -48,7 +48,8 @@ type MapRoleCity struct {
 	Y			int			`json:"y"`
 	IsMain		bool		`json:"is_main"`
 	Level		int8		`json:"level"`
-	Durable		int			`json:"durable"`
+	CurDurable	int			`json:"cur_durable"`
+	MaxDurable	int			`json:"max_durable"`
 }
 
 type MyCityReq struct {

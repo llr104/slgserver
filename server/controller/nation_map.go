@@ -75,7 +75,8 @@ func (this*NationMap) scan(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		rspObj.MRBuilds[i].Y = v.Y
 		rspObj.MRBuilds[i].Id = v.Id
 		rspObj.MRBuilds[i].Type = v.Type
-		rspObj.MRBuilds[i].Durable = v.Durable
+		rspObj.MRBuilds[i].CurDurable = v.CurDurable
+		rspObj.MRBuilds[i].MaxDurable = v.MaxDurable
 		rspObj.MRBuilds[i].Level = v.Level
 		rspObj.MRBuilds[i].RId = v.RId
 		rspObj.MRBuilds[i].Name = v.Name
@@ -89,7 +90,8 @@ func (this*NationMap) scan(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		rspObj.MCBuilds[i].X = v.X
 		rspObj.MCBuilds[i].Y = v.Y
 		rspObj.MCBuilds[i].CityId = v.CityId
-		rspObj.MCBuilds[i].Durable = v.Durable
+		rspObj.MCBuilds[i].CurDurable = v.CurDurable
+		rspObj.MCBuilds[i].MaxDurable = v.MaxDurable
 		rspObj.MCBuilds[i].Level = v.Level
 		rspObj.MCBuilds[i].RId = v.RId
 		rspObj.MCBuilds[i].Name = v.Name

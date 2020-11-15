@@ -163,7 +163,7 @@ func (this*Role) myCity(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 			if entity.RBMgr.IsEmpty(x, y) && entity.RCMgr.IsEmpty(x, y){
 				//建立城市
 				c := &model.MapRoleCity{RId: role.RId, X: x, Y: y, IsMain: 1,
-					Durable: 100, Level: 1, Name: role.NickName, CreatedAt: time.Now()}
+					CurDurable: 100, MaxDurable: 100, Level: 1, Name: role.NickName, CreatedAt: time.Now()}
 
 				//插入
 				_, err := db.MasterDB.Table(c).Insert(c)
@@ -192,7 +192,8 @@ func (this*Role) myCity(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		rspObj.Citys[i].Level = v.Level
 		rspObj.Citys[i].IsMain = v.IsMain!=0
 		rspObj.Citys[i].Name = v.Name
-		rspObj.Citys[i].Durable = v.Durable
+		rspObj.Citys[i].CurDurable = v.CurDurable
+		rspObj.Citys[i].MaxDurable = v.MaxDurable
 	}
 
 }

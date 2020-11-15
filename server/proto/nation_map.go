@@ -40,7 +40,8 @@ type MapRoleBuild struct {
 	Y			int    		`json:"y"`
 	Type		int8		`json:"type"`
 	Level		int			`json:"level"`
-	Durable		int			`json:"durable"`
+	CurDurable	int			`json:"cur_durable"`
+	MaxDurable	int			`json:"max_durable"`
 	Defender	int			`json:"defender"`
 }
 

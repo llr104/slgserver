@@ -59,7 +59,8 @@ CREATE TABLE IF NOT EXISTS `map_role_city` (
    `name` varchar(100) NOT NULL DEFAULT '城池' COMMENT '城池名称',
    `is_main` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否是主城',
    `level` int unsigned NOT NULL DEFAULT 1 COMMENT 'level',
-   `durable` int unsigned NOT NULL DEFAULT 1 COMMENT '耐久',
+   `max_durable` int unsigned NOT NULL COMMENT '最大耐久',
+   `cur_durable` int unsigned NOT NULL COMMENT '当前耐久',
    `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
    PRIMARY KEY (`cityId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '玩家城池';
@@ -71,6 +72,7 @@ CREATE TABLE IF NOT EXISTS `national_map` (
    `y` int unsigned NOT NULL COMMENT 'y坐标',
    `type` int unsigned NOT NULL COMMENT '建筑类型',
    `level` int unsigned NOT NULL DEFAULT 1 COMMENT 'level',
+   `cur_durable` int unsigned NOT NULL COMMENT '当前耐久',
     UNIQUE KEY (`mid`),
    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '全国地图';
@@ -101,7 +103,8 @@ CREATE TABLE IF NOT EXISTS `map_role_build` (
    `iron` int unsigned NOT NULL COMMENT '铁',
    `stone` int unsigned NOT NULL COMMENT '石头',
    `grain` int unsigned NOT NULL COMMENT '粮食',
-   `durable` int unsigned NOT NULL COMMENT '耐久',
+   `max_durable` int unsigned NOT NULL COMMENT '最大耐久',
+   `cur_durable` int unsigned NOT NULL COMMENT '当前耐久',
    `defender` int unsigned NOT NULL COMMENT '守军强度',
    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '角色建筑';

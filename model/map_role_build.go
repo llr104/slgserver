@@ -12,7 +12,8 @@ type MapRoleBuild struct {
 	Iron		int			`json:"iron"`
 	Stone		int			`json:"stone"`
 	Grain		int			`json:"grain"`
-	Durable		int			`json:"durable"`
+	CurDurable	int			`json:"cur_durable"`
+	MaxDurable	int			`json:"max_durable"`
 	Defender	int			`json:"defender"`
 }
 

@@ -29,3 +29,15 @@ func (this* BuildConfigMgr) Load() {
 func (this* BuildConfigMgr) Maps() map[int]model.MapBuildConfig {
 	return this.conf
 }
+
+func (this* BuildConfigMgr) GetDurable(t int8, level int) int {
+	this.mutex.RLock()
+	defer this.mutex.RUnlock()
+
+	for _, v := range this.conf {
+		if v.Type == t && v.Level == level{
+			return v.Durable
+		}
+	}
+	return 0
+}

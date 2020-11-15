@@ -71,9 +71,9 @@ func (this* NationalMapMgr) Load() {
 	}
 
 	for i, v := range m.List {
-		t := v[0]
+		t := int8(v[0])
 		l := v[1]
-		d := model.NationalMap{X: i/MapWith, Y: i%MapWith, MId: i, Type: t, Level: l}
+		d := model.NationalMap{X: i/MapWith, Y: i%MapWith, MId: i, Type: t, Level: l, CurDurable: BCMgr.GetDurable(t, l)}
 		this.conf[i] = d
 		if isNeedDb {
 			db.MasterDB.Insert(d)
