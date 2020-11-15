@@ -31,6 +31,7 @@ const (
 	FacilityWUDJT   //吴点将台
 	FacilityQUDJT   //群点将台
 	FacilityBY		//兵营
+	FacilityYBY		//预备役
 	FacilityFCT		//封禅台
 	FacilityMJ		//民居
 	FacilityCK		//仓库

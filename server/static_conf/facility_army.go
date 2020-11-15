@@ -40,7 +40,7 @@ func (this *facilityArmy) Load()  {
 	fileName := path.Join(jsonDir, "facility_army.json")
 	jdata, err := ioutil.ReadFile(fileName)
 	if err != nil {
-		log.DefaultLog.Error("facility_produce_res_conf load file error", zap.Error(err), zap.String("file", fileName))
+		log.DefaultLog.Error("facilityArmy load file error", zap.Error(err), zap.String("file", fileName))
 		os.Exit(0)
 	}
 

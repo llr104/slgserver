@@ -1,0 +1,125 @@
+{
+  "title": "城内设施-兵营、预备役配置表",
+  "by": {
+    "name": "兵营",
+    "type": 13,
+    "des": "提高本城部队武将带兵数量",
+    "levels": [{
+      "level": 1,
+      "extra": 100,
+      "need": {
+        "decree": 0,
+        "grain": 1000,
+        "wood": 1000,
+        "iron": 1000,
+        "stone": 1000
+      }
+    },
+      {
+        "level": 2,
+        "extra": 200,
+        "need": {
+          "decree": 0,
+          "grain": 1000,
+          "wood": 1000,
+          "iron": 1000,
+          "stone": 1000
+        }
+      },
+      {
+        "level": 3,
+        "extra": 300,
+        "need": {
+          "decree": 0,
+          "grain": 1000,
+          "wood": 1000,
+          "iron": 1000,
+          "stone": 1000
+        }
+      },
+      {
+        "level": 4,
+        "extra": 400,
+        "need": {
+          "decree": 0,
+          "grain": 1000,
+          "wood": 1000,
+          "iron": 1000,
+          "stone": 1000
+        }
+      },
+      {
+        "level": 5,
+        "extra": 500,
+        "need": {
+          "decree": 0,
+          "grain": 1000,
+          "wood": 1000,
+          "iron": 1000,
+          "stone": 1000
+        }
+      }
+    ]
+  },
+  "yby": {
+    "name": "预备役所",
+    "type": 14,
+    "des": "提高本城预备役上限",
+    "levels": [{
+      "level": 1,
+      "limit": 1000,
+      "need": {
+        "decree": 0,
+        "grain": 1000,
+        "wood": 1000,
+        "iron": 1000,
+        "stone": 1000
+      }
+    },
+      {
+        "level": 2,
+        "limit": 2000,
+        "need": {
+          "decree": 0,
+          "grain": 1000,
+          "wood": 1000,
+          "iron": 1000,
+          "stone": 1000
+        }
+      },
+      {
+        "level": 3,
+        "limit": 3000,
+        "need": {
+          "decree": 0,
+          "grain": 1000,
+          "wood": 1000,
+          "iron": 1000,
+          "stone": 1000
+        }
+      },
+      {
+        "level": 4,
+        "limit": 4000,
+        "need": {
+          "decree": 0,
+          "grain": 1000,
+          "wood": 1000,
+          "iron": 1000,
+          "stone": 1000
+        }
+      },
+      {
+        "level": 5,
+        "limit": 5000,
+        "need": {
+          "decree": 0,
+          "grain": 1000,
+          "wood": 1000,
+          "iron": 1000,
+          "stone": 1000
+        }
+      }
+    ]
+  }
+}

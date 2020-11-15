@@ -41,7 +41,7 @@ func (this *facilityCamp) Load()  {
 	fileName := path.Join(jsonDir, "facility_camp.json")
 	jdata, err := ioutil.ReadFile(fileName)
 	if err != nil {
-		log.DefaultLog.Error("facility_produce_res_conf load file error", zap.Error(err), zap.String("file", fileName))
+		log.DefaultLog.Error("facilityCamp load file error", zap.Error(err), zap.String("file", fileName))
 		os.Exit(0)
 	}
 
