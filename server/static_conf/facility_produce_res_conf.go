@@ -26,7 +26,6 @@ type produceResLevel struct {
 	Level	int8			`json:"level"`
 	Yield	int  			`json:"yield"`
 	Need	levelNeedRes	`json:"need"`
-
 }
 
 type produceRes struct {

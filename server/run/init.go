@@ -17,6 +17,7 @@ func Init() {
 	static_conf.FJC.Load()
 	static_conf.FPRC.Load()
 	static_conf.FMBS.Load()
+	static_conf.FARMY.Load()
 
 
 	entity.BCMgr.Load()
