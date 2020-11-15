@@ -18,6 +18,7 @@ func Init() {
 	static_conf.FPRC.Load()
 	static_conf.FMBS.Load()
 	static_conf.FARMY.Load()
+	static_conf.FCAMP.Load()
 
 
 	entity.BCMgr.Load()
