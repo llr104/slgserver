@@ -116,7 +116,12 @@ func (this*Role) enterServer(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 	role := &model.Role{}
 	b, err := db.MasterDB.Table(role).Where("uid=? and sid=?", uid, reqObj.SId).Get(role)
-	if b && err == nil {
+	if err != nil{
+		log.DefaultLog.Warn("enterServer db error", zap.Error(err))
+		rsp.Body.Code = constant.DBError
+		return
+	}
+	if b {
 		rsp.Body.Code = constant.OK
 		rspObj.Role.UId = role.UId
 		rspObj.Role.SId = role.SId
@@ -156,6 +161,8 @@ func (this*Role) enterServer(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 			rspObj.RoleRes.DepotCapacity = roleRes.DepotCapacity
 			rsp.Body.Code = constant.OK
 		}
+	}else{
+		rsp.Body.Code = constant.RoleNotExist
 	}
 }
 
