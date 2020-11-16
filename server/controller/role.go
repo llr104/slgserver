@@ -27,6 +27,7 @@ func (this*Role) InitRouter(r *net.Router) {
 	g.AddRouter("roleList", this.roleList)
 	g.AddRouter("enterServer", this.enterServer)
 	g.AddRouter("myCity", this.myCity)
+	g.AddRouter("myRoleRes", this.myRoleRes)
 }
 
 func (this*Role) create(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
@@ -37,7 +38,7 @@ func (this*Role) create(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 	uid, _ := req.Conn.GetProperty("uid")
 	reqObj.UId = uid.(int)
-	rspObj.UId = reqObj.UId
+	rspObj.Role.UId = reqObj.UId
 
 	r := make([]model.Role, 0)
 	has, _ := db.MasterDB.Table(r).Where("uid=? and sid=?", reqObj.UId, reqObj.SId).Get(r)
@@ -47,25 +48,25 @@ func (this*Role) create(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 			zap.Int("sid", reqObj.SId))
 		rsp.Body.Code = constant.RoleAlreadyCreate
 	}else {
-		rr := &model.Role{UId: reqObj.UId, SId: reqObj.SId,
+
+		role := &model.Role{UId: reqObj.UId, SId: reqObj.SId,
 			HeadId: reqObj.HeadId, Sex: reqObj.Sex,
 			NickName: reqObj.NickName, CreatedAt: time.Now()}
 
-		rId, err := db.MasterDB.Insert(rr)
-		if err != nil {
+		if _, err := db.MasterDB.Insert(role); err != nil {
 			log.DefaultLog.Info("role  create error",
 				zap.Int("uid", reqObj.UId),
 				zap.Int("sid", reqObj.SId),
 				zap.Error(err))
-
 			rsp.Body.Code = constant.DBError
 		}else{
-			rspObj.RId = int(rId)
-			rspObj.SId = reqObj.SId
-			rspObj.UId = reqObj.UId
-			rspObj.NickName = reqObj.NickName
-			rspObj.Sex = reqObj.Sex
-			rspObj.HeadId = reqObj.HeadId
+			rspObj.Role.RId = role.RId
+			rspObj.Role.SId = reqObj.SId
+			rspObj.Role.UId = reqObj.UId
+			rspObj.Role.NickName = reqObj.NickName
+			rspObj.Role.Sex = reqObj.Sex
+			rspObj.Role.HeadId = reqObj.HeadId
+
 			rsp.Body.Code = constant.OK
 		}
 	}
@@ -113,25 +114,49 @@ func (this*Role) enterServer(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	uid, _ := req.Conn.GetProperty("uid")
 	uid = uid.(int)
 
-	r := &model.Role{}
-	b, err := db.MasterDB.Table(r).Where("uid=? and sid=?", uid, reqObj.SId).Get(r)
+	role := &model.Role{}
+	b, err := db.MasterDB.Table(role).Where("uid=? and sid=?", uid, reqObj.SId).Get(role)
 	if b && err == nil {
 		rsp.Body.Code = constant.OK
-		rspObj.Role.UId = r.UId
-		rspObj.Role.SId = r.SId
-		rspObj.Role.RId = r.RId
-		rspObj.Role.Sex = r.Sex
-		rspObj.Role.NickName = r.NickName
-		rspObj.Role.HeadId = r.HeadId
-		rspObj.Role.Balance = r.Balance
-		rspObj.Role.Profile = r.Profile
+		rspObj.Role.UId = role.UId
+		rspObj.Role.SId = role.SId
+		rspObj.Role.RId = role.RId
+		rspObj.Role.Sex = role.Sex
+		rspObj.Role.NickName = role.NickName
+		rspObj.Role.HeadId = role.HeadId
+		rspObj.Role.Balance = role.Balance
+		rspObj.Role.Profile = role.Profile
 
-		req.Conn.SetProperty("sid", r.SId)
-		req.Conn.SetProperty("role", r)
-	}else{
-		rsp.Body.Code = constant.RoleNotExist
+		req.Conn.SetProperty("sid", role.SId)
+		req.Conn.SetProperty("role", role)
+
+		roleRes := &model.RoleRes{RId: role.RId, Wood: 10000, Iron: 10000,
+			Stone: 10000, Grain: 10000, Gold: 10000,
+			Decree: 20, WoodYield: 1000, IronYield: 1000,
+			StoneYield: 1000, GrainYield: 1000, GoldYield: 1000,
+			DepotCapacity: 100000}
+
+		if _, err := db.MasterDB.Insert(roleRes);err != nil {
+			log.DefaultLog.Info("role_res create error",
+				zap.Int("rid", role.RId),
+				zap.Error(err))
+			rsp.Body.Code = constant.DBError
+		}else{
+			rspObj.RoleRes.Gold = roleRes.Gold
+			rspObj.RoleRes.Grain = roleRes.Grain
+			rspObj.RoleRes.Stone = roleRes.Stone
+			rspObj.RoleRes.Iron = roleRes.Iron
+			rspObj.RoleRes.Wood = roleRes.Wood
+			rspObj.RoleRes.Decree = roleRes.Decree
+			rspObj.RoleRes.GoldYield = roleRes.GoldYield
+			rspObj.RoleRes.GrainYield = roleRes.GrainYield
+			rspObj.RoleRes.StoneYield = roleRes.StoneYield
+			rspObj.RoleRes.IronYield = roleRes.IronYield
+			rspObj.RoleRes.WoodYield = roleRes.WoodYield
+			rspObj.RoleRes.DepotCapacity = roleRes.DepotCapacity
+			rsp.Body.Code = constant.OK
+		}
 	}
-
 }
 
 func (this*Role) myCity(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
@@ -145,7 +170,7 @@ func (this*Role) myCity(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	r, err := req.Conn.GetProperty("role")
 	if err != nil{
 		if err != nil {
-			log.DefaultLog.Warn("myCity but connect not found sid")
+			log.DefaultLog.Warn("myCity but connect not found role")
 			rsp.Body.Code = constant.InvalidParam
 			return
 		}
@@ -195,5 +220,49 @@ func (this*Role) myCity(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		rspObj.Citys[i].CurDurable = v.CurDurable
 		rspObj.Citys[i].MaxDurable = v.MaxDurable
 	}
+}
 
+func (this*Role) myRoleRes(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+	reqObj := &proto.MyRoleResReq{}
+	rspObj := &proto.MyRoleResRsp{}
+
+	mapstructure.Decode(req.Body.Msg, reqObj)
+	rsp.Body.Msg = rspObj
+	rsp.Body.Code = constant.OK
+
+	r, err := req.Conn.GetProperty("role")
+	if err != nil{
+		if err != nil {
+			log.DefaultLog.Warn("myRoleRes but connect not found role")
+			rsp.Body.Code = constant.InvalidParam
+			return
+		}
+	}
+
+	role := r.(*model.Role)
+	roleRes := &model.RoleRes{}
+	b, err := db.MasterDB.Table(roleRes).Where("rid=?", role.RId).Get(roleRes)
+
+	if err != nil{
+		log.DefaultLog.Warn("myRoleRes db error", zap.Error(err))
+		return
+	}
+
+	if b {
+		rspObj.RoleRes.Gold = roleRes.Gold
+		rspObj.RoleRes.Grain = roleRes.Grain
+		rspObj.RoleRes.Stone = roleRes.Stone
+		rspObj.RoleRes.Iron = roleRes.Iron
+		rspObj.RoleRes.Wood = roleRes.Wood
+		rspObj.RoleRes.Decree = roleRes.Decree
+		rspObj.RoleRes.GoldYield = roleRes.GoldYield
+		rspObj.RoleRes.GrainYield = roleRes.GrainYield
+		rspObj.RoleRes.StoneYield = roleRes.StoneYield
+		rspObj.RoleRes.IronYield = roleRes.IronYield
+		rspObj.RoleRes.WoodYield = roleRes.WoodYield
+		rspObj.RoleRes.DepotCapacity = roleRes.DepotCapacity
+		rsp.Body.Code = constant.OK
+	}else{
+		rsp.Body.Code = constant.RoleNotExist
+	}
 }

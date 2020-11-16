@@ -20,15 +20,6 @@ type ConfigRsp struct {
 	Confs []Conf
 }
 
-/*
-type MapBaseBuild struct {
-	X		int		`json:"x"`
-	Y		int		`json:"y"`
-	Type	int8	`json:"type"`
-	Level	int		`json:"level"`
-	Durable	int		`json:"durable"`
-}
- */
 
 type MapRoleBuild struct {
 	RId			int			`json:"rid"`

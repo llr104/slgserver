@@ -78,7 +78,7 @@ func (this* FacilityMgr) GetAndTryCreate(cid int) (*model.CityFacility, error){
 			fs := make([]Facility, len(static_conf.FConf.List))
 
 			for i, v := range static_conf.FConf.List {
-				f := Facility{Type: int8(i), Level: int8(1), Name: v.Name}
+				f := Facility{Type: v.Type, Level: int8(1), Name: v.Name}
 				fs[i] = f
 			}
 
