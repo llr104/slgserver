@@ -89,14 +89,14 @@ func (this *facilityBarrackConf) MaxLevel(fType int8) int8 {
 func (this *facilityBarrackConf) Need(fType int8, level int) (*LevelNeedRes, error)  {
 	if this.BY.Type == fType{
 		if len(this.BY.Levels) >= level{
-			return &this.BY.Levels[level].Need, nil
+			return &this.BY.Levels[level-1].Need, nil
 		}else {
 			return nil, errors.New("level not found")
 		}
 
 	}else if this.YBY.Type == fType{
 		if len(this.YBY.Levels) >= level{
-			return &this.YBY.Levels[level].Need, nil
+			return &this.YBY.Levels[level-1].Need, nil
 		}else {
 			return nil, errors.New("level not found")
 		}

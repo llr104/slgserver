@@ -70,7 +70,7 @@ func (this *facilityFCTConf) MaxLevel(fType int8) int8 {
 func (this *facilityFCTConf) Need(fType int8, level int) (*LevelNeedRes, error)  {
 	if this.Type == fType{
 		if len(this.Levels) >= level{
-			return &this.Levels[level].Need, nil
+			return &this.Levels[level-1].Need, nil
 		}else{
 			return nil, errors.New("level not found")
 		}

@@ -95,31 +95,31 @@ func (this *facilityProduceResConf) MaxLevel(fType int8) int8 {
 func (this *facilityProduceResConf) Need(fType int8, level int) (*LevelNeedRes, error)  {
 	if this.CSC.Type == fType{
 		if len(this.CSC.Levels) >= level{
-			return &this.CSC.Levels[level].Need, nil
+			return &this.CSC.Levels[level-1].Need, nil
 		}else {
 			return nil, errors.New("level not found")
 		}
 	}else if this.FMC.Type == fType{
 		if len(this.FMC.Levels) >= level{
-			return &this.FMC.Levels[level].Need, nil
+			return &this.FMC.Levels[level-1].Need, nil
 		}else {
 			return nil, errors.New("level not found")
 		}
 	}else if this.LTC.Type == fType{
 		if len(this.LTC.Levels) >= level{
-			return &this.LTC.Levels[level].Need, nil
+			return &this.LTC.Levels[level-1].Need, nil
 		}else {
 			return nil, errors.New("level not found")
 		}
 	}else if this.MF.Type == fType{
 		if len(this.MF.Levels) >= level{
-			return &this.MF.Levels[level].Need, nil
+			return &this.MF.Levels[level-1].Need, nil
 		}else {
 			return nil, errors.New("level not found")
 		}
 	}else if this.MJ.Type == fType{
 		if len(this.MJ.Levels) >= level{
-			return &this.MJ.Levels[level].Need, nil
+			return &this.MJ.Levels[level-1].Need, nil
 		}else {
 			return nil, errors.New("level not found")
 		}

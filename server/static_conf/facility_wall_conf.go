@@ -76,14 +76,14 @@ func (this *facilityWallConf) MaxLevel(fType int8) int8 {
 func (this *facilityWallConf) Need(fType int8, level int) (*LevelNeedRes, error)  {
 	if this.CQ.Type == fType{
 		if len(this.CQ.Levels) >= level{
-			return &this.CQ.Levels[level].Need, nil
+			return &this.CQ.Levels[level-1].Need, nil
 		}else {
 			return nil, errors.New("level not found")
 		}
 
 	}else if this.NQ.Type == fType{
 		if len(this.NQ.Levels) >= level{
-			return &this.NQ.Levels[level].Need, nil
+			return &this.NQ.Levels[level-1].Need, nil
 		}else {
 			return nil, errors.New("level not found")
 		}
