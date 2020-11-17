@@ -4,12 +4,14 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"go.uber.org/zap"
 	"slgserver/constant"
 	"slgserver/db"
 	"slgserver/log"
 	"slgserver/model"
 	"slgserver/server/static_conf"
 	"sync"
+	"time"
 )
 
 
@@ -38,6 +40,8 @@ func (this* FacilityMgr) Load() {
 	if err != nil {
 		log.DefaultLog.Error("FacilityMgr load city_facility table error")
 	}
+
+	go this.toDatabase()
 }
 
 func (this* FacilityMgr) Get(cid int) (*model.CityFacility, error){
@@ -124,6 +128,7 @@ func (this* FacilityMgr) UpFacility(rid, cid int, fType int8) (*Facility, int){
 					v.Level += 1
 					suss = true
 					out = v
+					f.NeedUpdate = true
 				}else{
 					break
 				}
@@ -142,5 +147,29 @@ func (this* FacilityMgr) UpFacility(rid, cid int, fType int8) (*Facility, int){
 			return nil, constant.UpError
 		}
 
+	}
+}
+func (this* FacilityMgr) toDatabase() {
+	for true {
+		time.Sleep(5*time.Second)
+		this.mutex.RLock()
+		cnt :=0
+		for _, v := range this.facilities {
+			if v.NeedUpdate {
+				_, err := db.MasterDB.Table(v).Cols("facilities").Update(v)
+				if err != nil{
+					log.DefaultLog.Error("FacilityMgr toDatabase error", zap.Error(err))
+				}else{
+					v.NeedUpdate = false
+				}
+				cnt+=1
+			}
+
+			//一次最多更新20个
+			if cnt>20{
+				break
+			}
+		}
+		this.mutex.RUnlock()
 	}
 }
