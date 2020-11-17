@@ -10,13 +10,15 @@ type HandlerFunc func(req *WsMsgReq, rsp *WsMsgRsp)
 type MiddlewareFunc func(HandlerFunc) HandlerFunc
 
 type Group struct {
-	prefix     string
-	hMap       map[string]HandlerFunc
-	middleware []MiddlewareFunc
+	prefix     	string
+	hMap       	map[string]HandlerFunc
+	hMapMidd	map[string][]MiddlewareFunc
+	middleware 	[]MiddlewareFunc
 }
 
-func (this*Group) AddRouter(name string, handlerFunc HandlerFunc) {
+func (this*Group) AddRouter(name string, handlerFunc HandlerFunc, middleware ...MiddlewareFunc) {
 	this.hMap[name] = handlerFunc
+	this.hMapMidd[name] = middleware
 }
 
 func (this* Group) Use(middleware ...MiddlewareFunc) *Group{
@@ -29,6 +31,10 @@ func (this*Group) applyMiddleware(name string) HandlerFunc {
 	if ok {
 		for i := len(this.middleware) - 1; i >= 0; i-- {
 			h = this.middleware[i](h)
+		}
+
+		for i := len(this.hMapMidd[name]) - 1; i >= 0; i-- {
+			h = this.hMapMidd[name][i](h)
 		}
 	}
 
@@ -53,6 +59,7 @@ type Router struct {
 func (this*Router) Group(prefix string) *Group{
 	g := &Group{prefix: prefix,
 		hMap: make(map[string]HandlerFunc),
+		hMapMidd: make(map[string][]MiddlewareFunc),
 	}
 
 	this.groups = append(this.groups, g)

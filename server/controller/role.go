@@ -26,8 +26,8 @@ func (this*Role) InitRouter(r *net.Router) {
 	g.AddRouter("create", this.create)
 	g.AddRouter("roleList", this.roleList)
 	g.AddRouter("enterServer", this.enterServer)
-	g.AddRouter("myCity", this.myCity)
-	g.AddRouter("myRoleRes", this.myRoleRes)
+	g.AddRouter("myCity", this.myCity, middleware.CheckRole())
+	g.AddRouter("myRoleRes", this.myRoleRes, middleware.CheckRole())
 }
 
 func (this*Role) create(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
@@ -174,15 +174,7 @@ func (this*Role) myCity(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	rsp.Body.Msg = rspObj
 	rsp.Body.Code = constant.OK
 
-	r, err := req.Conn.GetProperty("role")
-	if err != nil{
-		if err != nil {
-			log.DefaultLog.Warn("myCity but connect not found role")
-			rsp.Body.Code = constant.InvalidParam
-			return
-		}
-	}
-
+	r, _ := req.Conn.GetProperty("role")
 	role, _ := r.(*model.Role)
 	citys := make([]model.MapRoleCity, 0)
 	//查询是否有城市
@@ -237,15 +229,7 @@ func (this*Role) myRoleRes(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	rsp.Body.Msg = rspObj
 	rsp.Body.Code = constant.OK
 
-	r, err := req.Conn.GetProperty("role")
-	if err != nil{
-		if err != nil {
-			log.DefaultLog.Warn("myRoleRes but connect not found role")
-			rsp.Body.Code = constant.InvalidParam
-			return
-		}
-	}
-
+	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
 	roleRes := &model.RoleRes{}
 	b, err := db.MasterDB.Table(roleRes).Where("rid=?", role.RId).Get(roleRes)
