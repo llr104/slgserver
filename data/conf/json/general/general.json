@@ -1,0 +1,136 @@
+{
+  "title": "奖励配置",
+  "list": [
+    {
+      "name": "张飞",
+      "force": 95,
+      "strategy": 55,
+      "defense": 90,
+      "speed": 88,
+      "take_apart": 30,
+      "cost": 10
+    },
+    {
+      "name": "关羽",
+      "force": 95,
+      "strategy": 55,
+      "defense": 90,
+      "speed": 88,
+      "take_apart": 30,
+      "cost": 10
+    },
+    {
+      "name": "赵云",
+      "force": 95,
+      "strategy": 55,
+      "defense": 90,
+      "speed": 88,
+      "take_apart": 30,
+      "cost": 10
+    },{
+      "name": "黄忠",
+      "force": 95,
+      "strategy": 55,
+      "defense": 90,
+      "speed": 88,
+      "take_apart": 30,
+      "cost": 10
+    },{
+      "name": "马超",
+      "force": 95,
+      "strategy": 55,
+      "defense": 90,
+      "speed": 88,
+      "take_apart": 30,
+      "cost": 10
+    },{
+      "name": "许褚",
+      "force": 95,
+      "strategy": 55,
+      "defense": 90,
+      "speed": 88,
+      "take_apart": 30,
+      "cost": 10
+    },{
+      "name": "张辽",
+      "force": 95,
+      "strategy": 55,
+      "defense": 90,
+      "speed": 88,
+      "take_apart": 30,
+      "cost": 10
+    },{
+      "name": "夏侯惇",
+      "force": 95,
+      "strategy": 55,
+      "defense": 90,
+      "speed": 88,
+      "take_apart": 30,
+      "cost": 10
+    },{
+      "name": "夏侯渊",
+      "force": 95,
+      "strategy": 55,
+      "defense": 90,
+      "speed": 88,
+      "take_apart": 30,
+      "cost": 10
+    },{
+      "name": "张合",
+      "force": 95,
+      "strategy": 55,
+      "defense": 90,
+      "speed": 88,
+      "take_apart": 30,
+      "cost": 10
+    },{
+      "name": "太史慈",
+      "force": 95,
+      "strategy": 55,
+      "defense": 90,
+      "speed": 88,
+      "take_apart": 30,
+      "cost": 10
+    },{
+      "name": "周瑜",
+      "force": 95,
+      "strategy": 55,
+      "defense": 90,
+      "speed": 88,
+      "take_apart": 30,
+      "cost": 10
+    },{
+      "name": "甘宁",
+      "force": 95,
+      "strategy": 55,
+      "defense": 90,
+      "speed": 88,
+      "take_apart": 30,
+      "cost": 10
+    },{
+      "name": "周泰",
+      "force": 95,
+      "strategy": 55,
+      "defense": 90,
+      "speed": 88,
+      "take_apart": 30,
+      "cost": 10
+    },{
+      "name": "黄盖",
+      "force": 95,
+      "strategy": 55,
+      "defense": 90,
+      "speed": 88,
+      "take_apart": 30,
+      "cost": 10
+    },{
+      "name": "孙策",
+      "force": 95,
+      "strategy": 55,
+      "defense": 90,
+      "speed": 88,
+      "take_apart": 30,
+      "cost": 10
+    }
+  ]
+}

@@ -6,6 +6,7 @@ import (
 	"slgserver/server/controller"
 	"slgserver/server/entity"
 	"slgserver/server/static_conf/facility"
+	"slgserver/server/static_conf/general"
 )
 
 var MyRouter = &net.Router{}
@@ -15,6 +16,7 @@ func Init() {
 	initRouter()
 
 	facility.FConf.Load()
+	general.GenBasic.Load()
 
 	entity.BCMgr.Load()
 	entity.NMMgr.Load()
