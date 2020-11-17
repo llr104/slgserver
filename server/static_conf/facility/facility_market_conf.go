@@ -1,4 +1,4 @@
-package static_conf
+package facility
 
 import (
 	"encoding/json"
@@ -16,17 +16,17 @@ import (
 var FMarket facilityMarketConf
 
 type facilityMarketConf struct {
-	Title	string			`json:"title"`
-	Name	string			`json:"name"`
-	Des		string			`json:"des"`
-	Type	int8			`json:"type"`
-	Levels	[]mbsLevel		`json:"levels"`
-	Types 	[]int8			`json:"-"`
+	Title	string      `json:"title"`
+	Name	string       `json:"name"`
+	Des		string    `json:"des"`
+	Type	int8         `json:"type"`
+	Levels	[]mbsLevel `json:"levels"`
+	Types 	[]int8      `json:"-"`
 }
 
 func (this *facilityMarketConf) Load()  {
 	jsonDir := config.File.MustValue("logic", "json_data", "../data/conf/")
-	fileName := path.Join(jsonDir, "facility_market.json")
+	fileName := path.Join(jsonDir, "facility", "facility_market.json")
 	jdata, err := ioutil.ReadFile(fileName)
 	if err != nil {
 		log.DefaultLog.Error("facilityMarketConf load file error", zap.Error(err), zap.String("file", fileName))

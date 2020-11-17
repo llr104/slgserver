@@ -1,4 +1,4 @@
-package static_conf
+package facility
 
 import (
 	"encoding/json"
@@ -25,14 +25,14 @@ type conf struct {
 }
 
 type facilityConf struct {
-	Title	string		`json:"title"`
-	List 	[]conf		`json:"list"`
+	Title	string `json:"title"`
+	List 	[]conf  `json:"list"`
 	loaders	[]iFacility
 }
 
 func (this *facilityConf) Load()  {
 	jsonDir := config.File.MustValue("logic", "json_data", "../data/conf/")
-	fileName := path.Join(jsonDir, "facility.json")
+	fileName := path.Join(jsonDir, "facility", "facility.json")
 	jdata, err := ioutil.ReadFile(fileName)
 	if err != nil {
 		log.DefaultLog.Error("facilityConf load file error", zap.Error(err), zap.String("file", fileName))

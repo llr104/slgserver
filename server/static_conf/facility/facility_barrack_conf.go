@@ -1,4 +1,4 @@
-package static_conf
+package facility
 
 import (
 	"encoding/json"
@@ -22,10 +22,10 @@ type byLevel struct {
 }
 
 type by struct {
-	Name	string          `json:"name"`
-	Des		string          `json:"des"`
-	Type	int8            `json:"type"`
-	Levels	[]byLevel		`json:"levels"`
+	Name	string      `json:"name"`
+	Des		string   `json:"des"`
+	Type	int8        `json:"type"`
+	Levels	[]byLevel `json:"levels"`
 }
 
 type ybyLevel struct {
@@ -35,23 +35,23 @@ type ybyLevel struct {
 }
 
 type yby struct {
-	Name	string          `json:"name"`
-	Des		string          `json:"des"`
-	Type	int8            `json:"type"`
-	Levels	[]ybyLevel		`json:"levels"`
+	Name	string       `json:"name"`
+	Des		string    `json:"des"`
+	Type	int8         `json:"type"`
+	Levels	[]ybyLevel `json:"levels"`
 }
 
 
 type facilityBarrackConf struct {
-	Title 	string		`json:"title"`
-	BY		by			`json:"by"`
-	YBY		yby			`json:"yby"`
-	Types	[]int8		`json:"-"`
+	Title string `json:"title"`
+	BY    by     `json:"by"`
+	YBY   yby    `json:"yby"`
+	Types []int8 `json:"-"`
 }
 
 func (this *facilityBarrackConf) Load()  {
 	jsonDir := config.File.MustValue("logic", "json_data", "../data/conf/")
-	fileName := path.Join(jsonDir, "facility_barrack.json")
+	fileName := path.Join(jsonDir, "facility", "facility_barrack.json")
 	jdata, err := ioutil.ReadFile(fileName)
 	if err != nil {
 		log.DefaultLog.Error("facilityBarrackConf load file error", zap.Error(err), zap.String("file", fileName))

@@ -1,4 +1,4 @@
-package static_conf
+package facility
 
 import (
 	"encoding/json"
@@ -22,22 +22,22 @@ type level struct {
 }
 
 type general struct {
-	Name	string		`json:"name"`
-	Des		string		`json:"des"`
-	Type	int8		`json:"type"`
-	Levels	[]level		`json:"levels"`
+	Name	string    `json:"name"`
+	Des		string `json:"des"`
+	Type	int8      `json:"type"`
+	Levels	[]level `json:"levels"`
 }
 
 type facilityGeneralConf struct {
-	Title	string		`json:"title"`
-	JC		general		`json:"jc"`		//校场
-	TST		general		`json:"tst"`	//统帅厅
-	Types 	[]int8		`json:"-"`
+	Title string  `json:"title"`
+	JC    general `json:"jc"`  //校场
+	TST   general `json:"tst"` //统帅厅
+	Types []int8  `json:"-"`
 }
 
 func (this *facilityGeneralConf) Load()  {
 	jsonDir := config.File.MustValue("logic", "json_data", "../data/conf/")
-	fileName := path.Join(jsonDir, "facility_general.json")
+	fileName := path.Join(jsonDir, "facility", "facility_general.json")
 	jdata, err := ioutil.ReadFile(fileName)
 	if err != nil {
 		log.DefaultLog.Error("facilityGeneralConf load file error", zap.Error(err), zap.String("file", fileName))

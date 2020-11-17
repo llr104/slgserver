@@ -1,0 +1,55 @@
+{
+  "title": "将领基本配置表",
+  "level":[
+    {
+      "level": 1,
+      "exp": 0,
+      "soldiers": 100
+    },
+    {
+      "level": 2,
+      "exp": 100,
+      "soldiers": 200
+    },
+    {
+      "level": 3,
+      "exp": 1000,
+      "soldiers": 300
+    },
+    {
+      "level": 4,
+      "exp": 2000,
+      "soldiers": 400
+    },
+    {
+      "level": 5,
+      "exp": 3000,
+      "soldiers": 500
+    },
+    {
+      "level": 6,
+      "exp": 4000,
+      "soldiers": 600
+    },
+    {
+      "level": 7,
+      "exp": 5000,
+      "soldiers": 700
+    },
+    {
+      "level": 8,
+      "exp": 6000,
+      "soldiers": 800
+    },
+    {
+      "level": 9,
+      "exp": 6000,
+      "soldiers": 900
+    },
+    {
+      "level": 10,
+      "exp": 7000,
+      "soldiers": 1000
+    }
+  ]
+}

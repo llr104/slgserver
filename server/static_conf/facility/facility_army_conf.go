@@ -1,4 +1,4 @@
-package static_conf
+package facility
 
 import (
 	"encoding/json"
@@ -22,24 +22,24 @@ type armyLevel struct {
 }
 
 type army struct {
-	Name	string          `json:"name"`
-	Des		string          `json:"des"`
-	Type	int8            `json:"type"`
-	Levels	[]armyLevel		`json:"levels"`
+	Name	string        `json:"name"`
+	Des		string     `json:"des"`
+	Type	int8          `json:"type"`
+	Levels	[]armyLevel `json:"levels"`
 }
 
 type facilityArmyConf struct {
-	Title string	`json:"title"`
-	JFY   army		`json:"jfy"`
-	TBY   army		`json:"tby"`
-	JJY   army		`json:"jjy"`
-	SWY   army		`json:"swy"`
-	Types []int8	`json:"-"`
+	Title string `json:"title"`
+	JFY   army   `json:"jfy"`
+	TBY   army   `json:"tby"`
+	JJY   army   `json:"jjy"`
+	SWY   army   `json:"swy"`
+	Types []int8 `json:"-"`
 }
 
 func (this *facilityArmyConf) Load()  {
 	jsonDir := config.File.MustValue("logic", "json_data", "../data/conf/")
-	fileName := path.Join(jsonDir, "facility_army.json")
+	fileName := path.Join(jsonDir, "facility", "facility_army.json")
 	jdata, err := ioutil.ReadFile(fileName)
 	if err != nil {
 		log.DefaultLog.Error("facilityArmyConf load file error", zap.Error(err), zap.String("file", fileName))

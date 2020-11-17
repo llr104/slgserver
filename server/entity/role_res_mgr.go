@@ -7,7 +7,7 @@ import (
 	"slgserver/db"
 	"slgserver/log"
 	"slgserver/model"
-	"slgserver/server/static_conf"
+	"slgserver/server/static_conf/facility"
 	"slgserver/util"
 	"sync"
 	"time"
@@ -74,7 +74,7 @@ func (this* RoleResMgr) Add(res *model.RoleRes) (){
 	this.rolesRes[res.RId] = res
 }
 
-func (this* RoleResMgr) TryUseNeed(rid int, need* static_conf.LevelNeedRes) bool{
+func (this* RoleResMgr) TryUseNeed(rid int, need*facility.LevelNeedRes) bool{
 	this.mutex.Lock()
 	defer this.mutex.Unlock()
 	rr, ok := this.rolesRes[rid]

@@ -1,4 +1,4 @@
-package static_conf
+package facility
 
 import (
 	"encoding/json"
@@ -22,23 +22,23 @@ type wallLevel struct {
 }
 
 type wall struct {
-	Name	string          `json:"name"`
-	Des		string          `json:"des"`
-	Type	int8            `json:"type"`
-	Levels	[]wallLevel		`json:"levels"`
+	Name	string        `json:"name"`
+	Des		string     `json:"des"`
+	Type	int8          `json:"type"`
+	Levels	[]wallLevel `json:"levels"`
 }
 
 
 type facilityWallConf struct {
-	Title 	string		`json:"title"`
-	CQ		wall		`json:"cq"`
-	NQ		wall		`json:"nq"`
-	Types 	[]int8		`json:"-"`
+	Title string `json:"title"`
+	CQ    wall   `json:"cq"`
+	NQ    wall   `json:"nq"`
+	Types []int8 `json:"-"`
 }
 
 func (this *facilityWallConf) Load()  {
 	jsonDir := config.File.MustValue("logic", "json_data", "../data/conf/")
-	fileName := path.Join(jsonDir, "facility_wall.json")
+	fileName := path.Join(jsonDir, "facility", "facility_wall.json")
 	jdata, err := ioutil.ReadFile(fileName)
 	if err != nil {
 		log.DefaultLog.Error("facilityWallConf load file error", zap.Error(err), zap.String("file", fileName))

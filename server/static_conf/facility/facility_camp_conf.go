@@ -1,7 +1,7 @@
-package static_conf
+package facility
 
 import (
-"encoding/json"
+	"encoding/json"
 	"errors"
 	"fmt"
 "go.uber.org/zap"
@@ -22,25 +22,25 @@ type campLevel struct {
 }
 
 type camp struct {
-	Name	string          `json:"name"`
-	Des		string          `json:"des"`
-	Type	int8            `json:"type"`
-	Levels	[]campLevel		`json:"levels"`
+	Name	string        `json:"name"`
+	Des		string     `json:"des"`
+	Type	int8          `json:"type"`
+	Levels	[]campLevel `json:"levels"`
 }
 
 type facilityCampConf struct {
-	Title	string	`json:"title"`
-	Han		camp	`json:"han"`
-	Wei		camp	`json:"wei"`
-	Shu		camp	`json:"shu"`
-	Wu		camp	`json:"wu"`
-	Qun		camp	`json:"qun"`
-	Types	[]int8	`json:"-"`
+	Title string `json:"title"`
+	Han   camp   `json:"han"`
+	Wei   camp   `json:"wei"`
+	Shu   camp   `json:"shu"`
+	Wu    camp   `json:"wu"`
+	Qun   camp   `json:"qun"`
+	Types []int8 `json:"-"`
 }
 
 func (this *facilityCampConf) Load()  {
 	jsonDir := config.File.MustValue("logic", "json_data", "../data/conf/")
-	fileName := path.Join(jsonDir, "facility_camp.json")
+	fileName := path.Join(jsonDir, "facility", "facility_camp.json")
 	jdata, err := ioutil.ReadFile(fileName)
 	if err != nil {
 		log.DefaultLog.Error("facilityCampConf load file error", zap.Error(err), zap.String("file", fileName))

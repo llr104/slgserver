@@ -9,7 +9,7 @@ import (
 	"slgserver/db"
 	"slgserver/log"
 	"slgserver/model"
-	"slgserver/server/static_conf"
+	"slgserver/server/static_conf/facility"
 	"sync"
 	"time"
 )
@@ -80,9 +80,9 @@ func (this* FacilityMgr) GetAndTryCreate(cid int) (*model.CityFacility, error){
 	}else{
 		if _, err:= RCMgr.Get(cid); err == nil {
 			//创建
-			fs := make([]Facility, len(static_conf.FConf.List))
+			fs := make([]Facility, len(facility.FConf.List))
 
-			for i, v := range static_conf.FConf.List {
+			for i, v := range facility.FConf.List {
 				f := Facility{Type: v.Type, Level: int8(1), Name: v.Name}
 				fs[i] = f
 			}
@@ -118,8 +118,8 @@ func (this* FacilityMgr) UpFacility(rid, cid int, fType int8) (*Facility, int){
 		json.Unmarshal([]byte(f.Facilities), &fa)
 		for _, v := range fa {
 
-			if v.Type == fType && v.Level < static_conf.FConf.MaxLevel(fType){
-				need, err := static_conf.FConf.Need(fType, int(v.Level+1))
+			if v.Type == fType && v.Level < facility.FConf.MaxLevel(fType){
+				need, err := facility.FConf.Need(fType, int(v.Level+1))
 				if err != nil {
 					break
 				}

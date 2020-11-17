@@ -1,4 +1,4 @@
-package static_conf
+package facility
 
 import (
 	"encoding/json"
@@ -12,32 +12,32 @@ import (
 	"slgserver/log"
 )
 
-//封禅台配置
-var FFCT facilityFCTConf
+//社稷坛配置
+var FSJT facilitySJTConf
 
 
-type fctLevel struct {
+type sjtLevel struct {
 	Level int8         `json:"level"`
 	Limit int          `json:"limit"`
 	Need  LevelNeedRes `json:"need"`
 }
 
 
-type facilityFCTConf struct {
+type facilitySJTConf struct {
 	Title 	string		`json:"title"`
 	Name	string		`json:"name"`
 	Des		string		`json:"des"`
 	Type	int8		`json:"type"`
-	Levels	[]fctLevel	`json:"levels"`
+	Levels	[]sjtLevel	`json:"levels"`
 	Types 	[]int8		`json:"-"`
 }
 
-func (this *facilityFCTConf) Load()  {
+func (this *facilitySJTConf) Load()  {
 	jsonDir := config.File.MustValue("logic", "json_data", "../data/conf/")
-	fileName := path.Join(jsonDir, "facility_fct.json")
+	fileName := path.Join(jsonDir, "facility", "facility_sjt.json")
 	jdata, err := ioutil.ReadFile(fileName)
 	if err != nil {
-		log.DefaultLog.Error("facilityFCTConf load file error", zap.Error(err), zap.String("file", fileName))
+		log.DefaultLog.Error("facilitySJTConf load file error", zap.Error(err), zap.String("file", fileName))
 		os.Exit(0)
 	}
 
@@ -46,11 +46,10 @@ func (this *facilityFCTConf) Load()  {
 	this.Types = make([]int8, 1)
 	this.Types[0] = this.Type
 
-
 	fmt.Println(this)
 }
 
-func (this *facilityFCTConf) IsContain(t int8) bool {
+func (this *facilitySJTConf) IsContain(t int8) bool {
 	for _, t1 := range this.Types {
 		if t == t1 {
 			return true
@@ -59,7 +58,7 @@ func (this *facilityFCTConf) IsContain(t int8) bool {
 	return false
 }
 
-func (this *facilityFCTConf) MaxLevel(fType int8) int8 {
+func (this *facilitySJTConf) MaxLevel(fType int8) int8 {
 	if this.Type == fType{
 		return int8(len(this.Levels))
 	}else{
@@ -67,7 +66,7 @@ func (this *facilityFCTConf) MaxLevel(fType int8) int8 {
 	}
 }
 
-func (this *facilityFCTConf) Need(fType int8, level int) (*LevelNeedRes, error)  {
+func (this *facilitySJTConf) Need(fType int8, level int) (*LevelNeedRes, error)  {
 	if this.Type == fType{
 		if len(this.Levels) >= level{
 			return &this.Levels[level-1].Need, nil
@@ -78,4 +77,3 @@ func (this *facilityFCTConf) Need(fType int8, level int) (*LevelNeedRes, error) 
 		return nil, errors.New("type not found")
 	}
 }
-

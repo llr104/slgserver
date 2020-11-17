@@ -1,4 +1,4 @@
-package static_conf
+package facility
 
 import (
 	"encoding/json"
@@ -30,25 +30,25 @@ type produceResLevel struct {
 }
 
 type produceRes struct {
-	Name	string           `json:"name"`
+	Name	string              `json:"name"`
 	Des		string           `json:"des"`
-	Type	int8             `json:"type"`
-	Levels	[]produceResLevel`json:"levels"`
+	Type	int8                `json:"type"`
+	Levels	[]produceResLevel `json:"levels"`
 }
 
 type facilityProduceResConf struct {
-	Title string     	`json:"title"`
-	FMC   produceRes 	`json:"fmc"`
-	LTC   produceRes 	`json:"ltc"`
-	MF    produceRes 	`json:"mf"`
-	CSC   produceRes 	`json:"csc"`
-	MJ    produceRes 	`json:"mj"`
-	Types []int8		`json:"-"`
+	Title string     `json:"title"`
+	FMC   produceRes `json:"fmc"`
+	LTC   produceRes `json:"ltc"`
+	MF    produceRes `json:"mf"`
+	CSC   produceRes `json:"csc"`
+	MJ    produceRes `json:"mj"`
+	Types []int8     `json:"-"`
 }
 
 func (this *facilityProduceResConf) Load()  {
 	jsonDir := config.File.MustValue("logic", "json_data", "../data/conf/")
-	fileName := path.Join(jsonDir, "facility_produce_res.json")
+	fileName := path.Join(jsonDir, "facility", "facility_produce_res.json")
 	jdata, err := ioutil.ReadFile(fileName)
 	if err != nil {
 		log.DefaultLog.Error("facility_produce_res_conf load file error", zap.Error(err), zap.String("file", fileName))

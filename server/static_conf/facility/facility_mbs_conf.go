@@ -1,4 +1,4 @@
-package static_conf
+package facility
 
 import (
 	"encoding/json"
@@ -12,32 +12,30 @@ import (
 	"slgserver/log"
 )
 
-//社稷坛配置
-var FSJT facilitySJTConf
+//城内设施募兵所
+var FMBS facilityMBSConf
 
-
-type sjtLevel struct {
+type mbsLevel struct {
 	Level int8         `json:"level"`
-	Limit int          `json:"limit"`
+	Rate  int8         `json:"rate"`
 	Need  LevelNeedRes `json:"need"`
 }
 
-
-type facilitySJTConf struct {
-	Title 	string		`json:"title"`
-	Name	string		`json:"name"`
-	Des		string		`json:"des"`
-	Type	int8		`json:"type"`
-	Levels	[]sjtLevel	`json:"levels"`
-	Types 	[]int8		`json:"-"`
+type facilityMBSConf struct {
+	Title	string      `json:"title"`
+	Name	string       `json:"name"`
+	Des		string    `json:"des"`
+	Type	int8         `json:"type"`
+	Levels	[]mbsLevel `json:"levels"`
+	Types 	[]int8      `json:"-"`
 }
 
-func (this *facilitySJTConf) Load()  {
+func (this *facilityMBSConf) Load()  {
 	jsonDir := config.File.MustValue("logic", "json_data", "../data/conf/")
-	fileName := path.Join(jsonDir, "facility_sjt.json")
+	fileName := path.Join(jsonDir, "facility", "facility_mbs.json")
 	jdata, err := ioutil.ReadFile(fileName)
 	if err != nil {
-		log.DefaultLog.Error("facilitySJTConf load file error", zap.Error(err), zap.String("file", fileName))
+		log.DefaultLog.Error("facility_mbs_conf load file error", zap.Error(err), zap.String("file", fileName))
 		os.Exit(0)
 	}
 
@@ -46,10 +44,11 @@ func (this *facilitySJTConf) Load()  {
 	this.Types = make([]int8, 1)
 	this.Types[0] = this.Type
 
+
 	fmt.Println(this)
 }
 
-func (this *facilitySJTConf) IsContain(t int8) bool {
+func (this *facilityMBSConf) IsContain(t int8) bool {
 	for _, t1 := range this.Types {
 		if t == t1 {
 			return true
@@ -58,7 +57,7 @@ func (this *facilitySJTConf) IsContain(t int8) bool {
 	return false
 }
 
-func (this *facilitySJTConf) MaxLevel(fType int8) int8 {
+func (this *facilityMBSConf) MaxLevel(fType int8) int8 {
 	if this.Type == fType{
 		return int8(len(this.Levels))
 	}else{
@@ -66,7 +65,7 @@ func (this *facilitySJTConf) MaxLevel(fType int8) int8 {
 	}
 }
 
-func (this *facilitySJTConf) Need(fType int8, level int) (*LevelNeedRes, error)  {
+func (this *facilityMBSConf) Need(fType int8, level int) (*LevelNeedRes, error)  {
 	if this.Type == fType{
 		if len(this.Levels) >= level{
 			return &this.Levels[level-1].Need, nil
