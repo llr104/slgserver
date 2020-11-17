@@ -135,21 +135,23 @@ func (this*Role) enterServer(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		req.Conn.SetProperty("sid", role.SId)
 		req.Conn.SetProperty("role", role)
 
-		roleRes := &model.RoleRes{RId: role.RId, Wood: 10000, Iron: 10000,
-			Stone: 10000, Grain: 10000, Gold: 10000,
-			Decree: 20, WoodYield: 1000, IronYield: 1000,
-			StoneYield: 1000, GrainYield: 1000, GoldYield: 1000,
-			DepotCapacity: 100000}
+		var e error = nil
+		var roleRes *model.RoleRes
+		if roleRes, err = entity.RResMgr.Get(role.RId); err != nil{
+			roleRes := &model.RoleRes{RId: role.RId, Wood: 10000, Iron: 10000,
+				Stone: 10000, Grain: 10000, Gold: 10000,
+				Decree: 20, WoodYield: 1000, IronYield: 1000,
+				StoneYield: 1000, GrainYield: 1000, GoldYield: 1000,
+				DepotCapacity: 100000}
 
-		if _, err := db.MasterDB.Insert(roleRes);err != nil {
-			log.DefaultLog.Info("role_res create error",
-				zap.Int("rid", role.RId),
-				zap.Error(err))
-			rsp.Body.Code = constant.DBError
-		}else{
+			_ ,e = db.MasterDB.Insert(roleRes)
+			if e != nil {
+				log.DefaultLog.Error("insert roleRes error", zap.Error(e))
+			}
+		}
 
+		if e == nil {
 			entity.RResMgr.Add(roleRes)
-
 			rspObj.RoleRes.Gold = roleRes.Gold
 			rspObj.RoleRes.Grain = roleRes.Grain
 			rspObj.RoleRes.Stone = roleRes.Stone
@@ -163,7 +165,10 @@ func (this*Role) enterServer(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 			rspObj.RoleRes.WoodYield = roleRes.WoodYield
 			rspObj.RoleRes.DepotCapacity = roleRes.DepotCapacity
 			rsp.Body.Code = constant.OK
+		}else{
+			rsp.Body.Code = constant.DBError
 		}
+
 	}else{
 		rsp.Body.Code = constant.RoleNotExist
 	}
