@@ -68,7 +68,7 @@ func (this *facilitySJTConf) MaxLevel(fType int8) int8 {
 
 func (this *facilitySJTConf) Need(fType int8, level int) (*LevelNeedRes, error)  {
 	if this.Type == fType{
-		if len(this.Levels) < level{
+		if len(this.Levels) > level{
 			return &this.Levels[level].Need, nil
 		}else{
 			return nil, errors.New("level not found")

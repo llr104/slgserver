@@ -3,6 +3,7 @@ package entity
 import (
 	"errors"
 	"fmt"
+	"go.uber.org/zap"
 	"slgserver/db"
 	"slgserver/log"
 	"slgserver/model"
@@ -134,7 +135,11 @@ func (this* RoleResMgr) toDatabase() {
 					"grain", "gold", "decree", "wood_yield",
 					"iron_yield", "stone_yield", "gold_yield",
 					"gold_yield", "depot_capacity").Update(v)
-				fmt.Println(err)
+				if err != nil{
+					log.DefaultLog.Error("RoleResMgr toDatabase error", zap.Error(err))
+				}else{
+					v.NeedUpdate = false
+				}
 				cnt+=1
 			}
 
