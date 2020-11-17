@@ -94,13 +94,27 @@ func (this*City) upFacility(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	out, err := entity.RFMgr.UpFacility(reqObj.CityId, int8(reqObj.FType))
-	if err != nil{
-		rsp.Body.Code = constant.UpError
-	}else{
+	out, errCode := entity.RFMgr.UpFacility(role.RId ,reqObj.CityId, int8(reqObj.FType))
+	rsp.Body.Code = errCode
+	if errCode == constant.OK{
 		rspObj.Facility.Level = out.Level
 		rspObj.Facility.Type = out.Type
 		rspObj.Facility.Name = out.Name
+
+		if roleRes, err:= entity.RResMgr.Get(role.RId); err == nil {
+			rspObj.RoleRes.Gold = roleRes.Gold
+			rspObj.RoleRes.Grain = roleRes.Grain
+			rspObj.RoleRes.Stone = roleRes.Stone
+			rspObj.RoleRes.Iron = roleRes.Iron
+			rspObj.RoleRes.Wood = roleRes.Wood
+			rspObj.RoleRes.Decree = roleRes.Decree
+			rspObj.RoleRes.GoldYield = roleRes.GoldYield
+			rspObj.RoleRes.GrainYield = roleRes.GrainYield
+			rspObj.RoleRes.StoneYield = roleRes.StoneYield
+			rspObj.RoleRes.IronYield = roleRes.IronYield
+			rspObj.RoleRes.WoodYield = roleRes.WoodYield
+			rspObj.RoleRes.DepotCapacity = roleRes.DepotCapacity
+		}
 	}
 
 }

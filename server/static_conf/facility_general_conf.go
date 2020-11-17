@@ -2,6 +2,7 @@ package static_conf
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"go.uber.org/zap"
 	"io/ioutil"
@@ -15,9 +16,9 @@ import (
 var FGEN facilityGeneralConf
 
 type level struct {
-	Level	int8			`json:"level"`
-	Cnt		int8 			`json:"cnt"`
-	Need	levelNeedRes	`json:"need"`
+	Level int8         `json:"level"`
+	Cnt   int8         `json:"cnt"`
+	Need  LevelNeedRes `json:"need"`
 }
 
 type general struct {
@@ -31,6 +32,7 @@ type facilityGeneralConf struct {
 	Title	string		`json:"title"`
 	JC		general		`json:"jc"`		//校场
 	TST		general		`json:"tst"`	//统帅厅
+	Types 	[]int8		`json:"-"`
 }
 
 func (this *facilityGeneralConf) Load()  {
@@ -43,7 +45,21 @@ func (this *facilityGeneralConf) Load()  {
 	}
 
 	json.Unmarshal(jdata, this)
+
+	this.Types = make([]int8, 2)
+	this.Types[0] = this.JC.Type
+	this.Types[1] = this.TST.Type
+
 	fmt.Println(this)
+}
+
+func (this *facilityGeneralConf) IsContain(t int8) bool {
+	for _, t1 := range this.Types {
+		if t == t1 {
+			return true
+		}
+	}
+	return false
 }
 
 func (this *facilityGeneralConf) MaxLevel(fType int8) int8 {
@@ -53,5 +69,24 @@ func (this *facilityGeneralConf) MaxLevel(fType int8) int8 {
 		return int8(len(this.TST.Levels))
 	}else{
 		return 0
+	}
+}
+
+func (this *facilityGeneralConf) Need(fType int8, level int) (*LevelNeedRes, error)  {
+	if this.JC.Type == fType{
+		if len(this.JC.Levels) < level{
+			return &this.JC.Levels[level].Need, nil
+		}else {
+			return nil, errors.New("level not found")
+		}
+
+	}else if this.TST.Type == fType{
+		if len(this.TST.Levels) < level{
+			return &this.TST.Levels[level].Need, nil
+		}else {
+			return nil, errors.New("level not found")
+		}
+	}else{
+		return nil, errors.New("type not found")
 	}
 }

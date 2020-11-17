@@ -23,4 +23,5 @@ type UpFacilityReq struct {
 type UpFacilityRsp struct {
 	CityId		int		`json:"cityId"`
 	Facility	Facility`json:"facility"`
+	RoleRes		RoleRes	`json:"role_res"`
 }

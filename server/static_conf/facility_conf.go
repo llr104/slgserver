@@ -2,6 +2,7 @@ package static_conf
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"go.uber.org/zap"
 	"io/ioutil"
@@ -11,6 +12,11 @@ import (
 	"slgserver/log"
 )
 
+type iFacility interface {
+	MaxLevel(fType int8) int8
+	Need(fType int8, level int) (*LevelNeedRes, error)
+	IsContain(t int8) bool
+}
 var FConf facilityConf
 
 type conf struct {
@@ -19,8 +25,9 @@ type conf struct {
 }
 
 type facilityConf struct {
-	Title	string	`json:"title"`
-	List 	[]conf	`json:"list"`
+	Title	string		`json:"title"`
+	List 	[]conf		`json:"list"`
+	loaders	[]iFacility
 }
 
 func (this *facilityConf) Load()  {
@@ -34,31 +41,51 @@ func (this *facilityConf) Load()  {
 
 	json.Unmarshal(jdata, this)
 	fmt.Println(this)
+
+	FGEN.Load()
+	FPRC.Load()
+	FMBS.Load()
+	FARMY.Load()
+	FCAMP.Load()
+	FBarrack.Load()
+	FFCT.Load()
+	FWALL.Load()
+	FMarket.Load()
+	FSJT.Load()
+
+	this.loaders = make([]iFacility, 0)
+	this.loaders = append(this.loaders, &FGEN)
+	this.loaders = append(this.loaders, &FPRC)
+	this.loaders = append(this.loaders, &FMBS)
+	this.loaders = append(this.loaders, &FARMY)
+	this.loaders = append(this.loaders, &FCAMP)
+	this.loaders = append(this.loaders, &FBarrack)
+	this.loaders = append(this.loaders, &FFCT)
+	this.loaders = append(this.loaders, &FWALL)
+	this.loaders = append(this.loaders, &FMarket)
+	this.loaders = append(this.loaders, &FSJT)
+
 }
 
 func (this *facilityConf) MaxLevel(fType int8) int8 {
-	if t := FARMY.MaxLevel(fType); t != 0{
-		return t
-	}else if t = FBarrack.MaxLevel(fType); t != 0{
-		return t
-	}else if t = FCAMP.MaxLevel(fType); t != 0{
-		return t
-	}else if t = FFCT.MaxLevel(fType); t != 0{
-		return t
-	}else if t = FGEN.MaxLevel(fType); t != 0{
-		return t
-	}else if t = FMarket.MaxLevel(fType); t != 0{
-		return t
-	}else if t = FMBS.MaxLevel(fType); t != 0{
-		return t
-	}else if t = FPRC.MaxLevel(fType); t != 0{
-		return t
-	}else if t = FSJT.MaxLevel(fType); t != 0{
-		return t
-	}else if t = FWALL.MaxLevel(fType); t != 0{
-		return t
+	for _, v := range this.loaders {
+		if v.IsContain(fType){
+			return v.MaxLevel(fType)
+		}
 	}
 	return 0
+}
+
+func (this *facilityConf) Need(fType int8, level int) (*LevelNeedRes, error) {
+	for _, v := range this.loaders {
+		if v.IsContain(fType){
+			return v.Need(fType, level)
+		}
+	}
+
+	str := fmt.Sprintf("facilityConf type: %d not found", fType)
+	log.DefaultLog.Info(str)
+	return nil, errors.New(str)
 }
 
 

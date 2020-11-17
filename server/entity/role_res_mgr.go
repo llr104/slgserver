@@ -6,6 +6,7 @@ import (
 	"slgserver/db"
 	"slgserver/log"
 	"slgserver/model"
+	"slgserver/server/static_conf"
 	"slgserver/util"
 	"sync"
 	"time"
@@ -72,12 +73,36 @@ func (this* RoleResMgr) Add(res *model.RoleRes) (){
 	this.rolesRes[res.RId] = res
 }
 
+func (this* RoleResMgr) TryUseNeed(rid int, need* static_conf.LevelNeedRes) bool{
+	this.mutex.Lock()
+	defer this.mutex.Unlock()
+	rr, ok := this.rolesRes[rid]
+	if ok {
+		if need.Decree <= rr.Decree && need.Grain <= rr.Grain &&
+			need.Stone <= rr.Stone && need.Wood <= rr.Wood && need.Iron <= rr.Iron {
+
+			rr.NeedUpdate = true
+			rr.Decree -= need.Decree
+			rr.Iron -= need.Iron
+			rr.Wood -= need.Wood
+			rr.Stone -= need.Stone
+			rr.Grain -= need.Grain
+			return true
+		}else{
+			return false
+		}
+	}else {
+		return false
+	}
+
+}
+
+
 func (this* RoleResMgr) produce() {
+	index := 1
 	for true {
 		time.Sleep(60*10*time.Second)
-
 		//每个10分钟处理一次资源更新
-		index := 1
 		this.mutex.Lock()
 		for _, v := range this.rolesRes {
 			v.Wood += util.MinInt(v.WoodYield/6, v.DepotCapacity)

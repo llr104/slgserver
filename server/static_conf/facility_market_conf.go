@@ -2,6 +2,7 @@ package static_conf
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"go.uber.org/zap"
 	"io/ioutil"
@@ -14,18 +15,13 @@ import (
 //城内设施集市
 var FMarket facilityMarketConf
 
-type arketLevel struct {
-	Level	int8			`json:"level"`
-	Rate	int8 			`json:"rate"`
-	Need	levelNeedRes	`json:"need"`
-}
-
 type facilityMarketConf struct {
-	Title	string				`json:"title"`
-	Name	string				`json:"name"`
-	Des		string				`json:"des"`
-	Type	int8				`json:"type"`
-	Levels	[]mbsLevel			`json:"levels"`
+	Title	string			`json:"title"`
+	Name	string			`json:"name"`
+	Des		string			`json:"des"`
+	Type	int8			`json:"type"`
+	Levels	[]mbsLevel		`json:"levels"`
+	Types 	[]int8			`json:"-"`
 }
 
 func (this *facilityMarketConf) Load()  {
@@ -38,7 +34,21 @@ func (this *facilityMarketConf) Load()  {
 	}
 
 	json.Unmarshal(jdata, this)
+
+	this.Types = make([]int8, 1)
+	this.Types[0] = this.Type
+
+
 	fmt.Println(this)
+}
+
+func (this *facilityMarketConf) IsContain(t int8) bool {
+	for _, t1 := range this.Types {
+		if t == t1 {
+			return true
+		}
+	}
+	return false
 }
 
 func (this *facilityMarketConf) MaxLevel(fType int8) int8 {
@@ -46,5 +56,17 @@ func (this *facilityMarketConf) MaxLevel(fType int8) int8 {
 		return int8(len(this.Levels))
 	}else{
 		return 0
+	}
+}
+
+func (this *facilityMarketConf) Need(fType int8, level int) (*LevelNeedRes, error)  {
+	if this.Type == fType{
+		if len(this.Levels) < level{
+			return &this.Levels[level].Need, nil
+		}else{
+			return nil, errors.New("level not found")
+		}
+	} else {
+		return nil, errors.New("type not found")
 	}
 }

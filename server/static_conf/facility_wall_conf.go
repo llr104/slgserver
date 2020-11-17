@@ -2,6 +2,7 @@ package static_conf
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"go.uber.org/zap"
 	"io/ioutil"
@@ -15,9 +16,9 @@ import (
 var FWALL facilityWallConf
 
 type wallLevel struct {
-	Level	int8			`json:"level"`
-	Limit	int  			`json:"limit"`
-	Need	levelNeedRes	`json:"need"`
+	Level int8         `json:"level"`
+	Limit int          `json:"limit"`
+	Need  LevelNeedRes `json:"need"`
 }
 
 type wall struct {
@@ -32,6 +33,7 @@ type facilityWallConf struct {
 	Title 	string		`json:"title"`
 	CQ		wall		`json:"cq"`
 	NQ		wall		`json:"nq"`
+	Types 	[]int8		`json:"-"`
 }
 
 func (this *facilityWallConf) Load()  {
@@ -44,7 +46,21 @@ func (this *facilityWallConf) Load()  {
 	}
 
 	json.Unmarshal(jdata, this)
+
+	this.Types = make([]int8, 2)
+	this.Types[0] = this.NQ.Type
+	this.Types[1] = this.CQ.Type
+
 	fmt.Println(this)
+}
+
+func (this *facilityWallConf) IsContain(t int8) bool {
+	for _, t1 := range this.Types {
+		if t == t1 {
+			return true
+		}
+	}
+	return false
 }
 
 func (this *facilityWallConf) MaxLevel(fType int8) int8 {
@@ -57,4 +73,21 @@ func (this *facilityWallConf) MaxLevel(fType int8) int8 {
 	}
 }
 
+func (this *facilityWallConf) Need(fType int8, level int) (*LevelNeedRes, error)  {
+	if this.CQ.Type == fType{
+		if len(this.CQ.Levels) < level{
+			return &this.CQ.Levels[level].Need, nil
+		}else {
+			return nil, errors.New("level not found")
+		}
 
+	}else if this.NQ.Type == fType{
+		if len(this.NQ.Levels) < level{
+			return &this.NQ.Levels[level].Need, nil
+		}else {
+			return nil, errors.New("level not found")
+		}
+	}else{
+		return nil, errors.New("type not found")
+	}
+}

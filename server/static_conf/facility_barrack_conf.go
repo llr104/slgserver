@@ -2,6 +2,7 @@ package static_conf
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"go.uber.org/zap"
 	"io/ioutil"
@@ -15,9 +16,9 @@ import (
 var FBarrack facilityBarrackConf
 
 type byLevel struct {
-	Level	int8			`json:"level"`
-	Extra	int  			`json:"extra"`
-	Need	levelNeedRes	`json:"need"`
+	Level int8         `json:"level"`
+	Extra int          `json:"extra"`
+	Need  LevelNeedRes `json:"need"`
 }
 
 type by struct {
@@ -28,9 +29,9 @@ type by struct {
 }
 
 type ybyLevel struct {
-	Level	int8			`json:"level"`
-	Limit	int  			`json:"limit"`
-	Need	levelNeedRes	`json:"need"`
+	Level int8         `json:"level"`
+	Limit int          `json:"limit"`
+	Need  LevelNeedRes `json:"need"`
 }
 
 type yby struct {
@@ -45,6 +46,7 @@ type facilityBarrackConf struct {
 	Title 	string		`json:"title"`
 	BY		by			`json:"by"`
 	YBY		yby			`json:"yby"`
+	Types	[]int8		`json:"-"`
 }
 
 func (this *facilityBarrackConf) Load()  {
@@ -57,7 +59,21 @@ func (this *facilityBarrackConf) Load()  {
 	}
 
 	json.Unmarshal(jdata, this)
+
+	this.Types = make([]int8, 2)
+	this.Types[0] = this.YBY.Type
+	this.Types[1] = this.BY.Type
+
 	fmt.Println(this)
+}
+
+func (this *facilityBarrackConf) IsContain(t int8) bool {
+	for _, t1 := range this.Types {
+		if t == t1 {
+			return true
+		}
+	}
+	return false
 }
 
 func (this *facilityBarrackConf) MaxLevel(fType int8) int8 {
@@ -67,6 +83,25 @@ func (this *facilityBarrackConf) MaxLevel(fType int8) int8 {
 		return int8(len(this.YBY.Levels))
 	}else{
 		return 0
+	}
+}
+
+func (this *facilityBarrackConf) Need(fType int8, level int) (*LevelNeedRes, error)  {
+	if this.BY.Type == fType{
+		if len(this.BY.Levels) < level{
+			return &this.BY.Levels[level].Need, nil
+		}else {
+			return nil, errors.New("level not found")
+		}
+
+	}else if this.YBY.Type == fType{
+		if len(this.YBY.Levels) < level{
+			return &this.YBY.Levels[level].Need, nil
+		}else {
+			return nil, errors.New("level not found")
+		}
+	}else{
+		return nil, errors.New("type not found")
 	}
 }
 

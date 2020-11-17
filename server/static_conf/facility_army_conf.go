@@ -2,6 +2,7 @@ package static_conf
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"go.uber.org/zap"
 	"io/ioutil"
@@ -15,9 +16,9 @@ import (
 var FARMY facilityArmyConf
 
 type armyLevel struct {
-	Level	int8			`json:"level"`
-	Rate	int  			`json:"rate"`
-	Need	levelNeedRes	`json:"need"`
+	Level int8         `json:"level"`
+	Rate  int          `json:"rate"`
+	Need  LevelNeedRes `json:"need"`
 }
 
 type army struct {
@@ -33,6 +34,7 @@ type facilityArmyConf struct {
 	TBY   army		`json:"tby"`
 	JJY   army		`json:"jjy"`
 	SWY   army		`json:"swy"`
+	Types []int8	`json:"-"`
 }
 
 func (this *facilityArmyConf) Load()  {
@@ -45,7 +47,22 @@ func (this *facilityArmyConf) Load()  {
 	}
 
 	json.Unmarshal(jdata, this)
+	this.Types = make([]int8, 4)
+	this.Types[0] = this.JFY.Type
+	this.Types[1] = this.JJY.Type
+	this.Types[2] = this.SWY.Type
+	this.Types[3] = this.TBY.Type
+
 	fmt.Println(this)
+}
+
+func (this *facilityArmyConf) IsContain(t int8) bool {
+	for _, t1 := range this.Types {
+		if t == t1 {
+			return true
+		}
+	}
+	return false
 }
 
 func (this *facilityArmyConf) MaxLevel(fType int8) int8 {
@@ -59,5 +76,36 @@ func (this *facilityArmyConf) MaxLevel(fType int8) int8 {
 		return int8(len(this.TBY.Levels))
 	}else{
 		return 0
+	}
+}
+
+func (this *facilityArmyConf) Need(fType int8, level int) (*LevelNeedRes, error)  {
+	if this.JFY.Type == fType{
+		if len(this.JFY.Levels) < level{
+			return &this.JFY.Levels[level].Need, nil
+		}else {
+			return nil, errors.New("level not found")
+		}
+
+	}else if this.JJY.Type == fType{
+		if len(this.JJY.Levels) < level{
+			return &this.JJY.Levels[level].Need, nil
+		}else {
+			return nil, errors.New("level not found")
+		}
+	}else if this.SWY.Type == fType{
+		if len(this.SWY.Levels) < level{
+			return &this.SWY.Levels[level].Need, nil
+		}else {
+			return nil, errors.New("level not found")
+		}
+	}else if this.TBY.Type == fType{
+		if len(this.TBY.Levels) < level{
+			return &this.TBY.Levels[level].Need, nil
+		}else {
+			return nil, errors.New("level not found")
+		}
+	}else{
+		return nil, errors.New("type not found")
 	}
 }

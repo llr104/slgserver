@@ -2,7 +2,8 @@ package static_conf
 
 import (
 "encoding/json"
-"fmt"
+	"errors"
+	"fmt"
 "go.uber.org/zap"
 "io/ioutil"
 "os"
@@ -15,9 +16,9 @@ import (
 var FCAMP facilityCampConf
 
 type campLevel struct {
-	Level	int8			`json:"level"`
-	Rate	int  			`json:"rate"`
-	Need	levelNeedRes	`json:"need"`
+	Level int8         `json:"level"`
+	Rate  int          `json:"rate"`
+	Need  LevelNeedRes `json:"need"`
 }
 
 type camp struct {
@@ -34,6 +35,7 @@ type facilityCampConf struct {
 	Shu		camp	`json:"shu"`
 	Wu		camp	`json:"wu"`
 	Qun		camp	`json:"qun"`
+	Types	[]int8	`json:"-"`
 }
 
 func (this *facilityCampConf) Load()  {
@@ -46,7 +48,25 @@ func (this *facilityCampConf) Load()  {
 	}
 
 	json.Unmarshal(jdata, this)
+
+	this.Types = make([]int8, 5)
+	this.Types[0] = this.Han.Type
+	this.Types[1] = this.Wei.Type
+	this.Types[2] = this.Shu.Type
+	this.Types[3] = this.Wu.Type
+	this.Types[4] = this.Qun.Type
+
+
 	fmt.Println(this)
+}
+
+func (this *facilityCampConf) IsContain(t int8) bool {
+	for _, t1 := range this.Types {
+		if t == t1 {
+			return true
+		}
+	}
+	return false
 }
 
 func (this *facilityCampConf) MaxLevel(fType int8) int8 {
@@ -65,3 +85,39 @@ func (this *facilityCampConf) MaxLevel(fType int8) int8 {
 	}
 }
 
+func (this *facilityCampConf) Need(fType int8, level int) (*LevelNeedRes, error)  {
+	if this.Han.Type == fType{
+		if len(this.Han.Levels) < level{
+			return &this.Han.Levels[level].Need, nil
+		}else {
+			return nil, errors.New("level not found")
+		}
+
+	}else if this.Wei.Type == fType{
+		if len(this.Wei.Levels) < level{
+			return &this.Wei.Levels[level].Need, nil
+		}else {
+			return nil, errors.New("level not found")
+		}
+	}else if this.Shu.Type == fType{
+		if len(this.Shu.Levels) < level{
+			return &this.Shu.Levels[level].Need, nil
+		}else {
+			return nil, errors.New("level not found")
+		}
+	}else if this.Wu.Type == fType{
+		if len(this.Wu.Levels) < level{
+			return &this.Wu.Levels[level].Need, nil
+		}else {
+			return nil, errors.New("level not found")
+		}
+	}else if this.Qun.Type == fType{
+		if len(this.Qun.Levels) < level{
+			return &this.Qun.Levels[level].Need, nil
+		}else {
+			return nil, errors.New("level not found")
+		}
+	}else{
+		return nil, errors.New("type not found")
+	}
+}

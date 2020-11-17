@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"slgserver/constant"
 	"slgserver/db"
 	"slgserver/log"
 	"slgserver/model"
@@ -98,38 +99,47 @@ func (this* FacilityMgr) GetAndTryCreate(cid int) (*model.CityFacility, error){
 	}
 }
 
-func (this* FacilityMgr) UpFacility(cid int, fType int8) (*Facility, error){
+func (this* FacilityMgr) UpFacility(rid, cid int, fType int8) (*Facility, int){
 	this.mutex.Lock()
 	defer this.mutex.Unlock()
 	f, ok := this.facilities[cid]
 	if ok == false{
 		str := fmt.Sprintf("UpFacility cityId %d not found", cid)
 		log.DefaultLog.Warn(str)
-		return nil, errors.New(str)
+		return nil, constant.CityNotExist
 	}else{
 		suss := false
 		fa := make([]*Facility, 0)
 		var out *Facility
 		json.Unmarshal([]byte(f.Facilities), &fa)
 		for _, v := range fa {
+
 			if v.Type == fType && v.Level < static_conf.FConf.MaxLevel(fType){
-				v.Level +=1
-				suss = true
-				out = v
-				break
+				need, err := static_conf.FConf.Need(fType, int(v.Level+1))
+				if err != nil {
+					break
+				}
+
+				if RResMgr.TryUseNeed(rid, need) {
+					v.Level += 1
+					suss = true
+					out = v
+				}else{
+					break
+				}
 			}
 		}
 		if suss {
 			if t, err := json.Marshal(fa); err == nil{
 				f.Facilities = string(t)
-				return out, nil
+				return out, constant.OK
 			}else{
-				return nil, err
+				return nil, constant.UpError
 			}
 		}else{
 			str := fmt.Sprintf("UpFacility error")
 			log.DefaultLog.Warn(str)
-			return nil, errors.New(str)
+			return nil, constant.UpError
 		}
 
 	}

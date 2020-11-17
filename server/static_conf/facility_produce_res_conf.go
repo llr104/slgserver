@@ -2,6 +2,7 @@ package static_conf
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"go.uber.org/zap"
 	"io/ioutil"
@@ -14,7 +15,7 @@ import (
 //城内生产资源设施配置
 var FPRC facilityProduceResConf
 
-type levelNeedRes struct {
+type LevelNeedRes struct {
 	Decree 		int	`json:"decree"`
 	Grain		int `json:"grain"`
 	Wood		int `json:"wood"`
@@ -23,9 +24,9 @@ type levelNeedRes struct {
 }
 
 type produceResLevel struct {
-	Level	int8			`json:"level"`
-	Yield	int  			`json:"yield"`
-	Need	levelNeedRes	`json:"need"`
+	Level int8         `json:"level"`
+	Yield int          `json:"yield"`
+	Need  LevelNeedRes `json:"need"`
 }
 
 type produceRes struct {
@@ -36,12 +37,13 @@ type produceRes struct {
 }
 
 type facilityProduceResConf struct {
-	Title string     `json:"title"`
-	FMC   produceRes `json:"fmc"`
-	LTC   produceRes `json:"ltc"`
-	MF    produceRes `json:"mf"`
-	CSC   produceRes `json:"csc"`
-	MJ    produceRes `json:"mj"`
+	Title string     	`json:"title"`
+	FMC   produceRes 	`json:"fmc"`
+	LTC   produceRes 	`json:"ltc"`
+	MF    produceRes 	`json:"mf"`
+	CSC   produceRes 	`json:"csc"`
+	MJ    produceRes 	`json:"mj"`
+	Types []int8		`json:"-"`
 }
 
 func (this *facilityProduceResConf) Load()  {
@@ -54,7 +56,24 @@ func (this *facilityProduceResConf) Load()  {
 	}
 
 	json.Unmarshal(jdata, this)
+
+	this.Types = make([]int8, 5)
+	this.Types[0] = this.FMC.Type
+	this.Types[1] = this.CSC.Type
+	this.Types[2] = this.LTC.Type
+	this.Types[3] = this.MF.Type
+	this.Types[4] = this.MJ.Type
+
 	fmt.Println(this)
+}
+
+func (this *facilityProduceResConf) IsContain(t int8) bool {
+	for _, t1 := range this.Types {
+		if t == t1 {
+			return true
+		}
+	}
+	return false
 }
 
 func (this *facilityProduceResConf) MaxLevel(fType int8) int8 {
@@ -70,5 +89,41 @@ func (this *facilityProduceResConf) MaxLevel(fType int8) int8 {
 		return int8(len(this.MJ.Levels))
 	}else{
 		return 0
+	}
+}
+
+func (this *facilityProduceResConf) Need(fType int8, level int) (*LevelNeedRes, error)  {
+	if this.CSC.Type == fType{
+		if len(this.CSC.Levels) < level{
+			return &this.CSC.Levels[level].Need, nil
+		}else {
+			return nil, errors.New("level not found")
+		}
+	}else if this.FMC.Type == fType{
+		if len(this.FMC.Levels) < level{
+			return &this.FMC.Levels[level].Need, nil
+		}else {
+			return nil, errors.New("level not found")
+		}
+	}else if this.LTC.Type == fType{
+		if len(this.LTC.Levels) < level{
+			return &this.LTC.Levels[level].Need, nil
+		}else {
+			return nil, errors.New("level not found")
+		}
+	}else if this.MF.Type == fType{
+		if len(this.MF.Levels) < level{
+			return &this.MF.Levels[level].Need, nil
+		}else {
+			return nil, errors.New("level not found")
+		}
+	}else if this.MJ.Type == fType{
+		if len(this.MJ.Levels) < level{
+			return &this.MJ.Levels[level].Need, nil
+		}else {
+			return nil, errors.New("level not found")
+		}
+	}else{
+		return nil, errors.New("type not found")
 	}
 }
