@@ -32,6 +32,7 @@ func Init() {
 	entity.RCMgr.Load()
 	entity.RBMgr.Load()
 	entity.RFMgr.Load()
+	entity.RResMgr.Load()
 
 }
 
