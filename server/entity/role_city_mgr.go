@@ -77,6 +77,32 @@ func (this* RoleCityMgr) Scan(x, y int) []*model.MapRoleCity {
 	return cb
 }
 
+func (this* RoleCityMgr) ScanBlock(x, y, length int) []*model.MapRoleCity {
+	if x >= 0 && x < MapWith && y >= 0 && y < MapHeight {
+		return nil
+	}
+
+	this.mutex.RLock()
+	defer this.mutex.RUnlock()
+
+	maxX := util.MaxInt(MapWith, x+length)
+	maxY := util.MinInt(MapHeight, y+length)
+
+	cb := make([]*model.MapRoleCity, 0)
+	for i := x; i <= maxX; i++ {
+		for j := y; j <= maxY; j++ {
+			posId := i*ScanWith+j
+			v, ok := this.posCity[posId]
+			if ok {
+				cb = append(cb, v)
+			}
+		}
+	}
+	return cb
+}
+
+
+
 func (this* RoleCityMgr) Get(cid int) (*model.MapRoleCity, error){
 	this.mutex.RLock()
 	r, ok := this.dbCity[cid]

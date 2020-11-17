@@ -45,3 +45,8 @@ type ScanRsp struct {
 	MCBuilds []MapRoleCity  `json:"mc_builds"` //角色城市
 }
 
+type ScanBlockReq struct {
+	X 		int    		`json:"x"`
+	Y 		int    		`json:"y"`
+	Length	int			`json:"length"`
+}
