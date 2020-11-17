@@ -192,7 +192,7 @@ func (this*Role) myCity(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		for true {
 			x := rand.Intn(entity.MapWith)
 			y := rand.Intn(entity.MapHeight)
-			if entity.RBMgr.IsEmpty(x, y) && entity.RCMgr.IsEmpty(x, y){
+			if entity.NMMgr.IsCanBuild(x, y) && entity.RBMgr.IsEmpty(x, y) && entity.RCMgr.IsEmpty(x, y){
 				//建立城市
 				c := &model.MapRoleCity{RId: role.RId, X: x, Y: y, IsMain: 1,
 					CurDurable: 100, MaxDurable: 100, Level: 1, Name: role.NickName, CreatedAt: time.Now()}

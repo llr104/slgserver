@@ -82,6 +82,22 @@ func (this* NationalMapMgr) Load() {
 
 }
 
+func (this* NationalMapMgr) IsCanBuild(x, y int) bool {
+	posIndex := x*MapWith+MapHeight
+	this.mutex.RLock()
+	defer this.mutex.RUnlock()
+	c,ok := this.conf[posIndex]
+	if ok {
+		if c.Type == 0{
+			return false
+		}else {
+			return true
+		}
+	}else {
+		return false
+	}
+}
+
 func (this* NationalMapMgr) Scan(x, y int) []model.NationalMap {
 	this.mutex.RLock()
 	defer this.mutex.RUnlock()
