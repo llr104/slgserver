@@ -94,25 +94,25 @@ func (this *facilityCampConf) Need(fType int8, level int) (*LevelNeedRes, error)
 		}
 
 	}else if this.Wei.Type == fType{
-		if len(this.Wei.Levels) > level{
+		if len(this.Wei.Levels) >= level{
 			return &this.Wei.Levels[level].Need, nil
 		}else {
 			return nil, errors.New("level not found")
 		}
 	}else if this.Shu.Type == fType{
-		if len(this.Shu.Levels) > level{
+		if len(this.Shu.Levels) >= level{
 			return &this.Shu.Levels[level].Need, nil
 		}else {
 			return nil, errors.New("level not found")
 		}
 	}else if this.Wu.Type == fType{
-		if len(this.Wu.Levels) > level{
+		if len(this.Wu.Levels) >= level{
 			return &this.Wu.Levels[level].Need, nil
 		}else {
 			return nil, errors.New("level not found")
 		}
 	}else if this.Qun.Type == fType{
-		if len(this.Qun.Levels) > level{
+		if len(this.Qun.Levels) >= level{
 			return &this.Qun.Levels[level].Need, nil
 		}else {
 			return nil, errors.New("level not found")

@@ -81,7 +81,7 @@ func (this *facilityGeneralConf) Need(fType int8, level int) (*LevelNeedRes, err
 		}
 
 	}else if this.TST.Type == fType{
-		if len(this.TST.Levels) > level{
+		if len(this.TST.Levels) >= level{
 			return &this.TST.Levels[level].Need, nil
 		}else {
 			return nil, errors.New("level not found")
