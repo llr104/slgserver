@@ -34,7 +34,8 @@ func (this* RoleResMgr) Load() {
 		this.rolesRes[v.RId] = &v
 	}
 
-	go this.running()
+	go this.produce()
+	go this.toDatabase()
 
 }
 
@@ -67,10 +68,11 @@ func (this* RoleResMgr) Get(rid int) (*model.RoleRes, error){
 func (this* RoleResMgr) Add(res *model.RoleRes) (){
 	this.mutex.Lock()
 	defer this.mutex.Unlock()
+	res.NeedUpdate = true
 	this.rolesRes[res.RId] = res
 }
 
-func (this* RoleResMgr) running() {
+func (this* RoleResMgr) produce() {
 	for true {
 		time.Sleep(60*10*time.Second)
 
@@ -87,9 +89,35 @@ func (this* RoleResMgr) running() {
 			if index%6 == 0{
 				v.Decree+=1
 			}
+
+			v.NeedUpdate = true
 		}
 		index++
 
 		this.mutex.Unlock()
+	}
+}
+
+func (this* RoleResMgr) toDatabase() {
+	for true {
+		time.Sleep(5*time.Second)
+		this.mutex.RLock()
+		cnt :=0
+		for _, v := range this.rolesRes {
+			if v.NeedUpdate {
+				_, err := db.MasterDB.Table(v).Cols("wood", "iron", "stone",
+					"grain", "gold", "decree", "wood_yield",
+					"iron_yield", "stone_yield", "gold_yield",
+					"gold_yield", "depot_capacity").Update(v)
+				fmt.Println(err)
+				cnt+=1
+			}
+
+			//一次最多更新20个
+			if cnt>20{
+				break
+			}
+		}
+		this.mutex.RUnlock()
 	}
 }

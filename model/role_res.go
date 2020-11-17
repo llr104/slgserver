@@ -15,7 +15,7 @@ type RoleRes struct {
 	GrainYield		int			`json:"grain_yield"`
 	GoldYield		int			`json:"gold_yield"`
 	DepotCapacity	int			`json:"depot_capacity"`	//仓库容量
-
+	NeedUpdate		bool		`json:"-" xorm:"-"`
 }
 
 func (this *RoleRes) TableName() string {
