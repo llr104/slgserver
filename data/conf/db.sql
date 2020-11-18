@@ -149,9 +149,25 @@ CREATE TABLE IF NOT EXISTS `general` (
    `speed` int unsigned NOT NULL COMMENT '速度',
    `destroy` int unsigned NOT NULL COMMENT '破坏',
    `cost` int unsigned NOT NULL COMMENT 'cost',
-   `armyId` tinyint NOT NULL DEFAULT -1 COMMENT '队伍编号',
+   `order` tinyint NOT NULL COMMENT '第几队',
+   `level` int unsigned NOT NULL DEFAULT 1 COMMENT 'level',
    `cityId` int NOT NULL DEFAULT -1 COMMENT '城市id',
    `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
    PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '将领表';
+
+CREATE TABLE IF NOT EXISTS `army` (
+   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+   `rid` int unsigned NOT NULL COMMENT "rid",
+   `cityId` int unsigned NOT NULL COMMENT '城市id',
+   `order` tinyint unsigned NOT NULL COMMENT '第几队 1-5队',
+   `firstId` int unsigned NOT NULL COMMENT '前锋武将',
+   `secondId` int unsigned NOT NULL COMMENT '中锋武将',
+   `thirdId` int unsigned NOT NULL COMMENT '大营武将',
+   `first_soldier_cnt` int unsigned NOT NULL COMMENT '前锋士兵数量',
+   `second_soldier_cnt` int unsigned NOT NULL COMMENT '中锋士兵数量',
+   `third_soldier_cnt` int unsigned NOT NULL COMMENT '大营士兵数量',
+   UNIQUE KEY (`rid`, `cityId`, `order`),
+   PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '军队表';
 

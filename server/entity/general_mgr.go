@@ -13,17 +13,19 @@ import (
 )
 
 type GeneralMgr struct {
-	mutex sync.RWMutex
-	gen   map[int][]*model.General
+	mutex     sync.RWMutex
+	genByRole map[int][]*model.General
+	genByGId  map[int]*model.General
 }
 
 var GMgr = &GeneralMgr{
-	gen: make(map[int][]*model.General),
+	genByRole: make(map[int][]*model.General),
+	genByGId: make(map[int]*model.General),
 }
 
 func (this* GeneralMgr) Get(rid int) ([]*model.General, error){
 	this.mutex.Lock()
-	r, ok := this.gen[rid]
+	r, ok := this.genByRole[rid]
 	this.mutex.Unlock()
 
 	if ok {
@@ -35,7 +37,10 @@ func (this* GeneralMgr) Get(rid int) ([]*model.General, error){
 	if err == nil {
 		if len(m) > 0 {
 			this.mutex.Lock()
-			this.gen[rid] = m
+			this.genByRole[rid] = m
+			for _, v := range m {
+				this.genByGId[v.Id] = v
+			}
 			this.mutex.Unlock()
 			return m, nil
 		}else{
@@ -43,6 +48,20 @@ func (this* GeneralMgr) Get(rid int) ([]*model.General, error){
 		}
 	}else{
 		return nil, err
+	}
+}
+
+//查找将领
+func (this* GeneralMgr) FindGeneral(gid int) (*model.General, error){
+	this.mutex.RLock()
+	defer this.mutex.RUnlock()
+	g, ok := this.genByGId[gid]
+	if ok {
+		return g, nil
+	}else{
+		str := fmt.Sprintf("general %d not found", gid)
+		log.DefaultLog.Warn(str, zap.Int("gid", gid))
+		return nil, errors.New(str)
 	}
 }
 
@@ -62,8 +81,8 @@ func (this* GeneralMgr) GetAndTryCreate(rid int) ([]*model.General, error){
 		for _, v := range general.General.List {
 			r := &model.General{RId: rid, Name: v.Name, CfgId: v.CfgId,
 				Force: v.Force, Strategy: v.Strategy, Defense: v.Defense,
-				Speed: v.Speed, Cost: v.Cost, ArmyId: -1, CityId: -1,
-				CreatedAt: time.Now(),
+				Speed: v.Speed, Cost: v.Cost, Order: 0, CityId: 0,
+				Level: 1, CreatedAt: time.Now(),
 			}
 			gs = append(gs, r)
 
@@ -73,7 +92,17 @@ func (this* GeneralMgr) GetAndTryCreate(rid int) ([]*model.General, error){
 				return nil, err
 			}
 		}
-		sess.Commit()
-		return gs, nil
+		if err := sess.Commit(); err != nil{
+			log.DefaultLog.Warn("db error", zap.Error(err))
+			return nil, err
+		}else{
+			this.mutex.Lock()
+			this.genByRole[rid] = gs
+			for _, v := range gs {
+				this.genByGId[v.Id] = v
+			}
+			this.mutex.Unlock()
+			return gs, nil
+		}
 	}
 }
