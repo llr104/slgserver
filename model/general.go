@@ -12,7 +12,7 @@ type General struct {
 	Defense   	int     	`json:"defense"`
 	Speed     	int     	`json:"speed"`
 	Destroy   	int     	`json:"destroy"`
-	Level		int     	`json:"level"`
+	Level		int8     	`json:"level"`
 	Cost      	int     	`json:"cost"`
 	Order     	int8     	`json:"order" xorm:"order"`
 	CityId    	int     	`json:"cityId" xorm:"cityId"`

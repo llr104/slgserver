@@ -11,7 +11,7 @@ type General struct {
 	Destroy   	int     `json:"destroy"`
 	Cost      	int     `json:"cost"`
 	Order     	int8    `json:"order"`
-	Level		int     `json:"level"`
+	Level		int8    `json:"level"`
 	CityId    	int     `json:"cityId"`
 }
 

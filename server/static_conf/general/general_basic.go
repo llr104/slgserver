@@ -14,7 +14,7 @@ import (
 var GenBasic Basic
 
 type gLevel struct {
-	Level		int `json:"level"`
+	Level		int8`json:"level"`
 	Exp			int `json:"exp"`
 	Soldiers	int `json:"soldiers"`
 }

@@ -30,7 +30,7 @@ func (this* BuildConfigMgr) Maps() map[int]model.MapBuildConfig {
 	return this.conf
 }
 
-func (this* BuildConfigMgr) GetDurable(t int8, level int) int {
+func (this* BuildConfigMgr) GetDurable(t int8, level int8) int {
 	this.mutex.RLock()
 	defer this.mutex.RUnlock()
 
