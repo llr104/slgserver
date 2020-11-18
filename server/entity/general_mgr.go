@@ -1,6 +1,8 @@
 package entity
 
 import (
+	"errors"
+	"fmt"
 	"go.uber.org/zap"
 	"slgserver/db"
 	"slgserver/log"
@@ -31,10 +33,14 @@ func (this* GeneralMgr) Get(rid int) ([]*model.General, error){
 	m := make([]*model.General, 0)
 	err := db.MasterDB.Table(new(model.General)).Where("rid=?", rid).Find(&m)
 	if err == nil {
-		this.mutex.Lock()
-		this.gen[rid] = m
-		this.mutex.Unlock()
-		return m, nil
+		if len(m) > 0 {
+			this.mutex.Lock()
+			this.gen[rid] = m
+			this.mutex.Unlock()
+			return m, nil
+		}else{
+			return nil, errors.New(fmt.Sprintf("rid: %d general not fount", rid))
+		}
 	}else{
 		return nil, err
 	}
@@ -48,27 +54,26 @@ func (this* GeneralMgr) GetAndTryCreate(rid int) ([]*model.General, error){
 	if err == nil {
 		return r, nil
 	}else{
-		if _, err:= RCMgr.Get(rid); err == nil {
-			//创建
-			gs := make([]*model.General, 0)
-			for _, v := range general.General.List {
-				r := &model.General{RId: rid, Name: v.Name, CfgId: v.CfgId,
-					Force: v.Force, Strategy: v.Strategy, Defense: v.Defense,
-					Speed: v.Speed, Cost: v.Cost, ArmyId: -1, CityId: -1,
-					CreatedAt: time.Now(),
-				}
-				gs = append(gs, r)
-			}
+		//创建
+		gs := make([]*model.General, 0)
+		sess := db.MasterDB.NewSession()
+		sess.Begin()
 
-			if _, e := db.MasterDB.Table(model.General{}).Insert(&gs); e!=nil {
-				log.DefaultLog.Warn("db error", zap.Error(e))
-				return nil, e
-			}else{
-				return gs, nil
+		for _, v := range general.General.List {
+			r := &model.General{RId: rid, Name: v.Name, CfgId: v.CfgId,
+				Force: v.Force, Strategy: v.Strategy, Defense: v.Defense,
+				Speed: v.Speed, Cost: v.Cost, ArmyId: -1, CityId: -1,
+				CreatedAt: time.Now(),
 			}
-		}else{
-			log.DefaultLog.Warn("db error", zap.Error(err))
-			return nil, err
+			gs = append(gs, r)
+
+			if _, err := db.MasterDB.Table(model.General{}).Insert(r); err != nil {
+				sess.Rollback()
+				log.DefaultLog.Warn("db error", zap.Error(err))
+				return nil, err
+			}
 		}
+		sess.Commit()
+		return gs, nil
 	}
 }

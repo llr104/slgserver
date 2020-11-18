@@ -13,8 +13,8 @@ type General struct {
 	Speed     int       `json:"speed"`
 	Destroy   int       `json:"destroy"`
 	Cost      int       `json:"cost"`
-	ArmyId    int       `json:"armyId"`
-	CityId    int       `json:"cityId"`
+	ArmyId    int       `json:"armyId" xorm:"armyId"`
+	CityId    int       `json:"cityId" xorm:"cityId"`
 	CreatedAt time.Time `json:"created_at"`
 }
 

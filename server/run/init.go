@@ -32,4 +32,5 @@ func initRouter() {
 	controller.DefaultRole.InitRouter(MyRouter)
 	controller.DefaultMap.InitRouter(MyRouter)
 	controller.DefaultCity.InitRouter(MyRouter)
+	controller.DefaultGeneral.InitRouter(MyRouter)
 }
