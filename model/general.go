@@ -14,6 +14,7 @@ type General struct {
 	Destroy   	int     	`json:"destroy"`
 	Level		int8     	`json:"level"`
 	Cost      	int     	`json:"cost"`
+	Exp      	int     	`json:"exp"`
 	Order     	int8     	`json:"order" xorm:"order"`
 	CityId    	int     	`json:"cityId" xorm:"cityId"`
 	CreatedAt 	time.Time	`json:"created_at"`

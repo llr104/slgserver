@@ -55,6 +55,7 @@ func (this*General) myGenerals(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 			rspObj.Generals[i].CfgId = v.CfgId
 			rspObj.Generals[i].Destroy = v.Destroy
 			rspObj.Generals[i].Level = v.Level
+			rspObj.Generals[i].Exp = v.Exp
 		}
 	}else{
 		rsp.Body.Code = constant.DBError

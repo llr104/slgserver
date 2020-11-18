@@ -149,6 +149,7 @@ CREATE TABLE IF NOT EXISTS `general` (
    `speed` int unsigned NOT NULL COMMENT '速度',
    `destroy` int unsigned NOT NULL COMMENT '破坏',
    `cost` int unsigned NOT NULL COMMENT 'cost',
+   `exp` int unsigned NOT NULL COMMENT '经验',
    `order` tinyint NOT NULL COMMENT '第几队',
    `level` tinyint unsigned NOT NULL DEFAULT 1 COMMENT 'level',
    `cityId` int NOT NULL DEFAULT 0 COMMENT '城市id',
