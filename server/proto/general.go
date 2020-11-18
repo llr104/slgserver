@@ -25,6 +25,16 @@ type MyGeneralRsp struct {
 }
 
 
+type ArmyListReq struct {
+	CityId	int  `json:"cityId"`
+}
+
+type ArmyListRsp struct {
+	CityId	int  	`json:"cityId"`
+	Armys	[]Army	`json:"armys"`
+}
+
+
 type Army struct {
 	Id               int  `json:"id"`
 	CityId           int  `json:"cityId"`

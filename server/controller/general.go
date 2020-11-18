@@ -26,6 +26,7 @@ func (this*General) InitRouter(r *net.Router) {
 
 	g.AddRouter("myGenerals", this.myGenerals)
 	g.AddRouter("dispose", this.dispose)
+	g.AddRouter("armyList", this.armyList)
 
 }
 
@@ -59,6 +60,43 @@ func (this*General) myGenerals(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		}
 	}else{
 		rsp.Body.Code = constant.DBError
+	}
+}
+
+//队伍列表
+func (this*General) armyList(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+	reqObj := &proto.ArmyListReq{}
+	rspObj := &proto.ArmyListRsp{}
+	mapstructure.Decode(req.Body.Msg, reqObj)
+	rsp.Body.Msg = rspObj
+	rsp.Body.Code = constant.OK
+
+	r, _ := req.Conn.GetProperty("role")
+	role := r.(*model.Role)
+	city,err := entity.RCMgr.Get(reqObj.CityId)
+	if err != nil{
+		rsp.Body.Code = constant.CityNotExist
+		return
+	}
+
+	if city.RId != role.RId {
+		rsp.Body.Code = constant.CityNotMe
+		return
+	}
+
+	as, _ := entity.AMgr.GetByCity(reqObj.CityId)
+	rspObj.Armys = make([]proto.Army, len(as))
+	for i, v := range as {
+		rspObj.Armys[i].Id = v.Id
+		rspObj.Armys[i].Order = v.Order
+		rspObj.Armys[i].CityId = v.CityId
+		rspObj.Armys[i].FirstId = v.FirstId
+		rspObj.Armys[i].SecondId = v.SecondId
+		rspObj.Armys[i].ThirdId = v.ThirdId
+		rspObj.Armys[i].FirstSoldierCnt = v.FirstSoldierCnt
+		rspObj.Armys[i].SecondSoldierCnt = v.SecondSoldierCnt
+		rspObj.Armys[i].ThirdSoldierCnt = v.ThirdSoldierCnt
+
 	}
 }
 

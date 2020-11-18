@@ -44,10 +44,33 @@ func (this* ArmyMgr) Get(aid int) (*model.Army, error){
 	}
 }
 
+func (this* ArmyMgr) GetByCity(cid int) ([]*model.Army, error){
+	this.mutex.RLock()
+	a,ok := this.armByCityId[cid]
+	this.mutex.RUnlock()
+	if ok {
+		return a, nil
+	}else{
+		m := make([]*model.Army, 0)
+		err := db.MasterDB.Table(model.Army{}).Where("cityId=?", cid).Find(&m)
+		if err!=nil{
+			log.DefaultLog.Warn("ArmyMgr GetByCity db error", zap.Int("cityId", cid))
+			return m, err
+		}else{
+			this.mutex.Lock()
+			this.armByCityId[cid] = m
+			this.mutex.Unlock()
+			return m, nil
+		}
+	}
+}
+
 func (this* ArmyMgr) GetOrCreate(rid int, cid int, order int8) (*model.Army, error){
 
 	this.mutex.RLock()
 	armys, ok := this.armByCityId[cid]
+	this.mutex.RUnlock()
+
 	if ok {
 		for _, v := range armys {
 			if v.Order == order{
