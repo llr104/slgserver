@@ -190,6 +190,8 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		g.CityId = reqObj.CityId
 	}
 
+	a.NeedUpdate = true
+	
 	rspObj.Army.CityId = a.CityId
 	rspObj.Army.Id = a.Id
 	rspObj.Army.Order = a.Order

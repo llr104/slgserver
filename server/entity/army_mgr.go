@@ -6,18 +6,63 @@ import (
 	"slgserver/log"
 	"slgserver/model"
 	"sync"
+	"time"
 )
 
 type ArmyMgr struct {
 	mutex     sync.RWMutex
 	armyById  map[int]*model.Army
 	armByCityId map[int][]*model.Army
-
 }
 
 var AMgr = &ArmyMgr{
 	armyById: make(map[int]*model.Army),
 	armByCityId: make(map[int][]*model.Army),
+}
+
+func (this* ArmyMgr) Load() {
+	this.mutex.Lock()
+	defer this.mutex.Unlock()
+	db.MasterDB.Table(model.Army{}).Find(this.armyById)
+
+	for _, v := range this.armyById {
+		cid := v.CityId
+		c,ok:= this.armByCityId[cid]
+		if ok {
+			this.armByCityId[cid] = append(c, v)
+		}else{
+			this.armByCityId[cid] = make([]*model.Army, 0)
+			this.armByCityId[cid] = append(this.armByCityId[cid], v)
+		}
+	}
+	go this.toDatabase()
+}
+
+func (this* ArmyMgr) toDatabase() {
+	for true {
+		time.Sleep(5*time.Second)
+		this.mutex.RLock()
+		cnt :=0
+		for _, v := range this.armyById {
+			if v.NeedUpdate {
+				cnt+=1
+				_, err := db.MasterDB.Table(model.Army{}).Cols("firstId", "secondId", "thirdId",
+					"first_soldier_cnt", "second_soldier_cnt", "third_soldier_cnt").Update(v)
+				if err != nil{
+					log.DefaultLog.Warn("db error", zap.Error(err))
+				}else{
+					v.NeedUpdate = false
+				}
+			}
+
+			//一次最多更新20个
+			if cnt>20{
+				break
+			}
+		}
+
+		this.mutex.RUnlock()
+	}
 }
 
 func (this* ArmyMgr) Get(aid int) (*model.Army, error){

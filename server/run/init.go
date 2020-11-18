@@ -24,6 +24,7 @@ func Init() {
 	entity.RBMgr.Load()
 	entity.RFMgr.Load()
 	entity.RResMgr.Load()
+	entity.AMgr.Load()
 
 }
 
