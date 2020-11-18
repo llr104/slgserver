@@ -81,7 +81,7 @@ func (this* ArmyMgr) GetOrCreate(rid int, cid int, order int8) (*model.Army, err
 
 	//需要创建
 	a := &model.Army{RId: rid, Order: order, CityId: cid,
-		FirstId: -1, SecondId: -1, ThirdId: -1,
+		FirstId: 0, SecondId: 0, ThirdId: 0,
 		FirstSoldierCnt: 0, SecondSoldierCnt: 0, ThirdSoldierCnt: 0}
 	_, err := db.MasterDB.Insert(a)
 	if err == nil{
