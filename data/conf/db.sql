@@ -142,7 +142,7 @@ CREATE TABLE IF NOT EXISTS `general` (
    `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
    `rid` int unsigned NOT NULL COMMENT "rid",
    `name` varchar(100) NOT NULL COMMENT "名字",
-   `type` int unsigned NOT NULL,
+   `cfgId` int unsigned NOT NULL COMMENT "配置id",
    `force` int unsigned NOT NULL COMMENT '武力',
    `strategy` int unsigned NOT NULL COMMENT '策略',
    `defense` int unsigned NOT NULL COMMENT '防御',
@@ -151,6 +151,7 @@ CREATE TABLE IF NOT EXISTS `general` (
    `cost` int unsigned NOT NULL COMMENT 'cost',
    `armyId` tinyint NOT NULL DEFAULT -1 COMMENT '队伍编号',
    `cityId` int NOT NULL DEFAULT -1 COMMENT '城市id',
+   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
    PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '将领表';
 

@@ -3,7 +3,7 @@
   "list": [
     {
       "name": "张飞",
-      "type": 1,
+      "cfgId": 1,
       "force": 95,
       "strategy": 55,
       "defense": 90,
@@ -13,7 +13,7 @@
     },
     {
       "name": "关羽",
-      "type": 2,
+      "cfgId": 2,
       "force": 95,
       "strategy": 55,
       "defense": 90,
@@ -23,7 +23,7 @@
     },
     {
       "name": "赵云",
-      "type": 3,
+      "cfgId": 3,
       "force": 95,
       "strategy": 55,
       "defense": 90,
@@ -32,7 +32,7 @@
       "cost": 10
     },{
       "name": "黄忠",
-      "type": 4,
+      "cfgId": 4,
       "force": 95,
       "strategy": 55,
       "defense": 90,
@@ -41,7 +41,7 @@
       "cost": 10
     },{
       "name": "马超",
-      "type": 5,
+      "cfgId": 5,
       "force": 95,
       "strategy": 55,
       "defense": 90,
@@ -50,7 +50,7 @@
       "cost": 10
     },{
       "name": "许褚",
-      "type": 6,
+      "cfgId": 6,
       "force": 95,
       "strategy": 55,
       "defense": 90,
@@ -59,7 +59,7 @@
       "cost": 10
     },{
       "name": "张辽",
-      "type": 7,
+      "cfgId": 7,
       "force": 95,
       "strategy": 55,
       "defense": 90,
@@ -68,7 +68,7 @@
       "cost": 10
     },{
       "name": "夏侯惇",
-      "type": 8,
+      "cfgId": 8,
       "force": 95,
       "strategy": 55,
       "defense": 90,
@@ -77,7 +77,7 @@
       "cost": 10
     },{
       "name": "夏侯渊",
-      "type": 9,
+      "cfgId": 9,
       "force": 95,
       "strategy": 55,
       "defense": 90,
@@ -86,7 +86,7 @@
       "cost": 10
     },{
       "name": "张合",
-      "type": 10,
+      "cfgId": 10,
       "force": 95,
       "strategy": 55,
       "defense": 90,
@@ -95,7 +95,7 @@
       "cost": 10
     },{
       "name": "太史慈",
-      "type": 11,
+      "cfgId": 11,
       "force": 95,
       "strategy": 55,
       "defense": 90,
@@ -104,7 +104,7 @@
       "cost": 10
     },{
       "name": "周瑜",
-      "type": 12,
+      "cfgId": 12,
       "force": 95,
       "strategy": 55,
       "defense": 90,
@@ -113,7 +113,7 @@
       "cost": 10
     },{
       "name": "甘宁",
-      "type": 13,
+      "cfgId": 13,
       "force": 95,
       "strategy": 55,
       "defense": 90,
@@ -122,7 +122,7 @@
       "cost": 10
     },{
       "name": "周泰",
-      "type": 14,
+      "cfgId": 14,
       "force": 95,
       "strategy": 55,
       "defense": 90,
@@ -131,7 +131,7 @@
       "cost": 10
     },{
       "name": "黄盖",
-      "type": 15,
+      "cfgId": 15,
       "force": 95,
       "strategy": 55,
       "defense": 90,
@@ -140,7 +140,7 @@
       "cost": 10
     },{
       "name": "孙策",
-      "type": 16,
+      "cfgId": 16,
       "force": 95,
       "strategy": 55,
       "defense": 90,
