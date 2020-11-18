@@ -59,9 +59,34 @@ func (this* GeneralMgr) FindGeneral(gid int) (*model.General, error){
 	if ok {
 		return g, nil
 	}else{
-		str := fmt.Sprintf("general %d not found", gid)
-		log.DefaultLog.Warn(str, zap.Int("gid", gid))
-		return nil, errors.New(str)
+
+		m := &model.General{}
+		r, err := db.MasterDB.Table(new(model.General)).Where("id=?", gid).Get(m)
+		if err == nil{
+			if r {
+				this.mutex.Lock()
+				this.genByGId[m.Id] = m
+
+				if rg,ok := this.genByRole[m.RId];ok{
+					this.genByRole[m.RId] = append(rg, m)
+				}else{
+					this.genByRole[m.RId] = make([]*model.General, 0)
+					this.genByRole[m.RId] = append(this.genByRole[m.RId], m)
+				}
+
+				this.mutex.Unlock()
+				return m, nil
+			}else{
+				str := fmt.Sprintf("general %d not found", gid)
+				log.DefaultLog.Warn(str, zap.Int("gid", gid))
+				return nil, errors.New(str)
+			}
+
+		}else{
+			str := fmt.Sprintf("general %d not found", gid)
+			log.DefaultLog.Warn(str, zap.Int("gid", gid))
+			return nil, errors.New(str)
+		}
 	}
 }
 

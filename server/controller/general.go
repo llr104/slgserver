@@ -147,8 +147,8 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 	//配置逻辑
 	if reqObj.Position == 0{
-		if a.ThirdId == g.Id{
-			a.ThirdId = 0
+		if a.FirstId == g.Id{
+			a.FirstId = 0
 			a.FirstSoldierCnt = 0
 		}else if a.SecondId == g.Id{
 			a.SecondId = 0
@@ -191,7 +191,7 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	}
 
 	a.NeedUpdate = true
-	
+
 	rspObj.Army.CityId = a.CityId
 	rspObj.Army.Id = a.Id
 	rspObj.Army.Order = a.Order
