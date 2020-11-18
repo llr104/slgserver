@@ -138,3 +138,19 @@ CREATE TABLE IF NOT EXISTS `role_res` (
    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '角色资源表';
 
+CREATE TABLE IF NOT EXISTS `general` (
+   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+   `rid` int unsigned NOT NULL COMMENT "rid",
+   `name` varchar(100) NOT NULL COMMENT "名字",
+   `type` int unsigned NOT NULL,
+   `force` int unsigned NOT NULL COMMENT '武力',
+   `strategy` int unsigned NOT NULL COMMENT '策略',
+   `defense` int unsigned NOT NULL COMMENT '防御',
+   `speed` int unsigned NOT NULL COMMENT '速度',
+   `destroy` int unsigned NOT NULL COMMENT '破坏',
+   `cost` int unsigned NOT NULL COMMENT 'cost',
+   `armyId` tinyint NOT NULL DEFAULT -1 COMMENT '队伍编号',
+   `cityId` int NOT NULL DEFAULT -1 COMMENT '城市id',
+   PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '将领表';
+

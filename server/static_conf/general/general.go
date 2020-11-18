@@ -14,13 +14,14 @@ import (
 var General general
 
 type g struct {
-	Name		string `json:"name"`
-	Force		int    `json:"force"`
-	Strategy	int    `json:"strategy"`
-	Defense		int    `json:"defense"`
-	Speed		int    `json:"speed"`
-	TakeApart	int    `json:"take_apart"`
-	Cost		int    `json:"cost"`
+	Name     string `json:"name"`
+	Type     int    `json:"type"`
+	Force    int    `json:"force"`
+	Strategy int    `json:"strategy"`
+	Defense  int    `json:"defense"`
+	Speed    int    `json:"speed"`
+	destroy  int    `json:"destroy"`
+	Cost     int    `json:"cost"`
 }
 
 type general struct {

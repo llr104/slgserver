@@ -50,9 +50,10 @@ func (this* RoleBuildMgr) IsEmpty(x, y int) bool {
 }
 
 func (this* RoleBuildMgr) Scan(x, y int) []*model.MapRoleBuild {
-	if x >= 0 && x < MapWith && y >= 0 && y < MapHeight {
+	if x < 0 || x >= MapWith || y < 0 || y >= MapHeight {
 		return nil
 	}
+
 
 	this.mutex.RLock()
 	defer this.mutex.RUnlock()
@@ -65,7 +66,7 @@ func (this* RoleBuildMgr) Scan(x, y int) []*model.MapRoleBuild {
 	rb := make([]*model.MapRoleBuild, 0)
 	for i := minX; i <= maxX; i++ {
 		for j := minY; j <= maxY; j++ {
-			posId := i*ScanWith+j
+			posId := i+MapWith*j
 			v, ok := this.posRB[posId]
 			if ok {
 				rb = append(rb, v)
@@ -77,20 +78,21 @@ func (this* RoleBuildMgr) Scan(x, y int) []*model.MapRoleBuild {
 }
 
 func (this* RoleBuildMgr) ScanBlock(x, y, length int) []*model.MapRoleBuild {
-	if x >= 0 && x < MapWith && y >= 0 && y < MapHeight {
+	if x < 0 || x >= MapWith || y < 0 || y >= MapHeight {
 		return nil
 	}
+
 
 	this.mutex.RLock()
 	defer this.mutex.RUnlock()
 
-	maxX := util.MaxInt(MapWith, x+length)
+	maxX := util.MinInt(MapWith, x+length)
 	maxY := util.MinInt(MapHeight, y+length)
 
 	rb := make([]*model.MapRoleBuild, 0)
 	for i := x; i <= maxX; i++ {
 		for j := y; j <= maxY; j++ {
-			posId := i*ScanWith+j
+			posId := i+MapWith*j
 			v, ok := this.posRB[posId]
 			if ok {
 				rb = append(rb, v)

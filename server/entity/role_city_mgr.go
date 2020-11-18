@@ -32,7 +32,7 @@ func (this* RoleCityMgr) Load() {
 
 	//转成posCity
 	for _, v := range this.dbCity {
-		posId := v.X*MapWith+v.Y
+		posId := v.X+MapWith*v.Y
 		this.posCity[posId] = v
 	}
 }
@@ -52,10 +52,14 @@ func (this* RoleCityMgr) Add(city *model.MapRoleCity) {
 	this.mutex.Lock()
 	defer this.mutex.Unlock()
 	this.dbCity[city.CityId] = city
-	this.posCity[city.X*MapWith+city.Y] = city
+	this.posCity[city.X+MapWith*city.Y] = city
 }
 
 func (this* RoleCityMgr) Scan(x, y int) []*model.MapRoleCity {
+	if x < 0 || x >= MapWith || y < 0 || y >= MapHeight {
+		return nil
+	}
+
 	this.mutex.RLock()
 	defer this.mutex.RUnlock()
 
@@ -67,7 +71,7 @@ func (this* RoleCityMgr) Scan(x, y int) []*model.MapRoleCity {
 	cb := make([]*model.MapRoleCity, 0)
 	for i := minX; i <= maxX; i++ {
 		for j := minY; j <= maxY; j++ {
-			posId := i*ScanWith+j
+			posId := i+MapWith*j
 			v, ok := this.posCity[posId]
 			if ok {
 				cb = append(cb, v)
@@ -78,20 +82,20 @@ func (this* RoleCityMgr) Scan(x, y int) []*model.MapRoleCity {
 }
 
 func (this* RoleCityMgr) ScanBlock(x, y, length int) []*model.MapRoleCity {
-	if x >= 0 && x < MapWith && y >= 0 && y < MapHeight {
+	if x < 0 || x >= MapWith || y < 0 || y >= MapHeight {
 		return nil
 	}
 
 	this.mutex.RLock()
 	defer this.mutex.RUnlock()
 
-	maxX := util.MaxInt(MapWith, x+length)
+	maxX := util.MinInt(MapWith, x+length)
 	maxY := util.MinInt(MapHeight, y+length)
 
 	cb := make([]*model.MapRoleCity, 0)
 	for i := x; i <= maxX; i++ {
 		for j := y; j <= maxY; j++ {
-			posId := i*ScanWith+j
+			posId := i+MapWith*j
 			v, ok := this.posCity[posId]
 			if ok {
 				cb = append(cb, v)

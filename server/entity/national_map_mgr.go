@@ -114,7 +114,7 @@ func (this* NationalMapMgr) Scan(x, y int) []model.NationalMap {
 	index := 0
 	for i := minX; i <= maxX; i++ {
 		for j := minY; j <= maxY; j++ {
-			v, ok := this.conf[i*ScanWith+j]
+			v, ok := this.conf[i+MapWith*j]
 			if ok {
 				r[index] = v
 			}
