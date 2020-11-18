@@ -1,12 +1,9 @@
-package model
-
-import "time"
+package proto
 
 type General struct {
-	Id        int       `json:"id" xorm:"id pk autoincr"`
-	RId       int       `json:"rid" xorm:"rid"`
+	Id        int       `json:"id"`
 	Name      string    `json:"name"`
-	CfgId     int       `json:"cfgId" xorm:"cfgId"`
+	CfgId     int		`json:"cfgId"`
 	Force     int       `json:"force"`
 	Strategy  int       `json:"strategy"`
 	Defense   int       `json:"defense"`
@@ -15,10 +12,12 @@ type General struct {
 	Cost      int       `json:"cost"`
 	ArmyId    int       `json:"armyId"`
 	CityId    int       `json:"cityId"`
-	CreatedAt time.Time `json:"created_at"`
 }
 
-func (this *General) TableName() string {
-	return "general"
+type MyGeneralReq struct {
+
 }
 
+type MyGeneralRsp struct {
+	Generals []General `json:"generals"`
+}

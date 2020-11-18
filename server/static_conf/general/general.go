@@ -15,7 +15,7 @@ var General general
 
 type g struct {
 	Name     string `json:"name"`
-	Type     int    `json:"type"`
+	CfgId    int    `json:"cfgId"`
 	Force    int    `json:"force"`
 	Strategy int    `json:"strategy"`
 	Defense  int    `json:"defense"`
