@@ -5,6 +5,17 @@ import (
 	"slgserver/server/proto"
 )
 
+func Role(m *model.Role, p *proto.Role)  {
+	p.UId = m.UId
+	p.SId = m.SId
+	p.RId = m.RId
+	p.Sex = m.Sex
+	p.NickName = m.NickName
+	p.HeadId = m.HeadId
+	p.Balance = m.Balance
+	p.Profile = m.Profile
+}
+
 func RRes(m *model.RoleRes, p *proto.RoleRes) {
 	p.Gold = m.Gold
 	p.Grain = m.Grain
@@ -19,6 +30,31 @@ func RRes(m *model.RoleRes, p *proto.RoleRes) {
 	p.WoodYield = m.WoodYield
 	p.DepotCapacity = m.DepotCapacity
 }
+
+func MRBuild(m *model.MapRoleBuild, p *proto.MapRoleBuild)  {
+	p.X = m.X
+	p.Y = m.Y
+	p.Type = m.Type
+	p.CurDurable = m.CurDurable
+	p.MaxDurable = m.MaxDurable
+	p.Level = m.Level
+	p.RId = m.RId
+	p.Name = m.Name
+	p.Defender = m.Defender
+}
+
+func MCBuild(m *model.MapRoleCity, p *proto.MapRoleCity)  {
+	p.X = m.X
+	p.Y = m.Y
+	p.CityId = m.CityId
+	p.CurDurable = m.CurDurable
+	p.MaxDurable = m.MaxDurable
+	p.Level = m.Level
+	p.RId = m.RId
+	p.Name = m.Name
+	p.IsMain = m.IsMain == 1
+}
+
 
 func Army(m *model.Army, p *proto.Army)  {
 	p.CityId = m.CityId

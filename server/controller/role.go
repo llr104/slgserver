@@ -83,19 +83,12 @@ func (this*Role) roleList(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	uid, _ := req.Conn.GetProperty("uid")
 	uid = uid.(int)
 
-	r := make([]model.Role, 0)
+	r := make([]*model.Role, 0)
 	err := db.MasterDB.Table(r).Where("uid=?", uid).Find(&r)
 	if err == nil{
 		rl := make([]proto.Role, len(r))
 		for i, d := range r {
-			rl[i].UId = d.UId
-			rl[i].SId = d.SId
-			rl[i].RId = d.RId
-			rl[i].Sex = d.Sex
-			rl[i].NickName = d.NickName
-			rl[i].HeadId = d.HeadId
-			rl[i].Balance = d.Balance
-			rl[i].Profile = d.Profile
+			model_to_proto.Role(d, &rl[i])
 		}
 		rspObj.Roles = rl
 		rsp.Body.Code = constant.OK
@@ -124,14 +117,7 @@ func (this*Role) enterServer(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	}
 	if b {
 		rsp.Body.Code = constant.OK
-		rspObj.Role.UId = role.UId
-		rspObj.Role.SId = role.SId
-		rspObj.Role.RId = role.RId
-		rspObj.Role.Sex = role.Sex
-		rspObj.Role.NickName = role.NickName
-		rspObj.Role.HeadId = role.HeadId
-		rspObj.Role.Balance = role.Balance
-		rspObj.Role.Profile = role.Profile
+		model_to_proto.Role(role, &rspObj.Role)
 
 		req.Conn.SetProperty("sid", role.SId)
 		req.Conn.SetProperty("role", role)
@@ -174,7 +160,7 @@ func (this*Role) myCity(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 	r, _ := req.Conn.GetProperty("role")
 	role, _ := r.(*model.Role)
-	citys := make([]model.MapRoleCity, 0)
+	citys := make([]*model.MapRoleCity, 0)
 	//查询是否有城市
 	db.MasterDB.Table(new(model.MapRoleCity)).Where("rid=?", role.RId).Find(&citys)
 	if len(citys) == 0 {
@@ -192,7 +178,7 @@ func (this*Role) myCity(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 				if err != nil{
 					rsp.Body.Code = constant.DBError
 				}else{
-					citys = append(citys, *c)
+					citys = append(citys, c)
 					//更新城市缓存
 					entity.RCMgr.Add(c)
 				}
@@ -207,15 +193,7 @@ func (this*Role) myCity(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	//赋值发送
 	rspObj.Citys = make([]proto.MapRoleCity, len(citys))
 	for i, v := range citys {
-		rspObj.Citys[i].CityId = v.CityId
-		rspObj.Citys[i].RId = v.RId
-		rspObj.Citys[i].X = v.X
-		rspObj.Citys[i].Y = v.Y
-		rspObj.Citys[i].Level = v.Level
-		rspObj.Citys[i].IsMain = v.IsMain!=0
-		rspObj.Citys[i].Name = v.Name
-		rspObj.Citys[i].CurDurable = v.CurDurable
-		rspObj.Citys[i].MaxDurable = v.MaxDurable
+		model_to_proto.MCBuild(v, &rspObj.Citys[i])
 	}
 }
 

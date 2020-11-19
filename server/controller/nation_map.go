@@ -6,6 +6,7 @@ import (
 	"slgserver/net"
 	"slgserver/server/entity"
 	"slgserver/server/middleware"
+	"slgserver/server/model_to_proto"
 	"slgserver/server/proto"
 )
 
@@ -70,31 +71,14 @@ func (this*NationMap) scan(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		if err == nil {
 			name = vRole.NickName
 		}
-
-		rspObj.MRBuilds[i].X = v.X
-		rspObj.MRBuilds[i].Y = v.Y
-		rspObj.MRBuilds[i].Type = v.Type
-		rspObj.MRBuilds[i].CurDurable = v.CurDurable
-		rspObj.MRBuilds[i].MaxDurable = v.MaxDurable
-		rspObj.MRBuilds[i].Level = v.Level
-		rspObj.MRBuilds[i].RId = v.RId
-		rspObj.MRBuilds[i].Name = v.Name
-		rspObj.MRBuilds[i].Defender = v.Defender
+		model_to_proto.MRBuild(v, &rspObj.MRBuilds[i])
 		rspObj.MRBuilds[i].RNick = name
 	}
 
 	cb := entity.RCMgr.Scan(x, y)
 	rspObj.MCBuilds = make([]proto.MapRoleCity, len(cb))
 	for i, v := range cb {
-		rspObj.MCBuilds[i].X = v.X
-		rspObj.MCBuilds[i].Y = v.Y
-		rspObj.MCBuilds[i].CityId = v.CityId
-		rspObj.MCBuilds[i].CurDurable = v.CurDurable
-		rspObj.MCBuilds[i].MaxDurable = v.MaxDurable
-		rspObj.MCBuilds[i].Level = v.Level
-		rspObj.MCBuilds[i].RId = v.RId
-		rspObj.MCBuilds[i].Name = v.Name
-		rspObj.MCBuilds[i].IsMain = v.IsMain == 1
+		model_to_proto.MCBuild(v, &rspObj.MCBuilds[i])
 	}
 }
 
@@ -117,30 +101,14 @@ func (this*NationMap) scanBlock(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 			name = vRole.NickName
 		}
 
-		rspObj.MRBuilds[i].X = v.X
-		rspObj.MRBuilds[i].Y = v.Y
-		rspObj.MRBuilds[i].Type = v.Type
-		rspObj.MRBuilds[i].CurDurable = v.CurDurable
-		rspObj.MRBuilds[i].MaxDurable = v.MaxDurable
-		rspObj.MRBuilds[i].Level = v.Level
-		rspObj.MRBuilds[i].RId = v.RId
-		rspObj.MRBuilds[i].Name = v.Name
-		rspObj.MRBuilds[i].Defender = v.Defender
+		model_to_proto.MRBuild(v, &rspObj.MRBuilds[i])
 		rspObj.MRBuilds[i].RNick = name
 	}
 
 	cb := entity.RCMgr.ScanBlock(x, y, reqObj.Length)
 	rspObj.MCBuilds = make([]proto.MapRoleCity, len(cb))
 	for i, v := range cb {
-		rspObj.MCBuilds[i].X = v.X
-		rspObj.MCBuilds[i].Y = v.Y
-		rspObj.MCBuilds[i].CityId = v.CityId
-		rspObj.MCBuilds[i].CurDurable = v.CurDurable
-		rspObj.MCBuilds[i].MaxDurable = v.MaxDurable
-		rspObj.MCBuilds[i].Level = v.Level
-		rspObj.MCBuilds[i].RId = v.RId
-		rspObj.MCBuilds[i].Name = v.Name
-		rspObj.MCBuilds[i].IsMain = v.IsMain == 1
+		model_to_proto.MCBuild(v, &rspObj.MCBuilds[i])
 	}
 }
 
