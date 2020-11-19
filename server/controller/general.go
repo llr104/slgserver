@@ -70,6 +70,7 @@ func (this*General) armyList(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	mapstructure.Decode(req.Body.Msg, reqObj)
 	rsp.Body.Msg = rspObj
 	rsp.Body.Code = constant.OK
+	rspObj.CityId = reqObj.CityId
 
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)

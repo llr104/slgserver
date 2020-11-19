@@ -1,0 +1,10 @@
+{
+  "conscript": {
+    "des": "每征一个兵需要消耗的资源",
+    "cost_wood":10,
+    "cost_iron":10,
+    "cost_stone":0,
+    "cost_grain":10,
+    "cost_gold":1
+  }
+}

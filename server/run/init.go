@@ -5,6 +5,7 @@ import (
 	"slgserver/net"
 	"slgserver/server/controller"
 	"slgserver/server/entity"
+	"slgserver/server/static_conf"
 	"slgserver/server/static_conf/facility"
 	"slgserver/server/static_conf/general"
 )
@@ -17,6 +18,7 @@ func Init() {
 
 	facility.FConf.Load()
 	general.GenBasic.Load()
+	static_conf.Basic.Load()
 
 	entity.BCMgr.Load()
 	entity.NMMgr.Load()
