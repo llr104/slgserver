@@ -11,6 +11,7 @@ import (
 	"slgserver/net"
 	"slgserver/server/entity"
 	"slgserver/server/middleware"
+	"slgserver/server/model_to_proto"
 	"slgserver/server/proto"
 	"time"
 )
@@ -152,18 +153,7 @@ func (this*Role) enterServer(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 		if e == nil {
 			entity.RResMgr.Add(roleRes)
-			rspObj.RoleRes.Gold = roleRes.Gold
-			rspObj.RoleRes.Grain = roleRes.Grain
-			rspObj.RoleRes.Stone = roleRes.Stone
-			rspObj.RoleRes.Iron = roleRes.Iron
-			rspObj.RoleRes.Wood = roleRes.Wood
-			rspObj.RoleRes.Decree = roleRes.Decree
-			rspObj.RoleRes.GoldYield = roleRes.GoldYield
-			rspObj.RoleRes.GrainYield = roleRes.GrainYield
-			rspObj.RoleRes.StoneYield = roleRes.StoneYield
-			rspObj.RoleRes.IronYield = roleRes.IronYield
-			rspObj.RoleRes.WoodYield = roleRes.WoodYield
-			rspObj.RoleRes.DepotCapacity = roleRes.DepotCapacity
+			model_to_proto.RRes(roleRes, &rspObj.RoleRes)
 			rsp.Body.Code = constant.OK
 		}else{
 			rsp.Body.Code = constant.DBError
@@ -246,18 +236,7 @@ func (this*Role) myRoleRes(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		rsp.Body.Code = constant.RoleNotExist
 		return
 	}else{
-		rspObj.RoleRes.Gold = roleRes.Gold
-		rspObj.RoleRes.Grain = roleRes.Grain
-		rspObj.RoleRes.Stone = roleRes.Stone
-		rspObj.RoleRes.Iron = roleRes.Iron
-		rspObj.RoleRes.Wood = roleRes.Wood
-		rspObj.RoleRes.Decree = roleRes.Decree
-		rspObj.RoleRes.GoldYield = roleRes.GoldYield
-		rspObj.RoleRes.GrainYield = roleRes.GrainYield
-		rspObj.RoleRes.StoneYield = roleRes.StoneYield
-		rspObj.RoleRes.IronYield = roleRes.IronYield
-		rspObj.RoleRes.WoodYield = roleRes.WoodYield
-		rspObj.RoleRes.DepotCapacity = roleRes.DepotCapacity
+		model_to_proto.RRes(roleRes, &rspObj.RoleRes)
 		rsp.Body.Code = constant.OK
 	}
 }

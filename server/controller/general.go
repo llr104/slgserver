@@ -7,6 +7,7 @@ import (
 	"slgserver/net"
 	"slgserver/server/entity"
 	"slgserver/server/middleware"
+	"slgserver/server/model_to_proto"
 	"slgserver/server/proto"
 	"slgserver/server/static_conf"
 	"slgserver/server/static_conf/facility"
@@ -202,6 +203,7 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 	army.NeedUpdate = true
 
+	//队伍
 	rspObj.Army.CityId = army.CityId
 	rspObj.Army.Id = army.Id
 	rspObj.Army.Order = army.Order
@@ -273,6 +275,7 @@ func (this*General) conscript(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		army.ThirdSoldierCnt += reqObj.ThirdCnt
 		army.NeedUpdate = true
 
+		//队伍
 		rspObj.Army.CityId = army.CityId
 		rspObj.Army.Id = army.Id
 		rspObj.Army.Order = army.Order
@@ -282,6 +285,11 @@ func (this*General) conscript(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		rspObj.Army.FirstSoldierCnt = army.FirstSoldierCnt
 		rspObj.Army.SecondSoldierCnt = army.SecondSoldierCnt
 		rspObj.Army.ThirdSoldierCnt = army.ThirdSoldierCnt
+
+		//资源
+		if rRes, err := entity.RResMgr.Get(role.RId); err == nil {
+			model_to_proto.RRes(rRes, &rspObj.RoleRes)
+		}
 
 		rsp.Body.Code = constant.OK
 	}else{

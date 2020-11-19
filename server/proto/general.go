@@ -69,4 +69,5 @@ type ConscriptReq struct {
 
 type ConscriptRsp struct {
 	Army	Army	`json:"army"`
+	RoleRes	RoleRes	`json:"role_res"`
 }

@@ -8,6 +8,7 @@ import (
 	"slgserver/net"
 	"slgserver/server/entity"
 	"slgserver/server/middleware"
+	"slgserver/server/model_to_proto"
 	"slgserver/server/proto"
 )
 
@@ -102,18 +103,7 @@ func (this*City) upFacility(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		rspObj.Facility.Name = out.Name
 
 		if roleRes, err:= entity.RResMgr.Get(role.RId); err == nil {
-			rspObj.RoleRes.Gold = roleRes.Gold
-			rspObj.RoleRes.Grain = roleRes.Grain
-			rspObj.RoleRes.Stone = roleRes.Stone
-			rspObj.RoleRes.Iron = roleRes.Iron
-			rspObj.RoleRes.Wood = roleRes.Wood
-			rspObj.RoleRes.Decree = roleRes.Decree
-			rspObj.RoleRes.GoldYield = roleRes.GoldYield
-			rspObj.RoleRes.GrainYield = roleRes.GrainYield
-			rspObj.RoleRes.StoneYield = roleRes.StoneYield
-			rspObj.RoleRes.IronYield = roleRes.IronYield
-			rspObj.RoleRes.WoodYield = roleRes.WoodYield
-			rspObj.RoleRes.DepotCapacity = roleRes.DepotCapacity
+			model_to_proto.RRes(roleRes, &rspObj.RoleRes)
 		}
 	}
 
