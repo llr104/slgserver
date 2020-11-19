@@ -26,7 +26,6 @@ var AMgr = &ArmyMgr{
 
 func (this* ArmyMgr) Load() {
 	this.mutex.Lock()
-	defer this.mutex.Unlock()
 	db.MasterDB.Table(model.Army{}).Find(this.armyById)
 
 	for _, v := range this.armyById {
@@ -39,11 +38,14 @@ func (this* ArmyMgr) Load() {
 			this.armyByCityId[cid] = append(this.armyByCityId[cid], v)
 		}
 	}
+
+	this.mutex.Unlock()
+
 	go this.toDatabase()
 }
 
 func (this* ArmyMgr) updateOne(army* model.Army)  {
-	this.mutex.Lock()
+
 	aid := army.Id
 	cid := army.CityId
 
@@ -52,7 +54,7 @@ func (this* ArmyMgr) updateOne(army* model.Army)  {
 		this.armyByCityId[cid] = make([]*model.Army, 0)
 	}
 	this.armyByCityId[cid] = append(this.armyByCityId[cid], army)
-	this.mutex.Unlock()
+
 }
 
 func (this* ArmyMgr) updateOneMutil(armys[] *model.Army)  {
@@ -65,7 +67,7 @@ func (this* ArmyMgr) updateOneMutil(armys[] *model.Army)  {
 func (this* ArmyMgr) PushAction(army *model.Army)  {
 	this.mutex.Lock()
 	this.pushAction(army)
-	defer this.mutex.Unlock()
+	this.mutex.Unlock()
 }
 
 func (this* ArmyMgr) pushAction(army *model.Army) {
