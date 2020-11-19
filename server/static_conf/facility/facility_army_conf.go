@@ -16,9 +16,9 @@ import (
 var FARMY facilityArmyConf
 
 type armyLevel struct {
-	Level int8         `json:"level"`
-	Rate  int          `json:"rate"`
-	Need  LevelNeedRes `json:"need"`
+	Level int8    `json:"level"`
+	Rate  int     `json:"rate"`
+	Need  NeedRes `json:"need"`
 }
 
 type army struct {
@@ -79,7 +79,7 @@ func (this *facilityArmyConf) MaxLevel(fType int8) int8 {
 	}
 }
 
-func (this *facilityArmyConf) Need(fType int8, level int) (*LevelNeedRes, error)  {
+func (this *facilityArmyConf) Need(fType int8, level int) (*NeedRes, error)  {
 	if this.JFY.Type == fType{
 		if len(this.JFY.Levels) >= level{
 			return &this.JFY.Levels[level-1].Need, nil

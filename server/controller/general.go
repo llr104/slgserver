@@ -8,6 +8,9 @@ import (
 	"slgserver/server/entity"
 	"slgserver/server/middleware"
 	"slgserver/server/proto"
+	"slgserver/server/static_conf"
+	"slgserver/server/static_conf/facility"
+	"slgserver/server/static_conf/general"
 )
 
 var DefaultGeneral = General{
@@ -27,6 +30,7 @@ func (this*General) InitRouter(r *net.Router) {
 	g.AddRouter("myGenerals", this.myGenerals)
 	g.AddRouter("dispose", this.dispose)
 	g.AddRouter("armyList", this.armyList)
+	g.AddRouter("conscript", this.conscript)
 
 }
 
@@ -140,7 +144,7 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	a, err := entity.AMgr.GetOrCreate(role.RId, reqObj.CityId, reqObj.Order)
+	army, err := entity.AMgr.GetOrCreate(role.RId, reqObj.CityId, reqObj.Order)
 	if err != nil{
 		rsp.Body.Code = constant.DBError
 		return
@@ -148,58 +152,146 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 	//配置逻辑
 	if reqObj.Position == 0{
-		if a.FirstId == g.Id{
-			a.FirstId = 0
-			a.FirstSoldierCnt = 0
-		}else if a.SecondId == g.Id{
-			a.SecondId = 0
-			a.SecondSoldierCnt = 0
-		}else if a.ThirdId == g.Id{
-			a.ThirdId = 0
-			a.ThirdSoldierCnt = 0
+		if army.FirstId == g.Id{
+			army.FirstId = 0
+			army.FirstSoldierCnt = 0
+		}else if army.SecondId == g.Id{
+			army.SecondId = 0
+			army.SecondSoldierCnt = 0
+		}else if army.ThirdId == g.Id{
+			army.ThirdId = 0
+			army.ThirdSoldierCnt = 0
 		}
 		g.Order = 0
 		g.CityId = 0
 	}else{
 		if reqObj.Position == 1 {
 			//旧的下阵
-			if oldG, err := entity.GMgr.FindGeneral(a.ThirdId); err==nil{
+			if oldG, err := entity.GMgr.FindGeneral(army.ThirdId); err==nil{
 				oldG.CityId = 0
 				oldG.Order = 0
 			}
-			a.FirstSoldierCnt = 0
-			a.FirstId = g.Id
+			army.FirstSoldierCnt = 0
+			army.FirstId = g.Id
 		}else if reqObj.Position == 2 {
 			//旧的下阵
-			if oldG, err := entity.GMgr.FindGeneral(a.SecondId); err==nil{
+			if oldG, err := entity.GMgr.FindGeneral(army.SecondId); err==nil{
 				oldG.CityId = 0
 				oldG.Order = 0
 			}
-			a.SecondSoldierCnt = 0
-			a.SecondId = g.Id
+			army.SecondSoldierCnt = 0
+			army.SecondId = g.Id
 		}else if reqObj.Position == 2 {
 			//旧的下阵
-			if oldG, err := entity.GMgr.FindGeneral(a.ThirdId); err==nil{
+			if oldG, err := entity.GMgr.FindGeneral(army.ThirdId); err==nil{
 				oldG.CityId = 0
 				oldG.Order = 0
 			}
-			a.ThirdSoldierCnt = 0
-			a.ThirdId = g.Id
+			army.ThirdSoldierCnt = 0
+			army.ThirdId = g.Id
 		}
 		//新的上阵
 		g.Order = reqObj.Position
 		g.CityId = reqObj.CityId
 	}
 
-	a.NeedUpdate = true
+	army.NeedUpdate = true
 
-	rspObj.Army.CityId = a.CityId
-	rspObj.Army.Id = a.Id
-	rspObj.Army.Order = a.Order
-	rspObj.Army.FirstId = a.FirstId
-	rspObj.Army.SecondId = a.SecondId
-	rspObj.Army.ThirdId = a.ThirdId
-	rspObj.Army.FirstSoldierCnt = a.FirstSoldierCnt
-	rspObj.Army.SecondSoldierCnt = a.SecondSoldierCnt
-	rspObj.Army.ThirdSoldierCnt = a.ThirdSoldierCnt
+	rspObj.Army.CityId = army.CityId
+	rspObj.Army.Id = army.Id
+	rspObj.Army.Order = army.Order
+	rspObj.Army.FirstId = army.FirstId
+	rspObj.Army.SecondId = army.SecondId
+	rspObj.Army.ThirdId = army.ThirdId
+	rspObj.Army.FirstSoldierCnt = army.FirstSoldierCnt
+	rspObj.Army.SecondSoldierCnt = army.SecondSoldierCnt
+	rspObj.Army.ThirdSoldierCnt = army.ThirdSoldierCnt
+}
+
+//征兵
+func (this*General) conscript(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+	reqObj := &proto.ConscriptReq{}
+	rspObj := &proto.ConscriptRsp{}
+	mapstructure.Decode(req.Body.Msg, reqObj)
+	rsp.Body.Msg = rspObj
+	rsp.Body.Code = constant.OK
+
+	if reqObj.ArmyId <= 0 || reqObj.FirstCnt <= 0 || reqObj.ThirdCnt <= 0{
+		rsp.Body.Code = constant.InvalidParam
+		return
+	}
+
+	r, _ := req.Conn.GetProperty("role")
+	role := r.(*model.Role)
+
+	army,err := entity.AMgr.Get(reqObj.ArmyId)
+	if err != nil{
+		rsp.Body.Code = constant.ArmyNotFound
+		return
+	}
+
+	if role.RId != army.RId{
+		rsp.Body.Code = constant.ArmyNotMe
+		return
+	}
+
+	//判断是否超过上限
+	if g, err := entity.GMgr.FindGeneral(army.FirstId); err == nil {
+		l := general.GenBasic.GetLevel(g.Level)
+		if l.Soldiers < reqObj.FirstCnt+army.FirstSoldierCnt{
+			rsp.Body.Code = constant.OutArmyLimit
+			return
+		}
+	}
+
+	if g, err := entity.GMgr.FindGeneral(army.SecondId); err == nil {
+		l := general.GenBasic.GetLevel(g.Level)
+		if l.Soldiers < reqObj.SecondCnt+army.SecondSoldierCnt{
+			rsp.Body.Code = constant.OutArmyLimit
+			return
+		}
+	}
+
+	if g, err := entity.GMgr.FindGeneral(army.ThirdId); err == nil {
+		l := general.GenBasic.GetLevel(g.Level)
+		if l.Soldiers < reqObj.ThirdCnt+army.ThirdSoldierCnt{
+			rsp.Body.Code = constant.OutArmyLimit
+			return
+		}
+	}
+
+
+	//开始征兵
+	total := reqObj.FirstCnt + reqObj.SecondCnt + reqObj.ThirdCnt
+	conscript := static_conf.Basic.ConScript
+	needWood := total*conscript.CostWood
+	needGrain := total*conscript.CostGrain
+	needIron := total*conscript.CostIron
+	needStone := total*conscript.CostStone
+	needGold := total*conscript.CostGold
+
+	nr := facility.NeedRes{Grain: needGrain, Wood: needWood,
+		Gold: needGold, Iron: needIron, Decree: 0,
+		Stone: needStone}
+
+	if ok := entity.RResMgr.TryUseNeed(army.RId, &nr); ok {
+		army.FirstSoldierCnt += reqObj.FirstCnt
+		army.SecondSoldierCnt += reqObj.SecondCnt
+		army.ThirdSoldierCnt += reqObj.ThirdCnt
+		army.NeedUpdate = true
+
+		rspObj.Army.CityId = army.CityId
+		rspObj.Army.Id = army.Id
+		rspObj.Army.Order = army.Order
+		rspObj.Army.FirstId = army.FirstId
+		rspObj.Army.SecondId = army.SecondId
+		rspObj.Army.ThirdId = army.ThirdId
+		rspObj.Army.FirstSoldierCnt = army.FirstSoldierCnt
+		rspObj.Army.SecondSoldierCnt = army.SecondSoldierCnt
+		rspObj.Army.ThirdSoldierCnt = army.ThirdSoldierCnt
+
+		rsp.Body.Code = constant.OK
+	}else{
+		rsp.Body.Code = constant.ResNotEnough
+	}
 }

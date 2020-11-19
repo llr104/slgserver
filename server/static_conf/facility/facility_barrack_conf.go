@@ -16,9 +16,9 @@ import (
 var FBarrack facilityBarrackConf
 
 type byLevel struct {
-	Level int8         `json:"level"`
-	Extra int          `json:"extra"`
-	Need  LevelNeedRes `json:"need"`
+	Level int8    `json:"level"`
+	Extra int     `json:"extra"`
+	Need  NeedRes `json:"need"`
 }
 
 type by struct {
@@ -29,9 +29,9 @@ type by struct {
 }
 
 type ybyLevel struct {
-	Level int8         `json:"level"`
-	Limit int          `json:"limit"`
-	Need  LevelNeedRes `json:"need"`
+	Level int8    `json:"level"`
+	Limit int     `json:"limit"`
+	Need  NeedRes `json:"need"`
 }
 
 type yby struct {
@@ -86,7 +86,7 @@ func (this *facilityBarrackConf) MaxLevel(fType int8) int8 {
 	}
 }
 
-func (this *facilityBarrackConf) Need(fType int8, level int) (*LevelNeedRes, error)  {
+func (this *facilityBarrackConf) Need(fType int8, level int) (*NeedRes, error)  {
 	if this.BY.Type == fType{
 		if len(this.BY.Levels) >= level{
 			return &this.BY.Levels[level-1].Need, nil

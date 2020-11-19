@@ -60,8 +60,11 @@ func (this* RoleResMgr) Get(rid int) (*model.RoleRes, error){
 		return m, nil
 	}else{
 		if err == nil{
-			return nil, errors.New(fmt.Sprintf("RoleRes %d not found", rid))
+			str := fmt.Sprintf("RoleRes %d not found", rid)
+			log.DefaultLog.Warn(str)
+			return nil, errors.New(str)
 		}else{
+			log.DefaultLog.Warn("db error", zap.Error(err))
 			return nil, err
 		}
 	}
@@ -74,13 +77,14 @@ func (this* RoleResMgr) Add(res *model.RoleRes) (){
 	this.rolesRes[res.RId] = res
 }
 
-func (this* RoleResMgr) TryUseNeed(rid int, need*facility.LevelNeedRes) bool{
+func (this* RoleResMgr) TryUseNeed(rid int, need*facility.NeedRes) bool{
 	this.mutex.Lock()
 	defer this.mutex.Unlock()
 	rr, ok := this.rolesRes[rid]
 	if ok {
 		if need.Decree <= rr.Decree && need.Grain <= rr.Grain &&
-			need.Stone <= rr.Stone && need.Wood <= rr.Wood && need.Iron <= rr.Iron {
+			need.Stone <= rr.Stone && need.Wood <= rr.Wood &&
+			need.Iron <= rr.Iron && need.Gold <= rr.Gold {
 
 			rr.NeedUpdate = true
 			rr.Decree -= need.Decree
@@ -88,6 +92,7 @@ func (this* RoleResMgr) TryUseNeed(rid int, need*facility.LevelNeedRes) bool{
 			rr.Wood -= need.Wood
 			rr.Stone -= need.Stone
 			rr.Grain -= need.Grain
+			rr.Gold -= need.Gold
 			return true
 		}else{
 			return false

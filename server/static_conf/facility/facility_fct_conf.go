@@ -17,9 +17,9 @@ var FFCT facilityFCTConf
 
 
 type fctLevel struct {
-	Level int8         `json:"level"`
-	Limit int          `json:"limit"`
-	Need  LevelNeedRes `json:"need"`
+	Level int8    `json:"level"`
+	Limit int     `json:"limit"`
+	Need  NeedRes `json:"need"`
 }
 
 
@@ -67,7 +67,7 @@ func (this *facilityFCTConf) MaxLevel(fType int8) int8 {
 	}
 }
 
-func (this *facilityFCTConf) Need(fType int8, level int) (*LevelNeedRes, error)  {
+func (this *facilityFCTConf) Need(fType int8, level int) (*NeedRes, error)  {
 	if this.Type == fType{
 		if len(this.Levels) >= level{
 			return &this.Levels[level-1].Need, nil

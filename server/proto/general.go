@@ -59,3 +59,14 @@ type DisposeRsp struct {
 	Army	Army	`json:"army"`
 }
 
+//征兵
+type ConscriptReq struct {
+	ArmyId		int  	`json:"armyId"`		//队伍id
+	FirstCnt	int		`json:"firstCnt"`	//前锋征兵人数
+	SecondCnt	int		`json:"firstCnt"`	//中锋征兵人数
+	ThirdCnt	int		`json:"firstCnt"`	//大营征兵人数
+}
+
+type ConscriptRsp struct {
+	Army	Army	`json:"army"`
+}

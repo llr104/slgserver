@@ -16,9 +16,9 @@ import (
 var FGEN facilityGeneralConf
 
 type level struct {
-	Level int8         `json:"level"`
-	Cnt   int8         `json:"cnt"`
-	Need  LevelNeedRes `json:"need"`
+	Level int8    `json:"level"`
+	Cnt   int8    `json:"cnt"`
+	Need  NeedRes `json:"need"`
 }
 
 type general struct {
@@ -72,7 +72,7 @@ func (this *facilityGeneralConf) MaxLevel(fType int8) int8 {
 	}
 }
 
-func (this *facilityGeneralConf) Need(fType int8, level int) (*LevelNeedRes, error)  {
+func (this *facilityGeneralConf) Need(fType int8, level int) (*NeedRes, error)  {
 	if this.JC.Type == fType{
 		if len(this.JC.Levels) > level{
 			return &this.JC.Levels[level-1].Need, nil

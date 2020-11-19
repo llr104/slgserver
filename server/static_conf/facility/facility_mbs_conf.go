@@ -16,9 +16,9 @@ import (
 var FMBS facilityMBSConf
 
 type mbsLevel struct {
-	Level int8         `json:"level"`
-	Rate  int8         `json:"rate"`
-	Need  LevelNeedRes `json:"need"`
+	Level int8    `json:"level"`
+	Rate  int8    `json:"rate"`
+	Need  NeedRes `json:"need"`
 }
 
 type facilityMBSConf struct {
@@ -65,7 +65,7 @@ func (this *facilityMBSConf) MaxLevel(fType int8) int8 {
 	}
 }
 
-func (this *facilityMBSConf) Need(fType int8, level int) (*LevelNeedRes, error)  {
+func (this *facilityMBSConf) Need(fType int8, level int) (*NeedRes, error)  {
 	if this.Type == fType{
 		if len(this.Levels) >= level{
 			return &this.Levels[level-1].Need, nil

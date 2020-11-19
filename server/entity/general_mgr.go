@@ -54,8 +54,8 @@ func (this* GeneralMgr) Get(rid int) ([]*model.General, error){
 //查找将领
 func (this* GeneralMgr) FindGeneral(gid int) (*model.General, error){
 	this.mutex.RLock()
-	defer this.mutex.RUnlock()
 	g, ok := this.genByGId[gid]
+	this.mutex.RUnlock()
 	if ok {
 		return g, nil
 	}else{

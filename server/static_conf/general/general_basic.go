@@ -39,3 +39,12 @@ func (this *Basic) Load()  {
 
 	General.Load()
 }
+
+func (this *Basic) GetLevel(l int8) *gLevel{
+	if int(l) < len(this.Levels){
+		return &this.Levels[l]
+	}else{
+		return nil
+	}
+}
+

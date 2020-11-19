@@ -1,6 +1,8 @@
 package entity
 
 import (
+	"errors"
+	"fmt"
 	"go.uber.org/zap"
 	"slgserver/db"
 	"slgserver/log"
@@ -84,7 +86,14 @@ func (this* ArmyMgr) Get(aid int) (*model.Army, error){
 			this.mutex.Unlock()
 			return army, nil
 		}else{
-			return nil, err
+			if err == nil{
+				str := fmt.Sprintf("ArmyMgr Get armyId:%d db not found", aid)
+				log.DefaultLog.Warn(str)
+				return nil, errors.New(str)
+			}else{
+				log.DefaultLog.Warn("ArmyMgr Get db error", zap.Int("armyId", aid))
+				return nil, err
+			}
 		}
 	}
 }

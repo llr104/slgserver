@@ -15,18 +15,12 @@ import (
 //城内生产资源设施配置
 var FPRC facilityProduceResConf
 
-type LevelNeedRes struct {
-	Decree 		int	`json:"decree"`
-	Grain		int `json:"grain"`
-	Wood		int `json:"wood"`
-	Iron		int `json:"iron"`
-	Stone		int `json:"stone"`
-}
+
 
 type produceResLevel struct {
-	Level int8         `json:"level"`
-	Yield int          `json:"yield"`
-	Need  LevelNeedRes `json:"need"`
+	Level int8    `json:"level"`
+	Yield int     `json:"yield"`
+	Need  NeedRes `json:"need"`
 }
 
 type produceRes struct {
@@ -92,7 +86,7 @@ func (this *facilityProduceResConf) MaxLevel(fType int8) int8 {
 	}
 }
 
-func (this *facilityProduceResConf) Need(fType int8, level int) (*LevelNeedRes, error)  {
+func (this *facilityProduceResConf) Need(fType int8, level int) (*NeedRes, error)  {
 	if this.CSC.Type == fType{
 		if len(this.CSC.Levels) >= level{
 			return &this.CSC.Levels[level-1].Need, nil

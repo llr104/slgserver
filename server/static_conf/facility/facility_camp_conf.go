@@ -16,9 +16,9 @@ import (
 var FCAMP facilityCampConf
 
 type campLevel struct {
-	Level int8         `json:"level"`
-	Rate  int          `json:"rate"`
-	Need  LevelNeedRes `json:"need"`
+	Level int8    `json:"level"`
+	Rate  int     `json:"rate"`
+	Need  NeedRes `json:"need"`
 }
 
 type camp struct {
@@ -85,7 +85,7 @@ func (this *facilityCampConf) MaxLevel(fType int8) int8 {
 	}
 }
 
-func (this *facilityCampConf) Need(fType int8, level int) (*LevelNeedRes, error)  {
+func (this *facilityCampConf) Need(fType int8, level int) (*NeedRes, error)  {
 	if this.Han.Type == fType{
 		if len(this.Han.Levels) > level{
 			return &this.Han.Levels[level].Need, nil

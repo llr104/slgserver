@@ -16,9 +16,9 @@ import (
 var FWALL facilityWallConf
 
 type wallLevel struct {
-	Level int8         `json:"level"`
-	Limit int          `json:"limit"`
-	Need  LevelNeedRes `json:"need"`
+	Level int8    `json:"level"`
+	Limit int     `json:"limit"`
+	Need  NeedRes `json:"need"`
 }
 
 type wall struct {
@@ -73,7 +73,7 @@ func (this *facilityWallConf) MaxLevel(fType int8) int8 {
 	}
 }
 
-func (this *facilityWallConf) Need(fType int8, level int) (*LevelNeedRes, error)  {
+func (this *facilityWallConf) Need(fType int8, level int) (*NeedRes, error)  {
 	if this.CQ.Type == fType{
 		if len(this.CQ.Levels) >= level{
 			return &this.CQ.Levels[level-1].Need, nil

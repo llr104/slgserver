@@ -15,3 +15,7 @@ const CityNotMe = 11		//城市不是自己的
 const UpError = 12			//升级失败
 const GeneralNotFound = 13	//武将不存在
 const GeneralNotMe = 14		//武将不是自己的
+const ArmyNotFound = 15		//军队不存在
+const ArmyNotMe = 15		//军队不是自己的
+const ResNotEnough = 16		//资源不足
+const OutArmyLimit = 17		//超过带兵限制

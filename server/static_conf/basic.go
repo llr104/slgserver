@@ -12,6 +12,16 @@ import (
 )
 var Basic basic
 
+type NeedRes struct {
+	Decree 		int	`json:"decree"`
+	Grain		int `json:"grain"`
+	Wood		int `json:"wood"`
+	Iron		int `json:"iron"`
+	Stone		int `json:"stone"`
+	Gold		int	`json:"gold"`
+}
+
+
 type conscript struct {
 	Des       string `json:"des"`
 	CostWood  int    `json:"cost_wood"`

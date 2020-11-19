@@ -12,9 +12,18 @@ import (
 	"slgserver/log"
 )
 
+type NeedRes struct {
+	Decree 		int	`json:"decree"`
+	Grain		int `json:"grain"`
+	Wood		int `json:"wood"`
+	Iron		int `json:"iron"`
+	Stone		int `json:"stone"`
+	Gold		int	`json:"gold"`
+}
+
 type iFacility interface {
 	MaxLevel(fType int8) int8
-	Need(fType int8, level int) (*LevelNeedRes, error)
+	Need(fType int8, level int) (*NeedRes, error)
 	IsContain(t int8) bool
 }
 var FConf facilityConf
@@ -76,7 +85,7 @@ func (this *facilityConf) MaxLevel(fType int8) int8 {
 	return 0
 }
 
-func (this *facilityConf) Need(fType int8, level int) (*LevelNeedRes, error) {
+func (this *facilityConf) Need(fType int8, level int) (*NeedRes, error) {
 	for _, v := range this.loaders {
 		if v.IsContain(fType){
 			return v.Need(fType, level)
