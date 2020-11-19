@@ -95,6 +95,8 @@ func (this* ArmyMgr) running() {
 						this.pushAction(army)
 						army.State = model.ArmyBack
 					}else{
+						army.ToX = army.FromX
+						army.ToY = army.FromY
 						army.State = model.ArmyIdle
 					}
 					army.NeedUpdate = true
