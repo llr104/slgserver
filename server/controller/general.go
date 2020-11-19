@@ -150,29 +150,38 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	}else{
 		if reqObj.Position == 1 {
 			//旧的下阵
-			if oldG, err := entity.GMgr.FindGeneral(army.FirstId); err==nil{
-				oldG.CityId = 0
-				oldG.Order = 0
-				oldG.NeedUpdate = true
+			if army.FirstId != 0 {
+				if oldG, err := entity.GMgr.FindGeneral(army.FirstId); err==nil{
+					oldG.CityId = 0
+					oldG.Order = 0
+					oldG.NeedUpdate = true
+				}
 			}
+
 			army.FirstSoldierCnt = 0
 			army.FirstId = g.Id
 		}else if reqObj.Position == 2 {
 			//旧的下阵
-			if oldG, err := entity.GMgr.FindGeneral(army.SecondId); err==nil{
-				oldG.CityId = 0
-				oldG.Order = 0
-				oldG.NeedUpdate = true
+			if army.SecondId != 0 {
+				if oldG, err := entity.GMgr.FindGeneral(army.SecondId); err==nil{
+					oldG.CityId = 0
+					oldG.Order = 0
+					oldG.NeedUpdate = true
+				}
 			}
+
 			army.SecondSoldierCnt = 0
 			army.SecondId = g.Id
 		}else if reqObj.Position == 3 {
 			//旧的下阵
-			if oldG, err := entity.GMgr.FindGeneral(army.ThirdId); err==nil{
-				oldG.CityId = 0
-				oldG.Order = 0
-				oldG.NeedUpdate = true
+			if army.ThirdId != 0 {
+				if oldG, err := entity.GMgr.FindGeneral(army.ThirdId); err==nil{
+					oldG.CityId = 0
+					oldG.Order = 0
+					oldG.NeedUpdate = true
+				}
 			}
+
 			army.ThirdSoldierCnt = 0
 			army.ThirdId = g.Id
 		}
@@ -188,7 +197,7 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	}
 
 	army.NeedUpdate = true
-	entity.AMgr.PushAction(army)
+
 
 	//队伍
 	model_to_proto.Army(army, &rspObj.Army)
@@ -334,5 +343,6 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 
 	army.NeedUpdate = true
 	model_to_proto.Army(army, &rspObj.Army)
+	entity.AMgr.PushAction(army)
 }
 
