@@ -2,6 +2,13 @@ package model
 
 import "time"
 
+const (
+	ArmyIdle  	= 0
+	ArmyAttack  = 1
+	ArmyDefend  = 2
+	ArmyBack  	= 3
+)
+
 //军队
 type Army struct {
 	Id               int  		`json:"id" xorm:"id pk autoincr"`

@@ -12,14 +12,15 @@ import (
 )
 
 type ArmyMgr struct {
-	mutex     sync.RWMutex
-	armyById  map[int]*model.Army
-	armByCityId map[int][]*model.Army
+	mutex        	sync.RWMutex
+	armyById     	map[int]*model.Army   	//key:armyId
+	armyByCityId 	map[int][]*model.Army 	//key:cityId
+	armyByEndTime	map[int64][]*model.Army	//key:到达时间
 }
 
 var AMgr = &ArmyMgr{
-	armyById: make(map[int]*model.Army),
-	armByCityId: make(map[int][]*model.Army),
+	armyById:     make(map[int]*model.Army),
+	armyByCityId: make(map[int][]*model.Army),
 }
 
 func (this* ArmyMgr) Load() {
@@ -29,15 +30,80 @@ func (this* ArmyMgr) Load() {
 
 	for _, v := range this.armyById {
 		cid := v.CityId
-		c,ok:= this.armByCityId[cid]
+		c,ok:= this.armyByCityId[cid]
 		if ok {
-			this.armByCityId[cid] = append(c, v)
+			this.armyByCityId[cid] = append(c, v)
 		}else{
-			this.armByCityId[cid] = make([]*model.Army, 0)
-			this.armByCityId[cid] = append(this.armByCityId[cid], v)
+			this.armyByCityId[cid] = make([]*model.Army, 0)
+			this.armyByCityId[cid] = append(this.armyByCityId[cid], v)
 		}
 	}
 	go this.toDatabase()
+}
+
+func (this* ArmyMgr) updateOne(army* model.Army)  {
+	this.mutex.Lock()
+	aid := army.Id
+	cid := army.CityId
+
+	this.armyById[aid] = army
+	if _, r:= this.armyByCityId[cid]; r == false{
+		this.armyByCityId[cid] = make([]*model.Army, 0)
+	}
+	this.armyByCityId[cid] = append(this.armyByCityId[cid], army)
+	this.mutex.Unlock()
+}
+
+func (this* ArmyMgr) updateOneMutil(armys[] *model.Army)  {
+	for _, v := range armys {
+		this.updateOne(v)
+	}
+}
+
+//把行动丢进来
+func (this* ArmyMgr) PushAction(army *model.Army)  {
+	this.mutex.Lock()
+	this.pushAction(army)
+	defer this.mutex.Unlock()
+}
+
+func (this* ArmyMgr) pushAction(army *model.Army) {
+	t := army.End.Unix()
+	_, ok := this.armyByEndTime[t]
+	if ok == false {
+		this.armyByEndTime[t] = make([]*model.Army, 0)
+	}
+	this.armyByEndTime[t] = append(this.armyByEndTime[t], army)
+}
+
+func (this* ArmyMgr) running() {
+	for true {
+		t := time.Now().Unix()
+		time.Sleep(1*time.Second)
+
+		this.mutex.Lock()
+		//往前5秒找，以防有些占用太久没有执行到
+		for i := t-5; i <= t ; i++ {
+			arr, ok := this.armyByEndTime[i]
+			if ok {
+				for _, army := range arr {
+					//先让他原路返回
+					if army.State != model.ArmyBack {
+						diff := army.End.Unix() - army.Start.Unix()
+						army.Start = army.End
+						army.End = army.Start.Add(time.Duration(diff))
+						this.pushAction(army)
+						army.State = model.ArmyBack
+					}else{
+						army.State = model.ArmyIdle
+					}
+					army.NeedUpdate = true
+				}
+			}
+			delete(this.armyByEndTime, i)
+		}
+		this.mutex.Unlock()
+	}
 }
 
 func (this* ArmyMgr) toDatabase() {
@@ -78,11 +144,7 @@ func (this* ArmyMgr) Get(aid int) (*model.Army, error){
 		ok, err := db.MasterDB.Table(model.Army{}).Where("id=?", aid).Get(army)
 		if ok {
 			this.mutex.Lock()
-			this.armyById[aid] = army
-			if _, r:= this.armByCityId[army.CityId]; r == false{
-				this.armByCityId[army.CityId] = make([]*model.Army, 0)
-			}
-			this.armByCityId[army.CityId] = append(this.armByCityId[army.CityId], army)
+			this.updateOne(army)
 			this.mutex.Unlock()
 			return army, nil
 		}else{
@@ -100,7 +162,7 @@ func (this* ArmyMgr) Get(aid int) (*model.Army, error){
 
 func (this* ArmyMgr) GetByCity(cid int) ([]*model.Army, error){
 	this.mutex.RLock()
-	a,ok := this.armByCityId[cid]
+	a,ok := this.armyByCityId[cid]
 	this.mutex.RUnlock()
 	if ok {
 		return a, nil
@@ -112,7 +174,7 @@ func (this* ArmyMgr) GetByCity(cid int) ([]*model.Army, error){
 			return m, err
 		}else{
 			this.mutex.Lock()
-			this.armByCityId[cid] = m
+			this.updateOneMutil(m)
 			this.mutex.Unlock()
 			return m, nil
 		}
@@ -122,7 +184,7 @@ func (this* ArmyMgr) GetByCity(cid int) ([]*model.Army, error){
 func (this* ArmyMgr) GetOrCreate(rid int, cid int, order int8) (*model.Army, error){
 
 	this.mutex.RLock()
-	armys, ok := this.armByCityId[cid]
+	armys, ok := this.armyByCityId[cid]
 	this.mutex.RUnlock()
 
 	if ok {
@@ -140,11 +202,7 @@ func (this* ArmyMgr) GetOrCreate(rid int, cid int, order int8) (*model.Army, err
 	_, err := db.MasterDB.Insert(army)
 	if err == nil{
 		this.mutex.Lock()
-		this.armyById[army.Id] = army
-		if _, r:= this.armByCityId[army.CityId]; r == false{
-			this.armByCityId[army.CityId] = make([]*model.Army, 0)
-		}
-		this.armByCityId[army.CityId] = append(this.armByCityId[army.CityId], army)
+		this.updateOne(army)
 		this.mutex.Unlock()
 		return army, nil
 	}else{

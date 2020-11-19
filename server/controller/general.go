@@ -188,6 +188,8 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	}
 
 	army.NeedUpdate = true
+	entity.AMgr.PushAction(army)
+
 	//队伍
 	model_to_proto.Army(army, &rspObj.Army)
 

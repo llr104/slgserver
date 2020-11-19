@@ -66,6 +66,7 @@ func Army(m *model.Army, p *proto.Army)  {
 	p.FirstSoldierCnt = m.FirstSoldierCnt
 	p.SecondSoldierCnt = m.SecondSoldierCnt
 	p.ThirdSoldierCnt = m.ThirdSoldierCnt
+	p.State = m.State
 	p.FromX = m.FromX
 	p.FromY = m.FromY
 	p.ToX = m.ToX
