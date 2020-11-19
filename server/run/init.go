@@ -18,6 +18,7 @@ func Init() {
 
 	facility.FConf.Load()
 	general.GenBasic.Load()
+	general.General.Load()
 	static_conf.Basic.Load()
 
 	entity.BCMgr.Load()

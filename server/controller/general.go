@@ -164,12 +164,14 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		}
 		g.Order = 0
 		g.CityId = 0
+		g.NeedUpdate = true
 	}else{
 		if reqObj.Position == 1 {
 			//旧的下阵
 			if oldG, err := entity.GMgr.FindGeneral(army.FirstId); err==nil{
 				oldG.CityId = 0
 				oldG.Order = 0
+				oldG.NeedUpdate = true
 			}
 			army.FirstSoldierCnt = 0
 			army.FirstId = g.Id
@@ -178,6 +180,7 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 			if oldG, err := entity.GMgr.FindGeneral(army.SecondId); err==nil{
 				oldG.CityId = 0
 				oldG.Order = 0
+				oldG.NeedUpdate = true
 			}
 			army.SecondSoldierCnt = 0
 			army.SecondId = g.Id
@@ -186,6 +189,7 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 			if oldG, err := entity.GMgr.FindGeneral(army.ThirdId); err==nil{
 				oldG.CityId = 0
 				oldG.Order = 0
+				oldG.NeedUpdate = true
 			}
 			army.ThirdSoldierCnt = 0
 			army.ThirdId = g.Id
@@ -193,6 +197,7 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		//新的上阵
 		g.Order = reqObj.Position
 		g.CityId = reqObj.CityId
+		g.NeedUpdate = true
 	}
 
 	army.NeedUpdate = true
@@ -216,7 +221,7 @@ func (this*General) conscript(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	rsp.Body.Msg = rspObj
 	rsp.Body.Code = constant.OK
 
-	if reqObj.ArmyId <= 0 || reqObj.FirstCnt <= 0 || reqObj.ThirdCnt <= 0{
+	if reqObj.ArmyId <= 0 || reqObj.FirstCnt < 0 || reqObj.SecondCnt < 0 || reqObj.ThirdCnt < 0{
 		rsp.Body.Code = constant.InvalidParam
 		return
 	}
@@ -235,31 +240,19 @@ func (this*General) conscript(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
+	armyIds := []int{army.FirstId, army.SecondId, army.ThirdId}
+	armyCnts := []int{army.FirstSoldierCnt, army.SecondSoldierCnt, army.ThirdSoldierCnt}
+
 	//判断是否超过上限
-	if g, err := entity.GMgr.FindGeneral(army.FirstId); err == nil {
-		l := general.GenBasic.GetLevel(g.Level)
-		if l.Soldiers < reqObj.FirstCnt+army.FirstSoldierCnt{
-			rsp.Body.Code = constant.OutArmyLimit
-			return
+	for i, gid := range armyIds {
+		if g, err := entity.GMgr.FindGeneral(gid); err == nil {
+			l := general.GenBasic.GetLevel(g.Level)
+			if l.Soldiers < reqObj.FirstCnt+armyCnts[i]{
+				rsp.Body.Code = constant.OutArmyLimit
+				return
+			}
 		}
 	}
-
-	if g, err := entity.GMgr.FindGeneral(army.SecondId); err == nil {
-		l := general.GenBasic.GetLevel(g.Level)
-		if l.Soldiers < reqObj.SecondCnt+army.SecondSoldierCnt{
-			rsp.Body.Code = constant.OutArmyLimit
-			return
-		}
-	}
-
-	if g, err := entity.GMgr.FindGeneral(army.ThirdId); err == nil {
-		l := general.GenBasic.GetLevel(g.Level)
-		if l.Soldiers < reqObj.ThirdCnt+army.ThirdSoldierCnt{
-			rsp.Body.Code = constant.OutArmyLimit
-			return
-		}
-	}
-
 
 	//开始征兵
 	total := reqObj.FirstCnt + reqObj.SecondCnt + reqObj.ThirdCnt

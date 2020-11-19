@@ -23,6 +23,36 @@ var GMgr = &GeneralMgr{
 	genByGId: make(map[int]*model.General),
 }
 
+func (this* GeneralMgr) Load(){
+	go this.toDatabase()
+}
+func (this* GeneralMgr) toDatabase() {
+	for true {
+		time.Sleep(5*time.Second)
+		this.mutex.RLock()
+		cnt :=0
+		for _, v := range this.genByGId {
+			if v.NeedUpdate {
+				cnt+=1
+				_, err := db.MasterDB.Table(model.General{}).Cols( "force", "strategy",
+					"defense", "speed", "destroy", "level", "exp", "order", "cityId").Update(v)
+				if err != nil{
+					log.DefaultLog.Warn("db error", zap.Error(err))
+				}else{
+					v.NeedUpdate = false
+				}
+			}
+
+			//一次最多更新20个
+			if cnt>20{
+				break
+			}
+		}
+
+		this.mutex.RUnlock()
+	}
+}
+
 func (this* GeneralMgr) Get(rid int) ([]*model.General, error){
 	this.mutex.Lock()
 	r, ok := this.genByRole[rid]

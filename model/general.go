@@ -18,6 +18,7 @@ type General struct {
 	Order     	int8     	`json:"order" xorm:"order"`
 	CityId    	int     	`json:"cityId" xorm:"cityId"`
 	CreatedAt 	time.Time	`json:"created_at"`
+	NeedUpdate	bool		`json:"-" xorm:"-"`
 }
 
 func (this *General) TableName() string {
