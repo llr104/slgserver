@@ -167,7 +167,7 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	}else{
 		if reqObj.Position == 1 {
 			//旧的下阵
-			if oldG, err := entity.GMgr.FindGeneral(army.ThirdId); err==nil{
+			if oldG, err := entity.GMgr.FindGeneral(army.FirstId); err==nil{
 				oldG.CityId = 0
 				oldG.Order = 0
 			}
@@ -181,7 +181,7 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 			}
 			army.SecondSoldierCnt = 0
 			army.SecondId = g.Id
-		}else if reqObj.Position == 2 {
+		}else if reqObj.Position == 3 {
 			//旧的下阵
 			if oldG, err := entity.GMgr.FindGeneral(army.ThirdId); err==nil{
 				oldG.CityId = 0
