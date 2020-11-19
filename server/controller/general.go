@@ -49,19 +49,7 @@ func (this*General) myGenerals(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		rsp.Body.Code = constant.OK
 		rspObj.Generals = make([]proto.General, len(gs))
 		for i, v := range gs {
-			rspObj.Generals[i].CityId = v.CityId
-			rspObj.Generals[i].Order = v.Order
-			rspObj.Generals[i].Cost = v.Cost
-			rspObj.Generals[i].Speed = v.Speed
-			rspObj.Generals[i].Defense = v.Defense
-			rspObj.Generals[i].Strategy = v.Strategy
-			rspObj.Generals[i].Force = v.Force
-			rspObj.Generals[i].Name = v.Name
-			rspObj.Generals[i].Id = v.Id
-			rspObj.Generals[i].CfgId = v.CfgId
-			rspObj.Generals[i].Destroy = v.Destroy
-			rspObj.Generals[i].Level = v.Level
-			rspObj.Generals[i].Exp = v.Exp
+			model_to_proto.General(v, &rspObj.Generals[i])
 		}
 	}else{
 		rsp.Body.Code = constant.DBError
@@ -93,16 +81,7 @@ func (this*General) armyList(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	as, _ := entity.AMgr.GetByCity(reqObj.CityId)
 	rspObj.Armys = make([]proto.Army, len(as))
 	for i, v := range as {
-		rspObj.Armys[i].Id = v.Id
-		rspObj.Armys[i].Order = v.Order
-		rspObj.Armys[i].CityId = v.CityId
-		rspObj.Armys[i].FirstId = v.FirstId
-		rspObj.Armys[i].SecondId = v.SecondId
-		rspObj.Armys[i].ThirdId = v.ThirdId
-		rspObj.Armys[i].FirstSoldierCnt = v.FirstSoldierCnt
-		rspObj.Armys[i].SecondSoldierCnt = v.SecondSoldierCnt
-		rspObj.Armys[i].ThirdSoldierCnt = v.ThirdSoldierCnt
-
+		model_to_proto.Army(v, &rspObj.Armys[i])
 	}
 }
 
@@ -204,15 +183,8 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	army.NeedUpdate = true
 
 	//队伍
-	rspObj.Army.CityId = army.CityId
-	rspObj.Army.Id = army.Id
-	rspObj.Army.Order = army.Order
-	rspObj.Army.FirstId = army.FirstId
-	rspObj.Army.SecondId = army.SecondId
-	rspObj.Army.ThirdId = army.ThirdId
-	rspObj.Army.FirstSoldierCnt = army.FirstSoldierCnt
-	rspObj.Army.SecondSoldierCnt = army.SecondSoldierCnt
-	rspObj.Army.ThirdSoldierCnt = army.ThirdSoldierCnt
+	model_to_proto.Army(army, &rspObj.Army)
+
 }
 
 //征兵
@@ -276,15 +248,7 @@ func (this*General) conscript(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		army.NeedUpdate = true
 
 		//队伍
-		rspObj.Army.CityId = army.CityId
-		rspObj.Army.Id = army.Id
-		rspObj.Army.Order = army.Order
-		rspObj.Army.FirstId = army.FirstId
-		rspObj.Army.SecondId = army.SecondId
-		rspObj.Army.ThirdId = army.ThirdId
-		rspObj.Army.FirstSoldierCnt = army.FirstSoldierCnt
-		rspObj.Army.SecondSoldierCnt = army.SecondSoldierCnt
-		rspObj.Army.ThirdSoldierCnt = army.ThirdSoldierCnt
+		model_to_proto.Army(army, &rspObj.Army)
 
 		//资源
 		if rRes, err := entity.RResMgr.Get(role.RId); err == nil {
