@@ -113,6 +113,11 @@ func (this*Account) reLogin(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	reqObj := &proto.ReLoginReq{}
 	rspObj := &proto.ReLoginRsp{}
 	mapstructure.Decode(req.Body.Msg, reqObj)
+	if reqObj.Session == ""{
+		rsp.Body.Code = constant.SessionInvalid
+		return
+	}
+
 	rsp.Body.Msg = rspObj
 	rspObj.Session = reqObj.Session
 
