@@ -1,5 +1,7 @@
 package constant
 
+const UserNotInConnect = -2 //链接没有找到用户
+const RoleNotInConnect = -1 //链接没有找到角色
 const OK = 0
 const InvalidParam = 1 		//参数有误
 const DBError = 2			//数据库异常

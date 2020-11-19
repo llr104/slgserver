@@ -15,7 +15,7 @@ func CheckLogin() net.MiddlewareFunc {
 			if err != nil {
 				log.DefaultLog.Warn("connect not found uid",
 					zap.String("msgName", req.Body.Name))
-				rsp.Body.Code = constant.InvalidParam
+				rsp.Body.Code = constant.UserNotInConnect
 				req.Conn.Send("account.pleaseLogin", nil)
 				return
 			}

@@ -13,7 +13,7 @@ func CheckRole() net.MiddlewareFunc {
 
 			_, err := req.Conn.GetProperty("role")
 			if err != nil {
-				rsp.Body.Code = constant.InvalidParam
+				rsp.Body.Code = constant.RoleNotInConnect
 				log.DefaultLog.Warn("connect not found role",
 					zap.String("msgName", req.Body.Name))
 				return
