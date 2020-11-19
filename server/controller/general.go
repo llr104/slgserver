@@ -32,6 +32,7 @@ func (this*General) InitRouter(r *net.Router) {
 	g.AddRouter("dispose", this.dispose)
 	g.AddRouter("armyList", this.armyList)
 	g.AddRouter("conscript", this.conscript)
+	g.AddRouter("assignArmy", this.assignArmy)
 
 }
 
@@ -214,15 +215,34 @@ func (this*General) conscript(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
+	addCnts := []int{reqObj.FirstCnt, reqObj.SecondCnt, reqObj.ThirdCnt}
 	armyIds := []int{army.FirstId, army.SecondId, army.ThirdId}
 	armyCnts := []int{army.FirstSoldierCnt, army.SecondSoldierCnt, army.ThirdSoldierCnt}
 
 	//判断是否超过上限
 	for i, gid := range armyIds {
+		if gid == 0 {
+			if i == 0{
+				reqObj.FirstCnt = 0
+				addCnts[0] = 0
+			}else if i==1 {
+				reqObj.SecondCnt = 0
+				addCnts[1] = 0
+			}else if i==2 {
+				reqObj.ThirdCnt = 0
+				addCnts[2] = 0
+			}
+			continue
+		}
 		if g, err := entity.GMgr.FindGeneral(gid); err == nil {
-			l := general.GenBasic.GetLevel(g.Level)
-			if l.Soldiers < reqObj.FirstCnt+armyCnts[i]{
-				rsp.Body.Code = constant.OutArmyLimit
+			l, e := general.GenBasic.GetLevel(g.Level)
+			if e == nil{
+				if l.Soldiers < addCnts[i]+armyCnts[i]{
+					rsp.Body.Code = constant.OutArmyLimit
+					return
+				}
+			}else{
+				rsp.Body.Code = constant.InvalidParam
 				return
 			}
 		}
@@ -260,3 +280,14 @@ func (this*General) conscript(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		rsp.Body.Code = constant.ResNotEnough
 	}
 }
+
+//派遣队伍
+func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
+	reqObj := &proto.AssignArmyReq{}
+	rspObj := &proto.AssignArmyRsp{}
+	mapstructure.Decode(req.Body.Msg, reqObj)
+	rsp.Body.Msg = rspObj
+	rsp.Body.Code = constant.OK
+	
+}
+

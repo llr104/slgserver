@@ -167,6 +167,13 @@ CREATE TABLE IF NOT EXISTS `army` (
    `first_soldier_cnt` int unsigned NOT NULL DEFAULT 0 COMMENT '前锋士兵数量',
    `second_soldier_cnt` int unsigned NOT NULL DEFAULT 0 COMMENT '中锋士兵数量',
    `third_soldier_cnt` int unsigned NOT NULL DEFAULT 0 COMMENT '大营士兵数量',
+   `state` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '状态，0:空闲 1:攻击 2：驻军',
+   `from_x` int unsigned NOT NULL COMMENT '来自x坐标',
+   `from_y` int unsigned NOT NULL COMMENT '来自y坐标',
+   `to_x` int unsigned COMMENT '去往x坐标',
+   `to_y` int unsigned COMMENT '去往y坐标',
+   `start` timestamp COMMENT '出发时间',
+   `end` timestamp COMMENT '到达时间',
    UNIQUE KEY (`rid`, `cityId`, `order`),
    PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '军队表';

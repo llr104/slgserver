@@ -36,15 +36,22 @@ type ArmyListRsp struct {
 
 
 type Army struct {
-	Id               int  `json:"id"`
-	CityId           int  `json:"cityId"`
-	Order            int8 `json:"order"`              //第几队，1-5队
-	FirstId          int  `json:"firstId"`            //前锋武将id
-	SecondId         int  `json:"secondId"`           //中锋武将id
-	ThirdId          int  `json:"thirdId"`            //大营武将
-	FirstSoldierCnt  int  `json:"first_soldier_cnt"`  //前锋士兵数量
-	SecondSoldierCnt int  `json:"second_soldier_cnt"` //中锋士兵数量
-	ThirdSoldierCnt  int  `json:"third_soldier_cnt"`  //大营士兵数量
+	Id               int   `json:"id"`
+	CityId           int   `json:"cityId"`
+	Order            int8  `json:"order"`              //第几队，1-5队
+	FirstId          int   `json:"firstId"`            //前锋武将id
+	SecondId         int   `json:"secondId"`           //中锋武将id
+	ThirdId          int   `json:"thirdId"`            //大营武将
+	FirstSoldierCnt  int   `json:"first_soldier_cnt"`  //前锋士兵数量
+	SecondSoldierCnt int   `json:"second_soldier_cnt"` //中锋士兵数量
+	ThirdSoldierCnt  int   `json:"third_soldier_cnt"`  //大营士兵数量
+	State            int8  `json:"state"`              //状态，0:空闲 1:攻击 2：驻军
+	FromX            int   `json:"from_x"`
+	FromY            int   `json:"from_y"`
+	ToX              int   `json:"to_x"`
+	ToY              int   `json:"to_y"`
+	Start            int64 `json:"start"`//出征开始时间
+	End              int64 `json:"end"`//出征结束时间
 }
 
 //配置武将
@@ -70,4 +77,16 @@ type ConscriptReq struct {
 type ConscriptRsp struct {
 	Army	Army	`json:"army"`
 	RoleRes	RoleRes	`json:"role_res"`
+}
+
+//派遣队伍
+type AssignArmyReq struct {
+	ArmyId		int  	`json:"armyId"`		//队伍id
+	state		int8	`json:"state"`		//状态，0:空闲 1:攻击 2：驻军
+	X			int		`json:"x"`
+	Y			int		`json:"y"`
+}
+
+type AssignArmyRsp struct {
+	Army		Army	`json:"army"`
 }

@@ -2,6 +2,7 @@ package general
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"go.uber.org/zap"
 	"io/ioutil"
@@ -40,11 +41,14 @@ func (this *Basic) Load()  {
 	General.Load()
 }
 
-func (this *Basic) GetLevel(l int8) *gLevel{
+func (this *Basic) GetLevel(l int8) (*gLevel, error){
+	if l <= 0{
+		return nil, errors.New("level error")
+	}
 	if int(l) < len(this.Levels){
-		return &this.Levels[l]
+		return &this.Levels[l-1], nil
 	}else{
-		return nil
+		return nil, errors.New("level error")
 	}
 }
 
