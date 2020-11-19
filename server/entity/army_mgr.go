@@ -21,6 +21,7 @@ type ArmyMgr struct {
 var AMgr = &ArmyMgr{
 	armyById:     make(map[int]*model.Army),
 	armyByCityId: make(map[int][]*model.Army),
+	armyByEndTime: make(map[int64][]*model.Army),
 }
 
 func (this* ArmyMgr) Load() {
@@ -116,8 +117,10 @@ func (this* ArmyMgr) toDatabase() {
 		for _, v := range this.armyById {
 			if v.NeedUpdate {
 				cnt+=1
-				_, err := db.MasterDB.Table(model.Army{}).Cols("firstId", "secondId", "thirdId",
-					"first_soldier_cnt", "second_soldier_cnt", "third_soldier_cnt").Update(v)
+				_, err := db.MasterDB.Table(model.Army{}).Cols("firstId",
+					"secondId", "thirdId", "first_soldier_cnt",
+					"second_soldier_cnt", "third_soldier_cnt", "state",
+					"from_x", "from_y", "to_x", "to_y", "start", "end").Update(v)
 				if err != nil{
 					log.DefaultLog.Warn("db error", zap.Error(err))
 				}else{

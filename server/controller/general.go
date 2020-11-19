@@ -340,6 +340,7 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 	army.End = time.Now().Add(60*time.Second)
 	army.ToX = reqObj.X
 	army.ToY = reqObj.Y
+	army.State = reqObj.State
 
 	army.NeedUpdate = true
 	model_to_proto.Army(army, &rspObj.Army)
