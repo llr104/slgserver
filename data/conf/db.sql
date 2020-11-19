@@ -72,7 +72,6 @@ CREATE TABLE IF NOT EXISTS `national_map` (
    `y` int unsigned NOT NULL COMMENT 'y坐标',
    `type` int unsigned NOT NULL COMMENT '建筑类型',
    `level` tinyint unsigned NOT NULL DEFAULT 1 COMMENT 'level',
-   `cur_durable` int unsigned NOT NULL COMMENT '当前耐久',
     UNIQUE KEY (`mid`),
    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '全国地图';

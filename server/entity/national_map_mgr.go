@@ -29,6 +29,10 @@ type mapData struct {
 	List	[][]int			`json:"list"`
 }
 
+func ToPosition(x, y int) int {
+	return x+MapHeight*y
+}
+
 type NationalMapMgr struct {
 	mutex sync.RWMutex
 	conf map[int]model.NationalMap
@@ -73,7 +77,7 @@ func (this* NationalMapMgr) Load() {
 	for i, v := range m.List {
 		t := int8(v[0])
 		l := int8(v[1])
-		d := model.NationalMap{X: i/MapWith, Y: i%MapWith, MId: i, Type: t, Level: l, CurDurable: BCMgr.GetDurable(t, l)}
+		d := model.NationalMap{X: i/MapWith, Y: i%MapWith, MId: i, Type: t, Level: l}
 		this.conf[i] = d
 		if isNeedDb {
 			db.MasterDB.Insert(d)
@@ -83,7 +87,7 @@ func (this* NationalMapMgr) Load() {
 }
 
 func (this* NationalMapMgr) IsCanBuild(x, y int) bool {
-	posIndex := x*MapWith+MapHeight
+	posIndex := ToPosition(x, y)
 	this.mutex.RLock()
 	defer this.mutex.RUnlock()
 	c,ok := this.conf[posIndex]
@@ -114,7 +118,7 @@ func (this* NationalMapMgr) Scan(x, y int) []model.NationalMap {
 	index := 0
 	for i := minX; i <= maxX; i++ {
 		for j := minY; j <= maxY; j++ {
-			v, ok := this.conf[i+MapWith*j]
+			v, ok := this.conf[ToPosition(i, j)]
 			if ok {
 				r[index] = v
 			}

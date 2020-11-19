@@ -7,7 +7,6 @@ type NationalMap struct {
 	Y			int		`json:"y"`
 	Type		int8	`json:"type"`
 	Level		int8	`json:"level"`
-	CurDurable	int		`json:"cur_durable"`
 }
 
 func (this *NationalMap) TableName() string {

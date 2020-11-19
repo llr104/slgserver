@@ -33,7 +33,7 @@ func (this* RoleBuildMgr) Load() {
 
 	//转成posRB
 	for _, v := range this.dbRB {
-		posId := v.X*MapWith+v.Y
+		posId := ToPosition(v.X, v.Y)
 		this.posRB[posId] = v
 	}
 }
@@ -44,7 +44,7 @@ func (this* RoleBuildMgr) Load() {
 func (this* RoleBuildMgr) IsEmpty(x, y int) bool {
 	this.mutex.RLock()
 	defer this.mutex.RUnlock()
-	posId := MapWith*x+y
+	posId := ToPosition(x, y)
 	_, ok := this.posRB[posId]
 	return !ok
 }
@@ -66,7 +66,7 @@ func (this* RoleBuildMgr) Scan(x, y int) []*model.MapRoleBuild {
 	rb := make([]*model.MapRoleBuild, 0)
 	for i := minX; i <= maxX; i++ {
 		for j := minY; j <= maxY; j++ {
-			posId := i+MapWith*j
+			posId := ToPosition(i, j)
 			v, ok := this.posRB[posId]
 			if ok {
 				rb = append(rb, v)
@@ -92,7 +92,7 @@ func (this* RoleBuildMgr) ScanBlock(x, y, length int) []*model.MapRoleBuild {
 	rb := make([]*model.MapRoleBuild, 0)
 	for i := x; i <= maxX; i++ {
 		for j := y; j <= maxY; j++ {
-			posId := i+MapWith*j
+			posId := ToPosition(i, j)
 			v, ok := this.posRB[posId]
 			if ok {
 				rb = append(rb, v)
