@@ -134,12 +134,19 @@ func (this* ArmyMgr) GetOrCreate(rid int, cid int, order int8) (*model.Army, err
 	}
 
 	//需要创建
-	a := &model.Army{RId: rid, Order: order, CityId: cid,
+	army := &model.Army{RId: rid, Order: order, CityId: cid,
 		FirstId: 0, SecondId: 0, ThirdId: 0,
 		FirstSoldierCnt: 0, SecondSoldierCnt: 0, ThirdSoldierCnt: 0}
-	_, err := db.MasterDB.Insert(a)
+	_, err := db.MasterDB.Insert(army)
 	if err == nil{
-		return a, nil
+		this.mutex.Lock()
+		this.armyById[army.Id] = army
+		if _, r:= this.armByCityId[army.CityId]; r == false{
+			this.armByCityId[army.CityId] = make([]*model.Army, 0)
+		}
+		this.armByCityId[army.CityId] = append(this.armByCityId[army.CityId], army)
+		this.mutex.Unlock()
+		return army, nil
 	}else{
 		log.DefaultLog.Warn("db error", zap.Error(err))
 		return nil, err

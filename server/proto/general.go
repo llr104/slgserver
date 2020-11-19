@@ -45,7 +45,7 @@ type Army struct {
 	FirstSoldierCnt  int   `json:"first_soldier_cnt"`  //前锋士兵数量
 	SecondSoldierCnt int   `json:"second_soldier_cnt"` //中锋士兵数量
 	ThirdSoldierCnt  int   `json:"third_soldier_cnt"`  //大营士兵数量
-	State            int8  `json:"state"`              //状态，0:空闲 1:攻击 2：驻军
+	State            int8  `json:"state"`              //状态，0:空闲 1:攻击 2：驻军 3:返回
 	FromX            int   `json:"from_x"`
 	FromY            int   `json:"from_y"`
 	ToX              int   `json:"to_x"`
@@ -81,10 +81,10 @@ type ConscriptRsp struct {
 
 //派遣队伍
 type AssignArmyReq struct {
-	ArmyId		int  	`json:"armyId"`		//队伍id
-	state		int8	`json:"state"`		//状态，0:空闲 1:攻击 2：驻军
-	X			int		`json:"x"`
-	Y			int		`json:"y"`
+	ArmyId int  `json:"armyId"` //队伍id
+	State  int8 `json:"state"`  //状态，0:空闲 1:攻击 2：驻军 3:返回
+	X      int  `json:"x"`
+	Y      int  `json:"y"`
 }
 
 type AssignArmyRsp struct {

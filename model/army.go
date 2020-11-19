@@ -14,7 +14,7 @@ type Army struct {
 	FirstSoldierCnt  int       	`json:"first_soldier_cnt" xorm:"first_soldier_cnt"`
 	SecondSoldierCnt int       	`json:"second_soldier_cnt" xorm:"second_soldier_cnt"`
 	ThirdSoldierCnt  int       	`json:"third_soldier_cnt" xorm:"third_soldier_cnt"`
-	State            int8  		`json:"state"` //状态，0:空闲 1:攻击 2：驻军
+	State            int8  		`json:"state"` //状态，0:空闲 1:攻击 2：驻军 3:返回
 	FromX            int       	`json:"from_x"`
 	FromY            int       	`json:"from_y"`
 	ToX              int       	`json:"to_x"`

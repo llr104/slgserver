@@ -12,6 +12,7 @@ import (
 	"slgserver/server/static_conf"
 	"slgserver/server/static_conf/facility"
 	"slgserver/server/static_conf/general"
+	"time"
 )
 
 var DefaultGeneral = General{
@@ -181,8 +182,12 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		g.NeedUpdate = true
 	}
 
-	army.NeedUpdate = true
+	if c, err := entity.RCMgr.Get(army.CityId); err == nil{
+		army.FromX = c.X
+		army.FromY = c.Y
+	}
 
+	army.NeedUpdate = true
 	//队伍
 	model_to_proto.Army(army, &rspObj.Army)
 
@@ -288,6 +293,44 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 	mapstructure.Decode(req.Body.Msg, reqObj)
 	rsp.Body.Msg = rspObj
 	rsp.Body.Code = constant.OK
-	
+
+	r, _ := req.Conn.GetProperty("role")
+	role := r.(*model.Role)
+
+	if reqObj.State != 1 && reqObj.State != 2{
+		rsp.Body.Code = constant.InvalidParam
+		return
+	}
+
+	if reqObj.X < 0 || reqObj.X >= entity.MapWith ||
+		reqObj.Y < 0 || reqObj.Y >= entity.MapHeight{
+		rsp.Body.Code = constant.InvalidParam
+		return
+	}
+
+	army,err := entity.AMgr.Get(reqObj.ArmyId)
+	if err != nil{
+		rsp.Body.Code = constant.ArmyNotFound
+		return
+	}
+
+	if role.RId != army.RId{
+		rsp.Body.Code = constant.ArmyNotMe
+		return
+	}
+
+	if army.State != 0 {
+		rsp.Body.Code = constant.ArmyBusy
+		return
+	}
+
+	army.Start = time.Now()
+	//先写死1分钟到达
+	army.End = time.Now().Add(60*time.Second)
+	army.ToX = reqObj.X
+	army.ToY = reqObj.Y
+
+	army.NeedUpdate = true
+	model_to_proto.Army(army, &rspObj.Army)
 }
 
