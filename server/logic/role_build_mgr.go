@@ -7,6 +7,7 @@ import (
 	"slgserver/model"
 	"slgserver/util"
 	"sync"
+	"time"
 )
 
 
@@ -38,6 +39,33 @@ func (this* RoleBuildMgr) Load() {
 	}
 }
 
+
+func (this* RoleBuildMgr) toDatabase() {
+	for true {
+		time.Sleep(5*time.Second)
+		this.mutex.RLock()
+		cnt :=0
+		for _, v := range this.dbRB {
+			if v.NeedUpdate {
+				_, err := db.MasterDB.Table(v).Cols("rid",
+					"cur_durable", "max_durable").Update(v)
+				if err != nil{
+					log.DefaultLog.Error("RoleResMgr toDatabase error", zap.Error(err))
+				}else{
+					v.NeedUpdate = false
+				}
+				cnt+=1
+			}
+
+			//一次最多更新20个
+			if cnt>20{
+				break
+			}
+		}
+		this.mutex.RUnlock()
+	}
+}
+
 /*
 该位置是否被角色占领
 */
@@ -48,6 +76,28 @@ func (this* RoleBuildMgr) IsEmpty(x, y int) bool {
 	_, ok := this.posRB[posId]
 	return !ok
 }
+
+func (this* RoleBuildMgr) PositionBuild(x, y int) (*model.MapRoleBuild, bool) {
+	this.mutex.RLock()
+	defer this.mutex.RUnlock()
+	posId := ToPosition(x, y)
+	b,ok := this.posRB[posId]
+	return b, ok
+}
+
+
+func (this* RoleBuildMgr) AddBuild(build *model.MapRoleBuild)  {
+	posId := ToPosition(build.X, build.Y)
+	if _, err := db.MasterDB.Table(model.MapRoleBuild{}).Insert(build); err == nil{
+		this.mutex.Lock()
+		this.posRB[posId] = build
+		this.dbRB[build.Id] = build
+		this.mutex.Unlock()
+	}else{
+		log.DefaultLog.Warn("db error", zap.Error(err))
+	}
+}
+
 
 func (this* RoleBuildMgr) Scan(x, y int) []*model.MapRoleBuild {
 	if x < 0 || x >= MapWith || y < 0 || y >= MapHeight {

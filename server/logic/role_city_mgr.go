@@ -48,6 +48,14 @@ func (this* RoleCityMgr) IsEmpty(x, y int) bool {
 	return !ok
 }
 
+func (this* RoleCityMgr) PositionCity(x, y int) (*model.MapRoleCity, bool) {
+	this.mutex.RLock()
+	defer this.mutex.RUnlock()
+	posId := ToPosition(x, y)
+	c,ok := this.posCity[posId]
+	return c, ok
+}
+
 func (this* RoleCityMgr) Add(city *model.MapRoleCity) {
 	this.mutex.Lock()
 	defer this.mutex.Unlock()

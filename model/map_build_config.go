@@ -11,6 +11,7 @@ type MapBuildConfig struct {
 	Grain		int			`json:"grain"`
 	Durable		int			`json:"durable"`
 	Defender	int			`json:"defender"`
+
 }
 
 func (this *MapBuildConfig) TableName() string {

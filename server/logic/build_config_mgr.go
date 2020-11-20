@@ -1,6 +1,8 @@
 package logic
 
 import (
+	"errors"
+	"go.uber.org/zap"
 	"slgserver/db"
 	"slgserver/log"
 	"slgserver/model"
@@ -28,6 +30,20 @@ func (this* BuildConfigMgr) Load() {
 
 func (this* BuildConfigMgr) Maps() map[int]model.MapBuildConfig {
 	return this.conf
+}
+
+func (this* BuildConfigMgr) BuildConfig(t int8, level int8) (*model.MapBuildConfig, error) {
+	this.mutex.RLock()
+	defer this.mutex.RUnlock()
+
+	for _, v := range this.conf {
+		if v.Type == t && v.Level == level{
+			return &v, nil
+		}
+	}
+	log.DefaultLog.Warn("build not found",
+		zap.Int("type", int(t)), zap.Int("level", int(level)))
+	return nil, errors.New("build not found")
 }
 
 func (this* BuildConfigMgr) GetDurable(t int8, level int8) int {

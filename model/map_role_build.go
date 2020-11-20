@@ -15,6 +15,7 @@ type MapRoleBuild struct {
 	CurDurable	int			`json:"cur_durable"`
 	MaxDurable	int			`json:"max_durable"`
 	Defender	int			`json:"defender"`
+	NeedUpdate	bool		`json:"-" xorm:"-"`
 }
 
 func (this *MapRoleBuild) TableName() string {
