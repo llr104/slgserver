@@ -84,8 +84,6 @@ func (this *armyLogic) battle(army* model.Army) {
 
 	//占领
 	this.OccupyBuild(army.Id, army.ToX, army.ToY)
-
-
 }
 
 func (this* armyLogic) OccupyBuild(rid, x, y int)  {

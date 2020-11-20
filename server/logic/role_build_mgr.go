@@ -15,12 +15,14 @@ type RoleBuildMgr struct {
 	mutex sync.RWMutex
 	dbRB  map[int]*model.MapRoleBuild //key:dbId
 	posRB map[int]*model.MapRoleBuild //key:posId
+	roleRB map[int][]*model.MapRoleBuild //key:roleId
 }
 
 
 var RBMgr = &RoleBuildMgr{
 	dbRB: make(map[int]*model.MapRoleBuild),
 	posRB: make(map[int]*model.MapRoleBuild),
+	roleRB: make(map[int][]*model.MapRoleBuild),
 }
 
 func (this* RoleBuildMgr) Load() {
@@ -32,11 +34,17 @@ func (this* RoleBuildMgr) Load() {
 		log.DefaultLog.Error("RoleBuildMgr load role_build table error", zap.Error(err))
 	}
 
-	//转成posRB
+	//转成posRB 和 roleRB
 	for _, v := range this.dbRB {
 		posId := ToPosition(v.X, v.Y)
 		this.posRB[posId] = v
+		_,ok := this.roleRB[v.RId]
+		if ok == false{
+			this.roleRB[v.RId] = make([]*model.MapRoleBuild, 0)
+		}
+		this.roleRB[v.RId] = append(this.roleRB[v.RId], v)
 	}
+
 }
 
 
@@ -98,6 +106,12 @@ func (this* RoleBuildMgr) AddBuild(build *model.MapRoleBuild)  {
 	}
 }
 
+func (this* RoleBuildMgr) GetRoleBuild(rid int) ([]*model.MapRoleBuild, bool) {
+	this.mutex.RLock()
+	defer this.mutex.RUnlock()
+	ra, ok := this.roleRB[rid]
+	return ra, ok
+}
 
 func (this* RoleBuildMgr) Scan(x, y int) []*model.MapRoleBuild {
 	if x < 0 || x >= MapWith || y < 0 || y >= MapHeight {

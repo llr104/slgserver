@@ -83,3 +83,11 @@ type MyRoleResReq struct {
 type MyRoleResRsp struct {
 	RoleRes		RoleRes	`json:"role_res"`
 }
+
+type MyRoleBuildReq struct {
+
+}
+
+type MyRoleBuildRsp struct {
+	MRBuilds []MapRoleBuild `json:"mr_builds"` //角色建筑，包含被占领的基础建筑
+}

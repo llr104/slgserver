@@ -30,6 +30,7 @@ func (this*Role) InitRouter(r *net.Router) {
 	g.AddRouter("enterServer", this.enterServer)
 	g.AddRouter("myCity", this.myCity, middleware.CheckRole())
 	g.AddRouter("myRoleRes", this.myRoleRes, middleware.CheckRole())
+	g.AddRouter("myRoleBuild", this.myRoleBuild, middleware.CheckRole())
 }
 
 func (this*Role) create(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
@@ -220,4 +221,27 @@ func (this*Role) myRoleRes(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		model_to_proto.RRes(roleRes, &rspObj.RoleRes)
 		rsp.Body.Code = constant.OK
 	}
+}
+
+func (this*Role) myRoleBuild(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+	reqObj := &proto.MyRoleBuildReq{}
+	rspObj := &proto.MyRoleBuildRsp{}
+
+	mapstructure.Decode(req.Body.Msg, reqObj)
+	rsp.Body.Msg = rspObj
+	rsp.Body.Code = constant.OK
+
+	r, _ := req.Conn.GetProperty("role")
+	role := r.(*model.Role)
+
+	ra, ok := logic.RBMgr.GetRoleBuild(role.RId)
+	if ok {
+		rspObj.MRBuilds = make([]proto.MapRoleBuild, len(ra))
+		for i, v := range ra {
+			model_to_proto.MRBuild(v, &rspObj.MRBuilds[i])
+		}
+	}else{
+		rspObj.MRBuilds = make([]proto.MapRoleBuild, 0)
+	}
+
 }
