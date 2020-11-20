@@ -4,6 +4,7 @@ import (
 	"github.com/gorilla/websocket"
 	"go.uber.org/zap"
 	"slgserver/log"
+	"slgserver/model"
 	"slgserver/net"
 	"sync"
 )
@@ -13,9 +14,11 @@ var cid = 0
 type ConnMgr struct {
 	cm        sync.RWMutex
 	um        sync.RWMutex
+	rm        sync.RWMutex
 
 	connCache map[int]*net.WSConn
 	userCache map[int]*net.WSConn
+	roleCache map[int]*net.WSConn
 }
 
 func (this* ConnMgr) NewConn(wsSocket *websocket.Conn, needSecret bool) *net.WSConn{
@@ -29,6 +32,10 @@ func (this* ConnMgr) NewConn(wsSocket *websocket.Conn, needSecret bool) *net.WSC
 
 	if this.userCache == nil {
 		this.userCache = make(map[int]*net.WSConn)
+	}
+
+	if this.roleCache == nil {
+		this.roleCache = make(map[int]*net.WSConn)
 	}
 
 	c := net.NewWSConn(wsSocket, needSecret)
@@ -68,7 +75,18 @@ func (this* ConnMgr) UserLogout(conn *net.WSConn) {
 	}
 	conn.RemoveProperty("session")
 	conn.RemoveProperty("uid")
+	conn.RemoveProperty("role")
 
+}
+
+func (this* ConnMgr) RoleEnter(conn *net.WSConn) {
+	this.rm.Lock()
+	defer this.rm.Unlock()
+
+	if r, err := conn.GetProperty("role"); err == nil{
+		role := r.(*model.Role)
+		this.roleCache[role.RId] = conn
+	}
 }
 
 func (this* ConnMgr) RemoveConn(conn *net.WSConn){
@@ -85,6 +103,25 @@ func (this* ConnMgr) RemoveConn(conn *net.WSConn){
 		delete(this.userCache, uid.(int))
 	}
 	this.um.Unlock()
+
+	this.rm.Lock()
+	if r, err := conn.GetProperty("role"); err == nil{
+		role := r.(*model.Role)
+		delete(this.roleCache, role.RId)
+	}
+	this.rm.Unlock()
+}
+
+func (this* ConnMgr) PushByRoleId(rid int, msgName string, data interface{}) bool {
+	this.rm.Lock()
+	defer this.rm.Unlock()
+	conn, ok := this.roleCache[rid]
+	if ok {
+		conn.Send(msgName, data)
+		return true
+	}else{
+		return false
+	}
 }
 
 func (this* ConnMgr) Count() int{

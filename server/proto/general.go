@@ -90,3 +90,8 @@ type AssignArmyReq struct {
 type AssignArmyRsp struct {
 	Army		Army	`json:"army"`
 }
+
+type ArmyStatePush struct {
+	CityId	int  	`json:"cityId"`
+	Army	Army	`json:"army"`
+}

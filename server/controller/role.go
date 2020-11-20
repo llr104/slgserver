@@ -9,6 +9,7 @@ import (
 	"slgserver/log"
 	"slgserver/model"
 	"slgserver/net"
+	"slgserver/server"
 	"slgserver/server/entity"
 	"slgserver/server/middleware"
 	"slgserver/server/model_to_proto"
@@ -121,6 +122,8 @@ func (this*Role) enterServer(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 		req.Conn.SetProperty("sid", role.SId)
 		req.Conn.SetProperty("role", role)
+
+		server.DefaultConnMgr.RoleEnter(req.Conn)
 
 		var e error = nil
 		var roleRes *model.RoleRes

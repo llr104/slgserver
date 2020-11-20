@@ -7,6 +7,7 @@ import (
 	"slgserver/db"
 	"slgserver/log"
 	"slgserver/model"
+	"slgserver/server/logic"
 	"sync"
 	"time"
 )
@@ -37,10 +38,51 @@ func (this* ArmyMgr) Load() {
 			this.armyByCityId[cid] = make([]*model.Army, 0)
 			this.armyByCityId[cid] = append(this.armyByCityId[cid], v)
 		}
+
+		//恢复已经执行行动的军队
+		if v.State != model.ArmyIdle {
+			e := v.End.Unix()
+			_, ok := this.armyByEndTime[e]
+			if ok == false{
+				this.armyByEndTime[e] = make([]*model.Army, 0)
+			}
+			this.armyByEndTime[e] = append(this.armyByEndTime[e], v)
+		}
 	}
 
-	this.mutex.Unlock()
+	cur_t := time.Now().Unix()
+	for k, armys := range this.armyByEndTime {
+		if k<= cur_t {
+			for _, a := range armys {
+				if a.State == model.ArmyAttack{
+					diff := a.End.Unix() - a.Start.Unix()
+					if cur_t >= 2*diff + a.End.Unix() {
+						//还需要处理战斗
+						a.ToX = a.FromX
+						a.ToY = a.FromY
+						a.State = model.ArmyIdle
+					}else if cur_t >= diff + a.End.Unix() {
+						//还需要处理战斗
 
+						a.ToX = a.FromX
+						a.ToY = a.FromY
+						a.State = model.ArmyBack
+					}
+				}else if a.State == model.ArmyDefend{
+
+				}else if a.State == model.ArmyBack {
+					if cur_t >= a.End.Unix() {
+						a.ToX = a.FromX
+						a.ToY = a.FromY
+						a.State = model.ArmyIdle
+					}
+				}
+				a.NeedUpdate = true
+			}
+		}
+	}
+	this.mutex.Unlock()
+	go this.running()
 	go this.toDatabase()
 }
 
@@ -90,19 +132,11 @@ func (this* ArmyMgr) running() {
 			arr, ok := this.armyByEndTime[i]
 			if ok {
 				for _, army := range arr {
-					//先让他原路返回
-					if army.State != model.ArmyBack {
-						diff := army.End.Unix() - army.Start.Unix()
-						army.Start = army.End
-						army.End = army.Start.Add(time.Duration(diff))
+					armyLogic := logic.ArmyLogic{}
+					armyLogic.Arrive(army)
+					if army.State != model.ArmyIdle{
 						this.pushAction(army)
-						army.State = model.ArmyBack
-					}else{
-						army.ToX = army.FromX
-						army.ToY = army.FromY
-						army.State = model.ArmyIdle
 					}
-					army.NeedUpdate = true
 				}
 			}
 			delete(this.armyByEndTime, i)
