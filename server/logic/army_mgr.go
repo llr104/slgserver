@@ -16,12 +16,14 @@ type ArmyMgr struct {
 	armyById     	map[int]*model.Army   	//key:armyId
 	armyByCityId 	map[int][]*model.Army 	//key:cityId
 	armyByEndTime	map[int64][]*model.Army	//key:到达时间
+	armyByRId		map[int][]*model.Army	//key:rid
 }
 
 var AMgr = &ArmyMgr{
 	armyById:     make(map[int]*model.Army),
 	armyByCityId: make(map[int][]*model.Army),
 	armyByEndTime: make(map[int64][]*model.Army),
+	armyByRId: make(map[int][]*model.Army),
 }
 
 func (this* ArmyMgr) Load() {
@@ -37,6 +39,12 @@ func (this* ArmyMgr) Load() {
 			this.armyByCityId[cid] = make([]*model.Army, 0)
 			this.armyByCityId[cid] = append(this.armyByCityId[cid], v)
 		}
+
+		//rid
+		if _, ok := this.armyByRId[v.RId]; ok == false{
+			this.armyByRId[v.RId] = make([]*model.Army, 0)
+		}
+		this.armyByRId[v.RId] = append(this.armyByRId[v.RId], v)
 
 		//恢复已经执行行动的军队
 		if v.State != model.ArmyIdle {
@@ -74,7 +82,7 @@ func (this* ArmyMgr) Load() {
 	go this.toDatabase()
 }
 
-func (this* ArmyMgr) updateOne(army* model.Army)  {
+func (this* ArmyMgr) insertOne(army* model.Army)  {
 
 	aid := army.Id
 	cid := army.CityId
@@ -85,11 +93,16 @@ func (this* ArmyMgr) updateOne(army* model.Army)  {
 	}
 	this.armyByCityId[cid] = append(this.armyByCityId[cid], army)
 
+	if _, ok := this.armyByRId[army.RId]; ok == false{
+		this.armyByRId[army.RId] = make([]*model.Army, 0)
+	}
+	this.armyByRId[army.RId] = append(this.armyByRId[army.RId], army)
+
 }
 
-func (this* ArmyMgr) updateOneMutil(armys[] *model.Army)  {
+func (this* ArmyMgr) insertMutil(armys[] *model.Army)  {
 	for _, v := range armys {
-		this.updateOne(v)
+		this.insertOne(v)
 	}
 }
 
@@ -168,7 +181,7 @@ func (this* ArmyMgr) Get(aid int) (*model.Army, error){
 		ok, err := db.MasterDB.Table(model.Army{}).Where("id=?", aid).Get(army)
 		if ok {
 			this.mutex.Lock()
-			this.updateOne(army)
+			this.insertOne(army)
 			this.mutex.Unlock()
 			return army, nil
 		}else{
@@ -198,11 +211,18 @@ func (this* ArmyMgr) GetByCity(cid int) ([]*model.Army, error){
 			return m, err
 		}else{
 			this.mutex.Lock()
-			this.updateOneMutil(m)
+			this.insertMutil(m)
 			this.mutex.Unlock()
 			return m, nil
 		}
 	}
+}
+
+func (this* ArmyMgr) GetByRId(rid int) ([]*model.Army, bool){
+	this.mutex.RLock()
+	a,ok := this.armyByRId[rid]
+	this.mutex.RUnlock()
+	return a, ok
 }
 
 func (this* ArmyMgr) GetOrCreate(rid int, cid int, order int8) (*model.Army, error){
@@ -226,7 +246,7 @@ func (this* ArmyMgr) GetOrCreate(rid int, cid int, order int8) (*model.Army, err
 	_, err := db.MasterDB.Insert(army)
 	if err == nil{
 		this.mutex.Lock()
-		this.updateOne(army)
+		this.insertOne(army)
 		this.mutex.Unlock()
 		return army, nil
 	}else{

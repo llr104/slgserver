@@ -31,6 +31,7 @@ func (this*Role) InitRouter(r *net.Router) {
 	g.AddRouter("myCity", this.myCity, middleware.CheckRole())
 	g.AddRouter("myRoleRes", this.myRoleRes, middleware.CheckRole())
 	g.AddRouter("myRoleBuild", this.myRoleBuild, middleware.CheckRole())
+	g.AddRouter("role.myProperty", this.myProperty, middleware.CheckRole())
 }
 
 func (this*Role) create(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
@@ -221,6 +222,74 @@ func (this*Role) myRoleRes(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		model_to_proto.RRes(roleRes, &rspObj.RoleRes)
 		rsp.Body.Code = constant.OK
 	}
+}
+func (this*Role) myProperty(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+	reqObj := &proto.MyRolePropertyReq{}
+	rspObj := &proto.MyRolePropertyRsp{}
+
+	mapstructure.Decode(req.Body.Msg, reqObj)
+	rsp.Body.Msg = rspObj
+	rsp.Body.Code = constant.OK
+
+	r, _ := req.Conn.GetProperty("role")
+	role := r.(*model.Role)
+
+	//城市
+	c, ok := logic.RCMgr.GetByRId(role.RId)
+	if ok {
+		rspObj.Citys = make([]proto.MapRoleCity, len(c))
+		for i, v := range c {
+			model_to_proto.MCBuild(v, &rspObj.Citys[i])
+		}
+	}else{
+		rspObj.Citys = make([]proto.MapRoleCity, 0)
+	}
+
+
+	//建筑
+	ra, ok := logic.RBMgr.GetRoleBuild(role.RId)
+	if ok {
+		rspObj.MRBuilds = make([]proto.MapRoleBuild, len(ra))
+		for i, v := range ra {
+			model_to_proto.MRBuild(v, &rspObj.MRBuilds[i])
+		}
+	}else{
+		rspObj.MRBuilds = make([]proto.MapRoleBuild, 0)
+	}
+
+	//资源
+	roleRes, err := logic.RResMgr.Get(role.RId)
+	if err != nil{
+		log.DefaultLog.Warn("myRoleRes db error", zap.Error(err))
+		rsp.Body.Code = constant.RoleNotExist
+		return
+	}else{
+		model_to_proto.RRes(roleRes, &rspObj.RoleRes)
+	}
+
+	//武将
+	gs, err := logic.GMgr.GetAndTryCreate(role.RId)
+	if err == nil {
+		rspObj.Generals = make([]proto.General, len(gs))
+		for i, v := range gs {
+			model_to_proto.General(v, &rspObj.Generals[i])
+		}
+	}else{
+		rsp.Body.Code = constant.DBError
+		return
+	}
+
+	//军队
+	ar, ok := logic.AMgr.GetByRId(role.RId)
+	if ok {
+		rspObj.Armys = make([]proto.Army, len(ar))
+		for i, v := range ar {
+			model_to_proto.Army(v, &rspObj.Armys[i])
+		}
+	}else{
+		rspObj.Armys = make([]proto.Army, 0)
+	}
+
 }
 
 func (this*Role) myRoleBuild(req *net.WsMsgReq, rsp *net.WsMsgRsp) {

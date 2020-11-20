@@ -84,6 +84,8 @@ func (this *armyLogic) battle(army* model.Army) {
 
 	//占领
 	this.OccupyBuild(army.Id, army.ToX, army.ToY)
+
+
 }
 
 func (this* armyLogic) OccupyBuild(rid, x, y int)  {
@@ -116,6 +118,11 @@ func (this* armyLogic) OccupyBuild(rid, x, y int)  {
 		b.NeedUpdate = true
 		b.RId = rid
 
+		push := &proto.RoleBuildStatePush{}
+		model_to_proto.MRBuild(b, &push.MRBuild)
+		server.DefaultConnMgr.PushByRoleId(oldId, "role.roleBuildState", push)
+		server.DefaultConnMgr.PushByRoleId(newId, "role.roleBuildState", push)
+
 	}else{
 		if NMMgr.IsCanBuild(x, y){
 			b, ok := NMMgr.PositionBuild(x, y)
@@ -126,6 +133,7 @@ func (this* armyLogic) OccupyBuild(rid, x, y int)  {
 						Wood: cfg.Wood, Iron: cfg.Iron, Stone: cfg.Stone,
 						Grain: cfg.Grain, CurDurable: cfg.Durable,
 						MaxDurable: cfg.Durable, NeedUpdate: true}
+
 					RBMgr.AddBuild(rb)
 
 					//占领的增加产量
@@ -136,6 +144,10 @@ func (this* armyLogic) OccupyBuild(rid, x, y int)  {
 						newRole.IronYield -= rb.Iron
 						newRole.NeedUpdate = true
 					}
+
+					push := &proto.RoleBuildStatePush{}
+					model_to_proto.MRBuild(rb, &push.MRBuild)
+					server.DefaultConnMgr.PushByRoleId(newId, "role.roleBuildState", push)
 				}
 			}
 		}

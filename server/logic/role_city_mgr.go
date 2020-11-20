@@ -12,13 +12,15 @@ import (
 
 type RoleCityMgr struct {
 	mutex  sync.RWMutex
-	dbCity map[int]*model.MapRoleCity
-	posCity map[int]*model.MapRoleCity
+	dbCity map[int]*model.MapRoleCity	//key: cid
+	posCity map[int]*model.MapRoleCity	//key: pos
+	roleCity map[int][]*model.MapRoleCity	//key: rid
 }
 
 var RCMgr = &RoleCityMgr{
 	dbCity: make(map[int]*model.MapRoleCity),
 	posCity: make(map[int]*model.MapRoleCity),
+	roleCity: make(map[int][]*model.MapRoleCity),
 }
 
 func (this* RoleCityMgr) Load() {
@@ -30,10 +32,15 @@ func (this* RoleCityMgr) Load() {
 		log.DefaultLog.Error("RoleCityMgr load role_city table error")
 	}
 
-	//转成posCity
+	//转成posCity、roleCity
 	for _, v := range this.dbCity {
 		posId := ToPosition(v.X, v.Y)
 		this.posCity[posId] = v
+		_, ok := this.roleCity[v.RId]
+		if ok == false{
+			this.roleCity[v.RId] = make([]*model.MapRoleCity, 0)
+		}
+		this.roleCity[v.RId] = append(this.roleCity[v.RId], v)
 	}
 }
 
@@ -61,6 +68,12 @@ func (this* RoleCityMgr) Add(city *model.MapRoleCity) {
 	defer this.mutex.Unlock()
 	this.dbCity[city.CityId] = city
 	this.posCity[ToPosition(city.X, city.Y)] = city
+
+	_, ok := this.roleCity[city.RId]
+	if ok == false{
+		this.roleCity[city.RId] = make([]*model.MapRoleCity, 0)
+	}
+	this.roleCity[city.RId] = append(this.roleCity[city.RId], city)
 }
 
 func (this* RoleCityMgr) Scan(x, y int) []*model.MapRoleCity {
@@ -113,7 +126,12 @@ func (this* RoleCityMgr) ScanBlock(x, y, length int) []*model.MapRoleCity {
 	return cb
 }
 
-
+func (this* RoleCityMgr) GetByRId(rid int) ([]*model.MapRoleCity, bool){
+	this.mutex.RLock()
+	this.mutex.RUnlock()
+	r, ok := this.roleCity[rid]
+	return r, ok
+}
 
 func (this* RoleCityMgr) Get(cid int) (*model.MapRoleCity, error){
 	this.mutex.RLock()
