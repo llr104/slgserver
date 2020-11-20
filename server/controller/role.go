@@ -148,6 +148,37 @@ func (this*Role) enterServer(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 			rsp.Body.Code = constant.OK
 		}else{
 			rsp.Body.Code = constant.DBError
+			return
+		}
+
+		//查询是否有城市
+		_, ok = logic.RCMgr.GetByRId(role.RId)
+		if ok == false{
+			citys := make([]*model.MapRoleCity, 0)
+			//随机生成一个城市
+			for true {
+				x := rand.Intn(logic.MapWith)
+				y := rand.Intn(logic.MapHeight)
+				if logic.NMMgr.IsCanBuild(x, y) && logic.RBMgr.IsEmpty(x, y) && logic.RCMgr.IsEmpty(x, y){
+					//建立城市
+					c := &model.MapRoleCity{RId: role.RId, X: x, Y: y, IsMain: 1,
+						CurDurable: 100, MaxDurable: 100, Level: 1, Name: role.NickName, CreatedAt: time.Now()}
+
+					//插入
+					_, err := db.MasterDB.Table(c).Insert(c)
+					if err != nil{
+						rsp.Body.Code = constant.DBError
+					}else{
+						citys = append(citys, c)
+						//更新城市缓存
+						logic.RCMgr.Add(c)
+					}
+
+					//生成城市里面的设施
+					logic.RFMgr.GetAndTryCreate(c.CityId)
+					break
+				}
+			}
 		}
 
 	}else{
@@ -165,41 +196,20 @@ func (this*Role) myCity(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 	r, _ := req.Conn.GetProperty("role")
 	role, _ := r.(*model.Role)
-	citys := make([]*model.MapRoleCity, 0)
-	//查询是否有城市
-	db.MasterDB.Table(new(model.MapRoleCity)).Where("rid=?", role.RId).Find(&citys)
-	if len(citys) == 0 {
-		//随机生成一个城市
-		for true {
-			x := rand.Intn(logic.MapWith)
-			y := rand.Intn(logic.MapHeight)
-			if logic.NMMgr.IsCanBuild(x, y) && logic.RBMgr.IsEmpty(x, y) && logic.RCMgr.IsEmpty(x, y){
-				//建立城市
-				c := &model.MapRoleCity{RId: role.RId, X: x, Y: y, IsMain: 1,
-					CurDurable: 100, MaxDurable: 100, Level: 1, Name: role.NickName, CreatedAt: time.Now()}
 
-				//插入
-				_, err := db.MasterDB.Table(c).Insert(c)
-				if err != nil{
-					rsp.Body.Code = constant.DBError
-				}else{
-					citys = append(citys, c)
-					//更新城市缓存
-					logic.RCMgr.Add(c)
-				}
 
-				//生成城市里面的设施
-				logic.RFMgr.GetAndTryCreate(c.CityId)
-				break
-			}
+	citys,ok := logic.RCMgr.GetByRId(role.RId)
+	if ok {
+		rspObj.Citys = make([]proto.MapRoleCity, len(citys))
+		//赋值发送
+		for i, v := range citys {
+			model_to_proto.MCBuild(v, &rspObj.Citys[i])
 		}
+
+	}else{
+		rspObj.Citys = make([]proto.MapRoleCity, 0)
 	}
 
-	//赋值发送
-	rspObj.Citys = make([]proto.MapRoleCity, len(citys))
-	for i, v := range citys {
-		model_to_proto.MCBuild(v, &rspObj.Citys[i])
-	}
 }
 
 func (this*Role) myRoleRes(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
