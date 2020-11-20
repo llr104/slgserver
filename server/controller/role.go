@@ -130,13 +130,13 @@ func (this*Role) enterServer(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		var e error = nil
 		roleRes, ok := logic.RResMgr.Get(role.RId)
 		if ok == false{
-			rres := &model.RoleRes{RId: role.RId, Wood: 10000, Iron: 10000,
+			roleRes = &model.RoleRes{RId: role.RId, Wood: 10000, Iron: 10000,
 				Stone: 10000, Grain: 10000, Gold: 10000,
 				Decree: 20, WoodYield: 1000, IronYield: 1000,
 				StoneYield: 1000, GrainYield: 1000, GoldYield: 1000,
 				DepotCapacity: 100000}
 
-			_ ,e = db.MasterDB.Insert(rres)
+			_ ,e = db.MasterDB.Insert(roleRes)
 			if e != nil {
 				log.DefaultLog.Error("insert rres error", zap.Error(e))
 			}
