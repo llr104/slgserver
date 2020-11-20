@@ -125,15 +125,13 @@ func (this* ArmyMgr) running() {
 		time.Sleep(1*time.Second)
 
 		this.mutex.Lock()
-		//往前5秒找，以防有些占用太久没有执行到
-		for i := t-5; i <= t ; i++ {
-			arr, ok := this.armyByEndTime[i]
-			if ok {
-				for _, army := range arr {
+		for k, armies := range this.armyByEndTime {
+			if k <= t{
+				for _, army := range armies {
 					ArmyLogic.Arrive(army)
 				}
+				delete(this.armyByEndTime, k)
 			}
-			delete(this.armyByEndTime, i)
 		}
 		this.mutex.Unlock()
 	}
