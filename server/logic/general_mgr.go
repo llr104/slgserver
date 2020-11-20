@@ -82,12 +82,12 @@ func (this* GeneralMgr) Get(rid int) ([]*model.General, error){
 }
 
 //查找将领
-func (this* GeneralMgr) FindGeneral(gid int) (*model.General, error){
+func (this* GeneralMgr) FindGeneral(gid int) (*model.General, bool){
 	this.mutex.RLock()
 	g, ok := this.genByGId[gid]
 	this.mutex.RUnlock()
 	if ok {
-		return g, nil
+		return g, true
 	}else{
 
 		m := &model.General{}
@@ -105,17 +105,15 @@ func (this* GeneralMgr) FindGeneral(gid int) (*model.General, error){
 				}
 
 				this.mutex.Unlock()
-				return m, nil
+				return m, true
 			}else{
-				str := fmt.Sprintf("general %d not found", gid)
-				log.DefaultLog.Warn(str, zap.Int("gid", gid))
-				return nil, errors.New(str)
+				log.DefaultLog.Warn("general gid not found", zap.Int("gid", gid))
+				return nil, false
 			}
 
 		}else{
-			str := fmt.Sprintf("general %d not found", gid)
-			log.DefaultLog.Warn(str, zap.Int("gid", gid))
-			return nil, errors.New(str)
+			log.DefaultLog.Warn("general gid not found", zap.Int("gid", gid))
+			return nil, false
 		}
 	}
 }
@@ -123,10 +121,10 @@ func (this* GeneralMgr) FindGeneral(gid int) (*model.General, error){
 /*
 如果不存在尝试去创建
 */
-func (this* GeneralMgr) GetAndTryCreate(rid int) ([]*model.General, error){
+func (this* GeneralMgr) GetAndTryCreate(rid int) ([]*model.General, bool){
 	r, err := this.Get(rid)
 	if err == nil {
-		return r, nil
+		return r, true
 	}else{
 		//创建
 		gs := make([]*model.General, 0)
@@ -144,12 +142,12 @@ func (this* GeneralMgr) GetAndTryCreate(rid int) ([]*model.General, error){
 			if _, err := db.MasterDB.Table(model.General{}).Insert(r); err != nil {
 				sess.Rollback()
 				log.DefaultLog.Warn("db error", zap.Error(err))
-				return nil, err
+				return nil, false
 			}
 		}
 		if err := sess.Commit(); err != nil{
 			log.DefaultLog.Warn("db error", zap.Error(err))
-			return nil, err
+			return nil, false
 		}else{
 			this.mutex.Lock()
 			this.genByRole[rid] = gs
@@ -157,7 +155,7 @@ func (this* GeneralMgr) GetAndTryCreate(rid int) ([]*model.General, error){
 				this.genByGId[v.Id] = v
 			}
 			this.mutex.Unlock()
-			return gs, nil
+			return gs, true
 		}
 	}
 }

@@ -1,8 +1,7 @@
 package logic
 
 import (
-	"errors"
-	"fmt"
+	"go.uber.org/zap"
 	"slgserver/db"
 	"slgserver/log"
 	"slgserver/model"
@@ -133,29 +132,28 @@ func (this* RoleCityMgr) GetByRId(rid int) ([]*model.MapRoleCity, bool){
 	return r, ok
 }
 
-func (this* RoleCityMgr) Get(cid int) (*model.MapRoleCity, error){
+func (this* RoleCityMgr) Get(cid int) (*model.MapRoleCity, bool){
 	this.mutex.RLock()
 	r, ok := this.dbCity[cid]
 	this.mutex.RUnlock()
 
 	if ok {
-		return r, nil
+		return r, true
 	}
 
 
 	r = &model.MapRoleCity{}
 	ok, err := db.MasterDB.Table(r).Where("cityId=?", cid).Get(r)
+	if err != nil{
+		log.DefaultLog.Warn("db error", zap.Error(err))
+	}
+
 	if ok {
 		this.mutex.Lock()
 		this.dbCity[cid] = r
 		this.mutex.Unlock()
-		return r, nil
+		return r, true
 	}else{
-		if err != nil{
-			return nil, err
-		}else{
-			str := fmt.Sprintf("cid:%d CityFacility not found", cid)
-			return nil, errors.New(str)
-		}
+		return nil, false
 	}
 }

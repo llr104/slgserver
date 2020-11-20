@@ -45,7 +45,7 @@ func (this*Group) applyMiddleware(name string) HandlerFunc {
 func (this*Group) exec(name string, req *WsMsgReq, rsp *WsMsgRsp){
 	h := this.applyMiddleware(name)
 	if h == nil {
-		log.DefaultLog.Warn("Group has not applyMiddleware",
+		log.DefaultLog.Warn("Group has not",
 			zap.String("msgName", req.Body.Name))
 	}else{
 		h(req, rsp)

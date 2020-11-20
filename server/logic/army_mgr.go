@@ -1,8 +1,6 @@
 package logic
 
 import (
-	"errors"
-	"fmt"
 	"go.uber.org/zap"
 	"slgserver/db"
 	"slgserver/log"
@@ -170,12 +168,12 @@ func (this* ArmyMgr) toDatabase() {
 	}
 }
 
-func (this* ArmyMgr) Get(aid int) (*model.Army, error){
+func (this* ArmyMgr) Get(aid int) (*model.Army, bool){
 	this.mutex.RLock()
 	a, ok := this.armyById[aid]
 	this.mutex.RUnlock()
 	if ok {
-		return a, nil
+		return a, true
 	}else{
 		army := &model.Army{}
 		ok, err := db.MasterDB.Table(model.Army{}).Where("id=?", aid).Get(army)
@@ -183,37 +181,37 @@ func (this* ArmyMgr) Get(aid int) (*model.Army, error){
 			this.mutex.Lock()
 			this.insertOne(army)
 			this.mutex.Unlock()
-			return army, nil
+			return army, true
 		}else{
 			if err == nil{
-				str := fmt.Sprintf("ArmyMgr Get armyId:%d db not found", aid)
-				log.DefaultLog.Warn(str)
-				return nil, errors.New(str)
+				log.DefaultLog.Warn("ArmyMgr Get armyId db not found",
+					zap.Int("armyId", aid))
+				return nil, false
 			}else{
 				log.DefaultLog.Warn("ArmyMgr Get db error", zap.Int("armyId", aid))
-				return nil, err
+				return nil, false
 			}
 		}
 	}
 }
 
-func (this* ArmyMgr) GetByCity(cid int) ([]*model.Army, error){
+func (this* ArmyMgr) GetByCity(cid int) ([]*model.Army, bool){
 	this.mutex.RLock()
 	a,ok := this.armyByCityId[cid]
 	this.mutex.RUnlock()
 	if ok {
-		return a, nil
+		return a, true
 	}else{
 		m := make([]*model.Army, 0)
 		err := db.MasterDB.Table(model.Army{}).Where("cityId=?", cid).Find(&m)
 		if err!=nil{
 			log.DefaultLog.Warn("ArmyMgr GetByCity db error", zap.Int("cityId", cid))
-			return m, err
+			return m, false
 		}else{
 			this.mutex.Lock()
 			this.insertMutil(m)
 			this.mutex.Unlock()
-			return m, nil
+			return m, true
 		}
 	}
 }

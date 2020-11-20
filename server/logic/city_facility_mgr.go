@@ -2,7 +2,6 @@ package logic
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"go.uber.org/zap"
 	"slgserver/constant"
@@ -44,41 +43,37 @@ func (this* FacilityMgr) Load() {
 	go this.toDatabase()
 }
 
-func (this* FacilityMgr) Get(cid int) (*model.CityFacility, error){
+func (this* FacilityMgr) Get(cid int) (*model.CityFacility, bool){
 	this.mutex.RLock()
 	r, ok := this.facilities[cid]
 	this.mutex.RUnlock()
 
 	if ok {
-		return r, nil
+		return r, true
 	}
 
 	r = &model.CityFacility{}
 	ok, err := db.MasterDB.Table(r).Where("cityId=?", cid).Get(r)
+	log.DefaultLog.Warn("db error", zap.Error(err))
 	if ok {
 		this.mutex.Lock()
 		this.facilities[cid] = r
 		this.mutex.Unlock()
-		return r, nil
+		return r, true
 	}else{
-		if err != nil{
-			return nil, err
-		}else{
-			str := fmt.Sprintf("cid:%d CityFacility not found", cid)
-			return nil, errors.New(str)
-		}
+		return nil, false
 	}
 }
 
 /*
 如果不存在尝试去创建
 */
-func (this* FacilityMgr) GetAndTryCreate(cid int) (*model.CityFacility, error){
-	r, err := this.Get(cid)
-	if err == nil {
-		return r, nil
+func (this* FacilityMgr) GetAndTryCreate(cid int) (*model.CityFacility, bool){
+	r, ok := this.Get(cid)
+	if ok {
+		return r, true
 	}else{
-		if _, err:= RCMgr.Get(cid); err == nil {
+		if _, ok:= RCMgr.Get(cid); ok {
 			//创建
 			fs := make([]Facility, len(facility.FConf.List))
 
@@ -95,10 +90,10 @@ func (this* FacilityMgr) GetAndTryCreate(cid int) (*model.CityFacility, error){
 			this.facilities[cid] = cf
 			this.mutex.Unlock()
 
-			return cf, nil
+			return cf, true
 		}else{
-			str := fmt.Sprintf("cid:%d not found", cid)
-			return nil, errors.New(str)
+			log.DefaultLog.Warn("cid not found", zap.Int("cid", cid))
+			return nil, false
 		}
 	}
 }

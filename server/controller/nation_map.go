@@ -67,8 +67,8 @@ func (this*NationMap) scan(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	rspObj.MRBuilds = make([]proto.MapRoleBuild, len(rb))
 	for i, v := range rb {
 		name := ""
-		vRole, err := logic.RMgr.Get(v.RId)
-		if err == nil {
+		vRole, ok := logic.RMgr.Get(v.RId)
+		if ok {
 			name = vRole.NickName
 		}
 		model_to_proto.MRBuild(v, &rspObj.MRBuilds[i])
@@ -96,8 +96,8 @@ func (this*NationMap) scanBlock(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	rspObj.MRBuilds = make([]proto.MapRoleBuild, len(rb))
 	for i, v := range rb {
 		name := ""
-		vRole, err := logic.RMgr.Get(v.RId)
-		if err == nil {
+		vRole, ok := logic.RMgr.Get(v.RId)
+		if ok {
 			name = vRole.NickName
 		}
 

@@ -38,8 +38,8 @@ func (this*City) facilities(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	rsp.Body.Code = constant.OK
 
 	r, _ := req.Conn.GetProperty("role")
-	city, err := logic.RCMgr.Get(reqObj.CityId)
-	if err != nil {
+	city, ok := logic.RCMgr.Get(reqObj.CityId)
+	if ok == false {
 		rsp.Body.Code = constant.CityNotExist
 		return
 	}
@@ -50,8 +50,8 @@ func (this*City) facilities(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	f, err := logic.RFMgr.Get(reqObj.CityId)
-	if err != nil {
+	f, ok := logic.RFMgr.Get(reqObj.CityId)
+	if ok == false {
 		rsp.Body.Code = constant.CityNotExist
 		return
 	}
@@ -77,8 +77,8 @@ func (this*City) upFacility(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	rsp.Body.Code = constant.OK
 
 	r, _ := req.Conn.GetProperty("role")
-	city, err := logic.RCMgr.Get(reqObj.CityId)
-	if err != nil {
+	city, ok := logic.RCMgr.Get(reqObj.CityId)
+	if ok == false {
 		rsp.Body.Code = constant.CityNotExist
 		return
 	}
@@ -89,8 +89,8 @@ func (this*City) upFacility(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	_, err = logic.RFMgr.Get(reqObj.CityId)
-	if err != nil {
+	_, ok = logic.RFMgr.Get(reqObj.CityId)
+	if ok == false {
 		rsp.Body.Code = constant.CityNotExist
 		return
 	}
@@ -102,7 +102,7 @@ func (this*City) upFacility(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		rspObj.Facility.Type = out.Type
 		rspObj.Facility.Name = out.Name
 
-		if roleRes, err:= logic.RResMgr.Get(role.RId); err == nil {
+		if roleRes, ok:= logic.RResMgr.Get(role.RId); ok {
 			model_to_proto.RRes(roleRes, &rspObj.RoleRes)
 		}
 	}

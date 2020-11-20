@@ -31,7 +31,7 @@ func (this*Role) InitRouter(r *net.Router) {
 	g.AddRouter("myCity", this.myCity, middleware.CheckRole())
 	g.AddRouter("myRoleRes", this.myRoleRes, middleware.CheckRole())
 	g.AddRouter("myRoleBuild", this.myRoleBuild, middleware.CheckRole())
-	g.AddRouter("role.myProperty", this.myProperty, middleware.CheckRole())
+	g.AddRouter("myProperty", this.myProperty, middleware.CheckRole())
 }
 
 func (this*Role) create(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
@@ -128,17 +128,17 @@ func (this*Role) enterServer(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		server.DefaultConnMgr.RoleEnter(req.Conn)
 
 		var e error = nil
-		var roleRes *model.RoleRes
-		if roleRes, err = logic.RResMgr.Get(role.RId); err != nil{
-			roleRes := &model.RoleRes{RId: role.RId, Wood: 10000, Iron: 10000,
+		roleRes, ok := logic.RResMgr.Get(role.RId)
+		if ok == false{
+			rres := &model.RoleRes{RId: role.RId, Wood: 10000, Iron: 10000,
 				Stone: 10000, Grain: 10000, Gold: 10000,
 				Decree: 20, WoodYield: 1000, IronYield: 1000,
 				StoneYield: 1000, GrainYield: 1000, GoldYield: 1000,
 				DepotCapacity: 100000}
 
-			_ ,e = db.MasterDB.Insert(roleRes)
+			_ ,e = db.MasterDB.Insert(rres)
 			if e != nil {
-				log.DefaultLog.Error("insert roleRes error", zap.Error(e))
+				log.DefaultLog.Error("insert rres error", zap.Error(e))
 			}
 		}
 
@@ -213,9 +213,8 @@ func (this*Role) myRoleRes(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
 
-	roleRes, err := logic.RResMgr.Get(role.RId)
-	if err != nil{
-		log.DefaultLog.Warn("myRoleRes db error", zap.Error(err))
+	roleRes, ok := logic.RResMgr.Get(role.RId)
+	if ok == false{
 		rsp.Body.Code = constant.RoleNotExist
 		return
 	}else{
@@ -223,6 +222,7 @@ func (this*Role) myRoleRes(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		rsp.Body.Code = constant.OK
 	}
 }
+
 func (this*Role) myProperty(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	reqObj := &proto.MyRolePropertyReq{}
 	rspObj := &proto.MyRolePropertyRsp{}
@@ -258,18 +258,17 @@ func (this*Role) myProperty(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	}
 
 	//资源
-	roleRes, err := logic.RResMgr.Get(role.RId)
-	if err != nil{
-		log.DefaultLog.Warn("myRoleRes db error", zap.Error(err))
+	roleRes, ok := logic.RResMgr.Get(role.RId)
+	if ok {
+		model_to_proto.RRes(roleRes, &rspObj.RoleRes)
+	}else{
 		rsp.Body.Code = constant.RoleNotExist
 		return
-	}else{
-		model_to_proto.RRes(roleRes, &rspObj.RoleRes)
 	}
 
 	//武将
-	gs, err := logic.GMgr.GetAndTryCreate(role.RId)
-	if err == nil {
+	gs, ok := logic.GMgr.GetAndTryCreate(role.RId)
+	if ok {
 		rspObj.Generals = make([]proto.General, len(gs))
 		for i, v := range gs {
 			model_to_proto.General(v, &rspObj.Generals[i])

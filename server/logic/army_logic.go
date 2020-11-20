@@ -100,7 +100,7 @@ func (this* armyLogic) OccupyBuild(rid, x, y int)  {
 			zap.Int("newRId", newId))
 
 		//被占领的减产
-		if oldRole, err := RResMgr.Get(oldId); err == nil{
+		if oldRole, ok := RResMgr.Get(oldId); ok{
 			oldRole.WoodYield -= b.Wood
 			oldRole.GrainYield -= b.Grain
 			oldRole.StoneYield -= b.Stone
@@ -108,7 +108,7 @@ func (this* armyLogic) OccupyBuild(rid, x, y int)  {
 			oldRole.NeedUpdate = true
 		}
 		//占领的增加产量
-		if newRole, err := RResMgr.Get(newId); err == nil{
+		if newRole, ok := RResMgr.Get(newId); ok{
 			newRole.WoodYield -= b.Wood
 			newRole.GrainYield -= b.Grain
 			newRole.StoneYield -= b.Stone
@@ -137,7 +137,7 @@ func (this* armyLogic) OccupyBuild(rid, x, y int)  {
 					RBMgr.AddBuild(rb)
 
 					//占领的增加产量
-					if newRole, err := RResMgr.Get(newId); err == nil{
+					if newRole, ok := RResMgr.Get(newId); ok{
 						newRole.WoodYield -= rb.Wood
 						newRole.GrainYield -= rb.Grain
 						newRole.StoneYield -= rb.Stone

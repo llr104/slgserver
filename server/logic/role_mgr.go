@@ -1,9 +1,9 @@
 package logic
 
 import (
-	"errors"
-	"fmt"
+	"go.uber.org/zap"
 	"slgserver/db"
+	"slgserver/log"
 	"slgserver/model"
 	"sync"
 )
@@ -17,28 +17,25 @@ var RMgr = &RoleMgr{
 	roles: make(map[int]*model.Role),
 }
 
-func (this* RoleMgr) Get(rid int) (*model.Role, error){
+func (this* RoleMgr) Get(rid int) (*model.Role, bool){
 	this.mutex.Lock()
 	r, ok := this.roles[rid]
 	this.mutex.Unlock()
 
 	if ok {
-		return r, nil
+		return r, true
 	}
 
 	m := &model.Role{}
 	ok, err := db.MasterDB.Table(new(model.Role)).Where("rid=?", rid).Get(m)
+	log.DefaultLog.Warn("db error", zap.Error(err))
 	if ok {
 		this.mutex.Lock()
 		this.roles[rid] = m
 		this.mutex.Unlock()
-		return m, nil
+		return m, true
 	}else{
-		if err == nil{
-			return nil, errors.New(fmt.Sprintf("role %d not found", rid))
-		}else{
-			return nil, err
-		}
+		return nil, false
 	}
 }
 

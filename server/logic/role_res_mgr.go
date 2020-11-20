@@ -1,7 +1,6 @@
 package logic
 
 import (
-	"errors"
 	"fmt"
 	"go.uber.org/zap"
 	"slgserver/db"
@@ -42,13 +41,13 @@ func (this* RoleResMgr) Load() {
 }
 
 
-func (this* RoleResMgr) Get(rid int) (*model.RoleRes, error){
+func (this* RoleResMgr) Get(rid int) (*model.RoleRes, bool){
 	this.mutex.RLock()
 	r, ok := this.rolesRes[rid]
 	this.mutex.RUnlock()
 
 	if ok {
-		return r, nil
+		return r, true
 	}
 
 	m := &model.RoleRes{}
@@ -57,15 +56,15 @@ func (this* RoleResMgr) Get(rid int) (*model.RoleRes, error){
 		this.mutex.Lock()
 		this.rolesRes[rid] = m
 		this.mutex.Unlock()
-		return m, nil
+		return m, true
 	}else{
 		if err == nil{
 			str := fmt.Sprintf("RoleRes %d not found", rid)
 			log.DefaultLog.Warn(str)
-			return nil, errors.New(str)
+			return nil, false
 		}else{
 			log.DefaultLog.Warn("db error", zap.Error(err))
-			return nil, err
+			return nil, false
 		}
 	}
 }

@@ -46,8 +46,8 @@ func (this*General) myGenerals(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
-	gs, err := logic.GMgr.GetAndTryCreate(role.RId)
-	if err == nil {
+	gs, ok := logic.GMgr.GetAndTryCreate(role.RId)
+	if ok {
 		rsp.Body.Code = constant.OK
 		rspObj.Generals = make([]proto.General, len(gs))
 		for i, v := range gs {
@@ -69,8 +69,8 @@ func (this*General) armyList(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
-	city,err := logic.RCMgr.Get(reqObj.CityId)
-	if err != nil{
+	city,ok := logic.RCMgr.Get(reqObj.CityId)
+	if ok == false{
 		rsp.Body.Code = constant.CityNotExist
 		return
 	}
@@ -104,8 +104,8 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	city, err := logic.RCMgr.Get(reqObj.CityId)
-	if err != nil {
+	city, ok := logic.RCMgr.Get(reqObj.CityId)
+	if ok == false {
 		rsp.Body.Code = constant.CityNotExist
 		return
 	}
@@ -115,8 +115,8 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	g, err := logic.GMgr.FindGeneral(reqObj.GeneralId)
-	if err != nil{
+	g, ok := logic.GMgr.FindGeneral(reqObj.GeneralId)
+	if ok == false{
 		rsp.Body.Code = constant.GeneralNotFound
 		return
 	}
@@ -151,7 +151,7 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		if reqObj.Position == 1 {
 			//旧的下阵
 			if army.FirstId != 0 {
-				if oldG, err := logic.GMgr.FindGeneral(army.FirstId); err==nil{
+				if oldG, ok := logic.GMgr.FindGeneral(army.FirstId); ok{
 					oldG.CityId = 0
 					oldG.Order = 0
 					oldG.NeedUpdate = true
@@ -163,7 +163,7 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		}else if reqObj.Position == 2 {
 			//旧的下阵
 			if army.SecondId != 0 {
-				if oldG, err := logic.GMgr.FindGeneral(army.SecondId); err==nil{
+				if oldG, ok := logic.GMgr.FindGeneral(army.SecondId); ok{
 					oldG.CityId = 0
 					oldG.Order = 0
 					oldG.NeedUpdate = true
@@ -175,7 +175,7 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		}else if reqObj.Position == 3 {
 			//旧的下阵
 			if army.ThirdId != 0 {
-				if oldG, err := logic.GMgr.FindGeneral(army.ThirdId); err==nil{
+				if oldG, ok := logic.GMgr.FindGeneral(army.ThirdId); ok{
 					oldG.CityId = 0
 					oldG.Order = 0
 					oldG.NeedUpdate = true
@@ -191,17 +191,14 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		g.NeedUpdate = true
 	}
 
-	if c, err := logic.RCMgr.Get(army.CityId); err == nil{
+	if c, ok := logic.RCMgr.Get(army.CityId); ok{
 		army.FromX = c.X
 		army.FromY = c.Y
 	}
 
 	army.NeedUpdate = true
-
-
 	//队伍
 	model_to_proto.Army(army, &rspObj.Army)
-
 }
 
 //征兵
@@ -220,8 +217,8 @@ func (this*General) conscript(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
 
-	army,err := logic.AMgr.Get(reqObj.ArmyId)
-	if err != nil{
+	army,ok := logic.AMgr.Get(reqObj.ArmyId)
+	if ok == false{
 		rsp.Body.Code = constant.ArmyNotFound
 		return
 	}
@@ -250,7 +247,7 @@ func (this*General) conscript(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 			}
 			continue
 		}
-		if g, err := logic.GMgr.FindGeneral(gid); err == nil {
+		if g, ok := logic.GMgr.FindGeneral(gid); ok {
 			l, e := general.GenBasic.GetLevel(g.Level)
 			if e == nil{
 				if l.Soldiers < addCnts[i]+armyCnts[i]{
@@ -287,7 +284,7 @@ func (this*General) conscript(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		model_to_proto.Army(army, &rspObj.Army)
 
 		//资源
-		if rRes, err := logic.RResMgr.Get(role.RId); err == nil {
+		if rRes, ok := logic.RResMgr.Get(role.RId); ok {
 			model_to_proto.RRes(rRes, &rspObj.RoleRes)
 		}
 
@@ -319,8 +316,8 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 		return
 	}
 
-	army,err := logic.AMgr.Get(reqObj.ArmyId)
-	if err != nil{
+	army,ok := logic.AMgr.Get(reqObj.ArmyId)
+	if ok == false{
 		rsp.Body.Code = constant.ArmyNotFound
 		return
 	}

@@ -135,8 +135,8 @@ func (this*Account) reLogin(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 					rsp.Body.Code = constant.OK
 					server.DefaultConnMgr.UserLogin(req.Conn, reqObj.Session, ll.UId)
 
-					role, err := logic.RMgr.Get(reqObj.RId)
-					if err == nil && ll.UId == role.UId{
+					role, ok := logic.RMgr.Get(reqObj.RId)
+					if ok && ll.UId == role.UId{
 						req.Conn.SetProperty("role", role)
 						server.DefaultConnMgr.RoleEnter(req.Conn)
 					}
