@@ -28,13 +28,13 @@ func (this* RoleMgr) Get(rid int) (*model.Role, bool){
 
 	m := &model.Role{}
 	ok, err := db.MasterDB.Table(new(model.Role)).Where("rid=?", rid).Get(m)
-	log.DefaultLog.Warn("db error", zap.Error(err))
 	if ok {
 		this.mutex.Lock()
 		this.roles[rid] = m
 		this.mutex.Unlock()
 		return m, true
 	}else{
+		log.DefaultLog.Warn("db error", zap.Error(err), zap.Int("rid", rid))
 		return nil, false
 	}
 }
