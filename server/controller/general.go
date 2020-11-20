@@ -5,7 +5,7 @@ import (
 	"slgserver/constant"
 	"slgserver/model"
 	"slgserver/net"
-	"slgserver/server/entity"
+	"slgserver/server/logic"
 	"slgserver/server/middleware"
 	"slgserver/server/model_to_proto"
 	"slgserver/server/proto"
@@ -46,7 +46,7 @@ func (this*General) myGenerals(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
-	gs, err := entity.GMgr.GetAndTryCreate(role.RId)
+	gs, err := logic.GMgr.GetAndTryCreate(role.RId)
 	if err == nil {
 		rsp.Body.Code = constant.OK
 		rspObj.Generals = make([]proto.General, len(gs))
@@ -69,7 +69,7 @@ func (this*General) armyList(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
-	city,err := entity.RCMgr.Get(reqObj.CityId)
+	city,err := logic.RCMgr.Get(reqObj.CityId)
 	if err != nil{
 		rsp.Body.Code = constant.CityNotExist
 		return
@@ -80,7 +80,7 @@ func (this*General) armyList(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	as, _ := entity.AMgr.GetByCity(reqObj.CityId)
+	as, _ := logic.AMgr.GetByCity(reqObj.CityId)
 	rspObj.Armys = make([]proto.Army, len(as))
 	for i, v := range as {
 		model_to_proto.Army(v, &rspObj.Armys[i])
@@ -104,7 +104,7 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	city, err := entity.RCMgr.Get(reqObj.CityId)
+	city, err := logic.RCMgr.Get(reqObj.CityId)
 	if err != nil {
 		rsp.Body.Code = constant.CityNotExist
 		return
@@ -115,7 +115,7 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	g, err := entity.GMgr.FindGeneral(reqObj.GeneralId)
+	g, err := logic.GMgr.FindGeneral(reqObj.GeneralId)
 	if err != nil{
 		rsp.Body.Code = constant.GeneralNotFound
 		return
@@ -126,7 +126,7 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	army, err := entity.AMgr.GetOrCreate(role.RId, reqObj.CityId, reqObj.Order)
+	army, err := logic.AMgr.GetOrCreate(role.RId, reqObj.CityId, reqObj.Order)
 	if err != nil{
 		rsp.Body.Code = constant.DBError
 		return
@@ -151,7 +151,7 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		if reqObj.Position == 1 {
 			//旧的下阵
 			if army.FirstId != 0 {
-				if oldG, err := entity.GMgr.FindGeneral(army.FirstId); err==nil{
+				if oldG, err := logic.GMgr.FindGeneral(army.FirstId); err==nil{
 					oldG.CityId = 0
 					oldG.Order = 0
 					oldG.NeedUpdate = true
@@ -163,7 +163,7 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		}else if reqObj.Position == 2 {
 			//旧的下阵
 			if army.SecondId != 0 {
-				if oldG, err := entity.GMgr.FindGeneral(army.SecondId); err==nil{
+				if oldG, err := logic.GMgr.FindGeneral(army.SecondId); err==nil{
 					oldG.CityId = 0
 					oldG.Order = 0
 					oldG.NeedUpdate = true
@@ -175,7 +175,7 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		}else if reqObj.Position == 3 {
 			//旧的下阵
 			if army.ThirdId != 0 {
-				if oldG, err := entity.GMgr.FindGeneral(army.ThirdId); err==nil{
+				if oldG, err := logic.GMgr.FindGeneral(army.ThirdId); err==nil{
 					oldG.CityId = 0
 					oldG.Order = 0
 					oldG.NeedUpdate = true
@@ -191,7 +191,7 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		g.NeedUpdate = true
 	}
 
-	if c, err := entity.RCMgr.Get(army.CityId); err == nil{
+	if c, err := logic.RCMgr.Get(army.CityId); err == nil{
 		army.FromX = c.X
 		army.FromY = c.Y
 	}
@@ -220,7 +220,7 @@ func (this*General) conscript(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
 
-	army,err := entity.AMgr.Get(reqObj.ArmyId)
+	army,err := logic.AMgr.Get(reqObj.ArmyId)
 	if err != nil{
 		rsp.Body.Code = constant.ArmyNotFound
 		return
@@ -250,7 +250,7 @@ func (this*General) conscript(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 			}
 			continue
 		}
-		if g, err := entity.GMgr.FindGeneral(gid); err == nil {
+		if g, err := logic.GMgr.FindGeneral(gid); err == nil {
 			l, e := general.GenBasic.GetLevel(g.Level)
 			if e == nil{
 				if l.Soldiers < addCnts[i]+armyCnts[i]{
@@ -277,7 +277,7 @@ func (this*General) conscript(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		Gold: needGold, Iron: needIron, Decree: 0,
 		Stone: needStone}
 
-	if ok := entity.RResMgr.TryUseNeed(army.RId, &nr); ok {
+	if ok := logic.RResMgr.TryUseNeed(army.RId, &nr); ok {
 		army.FirstSoldierCnt += reqObj.FirstCnt
 		army.SecondSoldierCnt += reqObj.SecondCnt
 		army.ThirdSoldierCnt += reqObj.ThirdCnt
@@ -287,7 +287,7 @@ func (this*General) conscript(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		model_to_proto.Army(army, &rspObj.Army)
 
 		//资源
-		if rRes, err := entity.RResMgr.Get(role.RId); err == nil {
+		if rRes, err := logic.RResMgr.Get(role.RId); err == nil {
 			model_to_proto.RRes(rRes, &rspObj.RoleRes)
 		}
 
@@ -313,13 +313,13 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 		return
 	}
 
-	if reqObj.X < 0 || reqObj.X >= entity.MapWith ||
-		reqObj.Y < 0 || reqObj.Y >= entity.MapHeight{
+	if reqObj.X < 0 || reqObj.X >= logic.MapWith ||
+		reqObj.Y < 0 || reqObj.Y >= logic.MapHeight{
 		rsp.Body.Code = constant.InvalidParam
 		return
 	}
 
-	army,err := entity.AMgr.Get(reqObj.ArmyId)
+	army,err := logic.AMgr.Get(reqObj.ArmyId)
 	if err != nil{
 		rsp.Body.Code = constant.ArmyNotFound
 		return
@@ -344,6 +344,6 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 
 	army.NeedUpdate = true
 	model_to_proto.Army(army, &rspObj.Army)
-	entity.AMgr.PushAction(army)
+	logic.AMgr.PushAction(army)
 }
 

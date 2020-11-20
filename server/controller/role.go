@@ -10,7 +10,7 @@ import (
 	"slgserver/model"
 	"slgserver/net"
 	"slgserver/server"
-	"slgserver/server/entity"
+	"slgserver/server/logic"
 	"slgserver/server/middleware"
 	"slgserver/server/model_to_proto"
 	"slgserver/server/proto"
@@ -127,7 +127,7 @@ func (this*Role) enterServer(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 		var e error = nil
 		var roleRes *model.RoleRes
-		if roleRes, err = entity.RResMgr.Get(role.RId); err != nil{
+		if roleRes, err = logic.RResMgr.Get(role.RId); err != nil{
 			roleRes := &model.RoleRes{RId: role.RId, Wood: 10000, Iron: 10000,
 				Stone: 10000, Grain: 10000, Gold: 10000,
 				Decree: 20, WoodYield: 1000, IronYield: 1000,
@@ -141,7 +141,7 @@ func (this*Role) enterServer(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		}
 
 		if e == nil {
-			entity.RResMgr.Add(roleRes)
+			logic.RResMgr.Add(roleRes)
 			model_to_proto.RRes(roleRes, &rspObj.RoleRes)
 			rsp.Body.Code = constant.OK
 		}else{
@@ -169,9 +169,9 @@ func (this*Role) myCity(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	if len(citys) == 0 {
 		//随机生成一个城市
 		for true {
-			x := rand.Intn(entity.MapWith)
-			y := rand.Intn(entity.MapHeight)
-			if entity.NMMgr.IsCanBuild(x, y) && entity.RBMgr.IsEmpty(x, y) && entity.RCMgr.IsEmpty(x, y){
+			x := rand.Intn(logic.MapWith)
+			y := rand.Intn(logic.MapHeight)
+			if logic.NMMgr.IsCanBuild(x, y) && logic.RBMgr.IsEmpty(x, y) && logic.RCMgr.IsEmpty(x, y){
 				//建立城市
 				c := &model.MapRoleCity{RId: role.RId, X: x, Y: y, IsMain: 1,
 					CurDurable: 100, MaxDurable: 100, Level: 1, Name: role.NickName, CreatedAt: time.Now()}
@@ -183,11 +183,11 @@ func (this*Role) myCity(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 				}else{
 					citys = append(citys, c)
 					//更新城市缓存
-					entity.RCMgr.Add(c)
+					logic.RCMgr.Add(c)
 				}
 
 				//生成城市里面的设施
-				entity.RFMgr.GetAndTryCreate(c.CityId)
+				logic.RFMgr.GetAndTryCreate(c.CityId)
 				break
 			}
 		}
@@ -211,7 +211,7 @@ func (this*Role) myRoleRes(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
 
-	roleRes, err := entity.RResMgr.Get(role.RId)
+	roleRes, err := logic.RResMgr.Get(role.RId)
 	if err != nil{
 		log.DefaultLog.Warn("myRoleRes db error", zap.Error(err))
 		rsp.Body.Code = constant.RoleNotExist

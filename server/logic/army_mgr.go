@@ -1,4 +1,4 @@
-package entity
+package logic
 
 import (
 	"errors"
@@ -7,7 +7,6 @@ import (
 	"slgserver/db"
 	"slgserver/log"
 	"slgserver/model"
-	"slgserver/server/logic"
 	"sync"
 	"time"
 )
@@ -51,23 +50,11 @@ func (this* ArmyMgr) Load() {
 	}
 
 	cur_t := time.Now().Unix()
-	for k, armys := range this.armyByEndTime {
-		if k<= cur_t {
+	for k_t, armys := range this.armyByEndTime {
+		if k_t <= cur_t {
 			for _, a := range armys {
 				if a.State == model.ArmyAttack{
-					diff := a.End.Unix() - a.Start.Unix()
-					if cur_t >= 2*diff + a.End.Unix() {
-						//还需要处理战斗
-						a.ToX = a.FromX
-						a.ToY = a.FromY
-						a.State = model.ArmyIdle
-					}else if cur_t >= diff + a.End.Unix() {
-						//还需要处理战斗
-
-						a.ToX = a.FromX
-						a.ToY = a.FromY
-						a.State = model.ArmyBack
-					}
+					ArmyLogic.Arrive(a)
 				}else if a.State == model.ArmyDefend{
 
 				}else if a.State == model.ArmyBack {
@@ -79,6 +66,7 @@ func (this* ArmyMgr) Load() {
 				}
 				a.NeedUpdate = true
 			}
+			delete(this.armyByEndTime, k_t)
 		}
 	}
 	this.mutex.Unlock()
@@ -108,18 +96,17 @@ func (this* ArmyMgr) updateOneMutil(armys[] *model.Army)  {
 //把行动丢进来
 func (this* ArmyMgr) PushAction(army *model.Army)  {
 	this.mutex.Lock()
-	this.pushAction(army)
-	this.mutex.Unlock()
-}
+	defer this.mutex.Unlock()
 
-func (this* ArmyMgr) pushAction(army *model.Army) {
 	t := army.End.Unix()
 	_, ok := this.armyByEndTime[t]
 	if ok == false {
 		this.armyByEndTime[t] = make([]*model.Army, 0)
 	}
 	this.armyByEndTime[t] = append(this.armyByEndTime[t], army)
+
 }
+
 
 func (this* ArmyMgr) running() {
 	for true {
@@ -132,11 +119,7 @@ func (this* ArmyMgr) running() {
 			arr, ok := this.armyByEndTime[i]
 			if ok {
 				for _, army := range arr {
-					armyLogic := logic.ArmyLogic{}
-					armyLogic.Arrive(army)
-					if army.State != model.ArmyIdle{
-						this.pushAction(army)
-					}
+					ArmyLogic.Arrive(army)
 				}
 			}
 			delete(this.armyByEndTime, i)

@@ -1,4 +1,4 @@
-package entity
+package logic
 
 import (
 	"go.uber.org/zap"

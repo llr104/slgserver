@@ -4,7 +4,7 @@ import (
 	"github.com/goinggo/mapstructure"
 	"slgserver/constant"
 	"slgserver/net"
-	"slgserver/server/entity"
+	"slgserver/server/logic"
 	"slgserver/server/middleware"
 	"slgserver/server/model_to_proto"
 	"slgserver/server/proto"
@@ -33,7 +33,7 @@ func (this*NationMap) config(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	rsp.Body.Msg = rspObj
 	rsp.Body.Code = constant.OK
 
-	m := entity.BCMgr.Maps()
+	m := logic.BCMgr.Maps()
 	rspObj.Confs = make([]proto.Conf, len(m))
 	i := 0
 	for _, v := range m {
@@ -63,11 +63,11 @@ func (this*NationMap) scan(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	x := reqObj.X
 	y := reqObj.Y
 
-	rb := entity.RBMgr.Scan(x, y)
+	rb := logic.RBMgr.Scan(x, y)
 	rspObj.MRBuilds = make([]proto.MapRoleBuild, len(rb))
 	for i, v := range rb {
 		name := ""
-		vRole, err := entity.RMgr.Get(v.RId)
+		vRole, err := logic.RMgr.Get(v.RId)
 		if err == nil {
 			name = vRole.NickName
 		}
@@ -75,7 +75,7 @@ func (this*NationMap) scan(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		rspObj.MRBuilds[i].RNick = name
 	}
 
-	cb := entity.RCMgr.Scan(x, y)
+	cb := logic.RCMgr.Scan(x, y)
 	rspObj.MCBuilds = make([]proto.MapRoleCity, len(cb))
 	for i, v := range cb {
 		model_to_proto.MCBuild(v, &rspObj.MCBuilds[i])
@@ -92,11 +92,11 @@ func (this*NationMap) scanBlock(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	x := reqObj.X
 	y := reqObj.Y
 
-	rb := entity.RBMgr.ScanBlock(x, y, reqObj.Length)
+	rb := logic.RBMgr.ScanBlock(x, y, reqObj.Length)
 	rspObj.MRBuilds = make([]proto.MapRoleBuild, len(rb))
 	for i, v := range rb {
 		name := ""
-		vRole, err := entity.RMgr.Get(v.RId)
+		vRole, err := logic.RMgr.Get(v.RId)
 		if err == nil {
 			name = vRole.NickName
 		}
@@ -105,7 +105,7 @@ func (this*NationMap) scanBlock(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		rspObj.MRBuilds[i].RNick = name
 	}
 
-	cb := entity.RCMgr.ScanBlock(x, y, reqObj.Length)
+	cb := logic.RCMgr.ScanBlock(x, y, reqObj.Length)
 	rspObj.MCBuilds = make([]proto.MapRoleCity, len(cb))
 	for i, v := range cb {
 		model_to_proto.MCBuild(v, &rspObj.MCBuilds[i])

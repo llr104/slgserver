@@ -4,7 +4,7 @@ import (
 	"slgserver/db"
 	"slgserver/net"
 	"slgserver/server/controller"
-	"slgserver/server/entity"
+	"slgserver/server/logic"
 	"slgserver/server/static_conf"
 	"slgserver/server/static_conf/facility"
 	"slgserver/server/static_conf/general"
@@ -21,13 +21,13 @@ func Init() {
 	general.General.Load()
 	static_conf.Basic.Load()
 
-	entity.BCMgr.Load()
-	entity.NMMgr.Load()
-	entity.RCMgr.Load()
-	entity.RBMgr.Load()
-	entity.RFMgr.Load()
-	entity.RResMgr.Load()
-	entity.AMgr.Load()
+	logic.BCMgr.Load()
+	logic.NMMgr.Load()
+	logic.RCMgr.Load()
+	logic.RBMgr.Load()
+	logic.RFMgr.Load()
+	logic.RResMgr.Load()
+	logic.AMgr.Load()
 
 }
 

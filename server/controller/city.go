@@ -6,7 +6,7 @@ import (
 	"slgserver/constant"
 	"slgserver/model"
 	"slgserver/net"
-	"slgserver/server/entity"
+	"slgserver/server/logic"
 	"slgserver/server/middleware"
 	"slgserver/server/model_to_proto"
 	"slgserver/server/proto"
@@ -38,7 +38,7 @@ func (this*City) facilities(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	rsp.Body.Code = constant.OK
 
 	r, _ := req.Conn.GetProperty("role")
-	city, err := entity.RCMgr.Get(reqObj.CityId)
+	city, err := logic.RCMgr.Get(reqObj.CityId)
 	if err != nil {
 		rsp.Body.Code = constant.CityNotExist
 		return
@@ -50,13 +50,13 @@ func (this*City) facilities(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	f, err := entity.RFMgr.Get(reqObj.CityId)
+	f, err := logic.RFMgr.Get(reqObj.CityId)
 	if err != nil {
 		rsp.Body.Code = constant.CityNotExist
 		return
 	}
 
-	t := make([]entity.Facility, 0)
+	t := make([]logic.Facility, 0)
 	json.Unmarshal([]byte(f.Facilities), &t)
 
 	rspObj.Facilities = make([]proto.Facility, len(t))
@@ -77,7 +77,7 @@ func (this*City) upFacility(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	rsp.Body.Code = constant.OK
 
 	r, _ := req.Conn.GetProperty("role")
-	city, err := entity.RCMgr.Get(reqObj.CityId)
+	city, err := logic.RCMgr.Get(reqObj.CityId)
 	if err != nil {
 		rsp.Body.Code = constant.CityNotExist
 		return
@@ -89,20 +89,20 @@ func (this*City) upFacility(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	_, err = entity.RFMgr.Get(reqObj.CityId)
+	_, err = logic.RFMgr.Get(reqObj.CityId)
 	if err != nil {
 		rsp.Body.Code = constant.CityNotExist
 		return
 	}
 
-	out, errCode := entity.RFMgr.UpFacility(role.RId ,reqObj.CityId, int8(reqObj.FType))
+	out, errCode := logic.RFMgr.UpFacility(role.RId ,reqObj.CityId, int8(reqObj.FType))
 	rsp.Body.Code = errCode
 	if errCode == constant.OK{
 		rspObj.Facility.Level = out.Level
 		rspObj.Facility.Type = out.Type
 		rspObj.Facility.Name = out.Name
 
-		if roleRes, err:= entity.RResMgr.Get(role.RId); err == nil {
+		if roleRes, err:= logic.RResMgr.Get(role.RId); err == nil {
 			model_to_proto.RRes(roleRes, &rspObj.RoleRes)
 		}
 	}
