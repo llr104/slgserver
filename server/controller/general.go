@@ -132,6 +132,11 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
+	if army.State != model.ArmyIdle{
+		rsp.Body.Code = constant.ArmyBusy
+		return
+	}
+
 	//配置逻辑
 	if reqObj.Position == 0{
 		if army.FirstId == g.Id{
