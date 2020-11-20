@@ -1,8 +1,6 @@
 package logic
 
 import (
-	"errors"
-	"fmt"
 	"go.uber.org/zap"
 	"slgserver/db"
 	"slgserver/log"
@@ -53,13 +51,13 @@ func (this* GeneralMgr) toDatabase() {
 	}
 }
 
-func (this* GeneralMgr) Get(rid int) ([]*model.General, error){
+func (this* GeneralMgr) Get(rid int) ([]*model.General, bool){
 	this.mutex.Lock()
 	r, ok := this.genByRole[rid]
 	this.mutex.Unlock()
 
 	if ok {
-		return r, nil
+		return r, true
 	}
 
 	m := make([]*model.General, 0)
@@ -72,12 +70,14 @@ func (this* GeneralMgr) Get(rid int) ([]*model.General, error){
 				this.genByGId[v.Id] = v
 			}
 			this.mutex.Unlock()
-			return m, nil
+			return m, true
 		}else{
-			return nil, errors.New(fmt.Sprintf("rid: %d general not fount", rid))
+			log.DefaultLog.Warn("general not fount", zap.Int("rid", rid))
+			return nil, false
 		}
 	}else{
-		return nil, err
+		log.DefaultLog.Warn("db error", zap.Error(err))
+		return nil, false
 	}
 }
 
@@ -122,8 +122,8 @@ func (this* GeneralMgr) FindGeneral(gid int) (*model.General, bool){
 如果不存在尝试去创建
 */
 func (this* GeneralMgr) GetAndTryCreate(rid int) ([]*model.General, bool){
-	r, err := this.Get(rid)
-	if err == nil {
+	r, ok := this.Get(rid)
+	if ok {
 		return r, true
 	}else{
 		//创建
