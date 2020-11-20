@@ -334,7 +334,7 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 
 	army.Start = time.Now()
 	//先写死1分钟到达
-	army.End = time.Now().Add(60*time.Second)
+	army.End = time.Now().Add(5*time.Second)
 	army.ToX = reqObj.X
 	army.ToY = reqObj.Y
 	army.State = reqObj.State

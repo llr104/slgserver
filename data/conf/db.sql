@@ -97,7 +97,7 @@ CREATE TABLE IF NOT EXISTS `map_role_build` (
    `level` tinyint unsigned NOT NULL COMMENT '建筑等级',
    `x` int unsigned NOT NULL COMMENT 'x坐标',
    `y` int unsigned NOT NULL COMMENT 'y坐标',
-   `name` int unsigned NOT NULL COMMENT 'name',
+   `name` varchar(100) NOT NULL COMMENT '名称',
    `wood` int unsigned NOT NULL COMMENT '木',
    `iron` int unsigned NOT NULL COMMENT '铁',
    `stone` int unsigned NOT NULL COMMENT '石头',

@@ -1,6 +1,7 @@
 package logic
 
 import (
+	"fmt"
 	"go.uber.org/zap"
 	"slgserver/log"
 	"slgserver/model"
@@ -28,8 +29,8 @@ func (this *armyLogic) running(){
 		select {
 		case army := <-this.armys:
 			cur_t := time.Now().Unix()
+			diff := army.End.Unix() - army.Start.Unix()
 			if army.State == model.ArmyAttack {
-				diff := army.End.Unix() - army.Start.Unix()
 
 				if cur_t >= 2*diff + army.Start.Unix() {
 					//两倍路程
@@ -41,7 +42,17 @@ func (this *armyLogic) running(){
 				}else if cur_t >= 1*diff + army.Start.Unix(){
 					//一倍路程
 					army.State = model.ArmyBack
+					army.Start = army.End
+					army.End = army.Start.Add(time.Duration(diff)*time.Second)
+
+					fmt.Println(army.Start.Unix(), army.End.Unix(), army.End.Unix()-army.Start.Unix())
 					this.battle(army)
+					AMgr.PushAction(army)
+				}
+			}else if army.State == model.ArmyBack {
+				 if cur_t >= 1*diff + army.Start.Unix(){
+					//一倍路程
+					army.State = model.ArmyIdle
 				}
 			}
 
@@ -73,13 +84,13 @@ func (this *armyLogic) battle(army* model.Army) {
 	_, ok = RBMgr.PositionBuild(army.ToX, army.ToY)
 	if ok {
 		//打玩家占领的领地
-		army.FirstSoldierCnt = util.MinInt(0, army.FirstSoldierCnt-50)
-		army.SecondSoldierCnt = util.MinInt(0, army.SecondSoldierCnt-50)
-		army.ThirdSoldierCnt = util.MinInt(0, army.ThirdSoldierCnt-50)
+		army.FirstSoldierCnt = util.MaxInt(0, army.FirstSoldierCnt-50)
+		army.SecondSoldierCnt = util.MaxInt(0, army.SecondSoldierCnt-50)
+		army.ThirdSoldierCnt = util.MaxInt(0, army.ThirdSoldierCnt-50)
 	}else{
-		army.FirstSoldierCnt = util.MinInt(0, army.FirstSoldierCnt-10)
-		army.SecondSoldierCnt = util.MinInt(0, army.SecondSoldierCnt-10)
-		army.ThirdSoldierCnt = util.MinInt(0, army.ThirdSoldierCnt-10)
+		army.FirstSoldierCnt = util.MaxInt(0, army.FirstSoldierCnt-10)
+		army.SecondSoldierCnt = util.MaxInt(0, army.SecondSoldierCnt-10)
+		army.ThirdSoldierCnt = util.MaxInt(0, army.ThirdSoldierCnt-10)
 	}
 
 	//占领
