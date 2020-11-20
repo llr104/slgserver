@@ -94,7 +94,7 @@ func (this *armyLogic) battle(army* model.Army) {
 	}
 
 	//占领
-	this.OccupyBuild(army.Id, army.ToX, army.ToY)
+	this.OccupyBuild(army.RId, army.ToX, army.ToY)
 
 
 }
