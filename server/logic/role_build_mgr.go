@@ -54,14 +54,14 @@ func (this* RoleBuildMgr) toDatabase() {
 		this.mutex.RLock()
 		cnt :=0
 		for _, v := range this.dbRB {
-			if v.NeedUpdate {
+			if v.DB.NeedSync() {
+				v.DB.BeginSync()
 				_, err := db.MasterDB.Table(v).Cols("rid",
 					"cur_durable", "max_durable").Update(v)
 				if err != nil{
 					log.DefaultLog.Error("RoleResMgr toDatabase error", zap.Error(err))
-				}else{
-					v.NeedUpdate = false
 				}
+				v.DB.EndSync()
 				cnt+=1
 			}
 
@@ -95,6 +95,7 @@ func (this* RoleBuildMgr) PositionBuild(x, y int) (*model.MapRoleBuild, bool) {
 
 
 func (this* RoleBuildMgr) AddBuild(build *model.MapRoleBuild)  {
+	build.DB.Sync()
 	posId := ToPosition(build.X, build.Y)
 	if _, err := db.MasterDB.Table(model.MapRoleBuild{}).Insert(build); err == nil{
 		this.mutex.Lock()

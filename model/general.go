@@ -3,6 +3,7 @@ package model
 import "time"
 
 type General struct {
+	DB 			dbSync		`xorm:"-"`
 	Id        	int     	`xorm:"id pk autoincr"`
 	RId       	int     	`xorm:"rid"`
 	Name      	string  	`xorm:"name"`
@@ -18,7 +19,6 @@ type General struct {
 	Order     	int8     	`xorm:"order"`
 	CityId    	int     	`xorm:"cityId"`
 	CreatedAt 	time.Time	`xorm:"created_at"`
-	NeedUpdate	bool		`xorm:"-"`
 }
 
 func (this *General) TableName() string {

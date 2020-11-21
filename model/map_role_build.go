@@ -1,6 +1,7 @@
 package model
 
 type MapRoleBuild struct {
+	DB 			dbSync		`xorm:"-"`
 	Id			int			`xorm:"id pk autoincr"`
 	RId			int			`xorm:"rid"`
 	Type		int8		`xorm:"type"`
@@ -15,7 +16,6 @@ type MapRoleBuild struct {
 	CurDurable	int			`xorm:"cur_durable"`
 	MaxDurable	int			`xorm:"max_durable"`
 	Defender	int			`xorm:"defender"`
-	NeedUpdate	bool		`xorm:"-"`
 }
 
 func (this *MapRoleBuild) TableName() string {

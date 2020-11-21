@@ -151,7 +151,7 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		}
 		g.Order = 0
 		g.CityId = 0
-		g.NeedUpdate = true
+		g.DB.Sync()
 	}else{
 		if reqObj.Position == 1 {
 			//旧的下阵
@@ -159,7 +159,7 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 				if oldG, ok := logic.GMgr.FindGeneral(army.FirstId); ok{
 					oldG.CityId = 0
 					oldG.Order = 0
-					oldG.NeedUpdate = true
+					oldG.DB.Sync()
 				}
 			}
 
@@ -171,7 +171,7 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 				if oldG, ok := logic.GMgr.FindGeneral(army.SecondId); ok{
 					oldG.CityId = 0
 					oldG.Order = 0
-					oldG.NeedUpdate = true
+					oldG.DB.Sync()
 				}
 			}
 
@@ -183,7 +183,7 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 				if oldG, ok := logic.GMgr.FindGeneral(army.ThirdId); ok{
 					oldG.CityId = 0
 					oldG.Order = 0
-					oldG.NeedUpdate = true
+					oldG.DB.Sync()
 				}
 			}
 
@@ -193,7 +193,7 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		//新的上阵
 		g.Order = reqObj.Position
 		g.CityId = reqObj.CityId
-		g.NeedUpdate = true
+		g.DB.Sync()
 	}
 
 	if c, ok := logic.RCMgr.Get(army.CityId); ok{
@@ -201,7 +201,7 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		army.FromY = c.Y
 	}
 
-	army.NeedUpdate = true
+	army.DB.Sync()
 	//队伍
 	model_to_proto.Army(army, &rspObj.Army)
 }
@@ -283,7 +283,7 @@ func (this*General) conscript(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		army.FirstSoldierCnt += reqObj.FirstCnt
 		army.SecondSoldierCnt += reqObj.SecondCnt
 		army.ThirdSoldierCnt += reqObj.ThirdCnt
-		army.NeedUpdate = true
+		army.DB.Sync()
 
 		//队伍
 		model_to_proto.Army(army, &rspObj.Army)
@@ -344,7 +344,7 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 	army.ToY = reqObj.Y
 	army.State = reqObj.State
 
-	army.NeedUpdate = true
+	army.DB.Sync()
 	model_to_proto.Army(army, &rspObj.Army)
 	logic.AMgr.PushAction(army)
 }

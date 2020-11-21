@@ -128,7 +128,7 @@ func (this* FacilityMgr) UpFacility(rid, cid int, fType int8) (*Facility, int){
 					if RResMgr.TryUseNeed(rid, need) {
 						v.Level += 1
 						out = v
-						f.NeedUpdate = true
+						f.DB.Sync()
 						if t, err := json.Marshal(fa); err == nil{
 							f.Facilities = string(t)
 							return out, constant.OK
@@ -154,13 +154,13 @@ func (this* FacilityMgr) toDatabase() {
 		this.mutex.RLock()
 		cnt :=0
 		for _, v := range this.facilities {
-			if v.NeedUpdate {
+			if v.DB.NeedSync() {
+				v.DB.BeginSync()
 				_, err := db.MasterDB.Table(v).Cols("facilities").Update(v)
 				if err != nil{
 					log.DefaultLog.Error("FacilityMgr toDatabase error", zap.Error(err))
-				}else{
-					v.NeedUpdate = false
 				}
+				v.DB.EndSync()
 				cnt+=1
 			}
 

@@ -30,15 +30,15 @@ func (this* GeneralMgr) toDatabase() {
 		this.mutex.RLock()
 		cnt :=0
 		for _, v := range this.genByGId {
-			if v.NeedUpdate {
-				cnt+=1
+			if v.DB.NeedSync() {
+				v.DB.BeginSync()
 				_, err := db.MasterDB.Table(model.General{}).Cols( "force", "strategy",
 					"defense", "speed", "destroy", "level", "exp", "order", "cityId").Update(v)
 				if err != nil{
 					log.DefaultLog.Warn("db error", zap.Error(err))
-				}else{
-					v.NeedUpdate = false
 				}
+				v.DB.EndSync()
+				cnt+=1
 			}
 
 			//一次最多更新20个

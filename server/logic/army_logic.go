@@ -56,7 +56,7 @@ func (this *armyLogic) running(){
 				}
 			}
 
-			army.NeedUpdate = true
+			army.DB.Sync()
 			ap := &proto.ArmyStatePush{}
 			ap.CityId = army.CityId
 			model_to_proto.Army(army, &ap.Army)
@@ -116,7 +116,7 @@ func (this* armyLogic) OccupyBuild(rid, x, y int)  {
 			oldRole.GrainYield -= b.Grain
 			oldRole.StoneYield -= b.Stone
 			oldRole.IronYield -= b.Iron
-			oldRole.NeedUpdate = true
+			oldRole.DB.Sync()
 		}
 		//占领的增加产量
 		if newRole, ok := RResMgr.Get(newId); ok{
@@ -124,9 +124,9 @@ func (this* armyLogic) OccupyBuild(rid, x, y int)  {
 			newRole.GrainYield += b.Grain
 			newRole.StoneYield += b.Stone
 			newRole.IronYield += b.Iron
-			newRole.NeedUpdate = true
+			newRole.DB.Sync()
 		}
-		b.NeedUpdate = true
+		b.DB.Sync()
 		b.RId = rid
 
 		push := &proto.RoleBuildStatePush{}
@@ -143,7 +143,7 @@ func (this* armyLogic) OccupyBuild(rid, x, y int)  {
 						Type: b.Type, Level: b.Level, Name: cfg.Name,
 						Wood: cfg.Wood, Iron: cfg.Iron, Stone: cfg.Stone,
 						Grain: cfg.Grain, CurDurable: cfg.Durable,
-						MaxDurable: cfg.Durable, NeedUpdate: true}
+						MaxDurable: cfg.Durable}
 
 					RBMgr.AddBuild(rb)
 
@@ -153,7 +153,7 @@ func (this* armyLogic) OccupyBuild(rid, x, y int)  {
 						newRole.GrainYield += rb.Grain
 						newRole.StoneYield += rb.Stone
 						newRole.IronYield += rb.Iron
-						newRole.NeedUpdate = true
+						newRole.DB.Sync()
 					}
 
 					push := &proto.RoleBuildStatePush{}

@@ -70,7 +70,7 @@ func (this* RoleResMgr) Get(rid int) (*model.RoleRes, bool){
 func (this* RoleResMgr) Add(res *model.RoleRes) (){
 	this.mutex.Lock()
 	defer this.mutex.Unlock()
-	res.NeedUpdate = true
+	res.DB.Sync()
 	this.rolesRes[res.RId] = res
 }
 
@@ -83,7 +83,7 @@ func (this* RoleResMgr) TryUseNeed(rid int, need*facility.NeedRes) bool{
 			need.Stone <= rr.Stone && need.Wood <= rr.Wood &&
 			need.Iron <= rr.Iron && need.Gold <= rr.Gold {
 
-			rr.NeedUpdate = true
+			rr.DB.Sync()
 			rr.Decree -= need.Decree
 			rr.Iron -= need.Iron
 			rr.Wood -= need.Wood
@@ -118,7 +118,7 @@ func (this* RoleResMgr) produce() {
 				v.Decree+=1
 			}
 
-			v.NeedUpdate = true
+			v.DB.Sync()
 		}
 		index++
 
@@ -132,16 +132,16 @@ func (this* RoleResMgr) toDatabase() {
 		this.mutex.RLock()
 		cnt :=0
 		for _, v := range this.rolesRes {
-			if v.NeedUpdate {
+			if v.DB.NeedSync() {
+				v.DB.BeginSync()
 				_, err := db.MasterDB.Table(v).Cols("wood", "iron", "stone",
 					"grain", "gold", "decree", "wood_yield",
 					"iron_yield", "stone_yield", "gold_yield",
 					"gold_yield", "depot_capacity").Update(v)
 				if err != nil{
 					log.DefaultLog.Error("RoleResMgr toDatabase error", zap.Error(err))
-				}else{
-					v.NeedUpdate = false
 				}
+				v.DB.EndSync()
 				cnt+=1
 			}
 

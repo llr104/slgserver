@@ -70,7 +70,7 @@ func (this* ArmyMgr) Load() {
 						a.State = model.ArmyIdle
 					}
 				}
-				a.NeedUpdate = true
+				a.DB.Sync()
 			}
 			delete(this.armyByEndTime, k_t)
 		}
@@ -143,7 +143,8 @@ func (this* ArmyMgr) toDatabase() {
 		this.mutex.RLock()
 		cnt :=0
 		for _, v := range this.armyById {
-			if v.NeedUpdate {
+			if v.DB.NeedSync() {
+				v.DB.BeginSync()
 				cnt+=1
 				_, err := db.MasterDB.Table(model.Army{}).Cols("firstId",
 					"secondId", "thirdId", "first_soldier_cnt",
@@ -151,9 +152,8 @@ func (this* ArmyMgr) toDatabase() {
 					"from_x", "from_y", "to_x", "to_y", "start", "end").Update(v)
 				if err != nil{
 					log.DefaultLog.Warn("db error", zap.Error(err))
-				}else{
-					v.NeedUpdate = false
 				}
+				v.DB.EndSync()
 			}
 
 			//一次最多更新20个

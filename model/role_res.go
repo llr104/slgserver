@@ -1,6 +1,7 @@
 package model
 
 type RoleRes struct {
+	DB 				dbSync		`xorm:"-"`
 	Id				int			`xorm:"id pk autoincr"`
 	RId				int			`xorm:"rid"`
 	Wood			int			`xorm:"wood"`
@@ -15,7 +16,6 @@ type RoleRes struct {
 	GrainYield		int			`xorm:"grain_yield"`
 	GoldYield		int			`xorm:"gold_yield"`
 	DepotCapacity	int			`xorm:"depot_capacity"`	//仓库容量
-	NeedUpdate		bool		`xorm:"-"`
 }
 
 func (this *RoleRes) TableName() string {
