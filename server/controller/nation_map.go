@@ -17,7 +17,7 @@ type NationMap struct {
 }
 
 func (this*NationMap) InitRouter(r *net.Router) {
-	g := r.Group("nationMap").Use(middleware.Log())
+	g := r.Group("nationMap").Use(middleware.ElapsedTime(), middleware.Log())
 	g.AddRouter("config", this.config)
 	g.AddRouter("scan", this.scan)
 	g.AddRouter("scanBlock", this.scanBlock)

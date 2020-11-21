@@ -25,9 +25,8 @@ type General struct {
 
 
 func (this*General) InitRouter(r *net.Router) {
-	g := r.Group("general").Use(middleware.Log(),
-		middleware.CheckLogin(),
-		middleware.CheckRole())
+	g := r.Group("general").Use(middleware.ElapsedTime(), middleware.Log(),
+		middleware.CheckLogin(), middleware.CheckRole())
 
 	g.AddRouter("myGenerals", this.myGenerals)
 	g.AddRouter("dispose", this.dispose)

@@ -20,9 +20,8 @@ type City struct {
 }
 
 func (this*City) InitRouter(r *net.Router) {
-	g := r.Group("city").Use(middleware.Log(),
-		middleware.CheckLogin(),
-		middleware.CheckRole())
+	g := r.Group("city").Use(middleware.ElapsedTime(),middleware.Log(),
+		middleware.CheckLogin(), middleware.CheckRole())
 
 	g.AddRouter("facilities", this.facilities)
 	g.AddRouter("upFacility", this.upFacility)
