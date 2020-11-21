@@ -2,7 +2,6 @@ package facility
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"go.uber.org/zap"
 	"io/ioutil"
@@ -79,33 +78,33 @@ func (this *facilityArmyConf) MaxLevel(fType int8) int8 {
 	}
 }
 
-func (this *facilityArmyConf) Need(fType int8, level int) (*NeedRes, error)  {
+func (this *facilityArmyConf) Need(fType int8, level int) (*NeedRes, bool)  {
 	if this.JFY.Type == fType{
 		if len(this.JFY.Levels) >= level{
-			return &this.JFY.Levels[level-1].Need, nil
+			return &this.JFY.Levels[level-1].Need, true
 		}else {
-			return nil, errors.New("level not found")
+			return nil, false
 		}
 
 	}else if this.JJY.Type == fType{
 		if len(this.JJY.Levels) >= level{
-			return &this.JJY.Levels[level-1].Need, nil
+			return &this.JJY.Levels[level-1].Need, true
 		}else {
-			return nil, errors.New("level not found")
+			return nil, false
 		}
 	}else if this.SWY.Type == fType{
 		if len(this.SWY.Levels) >= level{
-			return &this.SWY.Levels[level-1].Need, nil
+			return &this.SWY.Levels[level-1].Need, true
 		}else {
-			return nil, errors.New("level not found")
+			return nil, false
 		}
 	}else if this.TBY.Type == fType{
 		if len(this.TBY.Levels) >= level{
-			return &this.TBY.Levels[level-1].Need, nil
+			return &this.TBY.Levels[level-1].Need, true
 		}else {
-			return nil, errors.New("level not found")
+			return nil, false
 		}
 	}else{
-		return nil, errors.New("type not found")
+		return nil, false
 	}
 }

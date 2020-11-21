@@ -1,21 +1,21 @@
 package model
 
 type MapRoleBuild struct {
-	Id			int			`json:"id" xorm:"id pk autoincr"`
-	RId			int			`json:"rid" xorm:"rid"`
-	Type		int8		`json:"type"`
-	Level		int8		`json:"level"`
-	X			int			`json:"x"`
-	Y			int			`json:"y"`
-	Name		string		`json:"name"`
-	Wood		int			`json:"Wood"`
-	Iron		int			`json:"iron"`
-	Stone		int			`json:"stone"`
-	Grain		int			`json:"grain"`
-	CurDurable	int			`json:"cur_durable"`
-	MaxDurable	int			`json:"max_durable"`
-	Defender	int			`json:"defender"`
-	NeedUpdate	bool		`json:"-" xorm:"-"`
+	Id			int			`xorm:"id pk autoincr"`
+	RId			int			`xorm:"rid"`
+	Type		int8		`xorm:"type"`
+	Level		int8		`xorm:"level"`
+	X			int			`xorm:"x"`
+	Y			int			`xorm:"y"`
+	Name		string		`xorm:"name"`
+	Wood		int			`xorm:"Wood"`
+	Iron		int			`xorm:"iron"`
+	Stone		int			`xorm:"stone"`
+	Grain		int			`xorm:"grain"`
+	CurDurable	int			`xorm:"cur_durable"`
+	MaxDurable	int			`xorm:"max_durable"`
+	Defender	int			`xorm:"defender"`
+	NeedUpdate	bool		`xorm:"-"`
 }
 
 func (this *MapRoleBuild) TableName() string {

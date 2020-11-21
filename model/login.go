@@ -10,12 +10,12 @@ const (
 )
 
 type LoginHistory struct {
-	Id       int       `json:"id" xorm:"pk autoincr"`
-	UId      int       `json:"uid" xorm:"uid"`
-	Time     time.Time `json:"time"`
-	Ip       string    `json:"ip"`
-	State    int8      `json:"state"`
-	Hardware string    `json:"hardware"`
+	Id       int       `xorm:"id pk autoincr"`
+	UId      int       `xorm:"uid"`
+	Time     time.Time `xorm:"time"`
+	Ip       string    `xorm:"ip"`
+	State    int8      `xorm:"state"`
+	Hardware string    `xorm:"hardware"`
 }
 
 func (this *LoginHistory) TableName() string {
@@ -24,14 +24,14 @@ func (this *LoginHistory) TableName() string {
 
 
 type LoginLast struct {
-	Id         int       `json:"id" xorm:"pk autoincr"`
-	UId        int       `json:"uid" xorm:"uid"`
-	LoginTime  time.Time `json:"login_time"`
-	LogoutTime time.Time `json:"logout_time"`
-	Ip         string    `json:"ip"`
-	Session    string    `json:"session"`
-	IsLogout   int8      `json:"is_logout"`
-	Hardware   string    `json:"hardware"`
+	Id         int       `xorm:""id" pk autoincr"`
+	UId        int       `xorm:"uid"`
+	LoginTime  time.Time `xorm:"login_time"`
+	LogoutTime time.Time `xorm:"logout_time"`
+	Ip         string    `xorm:"ip"`
+	Session    string    `xorm:"session"`
+	IsLogout   int8      `xorm:"is_logout"`
+	Hardware   string    `xorm:"hardware"`
 }
 
 func (this *LoginLast) TableName() string {

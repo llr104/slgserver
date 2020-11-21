@@ -2,7 +2,6 @@ package facility
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"go.uber.org/zap"
 	"io/ioutil"
@@ -23,7 +22,7 @@ type NeedRes struct {
 
 type iFacility interface {
 	MaxLevel(fType int8) int8
-	Need(fType int8, level int) (*NeedRes, error)
+	Need(fType int8, level int) (*NeedRes, bool)
 	IsContain(t int8) bool
 }
 var FConf facilityConf
@@ -85,16 +84,15 @@ func (this *facilityConf) MaxLevel(fType int8) int8 {
 	return 0
 }
 
-func (this *facilityConf) Need(fType int8, level int) (*NeedRes, error) {
+func (this *facilityConf) Need(fType int8, level int) (*NeedRes, bool) {
 	for _, v := range this.loaders {
 		if v.IsContain(fType){
 			return v.Need(fType, level)
 		}
 	}
 
-	str := fmt.Sprintf("facilityConf type: %d not found", fType)
-	log.DefaultLog.Info(str)
-	return nil, errors.New(str)
+	log.DefaultLog.Info("facilityConf type not found", zap.Int("type", int(fType)))
+	return nil, false
 }
 
 

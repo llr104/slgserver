@@ -2,14 +2,13 @@ package facility
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
-"go.uber.org/zap"
-"io/ioutil"
-"os"
-"path"
-"slgserver/config"
-"slgserver/log"
+	"go.uber.org/zap"
+	"io/ioutil"
+	"os"
+	"path"
+	"slgserver/config"
+	"slgserver/log"
 )
 
 //阵营配置
@@ -85,39 +84,39 @@ func (this *facilityCampConf) MaxLevel(fType int8) int8 {
 	}
 }
 
-func (this *facilityCampConf) Need(fType int8, level int) (*NeedRes, error)  {
+func (this *facilityCampConf) Need(fType int8, level int) (*NeedRes, bool)  {
 	if this.Han.Type == fType{
 		if len(this.Han.Levels) > level{
-			return &this.Han.Levels[level].Need, nil
+			return &this.Han.Levels[level].Need, true
 		}else {
-			return nil, errors.New("level not found")
+			return nil, false
 		}
 
 	}else if this.Wei.Type == fType{
 		if len(this.Wei.Levels) >= level{
-			return &this.Wei.Levels[level-1].Need, nil
+			return &this.Wei.Levels[level-1].Need, true
 		}else {
-			return nil, errors.New("level not found")
+			return nil, false
 		}
 	}else if this.Shu.Type == fType{
 		if len(this.Shu.Levels) >= level{
-			return &this.Shu.Levels[level-1].Need, nil
+			return &this.Shu.Levels[level-1].Need, true
 		}else {
-			return nil, errors.New("level not found")
+			return nil, false
 		}
 	}else if this.Wu.Type == fType{
 		if len(this.Wu.Levels) >= level{
-			return &this.Wu.Levels[level-1].Need, nil
+			return &this.Wu.Levels[level-1].Need, true
 		}else {
-			return nil, errors.New("level not found")
+			return nil, false
 		}
 	}else if this.Qun.Type == fType{
 		if len(this.Qun.Levels) >= level{
-			return &this.Qun.Levels[level-1].Need, nil
+			return &this.Qun.Levels[level-1].Need, true
 		}else {
-			return nil, errors.New("level not found")
+			return nil, false
 		}
 	}else{
-		return nil, errors.New("type not found")
+		return nil, false
 	}
 }

@@ -2,7 +2,6 @@ package facility
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"go.uber.org/zap"
 	"io/ioutil"
@@ -66,14 +65,14 @@ func (this *facilitySJTConf) MaxLevel(fType int8) int8 {
 	}
 }
 
-func (this *facilitySJTConf) Need(fType int8, level int) (*NeedRes, error)  {
+func (this *facilitySJTConf) Need(fType int8, level int) (*NeedRes, bool)  {
 	if this.Type == fType{
 		if len(this.Levels) >= level{
-			return &this.Levels[level-1].Need, nil
+			return &this.Levels[level-1].Need, true
 		}else{
-			return nil, errors.New("level not found")
+			return nil, false
 		}
 	} else {
-		return nil, errors.New("type not found")
+		return nil, false
 	}
 }

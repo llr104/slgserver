@@ -1,7 +1,6 @@
 package logic
 
 import (
-	"fmt"
 	"go.uber.org/zap"
 	"slgserver/db"
 	"slgserver/log"
@@ -59,8 +58,7 @@ func (this* RoleResMgr) Get(rid int) (*model.RoleRes, bool){
 		return m, true
 	}else{
 		if err == nil{
-			str := fmt.Sprintf("RoleRes %d not found", rid)
-			log.DefaultLog.Warn(str)
+			log.DefaultLog.Warn("RoleRes not found", zap.Int("rid", rid))
 			return nil, false
 		}else{
 			log.DefaultLog.Warn("db error", zap.Error(err))

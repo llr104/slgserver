@@ -1,16 +1,16 @@
 package model
 
 type MapBuildConfig struct {
-	Id			int			`json:"id" xorm:"id pk autoincr"`
-	Type		int8		`json:"type"`
-	Level		int8		`json:"level"`
-	Name		string		`json:"name"`
-	Wood		int			`json:"Wood"`
-	Iron		int			`json:"iron"`
-	Stone		int			`json:"stone"`
-	Grain		int			`json:"grain"`
-	Durable		int			`json:"durable"`
-	Defender	int			`json:"defender"`
+	Id			int			`xorm:"id pk autoincr"`
+	Type		int8		`xorm:"type"`
+	Level		int8		`xorm:"level"`
+	Name		string		`xorm:"name"`
+	Wood		int			`xorm:"Wood"`
+	Iron		int			`xorm:"iron"`
+	Stone		int			`xorm:"stone"`
+	Grain		int			`xorm:"grain"`
+	Durable		int			`xorm:"durable"`
+	Defender	int			`xorm:"defender"`
 
 }
 

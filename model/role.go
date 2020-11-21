@@ -3,17 +3,17 @@ package model
 import "time"
 
 type Role struct {
-	RId			int			`json:"rid" xorm:"rid pk autoincr"`
-	UId			int			`json:"uid" xorm:"uid"`
-	SId			int			`json:"sid" xorm:"sid"`
-	NickName	string		`json:"nickName" validate:"min=4,max=20,regexp=^[a-zA-Z0-9_]*$"`
-	Balance		int			`json:"balance"`
-	HeadId		int16		`json:"headId" xorm:"headId"`
-	Sex			int8		`json:"sex"`
-	Profile		string		`json:"profile"`
-	LoginTime   time.Time	`json:"login_time"`
-	LogoutTime  time.Time	`json:"logout_time"`
-	CreatedAt	time.Time	`json:"created_at"`
+	RId			int			`xorm:"rid pk autoincr"`
+	UId			int			`xorm:"uid"`
+	SId			int			`xorm:"sid"`
+	NickName	string		`xorm:"nick_name" validate:"min=4,max=20,regexp=^[a-zA-Z0-9_]*$"`
+	Balance		int			`xorm:"balance"`
+	HeadId		int16		`xorm:"headId"`
+	Sex			int8		`xorm:"sex"`
+	Profile		string		`xorm:"profile"`
+	LoginTime   time.Time	`xorm:"login_time"`
+	LogoutTime  time.Time	`xorm:"logout_time"`
+	CreatedAt	time.Time	`xorm:"created_at"`
 }
 
 func (this *Role) TableName() string {

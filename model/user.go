@@ -3,15 +3,15 @@ package model
 import "time"
 
 type User struct {
-	UId      int       `json:"uid" xorm:"pk autoincr uid"`
-	Username string    `json:"username" validate:"min=4,max=20,regexp=^[a-zA-Z0-9_]*$"`
-	Passcode string    `json:"passcode"`
-	Passwd   string    `json:"passwd"`
-	Hardware string    `json:"hardware"`
-	Status   int       `json:"status"`
-	Ctime    time.Time `json:"ctime" xorm:"created"`
-	Mtime    time.Time `json:"mtime" xorm:"<-"`
-	IsOnline bool      `json:"is_online" xorm:"-"`
+	UId      int       `xorm:"uid pk autoincr"`
+	Username string    `xorm:"username" validate:"min=4,max=20,regexp=^[a-zA-Z0-9_]*$"`
+	Passcode string    `xorm:"passcode"`
+	Passwd   string    `xorm:"passwd"`
+	Hardware string    `xorm:"hardware"`
+	Status   int       `xorm:"status"`
+	Ctime    time.Time `xorm:"ctime"`
+	Mtime    time.Time `xorm:"mtime"`
+	IsOnline bool      `xorm:"-"`
 }
 
 func (this *User) TableName() string {

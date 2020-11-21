@@ -2,7 +2,6 @@ package logic
 
 import (
 	"encoding/json"
-	"fmt"
 	"go.uber.org/zap"
 	"slgserver/constant"
 	"slgserver/db"
@@ -54,7 +53,10 @@ func (this* FacilityMgr) Get(cid int) (*model.CityFacility, bool){
 
 	r = &model.CityFacility{}
 	ok, err := db.MasterDB.Table(r).Where("cityId=?", cid).Get(r)
-	log.DefaultLog.Warn("db error", zap.Error(err))
+	if err != nil{
+		log.DefaultLog.Warn("db error", zap.Error(err))
+	}
+
 	if ok {
 		this.mutex.Lock()
 		this.facilities[cid] = r
@@ -103,45 +105,47 @@ func (this* FacilityMgr) UpFacility(rid, cid int, fType int8) (*Facility, int){
 	defer this.mutex.Unlock()
 	f, ok := this.facilities[cid]
 	if ok == false{
-		str := fmt.Sprintf("UpFacility cityId %d not found", cid)
-		log.DefaultLog.Warn(str)
+		log.DefaultLog.Warn("UpFacility cityId not found", zap.Int("cityId", cid), zap.Int("type", int(fType)))
 		return nil, constant.CityNotExist
 	}else{
-		suss := false
 		fa := make([]*Facility, 0)
 		var out *Facility
 		json.Unmarshal([]byte(f.Facilities), &fa)
 		for _, v := range fa {
-
-			if v.Type == fType && v.Level < facility.FConf.MaxLevel(fType){
-				need, err := facility.FConf.Need(fType, int(v.Level+1))
-				if err != nil {
-					break
-				}
-
-				if RResMgr.TryUseNeed(rid, need) {
-					v.Level += 1
-					suss = true
-					out = v
-					f.NeedUpdate = true
+			if v.Type == fType {
+				maxLevel := facility.FConf.MaxLevel(fType)
+				if v.Level >= maxLevel{
+					log.DefaultLog.Warn("UpFacility error",
+						zap.Int("curLevel", int(v.Level)), zap.Int("maxLevel", int(maxLevel)), zap.Int("cityId", cid), zap.Int("type", int(fType)))
+					return nil, constant.UpError
 				}else{
-					break
+					need, ok := facility.FConf.Need(fType, int(v.Level+1))
+					if ok == false {
+						log.DefaultLog.Warn("UpFacility Need config error",
+							zap.Int("curLevel", int(v.Level)), zap.Int("cityId", cid), zap.Int("type", int(fType)))
+						return nil, constant.UpError
+					}
+					if RResMgr.TryUseNeed(rid, need) {
+						v.Level += 1
+						out = v
+						f.NeedUpdate = true
+						if t, err := json.Marshal(fa); err == nil{
+							f.Facilities = string(t)
+							return out, constant.OK
+						}else{
+							return nil, constant.UpError
+						}
+					}else{
+						log.DefaultLog.Warn("UpFacility Need Res Not Enough",
+							zap.Int("curLevel", int(v.Level)), zap.Int("cityId", cid), zap.Int("type", int(fType)))
+						return nil, constant.ResNotEnough
+					}
 				}
 			}
 		}
-		if suss {
-			if t, err := json.Marshal(fa); err == nil{
-				f.Facilities = string(t)
-				return out, constant.OK
-			}else{
-				return nil, constant.UpError
-			}
-		}else{
-			str := fmt.Sprintf("UpFacility error")
-			log.DefaultLog.Warn(str)
-			return nil, constant.UpError
-		}
 
+		log.DefaultLog.Warn("UpFacility error not found type", zap.Int("cityId", cid), zap.Int("type", int(fType)))
+		return nil, constant.UpError
 	}
 }
 func (this* FacilityMgr) toDatabase() {

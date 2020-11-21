@@ -2,7 +2,6 @@ package facility
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"go.uber.org/zap"
 	"io/ioutil"
@@ -86,38 +85,38 @@ func (this *facilityProduceResConf) MaxLevel(fType int8) int8 {
 	}
 }
 
-func (this *facilityProduceResConf) Need(fType int8, level int) (*NeedRes, error)  {
+func (this *facilityProduceResConf) Need(fType int8, level int) (*NeedRes, bool)  {
 	if this.CSC.Type == fType{
 		if len(this.CSC.Levels) >= level{
-			return &this.CSC.Levels[level-1].Need, nil
+			return &this.CSC.Levels[level-1].Need, true
 		}else {
-			return nil, errors.New("level not found")
+			return nil, false
 		}
 	}else if this.FMC.Type == fType{
 		if len(this.FMC.Levels) >= level{
-			return &this.FMC.Levels[level-1].Need, nil
+			return &this.FMC.Levels[level-1].Need, true
 		}else {
-			return nil, errors.New("level not found")
+			return nil, false
 		}
 	}else if this.LTC.Type == fType{
 		if len(this.LTC.Levels) >= level{
-			return &this.LTC.Levels[level-1].Need, nil
+			return &this.LTC.Levels[level-1].Need, true
 		}else {
-			return nil, errors.New("level not found")
+			return nil, false
 		}
 	}else if this.MF.Type == fType{
 		if len(this.MF.Levels) >= level{
-			return &this.MF.Levels[level-1].Need, nil
+			return &this.MF.Levels[level-1].Need, true
 		}else {
-			return nil, errors.New("level not found")
+			return nil, false
 		}
 	}else if this.MJ.Type == fType{
 		if len(this.MJ.Levels) >= level{
-			return &this.MJ.Levels[level-1].Need, nil
+			return &this.MJ.Levels[level-1].Need, true
 		}else {
-			return nil, errors.New("level not found")
+			return nil, false
 		}
 	}else{
-		return nil, errors.New("type not found")
+		return nil, false
 	}
 }
