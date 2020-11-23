@@ -114,13 +114,13 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	g, ok := logic.GMgr.FindGeneral(reqObj.GeneralId)
+	newG, ok := logic.GMgr.FindGeneral(reqObj.GeneralId)
 	if ok == false{
 		rsp.Body.Code = constant.GeneralNotFound
 		return
 	}
 
-	if g.RId != role.RId{
+	if newG.RId != role.RId{
 		rsp.Body.Code = constant.GeneralNotMe
 		return
 	}
@@ -139,17 +139,23 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	//下阵
 	if reqObj.Position == -1{
 		for i, gId := range army.GeneralArray {
-			if gId == g.Id{
+			if gId == newG.Id{
 				army.GeneralArray[i] = 0
 				army.SoldierArray[i] = 0
 				army.DB.Sync()
 				break
 			}
 		}
-		g.Order = 0
-		g.CityId = 0
-		g.DB.Sync()
+		newG.Order = 0
+		newG.CityId = 0
+		newG.DB.Sync()
 	}else{
+
+		if newG.CityId != 0{
+			rsp.Body.Code = constant.GeneralBusy
+			return
+		}
+
 		oldGId := army.GeneralArray[reqObj.Position]
 		if oldGId > 0{
 			if oldG, ok := logic.GMgr.FindGeneral(oldGId); ok{
@@ -162,9 +168,9 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		army.GeneralArray[reqObj.Position] = reqObj.GeneralId
 		army.SoldierArray[reqObj.Position] = 0
 
-		g.Order = reqObj.Order
-		g.CityId = reqObj.CityId
-		g.DB.Sync()
+		newG.Order = reqObj.Order
+		newG.CityId = reqObj.CityId
+		newG.DB.Sync()
 	}
 
 	if c, ok := logic.RCMgr.Get(army.CityId); ok{

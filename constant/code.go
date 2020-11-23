@@ -22,3 +22,4 @@ const ArmyNotMe = 15		//军队不是自己的
 const ResNotEnough = 16		//资源不足
 const OutArmyLimit = 17		//超过带兵限制
 const ArmyBusy = 18			//军队再忙
+const GeneralBusy = 19		//将领再忙
