@@ -90,21 +90,76 @@ func (this* RoleBuildMgr) PositionBuild(x, y int) (*model.MapRoleBuild, bool) {
 	defer this.mutex.RUnlock()
 	posId := ToPosition(x, y)
 	b,ok := this.posRB[posId]
-	return b, ok
+	if ok && b.RId != 0 {
+		return b, ok
+	}else{
+		return nil, false
+	}
 }
 
 
-func (this* RoleBuildMgr) AddBuild(build *model.MapRoleBuild)  {
-	build.DB.Sync()
-	posId := ToPosition(build.X, build.Y)
-	if _, err := db.MasterDB.Table(model.MapRoleBuild{}).Insert(build); err == nil{
+func (this* RoleBuildMgr) AddBuild(rid, x, y int) (*model.MapRoleBuild, bool) {
+
+	posId := ToPosition(x, y)
+	this.mutex.Lock()
+	rb, ok := this.posRB[posId]
+	this.mutex.Unlock()
+	if ok {
+		rb.RId = rid
+		rb.DB.Sync()
+
 		this.mutex.Lock()
-		this.posRB[posId] = build
-		this.dbRB[build.Id] = build
+		if _, ok := this.roleRB[rid]; ok == false{
+			this.roleRB[rid] = make([]*model.MapRoleBuild, 0)
+		}
+		this.roleRB[rid] = append(this.roleRB[rid], rb)
 		this.mutex.Unlock()
+		return rb, true
+
 	}else{
-		log.DefaultLog.Warn("db error", zap.Error(err))
+
+		if b, ok := NMMgr.PositionBuild(x, y); ok {
+			if cfg, _ := BCMgr.BuildConfig(b.Type, b.Level); cfg != nil {
+				rb := &model.MapRoleBuild{RId: rid, X: x, Y: y,
+					Type: b.Type, Level: b.Level, Name: cfg.Name,
+					Wood: cfg.Wood, Iron: cfg.Iron, Stone: cfg.Stone,
+					Grain: cfg.Grain, CurDurable: cfg.Durable,
+					MaxDurable: cfg.Durable}
+
+				if _, err := db.MasterDB.Table(model.MapRoleBuild{}).Insert(rb); err == nil{
+					this.mutex.Lock()
+					this.posRB[posId] = rb
+					this.dbRB[rb.Id] = rb
+					if _, ok := this.roleRB[rid]; ok == false{
+						this.roleRB[rid] = make([]*model.MapRoleBuild, 0)
+					}
+					this.roleRB[rid] = append(this.roleRB[rid], rb)
+					this.mutex.Unlock()
+					return rb, true
+				}else{
+					log.DefaultLog.Warn("db error", zap.Error(err))
+				}
+			}
+		}
 	}
+	return nil, false
+}
+
+func (this* RoleBuildMgr) Remove(build *model.MapRoleBuild)  {
+	this.mutex.Lock()
+	rb,ok := this.roleRB[build.RId]
+	if ok {
+		for i, v := range rb {
+			if v.Id == build.Id{
+				rb = append(rb[:i], rb[i+1:]...)
+				break
+			}
+		}
+	}
+	this.mutex.Unlock()
+
+	build.RId = 0
+	build.DB.Sync()
 }
 
 func (this* RoleBuildMgr) GetRoleBuild(rid int) ([]*model.MapRoleBuild, bool) {
@@ -119,7 +174,6 @@ func (this* RoleBuildMgr) Scan(x, y int) []*model.MapRoleBuild {
 		return nil
 	}
 
-
 	this.mutex.RLock()
 	defer this.mutex.RUnlock()
 
@@ -133,7 +187,7 @@ func (this* RoleBuildMgr) Scan(x, y int) []*model.MapRoleBuild {
 		for j := minY; j <= maxY; j++ {
 			posId := ToPosition(i, j)
 			v, ok := this.posRB[posId]
-			if ok {
+			if ok && v.RId != 0 {
 				rb = append(rb, v)
 			}
 		}
@@ -159,7 +213,7 @@ func (this* RoleBuildMgr) ScanBlock(x, y, length int) []*model.MapRoleBuild {
 		for j := y; j <= maxY; j++ {
 			posId := ToPosition(i, j)
 			v, ok := this.posRB[posId]
-			if ok {
+			if ok && v.RId != 0 {
 				rb = append(rb, v)
 			}
 		}

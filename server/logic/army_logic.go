@@ -140,26 +140,19 @@ func (this* armyLogic) OccupySystemBuild(rid, x, y int)  {
 	}
 
 	if NMMgr.IsCanBuild(x, y){
-		if b, ok := NMMgr.PositionBuild(x, y); ok {
-			if cfg, _ := BCMgr.BuildConfig(b.Type, b.Level); cfg != nil{
-				rb := &model.MapRoleBuild{RId: rid, X: x, Y: y,
-					Type: b.Type, Level: b.Level, Name: cfg.Name,
-					Wood: cfg.Wood, Iron: cfg.Iron, Stone: cfg.Stone,
-					Grain: cfg.Grain, CurDurable: cfg.Durable,
-					MaxDurable: cfg.Durable}
-				RBMgr.AddBuild(rb)
-				//占领的增加产量
-				if newRole, ok := RResMgr.Get(newId); ok{
-					newRole.WoodYield += rb.Wood
-					newRole.GrainYield += rb.Grain
-					newRole.StoneYield += rb.Stone
-					newRole.IronYield += rb.Iron
-					newRole.DB.Sync()
-				}
-				push := &proto.RoleBuildStatePush{}
-				model_to_proto.MRBuild(rb, &push.MRBuild)
-				server.DefaultConnMgr.PushByRoleId(newId, "role.roleBuildState", push)
+		rb, ok := RBMgr.AddBuild(rid, x, y)
+		if ok {
+			//占领的增加产量
+			if newRole, ok := RResMgr.Get(newId); ok{
+				newRole.WoodYield += rb.Wood
+				newRole.GrainYield += rb.Grain
+				newRole.StoneYield += rb.Stone
+				newRole.IronYield += rb.Iron
+				newRole.DB.Sync()
 			}
+			push := &proto.RoleBuildStatePush{}
+			model_to_proto.MRBuild(rb, &push.MRBuild)
+			server.DefaultConnMgr.PushByRoleId(newId, "role.roleBuildState", push)
 		}
 	}
 }
