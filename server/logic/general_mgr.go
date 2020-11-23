@@ -34,7 +34,7 @@ func (this* GeneralMgr) toDatabase() {
 		for _, v := range this.genByGId {
 			if v.DB.NeedSync() {
 				v.DB.BeginSync()
-				_, err := db.MasterDB.Table(model.General{}).Cols( "force", "strategy",
+				_, err := db.MasterDB.Table(model.General{}).ID(v.Id).Cols( "force", "strategy",
 					"defense", "speed", "destroy", "level", "exp", "order", "cityId").Update(v)
 				if err != nil{
 					log.DefaultLog.Warn("db error", zap.Error(err))

@@ -156,7 +156,7 @@ func (this* FacilityMgr) toDatabase() {
 		for _, v := range this.facilities {
 			if v.DB.NeedSync() {
 				v.DB.BeginSync()
-				_, err := db.MasterDB.Table(v).Cols("facilities").Update(v)
+				_, err := db.MasterDB.Table(v).ID(v.Id).Cols("facilities").Update(v)
 				if err != nil{
 					log.DefaultLog.Error("FacilityMgr toDatabase error", zap.Error(err))
 				}

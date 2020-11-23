@@ -145,7 +145,7 @@ func (this* RoleResMgr) toDatabase() {
 		for _, v := range this.rolesRes {
 			if v.DB.NeedSync() {
 				v.DB.BeginSync()
-				_, err := db.MasterDB.Table(v).Cols("wood", "iron", "stone",
+				_, err := db.MasterDB.Table(v).ID(v.Id).Cols("wood", "iron", "stone",
 					"grain", "gold", "decree", "wood_yield",
 					"iron_yield", "stone_yield", "gold_yield",
 					"gold_yield", "depot_capacity").Update(v)

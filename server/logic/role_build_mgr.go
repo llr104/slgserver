@@ -44,7 +44,7 @@ func (this* RoleBuildMgr) Load() {
 		}
 		this.roleRB[v.RId] = append(this.roleRB[v.RId], v)
 	}
-
+	go this.toDatabase()
 }
 
 
@@ -56,7 +56,7 @@ func (this* RoleBuildMgr) toDatabase() {
 		for _, v := range this.dbRB {
 			if v.DB.NeedSync() {
 				v.DB.BeginSync()
-				_, err := db.MasterDB.Table(v).Cols("rid",
+				_, err := db.MasterDB.Table(v).ID(v.Id).Cols("rid",
 					"cur_durable", "max_durable").Update(v)
 				if err != nil{
 					log.DefaultLog.Error("RoleResMgr toDatabase error", zap.Error(err))
@@ -205,8 +205,8 @@ func (this* RoleBuildMgr) ScanBlock(x, y, length int) []*model.MapRoleBuild {
 	this.mutex.RLock()
 	defer this.mutex.RUnlock()
 
-	maxX := util.MinInt(MapWith, x+length)
-	maxY := util.MinInt(MapHeight, y+length)
+	maxX := util.MinInt(MapWith, x+length-1)
+	maxY := util.MinInt(MapHeight, y+length-1)
 
 	rb := make([]*model.MapRoleBuild, 0)
 	for i := x; i <= maxX; i++ {
