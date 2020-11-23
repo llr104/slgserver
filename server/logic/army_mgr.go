@@ -234,7 +234,10 @@ func (this* ArmyMgr) GetOrCreate(rid int, cid int, order int8) (*model.Army, err
 	}
 
 	//需要创建
-	army := &model.Army{RId: rid, Order: order, CityId: cid, Generals: `[0,0,0]`, Soldiers: `[0,0,0]`}
+	army := &model.Army{RId: rid, Order: order,
+		CityId: cid, Generals: `[0,0,0]`, Soldiers: `[0,0,0]`,
+		GeneralArray: []int{0,0,0}, SoldierArray: []int{0,0,0}}
+
 	_, err := db.MasterDB.Insert(army)
 	if err == nil{
 		this.mutex.Lock()

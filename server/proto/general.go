@@ -39,8 +39,8 @@ type Army struct {
 	Id       int    `json:"id"`
 	CityId   int    `json:"cityId"`
 	Order    int8   `json:"order"`   //第几队，1-5队
-	Generals string `json:"generals"`
-	Soldiers string `json:"soldiers"`
+	Generals []int 	`json:"generals"`
+	Soldiers []int 	`json:"soldiers"`
 	State    int8   `json:"state"`   //状态，0:空闲 1:攻击 2：驻军 3:返回
 	FromX    int    `json:"from_x"`
 	FromY    int    `json:"from_y"`

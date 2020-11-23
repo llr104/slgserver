@@ -186,7 +186,7 @@ func (this*General) conscript(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	rsp.Body.Code = constant.OK
 
 	if reqObj.ArmyId <= 0 || len(reqObj.Cnts) != 3 ||
-		reqObj.Cnts[0] < 0 || reqObj.Cnts[1] < 0 || reqObj.Cnts[2] <= 0{
+		reqObj.Cnts[0] < 0 || reqObj.Cnts[1] < 0 || reqObj.Cnts[2] < 0{
 		rsp.Body.Code = constant.InvalidParam
 		return
 	}

@@ -106,7 +106,7 @@ type MyRolePropertyReq struct {
 type MyRolePropertyRsp struct {
 	RoleRes		RoleRes			`json:"role_res"`
 	MRBuilds	[]MapRoleBuild 	`json:"mr_builds"` //角色建筑，包含被占领的基础建筑
-	Generals 	[]General `json:"generals"`
+	Generals 	[]General 		`json:"generals"`
 	Citys 		[]MapRoleCity 	`json:"citys"`
 	Armys		[]Army			`json:"armys"`
 }

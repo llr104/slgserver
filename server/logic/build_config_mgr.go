@@ -57,3 +57,4 @@ func (this* BuildConfigMgr) GetDurable(t int8, level int8) int {
 	}
 	return 0
 }
+

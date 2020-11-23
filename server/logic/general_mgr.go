@@ -215,7 +215,10 @@ func (this* GeneralMgr) GetNPCGenerals(cnt int) ([]model.General, bool) {
 			}
 			rgs := make([]model.General, 0)
 			for _, v := range m {
-				rgs = append(rgs, *gs[v])
+				t := *gs[v]
+				//npc不需要更新到数据库
+				t.DB.Disable(true)
+				rgs = append(rgs, t)
 			}
 			return rgs, true
 		}

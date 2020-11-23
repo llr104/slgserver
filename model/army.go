@@ -42,26 +42,23 @@ func (this *Army) AfterSet(name string, cell xorm.Cell){
 	this.GeneralArray = []int{0,0,0}
 	if name == "generals"{
 		if cell != nil{
-			gs, ok := (*cell).(string)
+			gs, ok := (*cell).([]uint8)
 			if ok {
-				json.Unmarshal([]byte(gs), this.GeneralArray)
+				json.Unmarshal(gs, &this.GeneralArray)
 			}
-
 		}
-
 	}else if name == "soldiers"{
 		if cell != nil{
-			ss, ok := (*cell).(string)
+			ss, ok := (*cell).([]uint8)
 			if ok {
-				json.Unmarshal([]byte(ss), this.SoldierArray)
+				json.Unmarshal(ss, &this.SoldierArray)
 			}
-
 		}
-
 	}
 }
 
 func (this* Army) BeforeInsert() {
+
 	data, _ := json.Marshal(this.GeneralArray)
 	this.Generals = string(data)
 
@@ -70,6 +67,7 @@ func (this* Army) BeforeInsert() {
 }
 
 func (this* Army) BeforeUpdate() {
+
 	data, _ := json.Marshal(this.GeneralArray)
 	this.Generals = string(data)
 
