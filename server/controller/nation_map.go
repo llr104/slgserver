@@ -142,7 +142,7 @@ func (this*NationMap) giveUp(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	}
 
 	rr, ok := logic.RResMgr.CutDown(role.RId, rb)
-	logic.RBMgr.Remove(rb)
+	logic.RBMgr.RemoveFromRole(rb)
 
 	if ok {
 		model_to_proto.RRes(rr, &rspObj.RoleRes)

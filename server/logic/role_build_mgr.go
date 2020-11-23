@@ -145,7 +145,7 @@ func (this* RoleBuildMgr) AddBuild(rid, x, y int) (*model.MapRoleBuild, bool) {
 	return nil, false
 }
 
-func (this* RoleBuildMgr) Remove(build *model.MapRoleBuild)  {
+func (this* RoleBuildMgr) RemoveFromRole(build *model.MapRoleBuild)  {
 	this.mutex.Lock()
 	rb,ok := this.roleRB[build.RId]
 	if ok {
