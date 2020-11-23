@@ -27,7 +27,9 @@ func Init() {
 	logic.RBMgr.Load()
 	logic.RFMgr.Load()
 	logic.RResMgr.Load()
+	logic.GMgr.Load()
 	logic.AMgr.Load()
+
 
 }
 

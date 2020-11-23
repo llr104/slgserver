@@ -2,6 +2,7 @@ package logic
 
 import (
 	"go.uber.org/zap"
+	"math/rand"
 	"slgserver/db"
 	"slgserver/log"
 	"slgserver/model"
@@ -23,6 +24,7 @@ var GMgr = &GeneralMgr{
 
 func (this* GeneralMgr) Load(){
 	go this.toDatabase()
+	//this.createNPC()
 }
 func (this* GeneralMgr) toDatabase() {
 	for true {
@@ -156,6 +158,66 @@ func (this* GeneralMgr) GetAndTryCreate(rid int) ([]*model.General, bool){
 			}
 			this.mutex.Unlock()
 			return gs, true
+		}
+	}
+}
+
+func (this* GeneralMgr) createNPC() ([]*model.General, bool){
+	//创建
+	gs := make([]*model.General, 0)
+	sess := db.MasterDB.NewSession()
+	sess.Begin()
+
+	for _, v := range general.General.List {
+		r := &model.General{RId: 0, Name: v.Name, CfgId: v.CfgId,
+			Force: v.Force, Strategy: v.Strategy, Defense: v.Defense,
+			Speed: v.Speed, Cost: v.Cost, Order: 0, CityId: 0,
+			Level: 1, CreatedAt: time.Now(),
+		}
+		gs = append(gs, r)
+
+		if _, err := db.MasterDB.Table(model.General{}).Insert(r); err != nil {
+			sess.Rollback()
+			log.DefaultLog.Warn("db error", zap.Error(err))
+			return nil, false
+		}
+	}
+	if err := sess.Commit(); err != nil{
+		log.DefaultLog.Warn("db error", zap.Error(err))
+		return nil, false
+	}else{
+		this.mutex.Lock()
+		this.genByRole[0] = gs
+		for _, v := range gs {
+			this.genByGId[v.Id] = v
+		}
+		this.mutex.Unlock()
+		return gs, true
+	}
+}
+
+//获取npc武将
+func (this* GeneralMgr) GetNPCGenerals(cnt int) ([]model.General, bool) {
+	gs, ok := this.Get(0)
+	if ok == false {
+		return make([]model.General, 0), false
+	}else{
+		if cnt > len(gs){
+			return make([]model.General, 0), false
+		}else{
+			m := make(map[int]int)
+			for true {
+				 r := rand.Intn(len(gs))
+				 m[r] = r
+				 if len(m) == cnt{
+				 	break
+				 }
+			}
+			rgs := make([]model.General, 0)
+			for _, v := range m {
+				rgs = append(rgs, *gs[v])
+			}
+			return rgs, true
 		}
 	}
 }

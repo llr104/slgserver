@@ -24,7 +24,7 @@ func (this *LoginHistory) TableName() string {
 
 
 type LoginLast struct {
-	Id         int       `xorm:""id" pk autoincr"`
+	Id         int       `xorm:"id pk autoincr"`
 	UId        int       `xorm:"uid"`
 	LoginTime  time.Time `xorm:"login_time"`
 	LogoutTime time.Time `xorm:"logout_time"`

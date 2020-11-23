@@ -60,12 +60,8 @@ func Army(m *model.Army, p *proto.Army)  {
 	p.CityId = m.CityId
 	p.Id = m.Id
 	p.Order = m.Order
-	p.FirstId = m.FirstId
-	p.SecondId = m.SecondId
-	p.ThirdId = m.ThirdId
-	p.FirstSoldierCnt = m.FirstSoldierCnt
-	p.SecondSoldierCnt = m.SecondSoldierCnt
-	p.ThirdSoldierCnt = m.ThirdSoldierCnt
+	p.Generals = m.Generals
+	p.Soldiers = m.Soldiers
 	p.State = m.State
 	p.FromX = m.FromX
 	p.FromY = m.FromY

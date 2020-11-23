@@ -75,35 +75,31 @@ func (this *armyLogic) battle(army* model.Army) {
 	_, ok := RCMgr.PositionCity(army.ToX, army.ToY)
 	if ok {
 		//打城池
-		army.FirstSoldierCnt = 0
-		army.SecondSoldierCnt = 0
-		army.ThirdSoldierCnt = 0
 		return
 	}
 
 	_, ok = RBMgr.PositionBuild(army.ToX, army.ToY)
 	if ok {
 		//打玩家占领的领地
-		army.FirstSoldierCnt = util.MaxInt(0, army.FirstSoldierCnt-50)
-		army.SecondSoldierCnt = util.MaxInt(0, army.SecondSoldierCnt-50)
-		army.ThirdSoldierCnt = util.MaxInt(0, army.ThirdSoldierCnt-50)
+		army.SoldierArray[0] = util.MaxInt(0, army.SoldierArray[0]-50)
+		army.SoldierArray[1] = util.MaxInt(0, army.SoldierArray[1]-50)
+		army.SoldierArray[2] = util.MaxInt(0, army.SoldierArray[2]-50)
+		this.OccupyRoleBuild(army.RId, army.ToX, army.ToY)
 	}else{
-		army.FirstSoldierCnt = util.MaxInt(0, army.FirstSoldierCnt-10)
-		army.SecondSoldierCnt = util.MaxInt(0, army.SecondSoldierCnt-10)
-		army.ThirdSoldierCnt = util.MaxInt(0, army.ThirdSoldierCnt-10)
+		army.SoldierArray[0] = util.MaxInt(0, army.SoldierArray[0]-10)
+		army.SoldierArray[1] = util.MaxInt(0, army.SoldierArray[1]-10)
+		army.SoldierArray[2] = util.MaxInt(0, army.SoldierArray[2]-10)
+
+		//占领
+		this.OccupySystemBuild(army.RId, army.ToX, army.ToY)
 	}
-
-	//占领
-	this.OccupyBuild(army.RId, army.ToX, army.ToY)
-
 
 }
 
-func (this* armyLogic) OccupyBuild(rid, x, y int)  {
+func (this* armyLogic) OccupyRoleBuild(rid, x, y int)  {
 	newId := rid
 
-	b, ok := RBMgr.PositionBuild(x, y)
-	if ok {
+	if b, ok := RBMgr.PositionBuild(x, y); ok {
 
 		oldId := b.RId
 		log.DefaultLog.Info("battle in role build",
@@ -133,33 +129,36 @@ func (this* armyLogic) OccupyBuild(rid, x, y int)  {
 		model_to_proto.MRBuild(b, &push.MRBuild)
 		server.DefaultConnMgr.PushByRoleId(oldId, "role.roleBuildState", push)
 		server.DefaultConnMgr.PushByRoleId(newId, "role.roleBuildState", push)
+	}
+}
 
-	}else{
-		if NMMgr.IsCanBuild(x, y){
-			b, ok := NMMgr.PositionBuild(x, y)
-			if ok {
-				if cfg, _ := BCMgr.BuildConfig(b.Type, b.Level); cfg != nil{
-					rb := &model.MapRoleBuild{RId: rid, X: x, Y: y,
-						Type: b.Type, Level: b.Level, Name: cfg.Name,
-						Wood: cfg.Wood, Iron: cfg.Iron, Stone: cfg.Stone,
-						Grain: cfg.Grain, CurDurable: cfg.Durable,
-						MaxDurable: cfg.Durable}
+func (this* armyLogic) OccupySystemBuild(rid, x, y int)  {
+	newId := rid
 
-					RBMgr.AddBuild(rb)
+	if _, ok := RBMgr.PositionBuild(x, y); ok {
+		return
+	}
 
-					//占领的增加产量
-					if newRole, ok := RResMgr.Get(newId); ok{
-						newRole.WoodYield += rb.Wood
-						newRole.GrainYield += rb.Grain
-						newRole.StoneYield += rb.Stone
-						newRole.IronYield += rb.Iron
-						newRole.DB.Sync()
-					}
-
-					push := &proto.RoleBuildStatePush{}
-					model_to_proto.MRBuild(rb, &push.MRBuild)
-					server.DefaultConnMgr.PushByRoleId(newId, "role.roleBuildState", push)
+	if NMMgr.IsCanBuild(x, y){
+		if b, ok := NMMgr.PositionBuild(x, y); ok {
+			if cfg, _ := BCMgr.BuildConfig(b.Type, b.Level); cfg != nil{
+				rb := &model.MapRoleBuild{RId: rid, X: x, Y: y,
+					Type: b.Type, Level: b.Level, Name: cfg.Name,
+					Wood: cfg.Wood, Iron: cfg.Iron, Stone: cfg.Stone,
+					Grain: cfg.Grain, CurDurable: cfg.Durable,
+					MaxDurable: cfg.Durable}
+				RBMgr.AddBuild(rb)
+				//占领的增加产量
+				if newRole, ok := RResMgr.Get(newId); ok{
+					newRole.WoodYield += rb.Wood
+					newRole.GrainYield += rb.Grain
+					newRole.StoneYield += rb.Stone
+					newRole.IronYield += rb.Iron
+					newRole.DB.Sync()
 				}
+				push := &proto.RoleBuildStatePush{}
+				model_to_proto.MRBuild(rb, &push.MRBuild)
+				server.DefaultConnMgr.PushByRoleId(newId, "role.roleBuildState", push)
 			}
 		}
 	}

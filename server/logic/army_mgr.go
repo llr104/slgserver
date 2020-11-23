@@ -146,10 +146,8 @@ func (this* ArmyMgr) toDatabase() {
 			if v.DB.NeedSync() {
 				v.DB.BeginSync()
 				cnt+=1
-				_, err := db.MasterDB.Table(model.Army{}).Cols("firstId",
-					"secondId", "thirdId", "first_soldier_cnt",
-					"second_soldier_cnt", "third_soldier_cnt", "state",
-					"from_x", "from_y", "to_x", "to_y", "start", "end").Update(v)
+				_, err := db.MasterDB.Table(model.Army{}).Cols("soldiers",
+					"generals", "state", "from_x", "from_y", "to_x", "to_y", "start", "end").Update(v)
 				if err != nil{
 					log.DefaultLog.Warn("db error", zap.Error(err))
 				}
@@ -236,9 +234,7 @@ func (this* ArmyMgr) GetOrCreate(rid int, cid int, order int8) (*model.Army, err
 	}
 
 	//需要创建
-	army := &model.Army{RId: rid, Order: order, CityId: cid,
-		FirstId: 0, SecondId: 0, ThirdId: 0,
-		FirstSoldierCnt: 0, SecondSoldierCnt: 0, ThirdSoldierCnt: 0}
+	army := &model.Army{RId: rid, Order: order, CityId: cid, Generals: `[0,0,0]`, Soldiers: `[0,0,0]`}
 	_, err := db.MasterDB.Insert(army)
 	if err == nil{
 		this.mutex.Lock()

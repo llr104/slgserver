@@ -98,7 +98,7 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
 
-	if reqObj.Order<=0 || reqObj.Order>5 || reqObj.Position<0 || reqObj.Position>3{
+	if reqObj.Order <= 0 || reqObj.Order > 5 || reqObj.Position < -1 || reqObj.Position >2 {
 		rsp.Body.Code = constant.InvalidParam
 		return
 	}
@@ -136,61 +136,33 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	//配置逻辑
-	if reqObj.Position == 0{
-		if army.FirstId == g.Id{
-			army.FirstId = 0
-			army.FirstSoldierCnt = 0
-		}else if army.SecondId == g.Id{
-			army.SecondId = 0
-			army.SecondSoldierCnt = 0
-		}else if army.ThirdId == g.Id{
-			army.ThirdId = 0
-			army.ThirdSoldierCnt = 0
+	//下阵
+	if reqObj.Position == -1{
+		for i, gId := range army.GeneralArray {
+			if gId == g.Id{
+				army.GeneralArray[i] = 0
+				army.SoldierArray[i] = 0
+				army.DB.Sync()
+				break
+			}
 		}
 		g.Order = 0
 		g.CityId = 0
 		g.DB.Sync()
 	}else{
-		if reqObj.Position == 1 {
-			//旧的下阵
-			if army.FirstId != 0 {
-				if oldG, ok := logic.GMgr.FindGeneral(army.FirstId); ok{
-					oldG.CityId = 0
-					oldG.Order = 0
-					oldG.DB.Sync()
-				}
+		oldGId := army.GeneralArray[reqObj.Position]
+		if oldGId > 0{
+			if oldG, ok := logic.GMgr.FindGeneral(oldGId); ok{
+				//旧的下阵
+				oldG.CityId = 0
+				oldG.Order = 0
 			}
-
-			army.FirstSoldierCnt = 0
-			army.FirstId = g.Id
-		}else if reqObj.Position == 2 {
-			//旧的下阵
-			if army.SecondId != 0 {
-				if oldG, ok := logic.GMgr.FindGeneral(army.SecondId); ok{
-					oldG.CityId = 0
-					oldG.Order = 0
-					oldG.DB.Sync()
-				}
-			}
-
-			army.SecondSoldierCnt = 0
-			army.SecondId = g.Id
-		}else if reqObj.Position == 3 {
-			//旧的下阵
-			if army.ThirdId != 0 {
-				if oldG, ok := logic.GMgr.FindGeneral(army.ThirdId); ok{
-					oldG.CityId = 0
-					oldG.Order = 0
-					oldG.DB.Sync()
-				}
-			}
-
-			army.ThirdSoldierCnt = 0
-			army.ThirdId = g.Id
 		}
 		//新的上阵
-		g.Order = reqObj.Position
+		army.GeneralArray[reqObj.Position] = reqObj.GeneralId
+		army.SoldierArray[reqObj.Position] = 0
+
+		g.Order = reqObj.Order
 		g.CityId = reqObj.CityId
 		g.DB.Sync()
 	}
@@ -213,7 +185,8 @@ func (this*General) conscript(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	rsp.Body.Msg = rspObj
 	rsp.Body.Code = constant.OK
 
-	if reqObj.ArmyId <= 0 || reqObj.FirstCnt < 0 || reqObj.SecondCnt < 0 || reqObj.ThirdCnt < 0{
+	if reqObj.ArmyId <= 0 || len(reqObj.Cnts) != 3 ||
+		reqObj.Cnts[0] < 0 || reqObj.Cnts[1] < 0 || reqObj.Cnts[2] <= 0{
 		rsp.Body.Code = constant.InvalidParam
 		return
 	}
@@ -232,29 +205,17 @@ func (this*General) conscript(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	addCnts := []int{reqObj.FirstCnt, reqObj.SecondCnt, reqObj.ThirdCnt}
-	armyIds := []int{army.FirstId, army.SecondId, army.ThirdId}
-	armyCnts := []int{army.FirstSoldierCnt, army.SecondSoldierCnt, army.ThirdSoldierCnt}
 
 	//判断是否超过上限
-	for i, gid := range armyIds {
+	for i, gid := range army.GeneralArray {
 		if gid == 0 {
-			if i == 0{
-				reqObj.FirstCnt = 0
-				addCnts[0] = 0
-			}else if i==1 {
-				reqObj.SecondCnt = 0
-				addCnts[1] = 0
-			}else if i==2 {
-				reqObj.ThirdCnt = 0
-				addCnts[2] = 0
-			}
+			reqObj.Cnts[i] = 0
 			continue
 		}
 		if g, ok := logic.GMgr.FindGeneral(gid); ok {
 			l, e := general.GenBasic.GetLevel(g.Level)
 			if e == nil{
-				if l.Soldiers < addCnts[i]+armyCnts[i]{
+				if l.Soldiers < reqObj.Cnts[i]+army.SoldierArray[i]{
 					rsp.Body.Code = constant.OutArmyLimit
 					return
 				}
@@ -266,7 +227,11 @@ func (this*General) conscript(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	}
 
 	//开始征兵
-	total := reqObj.FirstCnt + reqObj.SecondCnt + reqObj.ThirdCnt
+	total := 0
+	for _, n := range reqObj.Cnts {
+		total += n
+	}
+
 	conscript := static_conf.Basic.ConScript
 	needWood := total*conscript.CostWood
 	needGrain := total*conscript.CostGrain
@@ -279,9 +244,10 @@ func (this*General) conscript(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		Stone: needStone}
 
 	if ok := logic.RResMgr.TryUseNeed(army.RId, &nr); ok {
-		army.FirstSoldierCnt += reqObj.FirstCnt
-		army.SecondSoldierCnt += reqObj.SecondCnt
-		army.ThirdSoldierCnt += reqObj.ThirdCnt
+		for i, _ := range army.SoldierArray {
+			army.SoldierArray[i] += reqObj.Cnts[i]
+		}
+
 		army.DB.Sync()
 
 		//队伍

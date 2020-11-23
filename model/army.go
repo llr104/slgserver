@@ -1,6 +1,10 @@
 package model
 
-import "time"
+import (
+	"encoding/json"
+	"time"
+	"xorm.io/xorm"
+)
 
 const (
 	ArmyIdle  	= 0
@@ -16,12 +20,10 @@ type Army struct {
 	RId              	int  		`xorm:"rid"`
 	CityId           	int  		`xorm:"cityId"`
 	Order            	int8 		`xorm:"order"`
-	FirstId          	int       	`xorm:"firstId"`
-	SecondId         	int       	`xorm:"secondId"`
-	ThirdId          	int       	`xorm:"thirdId"`
-	FirstSoldierCnt  	int       	`xorm:"first_soldier_cnt"`
-	SecondSoldierCnt 	int       	`xorm:"second_soldier_cnt"`
-	ThirdSoldierCnt  	int       	`xorm:"third_soldier_cnt"`
+	Generals			string		`xorm:"generals"`
+	Soldiers			string		`xorm:"soldiers"`
+	GeneralArray		[]int		`xorm:"-"`
+	SoldierArray		[]int		`xorm:"-"`
 	State            	int8  		`xorm:"state"` //状态，0:空闲 1:攻击 2：驻军 3:返回
 	FromX            	int       	`xorm:"from_x"`
 	FromY            	int       	`xorm:"from_y"`
@@ -35,4 +37,42 @@ func (this *Army) TableName() string {
 	return "army"
 }
 
+func (this *Army) AfterSet(name string, cell xorm.Cell){
+	this.SoldierArray = []int{0,0,0}
+	this.GeneralArray = []int{0,0,0}
+	if name == "generals"{
+		if cell != nil{
+			gs, ok := (*cell).(string)
+			if ok {
+				json.Unmarshal([]byte(gs), this.GeneralArray)
+			}
 
+		}
+
+	}else if name == "soldiers"{
+		if cell != nil{
+			ss, ok := (*cell).(string)
+			if ok {
+				json.Unmarshal([]byte(ss), this.SoldierArray)
+			}
+
+		}
+
+	}
+}
+
+func (this* Army) BeforeInsert() {
+	data, _ := json.Marshal(this.GeneralArray)
+	this.Generals = string(data)
+
+	data, _ = json.Marshal(this.SoldierArray)
+	this.Soldiers = string(data)
+}
+
+func (this* Army) BeforeUpdate() {
+	data, _ := json.Marshal(this.GeneralArray)
+	this.Generals = string(data)
+
+	data, _ = json.Marshal(this.SoldierArray)
+	this.Soldiers = string(data)
+}
