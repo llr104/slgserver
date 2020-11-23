@@ -3,6 +3,7 @@ package controller
 import (
 	"github.com/goinggo/mapstructure"
 	"slgserver/constant"
+	"slgserver/model"
 	"slgserver/net"
 	"slgserver/server/logic"
 	"slgserver/server/middleware"
@@ -21,6 +22,7 @@ func (this*NationMap) InitRouter(r *net.Router) {
 	g.AddRouter("config", this.config)
 	g.AddRouter("scan", this.scan)
 	g.AddRouter("scanBlock", this.scanBlock)
+	g.AddRouter("giveUp", this.giveUp, middleware.CheckRole())
 }
 
 /*
@@ -112,3 +114,39 @@ func (this*NationMap) scanBlock(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	}
 }
 
+func (this*NationMap) giveUp(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+	reqObj := &proto.GiveUpReq{}
+	rspObj := &proto.GiveUpRsp{}
+	mapstructure.Decode(req.Body.Msg, reqObj)
+	rsp.Body.Msg = rspObj
+	rsp.Body.Code = constant.OK
+
+	x := reqObj.X
+	y := reqObj.Y
+
+	rspObj.X = x
+	rspObj.Y = y
+
+	r, _ := req.Conn.GetProperty("role")
+	role := r.(*model.Role)
+
+	rb, ok := logic.RBMgr.PositionBuild(x, y)
+	if ok == false{
+		rsp.Body.Code = constant.CannotGiveUp
+		return
+	}
+
+	if rb.RId != role.RId{
+		rsp.Body.Code = constant.BuildNotMe
+		return
+	}
+
+	rr, ok := logic.RResMgr.CutDown(role.RId, rb)
+	if ok {
+		model_to_proto.RRes(rr, &rspObj.RoleRes)
+		rsp.Body.Code = constant.OK
+	}else{
+		rsp.Body.Code = constant.DBError
+	}
+
+}

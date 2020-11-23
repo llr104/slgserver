@@ -50,3 +50,14 @@ type ScanBlockReq struct {
 	Y 		int    		`json:"y"`
 	Length	int			`json:"length"`
 }
+
+type GiveUpReq struct {
+	X 		int    		`json:"x"`
+	Y 		int    		`json:"y"`
+}
+
+type GiveUpRsp struct {
+	X 		int    		`json:"x"`
+	Y 		int    		`json:"y"`
+	RoleRes	RoleRes		`json:"role_res"`
+}

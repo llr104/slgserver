@@ -100,7 +100,18 @@ func (this* RoleResMgr) TryUseNeed(rid int, need*facility.NeedRes) bool{
 
 }
 
-
+func (this* RoleResMgr) CutDown(rid int, b *model.MapRoleBuild) (*model.RoleRes, bool)  {
+	rr, ok := this.Get(rid)
+	if ok {
+		rr.GrainYield = util.MaxInt(rr.GrainYield-b.Grain, 0)
+		rr.IronYield = util.MaxInt(rr.IronYield-b.Iron, 0)
+		rr.StoneYield = util.MaxInt(rr.StoneYield-b.Stone, 0)
+		rr.WoodYield = util.MaxInt(rr.WoodYield-b.Wood, 0)
+		rr.DB.Sync()
+		return rr, true
+	}
+	return nil, false
+}
 func (this* RoleResMgr) produce() {
 	index := 1
 	for true {

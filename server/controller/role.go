@@ -103,6 +103,7 @@ func (this*Role) roleList(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 func (this*Role) enterServer(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	reqObj := &proto.EnterServerReq{}
 	rspObj := &proto.EnterServerRsp{}
+	rspObj.Time = time.Now().UnixNano()/1e6
 
 	mapstructure.Decode(req.Body.Msg, reqObj)
 	rsp.Body.Msg = rspObj
