@@ -1,7 +1,9 @@
 package logic
 
 import (
+	"encoding/json"
 	"go.uber.org/zap"
+	"slgserver/db"
 	"slgserver/log"
 	"slgserver/model"
 	"slgserver/server"
@@ -104,12 +106,57 @@ func (this *armyLogic) battle(army* model.Army) {
 		army.SoldierArray[2] = util.MaxInt(0, army.SoldierArray[2]-50)
 		this.OccupyRoleBuild(army.RId, army.ToX, army.ToY)
 	}else{
-		army.SoldierArray[0] = util.MaxInt(0, army.SoldierArray[0]-10)
-		army.SoldierArray[1] = util.MaxInt(0, army.SoldierArray[1]-10)
-		army.SoldierArray[2] = util.MaxInt(0, army.SoldierArray[2]-10)
 
-		//占领
-		this.OccupySystemBuild(army.RId, army.ToX, army.ToY)
+		enemys := SysArmy.GetArmy(army.ToX, army.ToY)
+		warReports := make([]*model.WarReport, 0)
+		for _, enemy := range enemys {
+			//战报处理
+			begArmy1, _ := json.Marshal(army)
+			begArmy2, _ := json.Marshal(enemy)
+
+			winCnt := 0
+			for i, s1 := range army.SoldierArray {
+				s2 := enemy.SoldierArray[i]
+				enemy.SoldierArray[i] = util.MaxInt(0, enemy.SoldierArray[i]-s1)
+				army.SoldierArray[i] = util.MaxInt(0, army.SoldierArray[i]-s2)
+				if army.SoldierArray[i] > 0{
+					winCnt+=1
+				}
+			}
+			endArmy1, _ := json.Marshal(army)
+			endArmy2, _ := json.Marshal(enemy)
+
+			wr := &model.WarReport{X: army.ToX, Y: army.ToY, AttackRid: army.RId,
+				AttackIsRead: false, DefenseIsRead: false, DefenseRid: enemy.RId,
+				BegAttackArmy: string(begArmy1), BegDefenseArmy: string(begArmy2),
+				EndAttackArmy: string(endArmy1), EndDefenseArmy: string(endArmy2),
+				AttackIsWin: winCnt>=2,Time: time.Now(),
+			}
+			warReports = append(warReports, wr)
+		}
+
+		//三盘两胜
+		isWinCnt := 0
+		for _, s := range army.SoldierArray {
+			if s>0{
+				isWinCnt+=1
+			}
+		}
+		if isWinCnt>=2 {
+			//占领系统领地
+			this.OccupySystemBuild(army.RId, army.ToX, army.ToY)
+			wr := warReports[len(warReports)-1]
+			wr.DestroyDurable = 100
+			wr.Occupy = 1
+		}
+
+		push := &proto.WarReportPush{}
+		push.List = make([]proto.WarReport, len(warReports))
+		for i, wr := range warReports {
+			db.MasterDB.InsertOne(wr)
+			model_to_proto.WarReport(wr, &push.List[i])
+			server.DefaultConnMgr.PushByRoleId(army.RId, "war.reportPush", push)
+		}
 	}
 
 }

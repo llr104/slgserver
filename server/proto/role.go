@@ -111,3 +111,4 @@ type MyRolePropertyRsp struct {
 	Citys 		[]MapRoleCity 	`json:"citys"`
 	Armys		[]Army			`json:"armys"`
 }
+

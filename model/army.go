@@ -2,7 +2,6 @@ package model
 
 import (
 	"encoding/json"
-	"fmt"
 	"time"
 	"xorm.io/xorm"
 )
@@ -52,7 +51,7 @@ func (this *Army) AfterSet(name string, cell xorm.Cell){
 			gs, ok := (*cell).([]uint8)
 			if ok {
 				json.Unmarshal(gs, &this.GeneralArray)
-				fmt.Println(this.GeneralArray)
+				//fmt.Println(this.GeneralArray)
 			}
 		}
 	}else if name == "soldiers"{
@@ -61,7 +60,7 @@ func (this *Army) AfterSet(name string, cell xorm.Cell){
 			ss, ok := (*cell).([]uint8)
 			if ok {
 				json.Unmarshal(ss, &this.SoldierArray)
-				fmt.Println(this.SoldierArray)
+				//fmt.Println(this.SoldierArray)
 			}
 		}
 	}

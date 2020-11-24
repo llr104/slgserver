@@ -87,3 +87,22 @@ func General(m *model.General, p *proto.General)  {
 	p.Level = m.Level
 	p.Exp = m.Exp
 }
+
+func WarReport(m *model.WarReport, p *proto.WarReport)  {
+	p.Time = m.Time.UnixNano()/1e6
+	p.Id = m.Id
+	p.AttackRid = m.AttackRid
+	p.DefenseRid = m.DefenseRid
+	p.BegAttackArmy = m.BegAttackArmy
+	p.BegDefenseArmy = m.BegDefenseArmy
+	p.EndAttackArmy = m.EndAttackArmy
+	p.EndDefenseArmy = m.EndDefenseArmy
+	p.AttackIsWin = m.AttackIsWin
+	p.AttackIsRead = m.AttackIsRead
+	p.DefenseIsRead = m.DefenseIsRead
+	p.DestroyDurable = m.DestroyDurable
+	p.Occupy = m.Occupy
+	p.X = m.X
+	p.X = m.X
+
+}
