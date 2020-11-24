@@ -46,7 +46,7 @@ func (this*War) report(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	rspObj.List = make([]proto.WarReport, 0)
+	rspObj.List = make([]proto.WarReport, len(l))
 	for i, v := range l {
 		model_to_proto.WarReport(v, &rspObj.List[i])
 	}
