@@ -37,8 +37,8 @@ func (this*War) report(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 	//查询最近30条战报吧
 	l := make([]*model.WarReport, 0)
-	err := db.MasterDB.Table(model.WarReport{}).Where("id=?",
-		role.RId).OrderBy("ctime").Limit(30, 0).Find(&l)
+	err := db.MasterDB.Table(model.WarReport{}).Where("attack_rid=? or defense_rid=?",
+		role.RId, role.RId).OrderBy("ctime").Limit(30, 0).Find(&l)
 
 	if err != nil{
 		log.DefaultLog.Warn("db error", zap.Error(err))
