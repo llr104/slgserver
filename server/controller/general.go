@@ -297,6 +297,12 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 		return
 	}
 
+	if army.GeneralArray[0] == 0{
+		rsp.Body.Code = constant.ArmyNotMain
+		return
+	}
+
+
 	if reqObj.Cmd == model.ArmyCmdBack {
 		//撤退
 		if army.Cmd == model.ArmyCmdAttack || army.Cmd == model.ArmyCmdDefend {
