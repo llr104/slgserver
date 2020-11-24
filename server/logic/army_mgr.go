@@ -174,7 +174,7 @@ func (this* ArmyMgr) toDatabase() {
 				v.DB.BeginSync()
 				cnt+=1
 				_, err := db.MasterDB.Table(model.Army{}).ID(v.Id).Cols("soldiers",
-					"generals", "state", "from_x", "from_y", "to_x", "to_y", "start", "end").Update(v)
+					"generals", "cmd", "from_x", "from_y", "to_x", "to_y", "start", "end").Update(v)
 				if err != nil{
 					log.DefaultLog.Warn("db error", zap.Error(err))
 				}

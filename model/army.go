@@ -31,7 +31,7 @@ type Army struct {
 	GeneralArray 		[]int  		`xorm:"-"`
 	SoldierArray 		[]int  		`xorm:"-"`
 	Cmd         		int8   		`xorm:"cmd"` //执行命令0:空闲 1:攻击 2：驻军 3:返回
-	State				int8		`xorm:"—"` //状态:0:running,1:stop
+	State				int8		`xorm:"-"` //状态:0:running,1:stop
 	FromX            	int       	`xorm:"from_x"`
 	FromY            	int       	`xorm:"from_y"`
 	ToX              	int       	`xorm:"to_x"`
