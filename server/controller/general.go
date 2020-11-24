@@ -281,13 +281,7 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
 
-	if reqObj.State != 1 && reqObj.State != 2{
-		rsp.Body.Code = constant.InvalidParam
-		return
-	}
-
-	if reqObj.X < 0 || reqObj.X >= logic.MapWith ||
-		reqObj.Y < 0 || reqObj.Y >= logic.MapHeight{
+	if reqObj.State >= model.ArmyAttack && reqObj.State <= model.ArmyBack{
 		rsp.Body.Code = constant.InvalidParam
 		return
 	}
@@ -303,20 +297,63 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 		return
 	}
 
-	if army.State != 0 {
-		rsp.Body.Code = constant.ArmyBusy
-		return
+	if reqObj.State == model.ArmyBack{
+		//撤退
+		if army.State == model.ArmyAttack || army.State == model.ArmyDefend{
+
+		}
+
+	}else{
+		if army.State != model.ArmyIdle {
+			rsp.Body.Code = constant.ArmyBusy
+			return
+		}
+
+		if reqObj.X < 0 || reqObj.X >= logic.MapWith ||
+			reqObj.Y < 0 || reqObj.Y >= logic.MapHeight{
+			rsp.Body.Code = constant.InvalidParam
+			return
+		}
+
+		cfg, ok := logic.NMMgr.PositionBuild(reqObj.X, reqObj.Y)
+		if ok == false || cfg.Type ==0 {
+			rsp.Body.Code = constant.InvalidParam
+			return
+		}
+
+		if reqObj.State == model.ArmyAttack{
+			army.Start = time.Now()
+
+			army.End = time.Now().Add(20*time.Second)
+			army.ToX = reqObj.X
+			army.ToY = reqObj.Y
+			army.State = reqObj.State
+			logic.AMgr.ArmyBack(army)
+			model_to_proto.Army(army, &rspObj.Army)
+
+			rsp.Body.Code = constant.OK
+
+		}else if reqObj.State == model.ArmyDefend{
+			if rb, ok := logic.RBMgr.PositionBuild(reqObj.X, reqObj.Y); ok {
+				if rb.RId != role.RId{
+					rsp.Body.Code = constant.BuildNotMe
+				}else{
+					army.Start = time.Now()
+					army.End = time.Now().Add(20*time.Second)
+					army.ToX = reqObj.X
+					army.ToY = reqObj.Y
+					army.State = reqObj.State
+
+					army.DB.Sync()
+					model_to_proto.Army(army, &rspObj.Army)
+					logic.AMgr.PushAction(army)
+					rsp.Body.Code = constant.OK
+				}
+			}else{
+				rsp.Body.Code = constant.BuildNotMe
+			}
+		}
 	}
 
-	army.Start = time.Now()
-	//先写死1分钟到达
-	army.End = time.Now().Add(5*time.Second)
-	army.ToX = reqObj.X
-	army.ToY = reqObj.Y
-	army.State = reqObj.State
-
-	army.DB.Sync()
-	model_to_proto.Army(army, &rspObj.Army)
-	logic.AMgr.PushAction(army)
 }
 

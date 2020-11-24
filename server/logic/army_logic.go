@@ -16,12 +16,14 @@ import (
 var ArmyLogic *armyLogic
 
 func init() {
-	ArmyLogic = &armyLogic{armys: make(chan *model.Army, 100)}
+	ArmyLogic = &armyLogic{armys: make(chan *model.Army, 100),
+		posArmys: make(map[int][]*model.Army)}
 	go ArmyLogic.running()
 }
 
 type armyLogic struct {
 	armys    chan *model.Army
+	posArmys map[int][]*model.Army	//key:posId
 }
 
 func (this *armyLogic) running(){
@@ -49,7 +51,15 @@ func (this *armyLogic) running(){
 					this.battle(army)
 					AMgr.PushAction(army)
 				}
-			}else if army.State == model.ArmyBack {
+			}else if army.State == model.ArmyDefend {
+				//呆在哪里不动
+				posId := ToPosition(army.ToX, army.ToY)
+				if _, ok := this.posArmys[posId]; ok == false {
+					this.posArmys[posId] = make([]*model.Army, 0)
+				}
+				this.posArmys[posId] = append(this.posArmys[posId], army)
+
+			} else if army.State == model.ArmyBack {
 				 if cur_t >= 1*diff + army.Start.Unix(){
 					//一倍路程
 					army.State = model.ArmyIdle

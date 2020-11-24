@@ -118,6 +118,32 @@ func (this* ArmyMgr) PushAction(army *model.Army)  {
 
 }
 
+func (this* ArmyMgr) ArmyBack(army *model.Army)  {
+	this.mutex.Lock()
+	t := army.End.Unix()
+	if actions, ok := this.armyByEndTime[t]; ok {
+		for i, v := range actions {
+			if v.Id == army.Id{
+				actions = append(actions[:i], actions[i+1:]...)
+				this.armyByEndTime[t] = actions
+				break
+			}
+		}
+	}
+	this.mutex.Unlock()
+
+	cur := time.Now()
+	diff := army.End.Unix()-army.Start.Unix()
+	if cur.Unix() < army.End.Unix(){
+		diff = cur.Unix()-army.Start.Unix()
+	}
+	army.Start = cur
+	army.End = cur.Add(time.Duration(diff) * time.Second)
+	army.DB.Sync()
+
+	this.PushAction(army)
+}
+
 
 func (this* ArmyMgr) running() {
 	for true {
