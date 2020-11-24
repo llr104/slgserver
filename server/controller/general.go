@@ -131,7 +131,7 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	if army.State != model.ArmyIdle{
+	if army.Cmd != model.ArmyCmdIdle {
 		rsp.Body.Code = constant.ArmyBusy
 		return
 	}
@@ -281,7 +281,7 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
 
-	if reqObj.State >= model.ArmyAttack && reqObj.State <= model.ArmyBack{
+	if reqObj.Cmd >= model.ArmyCmdAttack && reqObj.Cmd <= model.ArmyCmdBack {
 		rsp.Body.Code = constant.InvalidParam
 		return
 	}
@@ -297,14 +297,16 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 		return
 	}
 
-	if reqObj.State == model.ArmyBack{
+	if reqObj.Cmd == model.ArmyCmdBack {
 		//撤退
-		if army.State == model.ArmyAttack || army.State == model.ArmyDefend{
-
+		if army.Cmd == model.ArmyCmdAttack || army.Cmd == model.ArmyCmdDefend {
+			logic.AMgr.ArmyBack(army)
+			rsp.Body.Code = constant.OK
 		}
 
 	}else{
-		if army.State != model.ArmyIdle {
+
+		if army.Cmd != model.ArmyCmdIdle {
 			rsp.Body.Code = constant.ArmyBusy
 			return
 		}
@@ -315,44 +317,32 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 			return
 		}
 
+		//判断该地是否是能攻击类型
 		cfg, ok := logic.NMMgr.PositionBuild(reqObj.X, reqObj.Y)
-		if ok == false || cfg.Type ==0 {
+		if ok == false || cfg.Type == 0 {
 			rsp.Body.Code = constant.InvalidParam
 			return
 		}
 
-		if reqObj.State == model.ArmyAttack{
-			army.Start = time.Now()
-
-			army.End = time.Now().Add(20*time.Second)
-			army.ToX = reqObj.X
-			army.ToY = reqObj.Y
-			army.State = reqObj.State
-			logic.AMgr.ArmyBack(army)
-			model_to_proto.Army(army, &rspObj.Army)
-
-			rsp.Body.Code = constant.OK
-
-		}else if reqObj.State == model.ArmyDefend{
+		//判断驻守的地方是否是自己的领地
+		if reqObj.Cmd == model.ArmyCmdDefend {
 			if rb, ok := logic.RBMgr.PositionBuild(reqObj.X, reqObj.Y); ok {
 				if rb.RId != role.RId{
 					rsp.Body.Code = constant.BuildNotMe
-				}else{
-					army.Start = time.Now()
-					army.End = time.Now().Add(20*time.Second)
-					army.ToX = reqObj.X
-					army.ToY = reqObj.Y
-					army.State = reqObj.State
-
-					army.DB.Sync()
-					model_to_proto.Army(army, &rspObj.Army)
-					logic.AMgr.PushAction(army)
-					rsp.Body.Code = constant.OK
 				}
-			}else{
-				rsp.Body.Code = constant.BuildNotMe
 			}
 		}
+
+		army.Start = time.Now()
+		army.End = time.Now().Add(20*time.Second)
+		army.ToX = reqObj.X
+		army.ToY = reqObj.Y
+		army.Cmd = reqObj.Cmd
+		army.State = model.ArmyRunning
+		army.DB.Sync()
+		model_to_proto.Army(army, &rspObj.Army)
+		rsp.Body.Code = constant.OK
+
 	}
 
 }

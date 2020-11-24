@@ -32,18 +32,20 @@ func (this *armyLogic) running(){
 		case army := <-this.armys:
 			cur_t := time.Now().Unix()
 			diff := army.End.Unix() - army.Start.Unix()
-			if army.State == model.ArmyAttack {
+			if army.Cmd == model.ArmyCmdAttack {
 
 				if cur_t >= 2*diff + army.Start.Unix() {
 					//两倍路程
-					army.State = model.ArmyIdle
+					army.Cmd = model.ArmyCmdIdle
+					army.State = model.ArmyStop
 					army.ToX = army.FromX
 					army.ToY = army.FromY
 					this.battle(army)
 					AMgr.PushAction(army)
 				}else if cur_t >= 1*diff + army.Start.Unix(){
 					//一倍路程
-					army.State = model.ArmyBack
+					army.Cmd = model.ArmyCmdBack
+					army.State = model.ArmyRunning
 					army.Start = army.End
 					army.End = army.Start.Add(time.Duration(diff)*time.Second)
 
@@ -51,18 +53,22 @@ func (this *armyLogic) running(){
 					this.battle(army)
 					AMgr.PushAction(army)
 				}
-			}else if army.State == model.ArmyDefend {
+			}else if army.Cmd == model.ArmyCmdDefend {
 				//呆在哪里不动
 				posId := ToPosition(army.ToX, army.ToY)
 				if _, ok := this.posArmys[posId]; ok == false {
 					this.posArmys[posId] = make([]*model.Army, 0)
 				}
 				this.posArmys[posId] = append(this.posArmys[posId], army)
+				army.State = model.ArmyStop
 
-			} else if army.State == model.ArmyBack {
+			} else if army.Cmd == model.ArmyCmdBack {
 				 if cur_t >= 1*diff + army.Start.Unix(){
 					//一倍路程
-					army.State = model.ArmyIdle
+					army.Cmd = model.ArmyCmdIdle
+					army.State = model.ArmyStop
+				}else{
+					army.State = model.ArmyRunning
 				}
 			}
 

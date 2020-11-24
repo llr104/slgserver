@@ -45,7 +45,7 @@ func (this* ArmyMgr) Load() {
 		this.armyByRId[v.RId] = append(this.armyByRId[v.RId], v)
 
 		//恢复已经执行行动的军队
-		if v.State != model.ArmyIdle {
+		if v.Cmd != model.ArmyCmdIdle {
 			e := v.End.Unix()
 			_, ok := this.armyByEndTime[e]
 			if ok == false{
@@ -59,15 +59,15 @@ func (this* ArmyMgr) Load() {
 	for k_t, armys := range this.armyByEndTime {
 		if k_t <= cur_t {
 			for _, a := range armys {
-				if a.State == model.ArmyAttack{
+				if a.Cmd == model.ArmyCmdAttack {
 					ArmyLogic.Arrive(a)
-				}else if a.State == model.ArmyDefend{
+				}else if a.Cmd == model.ArmyCmdDefend {
 
-				}else if a.State == model.ArmyBack {
+				}else if a.Cmd == model.ArmyCmdBack {
 					if cur_t >= a.End.Unix() {
 						a.ToX = a.FromX
 						a.ToY = a.FromY
-						a.State = model.ArmyIdle
+						a.Cmd = model.ArmyCmdIdle
 					}
 				}
 				a.DB.Sync()
@@ -139,6 +139,7 @@ func (this* ArmyMgr) ArmyBack(army *model.Army)  {
 	}
 	army.Start = cur
 	army.End = cur.Add(time.Duration(diff) * time.Second)
+	army.State = model.ArmyRunning
 	army.DB.Sync()
 
 	this.PushAction(army)

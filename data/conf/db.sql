@@ -163,7 +163,7 @@ CREATE TABLE IF NOT EXISTS `army` (
    `order` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '第几队 1-5队',
    `generals` varchar(256) NOT NULL DEFAULT '[0, 0, 0]' COMMENT "将领",
    `soldiers` varchar(256) NOT NULL DEFAULT '[0, 0, 0]' COMMENT "士兵",
-   `state` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '状态  0:空闲 1:攻击 2：驻军 3:返回',
+   `cmd` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '命令  0:空闲 1:攻击 2：驻军 3:返回',
    `from_x` int unsigned NOT NULL COMMENT '来自x坐标',
    `from_y` int unsigned NOT NULL COMMENT '来自y坐标',
    `to_x` int unsigned COMMENT '去往x坐标',

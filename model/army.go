@@ -8,24 +8,30 @@ import (
 )
 
 const (
-	ArmyIdle  	= 0
-	ArmyAttack  = 1
-	ArmyDefend  = 2
-	ArmyBack  	= 3
+	ArmyCmdIdle   = 0
+	ArmyCmdAttack = 1
+	ArmyCmdDefend = 2
+	ArmyCmdBack   = 3
+)
+
+const (
+	ArmyRunning  	= 0
+	ArmyStop  		= 1
 )
 
 //军队
 type Army struct {
-	DB 					dbSync		`xorm:"-"`
-	Id               	int  		`xorm:"id pk autoincr"`
-	RId              	int  		`xorm:"rid"`
-	CityId           	int  		`xorm:"cityId"`
-	Order            	int8 		`xorm:"order"`
-	Generals			string		`xorm:"generals"`
-	Soldiers			string		`xorm:"soldiers"`
-	GeneralArray		[]int		`xorm:"-"`
-	SoldierArray		[]int		`xorm:"-"`
-	State            	int8  		`xorm:"state"` //状态，0:空闲 1:攻击 2：驻军 3:返回
+	DB           		dbSync 		`xorm:"-"`
+	Id           		int    		`xorm:"id pk autoincr"`
+	RId          		int    		`xorm:"rid"`
+	CityId       		int    		`xorm:"cityId"`
+	Order        		int8   		`xorm:"order"`
+	Generals     		string 		`xorm:"generals"`
+	Soldiers     		string 		`xorm:"soldiers"`
+	GeneralArray 		[]int  		`xorm:"-"`
+	SoldierArray 		[]int  		`xorm:"-"`
+	Cmd         		int8   		`xorm:"cmd"` //执行命令0:空闲 1:攻击 2：驻军 3:返回
+	State				int8		`xorm:"—"` //状态:0:running,1:stop
 	FromX            	int       	`xorm:"from_x"`
 	FromY            	int       	`xorm:"from_y"`
 	ToX              	int       	`xorm:"to_x"`
