@@ -64,7 +64,7 @@ func (this*Account) login(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 					zap.String("session", sessStr))
 
 				//登录成功，写记录
-				lh := &model.LoginHistory{UId: user.UId, Time: tt, Ip: reqObj.Ip,
+				lh := &model.LoginHistory{UId: user.UId, CTime: tt, Ip: reqObj.Ip,
 					Hardware: reqObj.Hardware, State: model.Login}
 				db.MasterDB.Insert(lh)
 
@@ -166,7 +166,7 @@ func (this*Account) logout(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 	tt := time.Now()
 	//登出，写记录
-	lh := &model.LoginHistory{UId: reqObj.UId, Time: tt, State: model.Logout}
+	lh := &model.LoginHistory{UId: reqObj.UId, CTime: tt, State: model.Logout}
 	db.MasterDB.Insert(lh)
 
 	ll := &model.LoginLast{}

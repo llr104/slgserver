@@ -12,7 +12,7 @@ const (
 type LoginHistory struct {
 	Id       int       `xorm:"id pk autoincr"`
 	UId      int       `xorm:"uid"`
-	Time     time.Time `xorm:"time"`
+	CTime    time.Time `xorm:"ctime"`
 	Ip       string    `xorm:"ip"`
 	State    int8      `xorm:"state"`
 	Hardware string    `xorm:"hardware"`

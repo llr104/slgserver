@@ -89,7 +89,7 @@ func General(m *model.General, p *proto.General)  {
 }
 
 func WarReport(m *model.WarReport, p *proto.WarReport)  {
-	p.Time = m.Time.UnixNano()/1e6
+	p.CTime = m.CTime.UnixNano()/1e6
 	p.Id = m.Id
 	p.AttackRid = m.AttackRid
 	p.DefenseRid = m.DefenseRid

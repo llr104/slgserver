@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS `login_history` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `uid` int unsigned NOT NULL DEFAULT 0 COMMENT '用户UID',
   `state` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '登录状态，0登录，1登出',
-  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '登录时间',
+  `ctime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '登录时间',
   `ip` varchar(31) NOT NULL DEFAULT '' COMMENT 'ip',
   `hardware` varchar(64) NOT NULL DEFAULT '' COMMENT 'hardware',
   PRIMARY KEY (`id`)
@@ -189,7 +189,7 @@ CREATE TABLE IF NOT EXISTS `war_report` (
    `occupy` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否攻占 0:否 1:是',
    `x` int unsigned COMMENT 'x坐标',
    `y` int unsigned COMMENT 'y坐标',
-   `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   `ctime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
    PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '战报表';
 

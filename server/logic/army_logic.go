@@ -2,6 +2,7 @@ package logic
 
 import (
 	"encoding/json"
+	"fmt"
 	"go.uber.org/zap"
 	"slgserver/db"
 	"slgserver/log"
@@ -130,7 +131,7 @@ func (this *armyLogic) battle(army* model.Army) {
 				AttackIsRead: false, DefenseIsRead: false, DefenseRid: enemy.RId,
 				BegAttackArmy: string(begArmy1), BegDefenseArmy: string(begArmy2),
 				EndAttackArmy: string(endArmy1), EndDefenseArmy: string(endArmy2),
-				AttackIsWin: winCnt>=2,Time: time.Now(),
+				AttackIsWin: winCnt>=2, CTime: time.Now(),
 			}
 			warReports = append(warReports, wr)
 		}
@@ -153,8 +154,15 @@ func (this *armyLogic) battle(army* model.Army) {
 		push := &proto.WarReportPush{}
 		push.List = make([]proto.WarReport, len(warReports))
 		for i, wr := range warReports {
-			db.MasterDB.InsertOne(wr)
-			model_to_proto.WarReport(wr, &push.List[i])
+			fmt.Println(wr.CTime)
+			_, err := db.MasterDB.InsertOne(wr)
+			fmt.Println(wr.CTime)
+
+			if err != nil{
+				log.DefaultLog.Warn("db error", zap.Error(err))
+			}else{
+				model_to_proto.WarReport(wr, &push.List[i])
+			}
 			server.DefaultConnMgr.PushByRoleId(army.RId, "war.reportPush", push)
 		}
 	}
