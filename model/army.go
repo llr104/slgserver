@@ -21,7 +21,7 @@ const (
 
 //军队
 type Army struct {
-	DB           		dbSync 		`xorm:"-"`
+	DB           		dbSync 		`json:"-" xorm:"-"`
 	Id           		int    		`xorm:"id pk autoincr"`
 	RId          		int    		`xorm:"rid"`
 	CityId       		int    		`xorm:"cityId"`
