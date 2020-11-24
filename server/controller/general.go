@@ -302,6 +302,7 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 		if army.Cmd == model.ArmyCmdAttack || army.Cmd == model.ArmyCmdDefend {
 			logic.AMgr.ArmyBack(army)
 			rsp.Body.Code = constant.OK
+			model_to_proto.Army(army, &rspObj.Army)
 		}
 
 	}else{

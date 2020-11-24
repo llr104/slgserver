@@ -145,6 +145,7 @@ func (this* ArmyMgr) ArmyBack(army *model.Army)  {
 	army.Start = cur
 	army.End = cur.Add(time.Duration(diff) * time.Second)
 	army.State = model.ArmyRunning
+	army.Cmd = model.ArmyCmdBack
 	army.DB.Sync()
 
 	this.PushAction(army)
