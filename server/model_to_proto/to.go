@@ -63,6 +63,7 @@ func Army(m *model.Army, p *proto.Army)  {
 	p.Generals = m.GeneralArray
 	p.Soldiers = m.SoldierArray
 	p.Cmd = m.Cmd
+	p.State = m.State
 	p.FromX = m.FromX
 	p.FromY = m.FromY
 	p.ToX = m.ToX

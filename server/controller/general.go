@@ -281,7 +281,7 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
 
-	if reqObj.Cmd >= model.ArmyCmdAttack && reqObj.Cmd <= model.ArmyCmdBack {
+	if reqObj.Cmd < model.ArmyCmdAttack || reqObj.Cmd > model.ArmyCmdBack {
 		rsp.Body.Code = constant.InvalidParam
 		return
 	}
@@ -340,6 +340,7 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 		army.Cmd = reqObj.Cmd
 		army.State = model.ArmyRunning
 		army.DB.Sync()
+		logic.AMgr.PushAction(army)
 		model_to_proto.Army(army, &rspObj.Army)
 		rsp.Body.Code = constant.OK
 

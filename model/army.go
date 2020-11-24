@@ -15,8 +15,9 @@ const (
 )
 
 const (
-	ArmyRunning  	= 0
-	ArmyStop  		= 1
+	ArmyStop  		= 0
+	ArmyRunning  	= 1
+
 )
 
 //军队

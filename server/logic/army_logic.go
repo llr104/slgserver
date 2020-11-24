@@ -37,8 +37,6 @@ func (this *armyLogic) running(){
 					//两倍路程
 					army.Cmd = model.ArmyCmdIdle
 					army.State = model.ArmyStop
-					army.ToX = army.FromX
-					army.ToY = army.FromY
 					this.battle(army)
 					AMgr.PushAction(army)
 				}else if cur_t >= 1*diff + army.Start.Unix(){
