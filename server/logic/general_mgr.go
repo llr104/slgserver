@@ -23,6 +23,20 @@ var GMgr = &GeneralMgr{
 }
 
 func (this* GeneralMgr) Load(){
+
+	err := db.MasterDB.Table(model.General{}).Find(this.genByGId)
+	if err != nil {
+		log.DefaultLog.Warn("db error", zap.Error(err))
+		return
+	}
+
+	for _, v := range this.genByGId {
+		if _, ok := this.genByRole[v.RId]; ok==false {
+			this.genByRole[v.RId] = make([]*model.General, 0)
+		}
+		this.genByRole[v.RId] = append(this.genByRole[v.RId], v)
+	}
+
 	go this.toDatabase()
 	//this.createNPC()
 }

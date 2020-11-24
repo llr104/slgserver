@@ -40,6 +40,9 @@ func (this * sysArmyLogic) GetArmy(x, y int) []*model.Army{
 				scnt := []int{n, n, n}
 				army := &model.Army{RId: 0, Order: 0, CityId: 0,
 					GeneralArray: gsId, SoldierArray: scnt}
+				army.ToGeneral()
+				army.ToSoldier()
+
 				armys = append(armys, army)
 				return armys
 			}else{

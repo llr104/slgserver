@@ -189,7 +189,7 @@ CREATE TABLE IF NOT EXISTS `war_report` (
    `occupy` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否攻占 0:否 1:是',
    `x` int unsigned COMMENT 'x坐标',
    `y` int unsigned COMMENT 'y坐标',
-   `ctime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   `ctime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT,
    PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '战报表';
 

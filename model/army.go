@@ -28,8 +28,8 @@ type Army struct {
 	Order        		int8   		`xorm:"order"`
 	Generals     		string 		`xorm:"generals"`
 	Soldiers     		string 		`xorm:"soldiers"`
-	GeneralArray 		[]int  		`xorm:"-"`
-	SoldierArray 		[]int  		`xorm:"-"`
+	GeneralArray 		[]int  		`json:"-" xorm:"-"`
+	SoldierArray 		[]int  		`json:"-" xorm:"-"`
 	Cmd         		int8   		`xorm:"cmd"` //执行命令0:空闲 1:攻击 2：驻军 3:返回
 	State				int8		`xorm:"-"` //状态:0:running,1:stop
 	FromX            	int       	`xorm:"from_x"`
@@ -65,6 +65,21 @@ func (this *Army) AfterSet(name string, cell xorm.Cell){
 		}
 	}
 }
+
+func (this* Army) ToSoldier() {
+	if this.SoldierArray != nil {
+		data, _ := json.Marshal(this.SoldierArray)
+		this.Soldiers = string(data)
+	}
+}
+
+func (this* Army) ToGeneral() {
+	if this.GeneralArray != nil {
+		data, _ := json.Marshal(this.GeneralArray)
+		this.Generals = string(data)
+	}
+}
+
 
 func (this* Army) BeforeInsert() {
 
