@@ -11,6 +11,8 @@ type WarReport struct {
 	BegDefenseArmy string    `xorm:"beg_defense_army"`
 	EndAttackArmy  string    `xorm:"end_attack_army"`
 	EndDefenseArmy string    `xorm:"end_defense_army"`
+	AttackGeneral  string    `xorm:"attack_general"`
+	DefenseGeneral string    `xorm:"defense_general"`
 	AttackIsWin    bool      `xorm:"attack_is_win"`
 	AttackIsRead   bool      `xorm:"attack_is_read"`
 	DefenseIsRead  bool      `xorm:"defense_is_read"`

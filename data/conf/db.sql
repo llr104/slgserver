@@ -182,6 +182,8 @@ CREATE TABLE IF NOT EXISTS `war_report` (
    `beg_defense_army` varchar(512) NOT NULL COMMENT '开始防守方军队',
    `end_attack_army` varchar(512) NOT NULL COMMENT '开始攻击方军队',
    `end_defense_army` varchar(512) NOT NULL COMMENT '开始防守方军队',
+   `attack_general` varchar(1024) NOT NULL COMMENT '攻击方武将',
+   `defense_general` varchar(1024) NOT NULL COMMENT '防守方武将',
    `attack_is_win` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否攻击方胜利 0:否 1:是',
    `attack_is_read` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '攻击方战报是否已阅 0:未阅 1:已阅',
    `defense_is_read` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '攻击方战报是否已阅 0:未阅 1:已阅',
@@ -189,7 +191,7 @@ CREATE TABLE IF NOT EXISTS `war_report` (
    `occupy` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否攻占 0:否 1:是',
    `x` int unsigned COMMENT 'x坐标',
    `y` int unsigned COMMENT 'y坐标',
-   `ctime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT,
+   `ctime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
    PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '战报表';
 

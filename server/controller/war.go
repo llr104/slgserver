@@ -59,6 +59,7 @@ func (this*War) read(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	mapstructure.Decode(req.Body.Msg, reqObj)
 	rsp.Body.Msg = rspObj
 	rsp.Body.Code = constant.OK
+	rspObj.Id = reqObj.Id
 
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)

@@ -8,6 +8,8 @@ type WarReport struct {
 	BegDefenseArmy 	string 		`json:"beg_defense_army"`
 	EndAttackArmy  	string 		`json:"end_attack_army"`
 	EndDefenseArmy 	string 		`json:"end_defense_army"`
+	AttackGeneral  	string    	`json:"attack_general"`
+	DefenseGeneral 	string    	`json:"defense_general"`
 	AttackIsWin    	bool   		`json:"attack_is_win"`
 	AttackIsRead   	bool   		`json:"attack_is_read"`
 	DefenseIsRead  	bool   		`json:"defense_is_read"`

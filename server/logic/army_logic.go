@@ -110,8 +110,33 @@ func (this *armyLogic) battle(army* model.Army) {
 
 		enemys := SysArmy.GetArmy(army.ToX, army.ToY)
 		warReports := make([]*model.WarReport, 0)
+
+		general1 := make([]proto.General, 0)
+		for _, id := range army.GeneralArray {
+			g, ok := GMgr.FindGeneral(id)
+			if ok {
+				pg := proto.General{}
+				model_to_proto.General(g, &pg)
+				general1 = append(general1, pg)
+			}
+		}
+
+		gdata1, _ := json.Marshal(general1)
+
 		for _, enemy := range enemys {
 			//战报处理
+			general2 := make([]proto.General, 0)
+			for _, id := range enemy.GeneralArray {
+				g, ok := GMgr.FindGeneral(id)
+				if ok {
+					pg := proto.General{}
+					model_to_proto.General(g, &pg)
+					general2 = append(general2, pg)
+				}
+			}
+
+			gdata2, _ := json.Marshal(general2)
+
 			begArmy1, _ := json.Marshal(army)
 			begArmy2, _ := json.Marshal(enemy)
 
@@ -131,8 +156,10 @@ func (this *armyLogic) battle(army* model.Army) {
 				AttackIsRead: false, DefenseIsRead: false, DefenseRid: enemy.RId,
 				BegAttackArmy: string(begArmy1), BegDefenseArmy: string(begArmy2),
 				EndAttackArmy: string(endArmy1), EndDefenseArmy: string(endArmy2),
-				AttackIsWin: winCnt>=2, CTime: time.Now(),
+				AttackIsWin: winCnt>=2, CTime: time.Now(), AttackGeneral: string(gdata1),
+				DefenseGeneral: string(gdata2),
 			}
+
 			warReports = append(warReports, wr)
 		}
 
