@@ -1,7 +1,6 @@
 package logic
 
 import (
-	"fmt"
 	"go.uber.org/zap"
 	"slgserver/log"
 	"slgserver/model"
@@ -17,13 +16,13 @@ var ArmyLogic *armyLogic
 
 func init() {
 	ArmyLogic = &armyLogic{armys: make(chan *model.Army, 100),
-		posArmys: make(map[int][]*model.Army)}
+		posArmys: make(map[int]map[int]*model.Army)}
 	go ArmyLogic.running()
 }
 
 type armyLogic struct {
 	armys    chan *model.Army
-	posArmys map[int][]*model.Army	//key:posId
+	posArmys map[int]map[int]*model.Army	//key:posId,armyId
 }
 
 func (this *armyLogic) running(){
@@ -49,7 +48,6 @@ func (this *armyLogic) running(){
 					army.Start = army.End
 					army.End = army.Start.Add(time.Duration(diff)*time.Second)
 
-					fmt.Println(army.Start.Unix(), army.End.Unix(), army.End.Unix()-army.Start.Unix())
 					this.battle(army)
 					AMgr.PushAction(army)
 				}
@@ -57,9 +55,9 @@ func (this *armyLogic) running(){
 				//呆在哪里不动
 				posId := ToPosition(army.ToX, army.ToY)
 				if _, ok := this.posArmys[posId]; ok == false {
-					this.posArmys[posId] = make([]*model.Army, 0)
+					this.posArmys[posId] = make(map[int]*model.Army)
 				}
-				this.posArmys[posId] = append(this.posArmys[posId], army)
+				this.posArmys[posId][army.Id] = army
 				army.State = model.ArmyStop
 
 			} else if army.Cmd == model.ArmyCmdBack {
@@ -69,6 +67,12 @@ func (this *armyLogic) running(){
 					army.State = model.ArmyStop
 				}else{
 					army.State = model.ArmyRunning
+				}
+
+				//如果该队伍在驻守，需要移除
+				posId := ToPosition(army.ToX, army.ToY)
+				if _, ok := this.posArmys[posId]; ok {
+					delete(this.posArmys[posId], army.Id)
 				}
 			}
 

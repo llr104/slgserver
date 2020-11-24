@@ -55,24 +55,29 @@ func (this* ArmyMgr) Load() {
 		}
 	}
 
-	cur_t := time.Now().Unix()
-	for k_t, armys := range this.armyByEndTime {
-		if k_t <= cur_t {
+	curTime := time.Now().Unix()
+	for kT, armys := range this.armyByEndTime {
+		if kT <= curTime {
 			for _, a := range armys {
 				if a.Cmd == model.ArmyCmdAttack {
 					ArmyLogic.Arrive(a)
 				}else if a.Cmd == model.ArmyCmdDefend {
-
+					ArmyLogic.Arrive(a)
 				}else if a.Cmd == model.ArmyCmdBack {
-					if cur_t >= a.End.Unix() {
+					if curTime >= a.End.Unix() {
 						a.ToX = a.FromX
 						a.ToY = a.FromY
 						a.Cmd = model.ArmyCmdIdle
+						a.State = model.ArmyStop
 					}
 				}
 				a.DB.Sync()
 			}
-			delete(this.armyByEndTime, k_t)
+			delete(this.armyByEndTime, kT)
+		}else{
+			for _, a := range armys {
+				a.State = model.ArmyRunning
+			}
 		}
 	}
 	this.mutex.Unlock()
