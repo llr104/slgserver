@@ -26,3 +26,4 @@ const GeneralBusy = 19		//将领再忙
 const CannotGiveUp = 20		//不能放弃
 const BuildNotMe = 21		//领地不是自己的
 const ArmyNotMain = 22		//军队没有主将
+const UnReachable = 23		//不可到达

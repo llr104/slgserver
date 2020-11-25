@@ -46,51 +46,34 @@ func (this *armyLogic) running(){
 				server.DefaultConnMgr.PushByRoleId(army.RId, "general.armyState", ap)
 			}
 			case army := <-this.arriveArmys:{
-				cur_t := time.Now().Unix()
-				diff := army.End.Unix() - army.Start.Unix()
 				if army.Cmd == model.ArmyCmdAttack {
-
-					if cur_t >= 2*diff + army.Start.Unix() {
-						//两倍路程
-						army.Cmd = model.ArmyCmdIdle
-						army.State = model.ArmyStop
+					if IsCanArrive(army.ToX, army.ToY, army.RId){
 						this.battle(army)
-						AMgr.PushAction(army)
-					}else if cur_t >= 1*diff + army.Start.Unix(){
-						//一倍路程
-						army.Cmd = model.ArmyCmdBack
-						army.State = model.ArmyRunning
-						army.Start = army.End
-						army.End = army.Start.Add(time.Duration(diff)*time.Second)
-
-						this.battle(army)
-						AMgr.PushAction(army)
 					}
+					AMgr.ArmyBack(army)
 				}else if army.Cmd == model.ArmyCmdDefend {
 					//呆在哪里不动
 					posId := ToPosition(army.ToX, army.ToY)
-					if _, ok := this.posArmys[posId]; ok == false {
-						this.posArmys[posId] = make(map[int]*model.Army)
+					roleBuild, ok := RBMgr.PositionBuild(army.ToX, army.ToY)
+					if ok && roleBuild.RId == army.RId {
+						//目前是自己的领地才能驻守
+						if _, ok := this.posArmys[posId]; ok == false {
+							this.posArmys[posId] = make(map[int]*model.Army)
+						}
+						this.posArmys[posId][army.Id] = army
+						army.State = model.ArmyStop
+						this.Update(army)
+					}else{
+						AMgr.ArmyBack(army)
 					}
-					this.posArmys[posId][army.Id] = army
-					army.State = model.ArmyStop
-					this.Update(army)
 
 				} else if army.Cmd == model.ArmyCmdBack {
-					 if cur_t >= 1*diff + army.Start.Unix(){
-						//一倍路程
-						army.Cmd = model.ArmyCmdIdle
-						army.State = model.ArmyStop
-					}else{
-						army.State = model.ArmyRunning
-					}
-
 					//如果该队伍在驻守，需要移除
 					posId := ToPosition(army.ToX, army.ToY)
 					if _, ok := this.posArmys[posId]; ok {
 						delete(this.posArmys[posId], army.Id)
 					}
-					this.Update(army)
+					AMgr.ArmyBack(army)
 				}
 				army.DB.Sync()
 			}

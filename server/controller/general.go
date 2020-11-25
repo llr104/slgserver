@@ -331,6 +331,12 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 			return
 		}
 
+		if logic.IsCanArrive(reqObj.X, reqObj.Y, role.RId) == false{
+			rsp.Body.Code = constant.UnReachable
+			return
+		}
+
+
 		//判断驻守的地方是否是自己的领地
 		if reqObj.Cmd == model.ArmyCmdDefend {
 			if rb, ok := logic.RBMgr.PositionBuild(reqObj.X, reqObj.Y); ok {
