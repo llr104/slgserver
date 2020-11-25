@@ -120,7 +120,7 @@ func (this* ArmyMgr) PushAction(army *model.Army)  {
 		this.armyByEndTime[t] = make([]*model.Army, 0)
 	}
 	this.armyByEndTime[t] = append(this.armyByEndTime[t], army)
-
+	ArmyLogic.Update(army)
 }
 
 func (this* ArmyMgr) ArmyBack(army *model.Army)  {
@@ -149,14 +149,13 @@ func (this* ArmyMgr) ArmyBack(army *model.Army)  {
 	army.DB.Sync()
 
 	this.PushAction(army)
-	this.PushAction(army)
 }
 
 
 func (this* ArmyMgr) running() {
 	for true {
 		t := time.Now().Unix()
-		time.Sleep(1*time.Second)
+		time.Sleep(100*time.Millisecond)
 
 		this.mutex.Lock()
 		for k, armies := range this.armyByEndTime {

@@ -18,23 +18,34 @@ import (
 var ArmyLogic *armyLogic
 
 func init() {
-	ArmyLogic = &armyLogic{armys: make(chan *model.Army, 100),
+	ArmyLogic = &armyLogic{arriveArmys: make(chan *model.Army, 100),
 		giveUpId: make(chan int, 100),
-		posArmys: make(map[int]map[int]*model.Army), sys: NewSysArmy()}
+		updateArmys:  make(chan *model.Army, 100),
+		posArmys: make(map[int]map[int]*model.Army),
+		sys: NewSysArmy()}
 	go ArmyLogic.running()
 }
 
 type armyLogic struct {
-	sys 		*sysArmyLogic
-	giveUpId	chan int
-	armys    	chan *model.Army
-	posArmys 	map[int]map[int]*model.Army	//玩家驻守的军队 key:posId,armyId
+	sys         *sysArmyLogic
+	giveUpId    chan int
+	arriveArmys chan *model.Army
+	updateArmys chan *model.Army
+	posArmys    map[int]map[int]*model.Army	//玩家驻守的军队 key:posId,armyId
 }
 
 func (this *armyLogic) running(){
 	for {
 		select {
-			case army := <-this.armys:{
+			case army := <-this.updateArmys:{
+				army.DB.Sync()
+				ap := &proto.ArmyStatePush{}
+				ap.CityId = army.CityId
+				model_to_proto.Army(army, &ap.Army)
+				//通知部队变化了
+				server.DefaultConnMgr.PushByRoleId(army.RId, "general.armyState", ap)
+			}
+			case army := <-this.arriveArmys:{
 				cur_t := time.Now().Unix()
 				diff := army.End.Unix() - army.Start.Unix()
 				if army.Cmd == model.ArmyCmdAttack {
@@ -63,6 +74,7 @@ func (this *armyLogic) running(){
 					}
 					this.posArmys[posId][army.Id] = army
 					army.State = model.ArmyStop
+					this.Update(army)
 
 				} else if army.Cmd == model.ArmyCmdBack {
 					 if cur_t >= 1*diff + army.Start.Unix(){
@@ -78,14 +90,10 @@ func (this *armyLogic) running(){
 					if _, ok := this.posArmys[posId]; ok {
 						delete(this.posArmys[posId], army.Id)
 					}
+					this.Update(army)
 				}
-
 				army.DB.Sync()
-				ap := &proto.ArmyStatePush{}
-				ap.CityId = army.CityId
-				model_to_proto.Army(army, &ap.Army)
-				//通知部队变化了
-				server.DefaultConnMgr.PushByRoleId(army.RId, "general.armyState", ap)}
+			}
 			case giveUpId := <- this.giveUpId:{
 				armys, ok := this.posArmys[giveUpId]
 				if ok {
@@ -100,7 +108,11 @@ func (this *armyLogic) running(){
 }
 
 func (this *armyLogic) Arrive(army* model.Army) {
-	this.armys <- army
+	this.arriveArmys <- army
+}
+
+func (this *armyLogic) Update(army* model.Army) {
+	this.updateArmys <- army
 }
 
 func (this *armyLogic) GiveUp(posId int) {
