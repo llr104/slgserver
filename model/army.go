@@ -36,8 +36,8 @@ type Army struct {
 	FromY            	int       	`xorm:"from_y"`
 	ToX              	int       	`xorm:"to_x"`
 	ToY              	int       	`xorm:"to_y"`
-	Start            	time.Time 	`xorm:"start"`
-	End              	time.Time 	`xorm:"end"`
+	Start            	time.Time 	`json:"-"xorm:"start"`
+	End              	time.Time 	`json:"-"xorm:"end"`
 }
 
 func (this *Army) TableName() string {

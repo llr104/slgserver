@@ -2,7 +2,6 @@ package logic
 
 import (
 	"encoding/json"
-	"fmt"
 	"go.uber.org/zap"
 	"slgserver/db"
 	"slgserver/log"
@@ -158,8 +157,14 @@ func (this* armyLogic) executeBuild(army* model.Army)  {
 		}
 
 		gdata2, _ := json.Marshal(general2)
-		begArmy1, _ := json.Marshal(army)
-		begArmy2, _ := json.Marshal(enemy)
+
+		pArmy := &proto.Army{}
+		pEnemy := &proto.Army{}
+		model_to_proto.Army(army, pArmy)
+		model_to_proto.Army(army, pEnemy)
+
+		begArmy1, _ := json.Marshal(pArmy)
+		begArmy2, _ := json.Marshal(pEnemy)
 
 		winCnt := 0
 		for i, s1 := range army.SoldierArray {
@@ -170,8 +175,11 @@ func (this* armyLogic) executeBuild(army* model.Army)  {
 				winCnt+=1
 			}
 		}
-		endArmy1, _ := json.Marshal(army)
-		endArmy2, _ := json.Marshal(enemy)
+
+		model_to_proto.Army(army, pArmy)
+		model_to_proto.Army(army, pEnemy)
+		endArmy1, _ := json.Marshal(pArmy)
+		endArmy2, _ := json.Marshal(pEnemy)
 
 		wr := &model.WarReport{X: army.ToX, Y: army.ToY, AttackRid: army.RId,
 			AttackIsRead: false, DefenseIsRead: false, DefenseRid: enemy.RId,
@@ -252,9 +260,7 @@ func (this* armyLogic) executeBuild(army* model.Army)  {
 	push := &proto.WarReportPush{}
 	push.List = make([]proto.WarReport, len(warReports))
 	for i, wr := range warReports {
-		fmt.Println(wr.CTime)
 		_, err := db.MasterDB.InsertOne(wr)
-		fmt.Println(wr.CTime)
 
 		if err != nil{
 			log.DefaultLog.Warn("db error", zap.Error(err))
