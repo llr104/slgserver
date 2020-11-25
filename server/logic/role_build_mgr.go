@@ -50,7 +50,7 @@ func (this* RoleBuildMgr) Load() {
 
 func (this* RoleBuildMgr) toDatabase() {
 	for true {
-		time.Sleep(5*time.Second)
+		time.Sleep(2*time.Second)
 		this.mutex.RLock()
 		cnt :=0
 		for _, v := range this.dbRB {

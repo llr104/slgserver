@@ -34,10 +34,10 @@ type ybyLevel struct {
 }
 
 type yby struct {
-	Name	string       `json:"name"`
+	Name	string    `json:"name"`
 	Des		string    `json:"des"`
-	Type	int8         `json:"type"`
-	Levels	[]ybyLevel `json:"levels"`
+	Type	int8      `json:"type"`
+	Levels	[]ybyLevel`json:"levels"`
 }
 
 

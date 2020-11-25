@@ -150,7 +150,7 @@ func (this* FacilityMgr) UpFacility(rid, cid int, fType int8) (*Facility, int){
 }
 func (this* FacilityMgr) toDatabase() {
 	for true {
-		time.Sleep(5*time.Second)
+		time.Sleep(2*time.Second)
 		this.mutex.RLock()
 		cnt :=0
 		for _, v := range this.facilities {

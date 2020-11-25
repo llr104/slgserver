@@ -60,6 +60,7 @@ func (this *facilityConf) Load()  {
 	FWALL.Load()
 	FMarket.Load()
 	FSJT.Load()
+	FWareHouse.Load()
 
 	this.loaders = make([]iFacility, 0)
 	this.loaders = append(this.loaders, &FGEN)
@@ -72,6 +73,7 @@ func (this *facilityConf) Load()  {
 	this.loaders = append(this.loaders, &FWALL)
 	this.loaders = append(this.loaders, &FMarket)
 	this.loaders = append(this.loaders, &FSJT)
+	this.loaders = append(this.loaders, &FWareHouse)
 
 }
 

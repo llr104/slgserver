@@ -82,14 +82,14 @@ func (this* RoleResMgr) TryUseNeed(rid int, need*facility.NeedRes) bool{
 		if need.Decree <= rr.Decree && need.Grain <= rr.Grain &&
 			need.Stone <= rr.Stone && need.Wood <= rr.Wood &&
 			need.Iron <= rr.Iron && need.Gold <= rr.Gold {
-
-			rr.DB.Sync()
 			rr.Decree -= need.Decree
 			rr.Iron -= need.Iron
 			rr.Wood -= need.Wood
 			rr.Stone -= need.Stone
 			rr.Grain -= need.Grain
 			rr.Gold -= need.Gold
+
+			rr.DB.Sync()
 			return true
 		}else{
 			return false
@@ -115,8 +115,8 @@ func (this* RoleResMgr) CutDown(rid int, b *model.MapRoleBuild) (*model.RoleRes,
 func (this* RoleResMgr) produce() {
 	index := 1
 	for true {
-		time.Sleep(60*10*time.Second)
 		//每个10分钟处理一次资源更新
+		time.Sleep(60*10*time.Second)
 		this.mutex.Lock()
 		for _, v := range this.rolesRes {
 			v.Wood += util.MinInt(v.WoodYield/6, v.DepotCapacity)
@@ -139,7 +139,7 @@ func (this* RoleResMgr) produce() {
 
 func (this* RoleResMgr) toDatabase() {
 	for true {
-		time.Sleep(5*time.Second)
+		time.Sleep(2*time.Second)
 		this.mutex.RLock()
 		cnt :=0
 		for _, v := range this.rolesRes {
