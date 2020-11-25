@@ -136,6 +136,11 @@ func (this*City) upFacility(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 				}
 				roleRes.DB.Sync()
 			}
+		}else if facility.FWareHouse.IsContain(reqObj.FType){
+			if roleRes, ok:= logic.RResMgr.Get(role.RId); ok {
+				limit := facility.FWareHouse.Limit(int(out.Level))
+				roleRes.DepotCapacity = limit
+			}
 		}
 
 		if roleRes, ok:= logic.RResMgr.Get(role.RId); ok {

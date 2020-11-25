@@ -37,8 +37,12 @@ func (this* GeneralMgr) Load(){
 		this.genByRole[v.RId] = append(this.genByRole[v.RId], v)
 	}
 
+	if len(this.genByGId) == 0{
+		this.createNPC()
+	}
+
 	go this.toDatabase()
-	//this.createNPC()
+
 }
 func (this* GeneralMgr) toDatabase() {
 	for true {
