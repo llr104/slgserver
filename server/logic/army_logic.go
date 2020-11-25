@@ -97,6 +97,7 @@ func (this *armyLogic) battle(army* model.Army) {
 	_, ok := RCMgr.PositionCity(army.ToX, army.ToY)
 	if ok {
 		//打城池
+		AMgr.ArmyBack(army)
 		return
 	}
 
@@ -196,13 +197,14 @@ func (this* armyLogic) executeBuild(army* model.Army)  {
 			if roleBuid.CurDurable == 0{
 				//攻占了玩家的领地
 				wr.Occupy = 1
-				roleBuid.RId = army.RId
+				RBMgr.RemoveFromRole(roleBuid)
+				RBMgr.AddBuild(army.RId, army.ToX, army.ToY)
 				roleBuid.CurDurable = roleBuid.MaxDurable
 				this.OccupyRoleBuild(army.RId, army.ToX, army.ToY)
-
 			}else{
 				wr.Occupy = 0
 			}
+			roleBuid.DB.Sync()
 		}else{
 			//占领系统领地
 			this.OccupySystemBuild(army.RId, army.ToX, army.ToY)
@@ -232,7 +234,11 @@ func (this* armyLogic) executeBuild(army* model.Army)  {
 		}else{
 			model_to_proto.WarReport(wr, &push.List[i])
 		}
+
 		server.DefaultConnMgr.PushByRoleId(army.RId, "war.reportPush", push)
+		if isRoleBuild {
+			server.DefaultConnMgr.PushByRoleId(roleBuid.RId, "war.reportPush", push)
+		}
 	}
 
 }

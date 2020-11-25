@@ -185,7 +185,7 @@ func (this* GeneralMgr) createNPC() ([]*model.General, bool){
 	for _, v := range general.General.List {
 		r := &model.General{RId: 0, Name: v.Name, CfgId: v.CfgId,
 			Force: v.Force, Strategy: v.Strategy, Defense: v.Defense,
-			Speed: v.Speed, Cost: v.Cost, Order: 0, CityId: 0,
+			Speed: v.Speed, Cost: v.Cost, Order: 0, CityId: 0, Destroy: v.Destroy,
 			Level: 1, CreatedAt: time.Now(),
 		}
 		gs = append(gs, r)

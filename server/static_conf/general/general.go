@@ -20,7 +20,7 @@ type g struct {
 	Strategy int    `json:"strategy"`
 	Defense  int    `json:"defense"`
 	Speed    int    `json:"speed"`
-	destroy  int    `json:"destroy"`
+	Destroy  int    `json:"destroy"`
 	Cost     int    `json:"cost"`
 }
 
