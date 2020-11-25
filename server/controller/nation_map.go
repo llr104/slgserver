@@ -9,6 +9,7 @@ import (
 	"slgserver/server/middleware"
 	"slgserver/server/model_to_proto"
 	"slgserver/server/proto"
+	"slgserver/server/static_conf"
 )
 
 var DefaultMap = NationMap{}
@@ -35,7 +36,7 @@ func (this*NationMap) config(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	rsp.Body.Msg = rspObj
 	rsp.Body.Code = constant.OK
 
-	m := logic.BCMgr.Maps()
+	m := static_conf.MapBuildConf.Cfg
 	rspObj.Confs = make([]proto.Conf, len(m))
 	i := 0
 	for _, v := range m {

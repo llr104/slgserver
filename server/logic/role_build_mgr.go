@@ -5,6 +5,7 @@ import (
 	"slgserver/db"
 	"slgserver/log"
 	"slgserver/model"
+	"slgserver/server/static_conf"
 	"slgserver/util"
 	"sync"
 	"time"
@@ -119,7 +120,7 @@ func (this* RoleBuildMgr) AddBuild(rid, x, y int) (*model.MapRoleBuild, bool) {
 	}else{
 
 		if b, ok := NMMgr.PositionBuild(x, y); ok {
-			if cfg, _ := BCMgr.BuildConfig(b.Type, b.Level); cfg != nil {
+			if cfg, _ := static_conf.MapBuildConf.BuildConfig(b.Type, b.Level); cfg != nil {
 				rb := &model.MapRoleBuild{RId: rid, X: x, Y: y,
 					Type: b.Type, Level: b.Level, Name: cfg.Name,
 					Wood: cfg.Wood, Iron: cfg.Iron, Stone: cfg.Stone,

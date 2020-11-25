@@ -76,19 +76,7 @@ CREATE TABLE IF NOT EXISTS `national_map` (
    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '全国地图';
 
-CREATE TABLE IF NOT EXISTS `map_build_config` (
-   `id` int unsigned NOT NULL AUTO_INCREMENT,
-   `type` int unsigned NOT NULL COMMENT '建筑类型',
-   `level` tinyint unsigned NOT NULL COMMENT '建筑等级',
-   `name` varchar(100) NOT NULL COMMENT '名称',
-   `wood` int unsigned NOT NULL COMMENT '木',
-   `iron` int unsigned NOT NULL COMMENT '铁',
-   `stone` int unsigned NOT NULL COMMENT '石头',
-   `grain` int unsigned NOT NULL COMMENT '粮食',
-   `durable` int unsigned NOT NULL COMMENT '耐久',
-   `defender` int unsigned NOT NULL COMMENT '守军强度',
-   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '建筑类型配置';
+
 
 CREATE TABLE IF NOT EXISTS `map_role_build` (
    `id` int unsigned NOT NULL AUTO_INCREMENT,

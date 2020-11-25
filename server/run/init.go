@@ -20,8 +20,8 @@ func Init() {
 	general.GenBasic.Load()
 	general.General.Load()
 	static_conf.Basic.Load()
+	static_conf.MapBuildConf.Load()
 
-	logic.BCMgr.Load()
 	logic.NMMgr.Load()
 	logic.RCMgr.Load()
 	logic.RBMgr.Load()
