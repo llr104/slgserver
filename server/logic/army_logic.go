@@ -173,6 +173,9 @@ func (this* armyLogic) executeBuild(army* model.Army)  {
 
 		if isRoleEnemy {
 			if winCnt >= 2 {
+				if isRoleEnemy {
+					delete(this.posArmys, posId)
+				}
 				AMgr.ArmyBack(enemy)
 			}
 			enemy.DB.Sync()
