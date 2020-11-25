@@ -211,6 +211,10 @@ func (this*General) conscript(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
+	if army.Cmd != model.ArmyCmdIdle {
+		rsp.Body.Code = constant.ArmyBusy
+		return
+	}
 
 	//判断是否超过上限
 	for i, gid := range army.GeneralArray {
