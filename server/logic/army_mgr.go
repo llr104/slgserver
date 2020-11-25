@@ -149,6 +149,7 @@ func (this* ArmyMgr) ArmyBack(army *model.Army)  {
 	army.DB.Sync()
 
 	this.PushAction(army)
+	this.PushAction(army)
 }
 
 

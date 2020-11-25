@@ -35,7 +35,7 @@ func (this * sysArmyLogic) GetArmy(x, y int) []*model.Army{
 		armys := make([]*model.Army, 0)
 		if ok {
 			if cfg, ok := NMMgr.PositionBuild(x, y); ok{
-				n := 100*int(cfg.Level)
+				n := 20*int(cfg.Level)
 				scnt := []int{n, n, n}
 				army := &model.Army{RId: 0, Order: 0, CityId: 0,
 					GeneralArray: gsId, SoldierArray: scnt}

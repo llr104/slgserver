@@ -73,8 +73,7 @@ func (this*NationMap) scan(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		if ok {
 			name = vRole.NickName
 		}
-		model_to_proto.MRBuild(v, &rspObj.MRBuilds[i])
-		rspObj.MRBuilds[i].RNick = name
+		model_to_proto.MRBuild(v, &rspObj.MRBuilds[i], name)
 	}
 
 	cb := logic.RCMgr.Scan(x, y)
@@ -103,8 +102,7 @@ func (this*NationMap) scanBlock(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 			name = vRole.NickName
 		}
 
-		model_to_proto.MRBuild(v, &rspObj.MRBuilds[i])
-		rspObj.MRBuilds[i].RNick = name
+		model_to_proto.MRBuild(v, &rspObj.MRBuilds[i], name)
 	}
 
 	cb := logic.RCMgr.ScanBlock(x, y, reqObj.Length)
@@ -143,6 +141,9 @@ func (this*NationMap) giveUp(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 	rr, ok := logic.RResMgr.CutDown(role.RId, rb)
 	logic.RBMgr.RemoveFromRole(rb)
+
+	//移除该地驻守
+	logic.ArmyLogic.GiveUp(logic.ToPosition(reqObj.X, reqObj.Y))
 
 	if ok {
 		model_to_proto.RRes(rr, &rspObj.RoleRes)

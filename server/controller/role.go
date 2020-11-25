@@ -262,7 +262,7 @@ func (this*Role) myProperty(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	if ok {
 		rspObj.MRBuilds = make([]proto.MapRoleBuild, len(ra))
 		for i, v := range ra {
-			model_to_proto.MRBuild(v, &rspObj.MRBuilds[i])
+			model_to_proto.MRBuild(v, &rspObj.MRBuilds[i], role.NickName)
 		}
 	}else{
 		rspObj.MRBuilds = make([]proto.MapRoleBuild, 0)
@@ -317,7 +317,7 @@ func (this*Role) myRoleBuild(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	if ok {
 		rspObj.MRBuilds = make([]proto.MapRoleBuild, len(ra))
 		for i, v := range ra {
-			model_to_proto.MRBuild(v, &rspObj.MRBuilds[i])
+			model_to_proto.MRBuild(v, &rspObj.MRBuilds[i], role.NickName)
 		}
 	}else{
 		rspObj.MRBuilds = make([]proto.MapRoleBuild, 0)

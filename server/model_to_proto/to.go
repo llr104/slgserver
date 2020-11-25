@@ -31,7 +31,8 @@ func RRes(m *model.RoleRes, p *proto.RoleRes) {
 	p.DepotCapacity = m.DepotCapacity
 }
 
-func MRBuild(m *model.MapRoleBuild, p *proto.MapRoleBuild)  {
+func MRBuild(m *model.MapRoleBuild, p *proto.MapRoleBuild, rNick string)  {
+	p.RNick = rNick
 	p.X = m.X
 	p.Y = m.Y
 	p.Type = m.Type

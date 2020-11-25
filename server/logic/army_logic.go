@@ -19,12 +19,14 @@ var ArmyLogic *armyLogic
 
 func init() {
 	ArmyLogic = &armyLogic{armys: make(chan *model.Army, 100),
+		giveUpId: make(chan int, 100),
 		posArmys: make(map[int]map[int]*model.Army), sys: NewSysArmy()}
 	go ArmyLogic.running()
 }
 
 type armyLogic struct {
 	sys 		*sysArmyLogic
+	giveUpId	chan int
 	armys    	chan *model.Army
 	posArmys 	map[int]map[int]*model.Army	//玩家驻守的军队 key:posId,armyId
 }
@@ -32,58 +34,67 @@ type armyLogic struct {
 func (this *armyLogic) running(){
 	for {
 		select {
-		case army := <-this.armys:
-			cur_t := time.Now().Unix()
-			diff := army.End.Unix() - army.Start.Unix()
-			if army.Cmd == model.ArmyCmdAttack {
+			case army := <-this.armys:{
+				cur_t := time.Now().Unix()
+				diff := army.End.Unix() - army.Start.Unix()
+				if army.Cmd == model.ArmyCmdAttack {
 
-				if cur_t >= 2*diff + army.Start.Unix() {
-					//两倍路程
-					army.Cmd = model.ArmyCmdIdle
+					if cur_t >= 2*diff + army.Start.Unix() {
+						//两倍路程
+						army.Cmd = model.ArmyCmdIdle
+						army.State = model.ArmyStop
+						this.battle(army)
+						AMgr.PushAction(army)
+					}else if cur_t >= 1*diff + army.Start.Unix(){
+						//一倍路程
+						army.Cmd = model.ArmyCmdBack
+						army.State = model.ArmyRunning
+						army.Start = army.End
+						army.End = army.Start.Add(time.Duration(diff)*time.Second)
+
+						this.battle(army)
+						AMgr.PushAction(army)
+					}
+				}else if army.Cmd == model.ArmyCmdDefend {
+					//呆在哪里不动
+					posId := ToPosition(army.ToX, army.ToY)
+					if _, ok := this.posArmys[posId]; ok == false {
+						this.posArmys[posId] = make(map[int]*model.Army)
+					}
+					this.posArmys[posId][army.Id] = army
 					army.State = model.ArmyStop
-					this.battle(army)
-					AMgr.PushAction(army)
-				}else if cur_t >= 1*diff + army.Start.Unix(){
-					//一倍路程
-					army.Cmd = model.ArmyCmdBack
-					army.State = model.ArmyRunning
-					army.Start = army.End
-					army.End = army.Start.Add(time.Duration(diff)*time.Second)
 
-					this.battle(army)
-					AMgr.PushAction(army)
-				}
-			}else if army.Cmd == model.ArmyCmdDefend {
-				//呆在哪里不动
-				posId := ToPosition(army.ToX, army.ToY)
-				if _, ok := this.posArmys[posId]; ok == false {
-					this.posArmys[posId] = make(map[int]*model.Army)
-				}
-				this.posArmys[posId][army.Id] = army
-				army.State = model.ArmyStop
+				} else if army.Cmd == model.ArmyCmdBack {
+					 if cur_t >= 1*diff + army.Start.Unix(){
+						//一倍路程
+						army.Cmd = model.ArmyCmdIdle
+						army.State = model.ArmyStop
+					}else{
+						army.State = model.ArmyRunning
+					}
 
-			} else if army.Cmd == model.ArmyCmdBack {
-				 if cur_t >= 1*diff + army.Start.Unix(){
-					//一倍路程
-					army.Cmd = model.ArmyCmdIdle
-					army.State = model.ArmyStop
-				}else{
-					army.State = model.ArmyRunning
+					//如果该队伍在驻守，需要移除
+					posId := ToPosition(army.ToX, army.ToY)
+					if _, ok := this.posArmys[posId]; ok {
+						delete(this.posArmys[posId], army.Id)
+					}
 				}
 
-				//如果该队伍在驻守，需要移除
-				posId := ToPosition(army.ToX, army.ToY)
-				if _, ok := this.posArmys[posId]; ok {
-					delete(this.posArmys[posId], army.Id)
+				army.DB.Sync()
+				ap := &proto.ArmyStatePush{}
+				ap.CityId = army.CityId
+				model_to_proto.Army(army, &ap.Army)
+				//通知部队变化了
+				server.DefaultConnMgr.PushByRoleId(army.RId, "general.armyState", ap)}
+			case giveUpId := <- this.giveUpId:{
+				armys, ok := this.posArmys[giveUpId]
+				if ok {
+					for _, army := range armys {
+						AMgr.ArmyBack(army)
+					}
+					delete(this.posArmys, giveUpId)
 				}
 			}
-
-			army.DB.Sync()
-			ap := &proto.ArmyStatePush{}
-			ap.CityId = army.CityId
-			model_to_proto.Army(army, &ap.Army)
-			//通知部队变化了
-			server.DefaultConnMgr.PushByRoleId(army.RId, "general.armyState", ap)
 		}
 	}
 }
@@ -92,6 +103,9 @@ func (this *armyLogic) Arrive(army* model.Army) {
 	this.armys <- army
 }
 
+func (this *armyLogic) GiveUp(posId int) {
+	this.giveUpId <- posId
+}
 //简单战斗
 func (this *armyLogic) battle(army* model.Army) {
 	_, ok := RCMgr.PositionCity(army.ToX, army.ToY)
@@ -218,12 +232,22 @@ func (this* armyLogic) executeBuild(army* model.Army)  {
 		}
 	}
 
-	statePush := &proto.RoleBuildStatePush{}
-	model_to_proto.MRBuild(roleBuid, &statePush.MRBuild)
-	server.DefaultConnMgr.PushByRoleId(army.RId, "role.roleBuildState", statePush)
-	if isRoleBuild {
-		server.DefaultConnMgr.PushByRoleId(roleBuid.RId, "role.roleBuildState", statePush)
+	//领地发生变化
+	if newRoleBuild, ok := RBMgr.PositionBuild(army.ToX, army.ToY); ok {
+		statePush := &proto.RoleBuildStatePush{}
+		name := ""
+		vRole, ok := RMgr.Get(newRoleBuild.RId)
+		if ok {
+			name = vRole.NickName
+		}
+
+		model_to_proto.MRBuild(newRoleBuild, &statePush.MRBuild, name)
+		server.DefaultConnMgr.PushByRoleId(army.RId, "role.roleBuildState", statePush)
+		if isRoleBuild {
+			server.DefaultConnMgr.PushByRoleId(roleBuid.RId, "role.roleBuildState", statePush)
+		}
 	}
+
 
 	push := &proto.WarReportPush{}
 	push.List = make([]proto.WarReport, len(warReports))

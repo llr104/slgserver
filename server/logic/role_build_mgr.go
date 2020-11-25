@@ -151,7 +151,7 @@ func (this* RoleBuildMgr) RemoveFromRole(build *model.MapRoleBuild)  {
 	if ok {
 		for i, v := range rb {
 			if v.Id == build.Id{
-				rb = append(rb[:i], rb[i+1:]...)
+				this.roleRB[build.RId] = append(rb[:i], rb[i+1:]...)
 				break
 			}
 		}
