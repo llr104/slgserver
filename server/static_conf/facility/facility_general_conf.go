@@ -71,7 +71,11 @@ func (this *facilityGeneralConf) MaxLevel(fType int8) int8 {
 	}
 }
 
-func (this *facilityGeneralConf) Need(fType int8, level int) (*NeedRes, bool)  {
+func (this *facilityGeneralConf) Need(fType int8, level int) (*NeedRes, bool) {
+	if level <= 0{
+		return nil, false
+	}
+
 	if this.JC.Type == fType{
 		if len(this.JC.Levels) > level{
 			return &this.JC.Levels[level-1].Need, true

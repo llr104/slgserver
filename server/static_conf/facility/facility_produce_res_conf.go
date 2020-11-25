@@ -85,7 +85,11 @@ func (this *facilityProduceResConf) MaxLevel(fType int8) int8 {
 	}
 }
 
-func (this *facilityProduceResConf) Need(fType int8, level int) (*NeedRes, bool)  {
+func (this *facilityProduceResConf) Need(fType int8, level int) (*NeedRes, bool) {
+	if level <= 0{
+		return nil, false
+	}
+
 	if this.CSC.Type == fType{
 		if len(this.CSC.Levels) >= level{
 			return &this.CSC.Levels[level-1].Need, true
@@ -113,6 +117,45 @@ func (this *facilityProduceResConf) Need(fType int8, level int) (*NeedRes, bool)
 	}else if this.MJ.Type == fType{
 		if len(this.MJ.Levels) >= level{
 			return &this.MJ.Levels[level-1].Need, true
+		}else {
+			return nil, false
+		}
+	}else{
+		return nil, false
+	}
+}
+
+func (this *facilityProduceResConf) GetProduce(fType int8, level int) (*produceResLevel, bool)  {
+	if level <= 0{
+		return nil, false
+	}
+	if this.CSC.Type == fType{
+		if len(this.CSC.Levels) >= level{
+			return &this.CSC.Levels[level-1], true
+		}else {
+			return nil, false
+		}
+	}else if this.FMC.Type == fType{
+		if len(this.FMC.Levels) >= level{
+			return &this.FMC.Levels[level-1], true
+		}else {
+			return nil, false
+		}
+	}else if this.LTC.Type == fType{
+		if len(this.LTC.Levels) >= level{
+			return &this.LTC.Levels[level-1], true
+		}else {
+			return nil, false
+		}
+	}else if this.MF.Type == fType{
+		if len(this.MF.Levels) >= level{
+			return &this.MF.Levels[level-1], true
+		}else {
+			return nil, false
+		}
+	}else if this.MJ.Type == fType{
+		if len(this.MJ.Levels) >= level{
+			return &this.MJ.Levels[level-1], true
 		}else {
 			return nil, false
 		}

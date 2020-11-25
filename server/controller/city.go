@@ -10,6 +10,7 @@ import (
 	"slgserver/server/middleware"
 	"slgserver/server/model_to_proto"
 	"slgserver/server/proto"
+	"slgserver/server/static_conf/facility"
 )
 
 var DefaultCity = City{
@@ -100,6 +101,42 @@ func (this*City) upFacility(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		rspObj.Facility.Level = out.Level
 		rspObj.Facility.Type = out.Type
 		rspObj.Facility.Name = out.Name
+
+		//资源产量变化了
+		if facility.FPRC.IsContain(reqObj.FType){
+			oldP, ok1 := facility.FPRC.GetProduce(reqObj.FType, int(out.Level-1))
+			newP, ok2 := facility.FPRC.GetProduce(reqObj.FType, int(out.Level))
+			roleRes, ok:= logic.RResMgr.Get(role.RId)
+			if ok {
+				if facility.FPRC.MF.Type == reqObj.FType{
+					if ok1 && ok2{
+						roleRes.GrainYield -= oldP.Yield
+						roleRes.GrainYield += newP.Yield
+					}
+				}else if facility.FPRC.FMC.Type == reqObj.FType {
+					if ok1 && ok2{
+						roleRes.WoodYield -= oldP.Yield
+						roleRes.WoodYield += newP.Yield
+					}
+				}else if facility.FPRC.LTC.Type == reqObj.FType {
+					if ok1 && ok2{
+						roleRes.IronYield -= oldP.Yield
+						roleRes.IronYield += newP.Yield
+					}
+				}else if facility.FPRC.CSC.Type == reqObj.FType {
+					if ok1 && ok2{
+						roleRes.StoneYield -= oldP.Yield
+						roleRes.StoneYield += newP.Yield
+					}
+				}else if facility.FPRC.MJ.Type == reqObj.FType {
+					if ok1 && ok2{
+						roleRes.GoldYield -= oldP.Yield
+						roleRes.GoldYield += newP.Yield
+					}
+				}
+				roleRes.DB.Sync()
+			}
+		}
 
 		if roleRes, ok:= logic.RResMgr.Get(role.RId); ok {
 			model_to_proto.RRes(roleRes, &rspObj.RoleRes)

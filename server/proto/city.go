@@ -16,8 +16,8 @@ type FacilitiesRsp struct {
 }
 
 type UpFacilityReq struct {
-	CityId int `json:"cityId"`
-	FType  int `json:"fType"`
+	CityId int 	`json:"cityId"`
+	FType  int8	`json:"fType"`
 }
 
 type UpFacilityRsp struct {

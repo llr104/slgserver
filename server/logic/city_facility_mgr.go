@@ -105,46 +105,57 @@ func (this* FacilityMgr) UpFacility(rid, cid int, fType int8) (*Facility, int){
 	defer this.mutex.Unlock()
 	f, ok := this.facilities[cid]
 	if ok == false{
-		log.DefaultLog.Warn("UpFacility cityId not found", zap.Int("cityId", cid), zap.Int("type", int(fType)))
+		log.DefaultLog.Warn("UpFacility cityId not found",
+			zap.Int("cityId", cid),
+			zap.Int("type", int(fType)))
 		return nil, constant.CityNotExist
 	}else{
-		fa := make([]*Facility, 0)
+		facilities := make([]*Facility, 0)
 		var out *Facility
-		json.Unmarshal([]byte(f.Facilities), &fa)
-		for _, v := range fa {
-			if v.Type == fType {
+		json.Unmarshal([]byte(f.Facilities), &facilities)
+		for _, fac := range facilities {
+			if fac.Type == fType {
 				maxLevel := facility.FConf.MaxLevel(fType)
-				if v.Level >= maxLevel{
+				if fac.Level >= maxLevel{
 					log.DefaultLog.Warn("UpFacility error",
-						zap.Int("curLevel", int(v.Level)), zap.Int("maxLevel", int(maxLevel)), zap.Int("cityId", cid), zap.Int("type", int(fType)))
+						zap.Int("curLevel", int(fac.Level)),
+						zap.Int("maxLevel", int(maxLevel)),
+						zap.Int("cityId", cid),
+						zap.Int("type", int(fType)))
 					return nil, constant.UpError
 				}else{
-					need, ok := facility.FConf.Need(fType, int(v.Level+1))
+					need, ok := facility.FConf.Need(fType, int(fac.Level+1))
 					if ok == false {
 						log.DefaultLog.Warn("UpFacility Need config error",
-							zap.Int("curLevel", int(v.Level)), zap.Int("cityId", cid), zap.Int("type", int(fType)))
+							zap.Int("curLevel", int(fac.Level)),
+							zap.Int("cityId", cid),
+							zap.Int("type", int(fType)))
 						return nil, constant.UpError
 					}
 					if RResMgr.TryUseNeed(rid, need) {
-						v.Level += 1
-						out = v
-						f.DB.Sync()
-						if t, err := json.Marshal(fa); err == nil{
+						fac.Level += 1
+						out = fac
+						if t, err := json.Marshal(facilities); err == nil{
 							f.Facilities = string(t)
+							f.DB.Sync()
 							return out, constant.OK
 						}else{
 							return nil, constant.UpError
 						}
 					}else{
 						log.DefaultLog.Warn("UpFacility Need Res Not Enough",
-							zap.Int("curLevel", int(v.Level)), zap.Int("cityId", cid), zap.Int("type", int(fType)))
+							zap.Int("curLevel", int(fac.Level)),
+							zap.Int("cityId", cid),
+							zap.Int("type", int(fType)))
 						return nil, constant.ResNotEnough
 					}
 				}
 			}
 		}
 
-		log.DefaultLog.Warn("UpFacility error not found type", zap.Int("cityId", cid), zap.Int("type", int(fType)))
+		log.DefaultLog.Warn("UpFacility error not found type",
+			zap.Int("cityId", cid),
+			zap.Int("type", int(fType)))
 		return nil, constant.UpError
 	}
 }

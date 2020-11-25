@@ -84,7 +84,11 @@ func (this *facilityCampConf) MaxLevel(fType int8) int8 {
 	}
 }
 
-func (this *facilityCampConf) Need(fType int8, level int) (*NeedRes, bool)  {
+func (this *facilityCampConf) Need(fType int8, level int) (*NeedRes, bool) {
+	if level <= 0{
+		return nil, false
+	}
+
 	if this.Han.Type == fType{
 		if len(this.Han.Levels) > level{
 			return &this.Han.Levels[level].Need, true

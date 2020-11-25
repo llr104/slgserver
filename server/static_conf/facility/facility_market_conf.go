@@ -58,7 +58,11 @@ func (this *facilityMarketConf) MaxLevel(fType int8) int8 {
 	}
 }
 
-func (this *facilityMarketConf) Need(fType int8, level int) (*NeedRes, bool)  {
+func (this *facilityMarketConf) Need(fType int8, level int) (*NeedRes, bool) {
+	if level <= 0{
+		return nil, false
+	}
+
 	if this.Type == fType{
 		if len(this.Levels) >= level{
 			return &this.Levels[level-1].Need, true

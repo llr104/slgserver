@@ -87,6 +87,10 @@ func (this *facilityConf) MaxLevel(fType int8) int8 {
 }
 
 func (this *facilityConf) Need(fType int8, level int) (*NeedRes, bool) {
+	if level <= 0{
+		return nil, false
+	}
+
 	for _, v := range this.loaders {
 		if v.IsContain(fType){
 			return v.Need(fType, level)
@@ -96,5 +100,8 @@ func (this *facilityConf) Need(fType int8, level int) (*NeedRes, bool) {
 	log.DefaultLog.Info("facilityConf type not found", zap.Int("type", int(fType)))
 	return nil, false
 }
+
+
+
 
 
