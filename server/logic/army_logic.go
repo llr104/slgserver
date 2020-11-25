@@ -167,8 +167,10 @@ func (this* armyLogic) executeBuild(army* model.Army)  {
 		}
 
 		warReports = append(warReports, wr)
+		enemy.DB.Sync()
 	}
-
+	army.DB.Sync()
+	
 	//三盘两胜
 	isWinCnt := 0
 	for _, s := range army.SoldierArray {
@@ -188,13 +190,15 @@ func (this* armyLogic) executeBuild(army* model.Army)  {
 				roleBuid.RId = army.RId
 				roleBuid.CurDurable = roleBuid.MaxDurable
 				this.OccupyRoleBuild(army.RId, army.ToX, army.ToY)
+
 			}else{
 				wr.Occupy = 0
-				push := &proto.RoleBuildStatePush{}
-				model_to_proto.MRBuild(roleBuid, &push.MRBuild)
-				server.DefaultConnMgr.PushByRoleId(army.RId, "role.roleBuildState", push)
-				server.DefaultConnMgr.PushByRoleId(roleBuid.RId, "role.roleBuildState", push)
 			}
+
+			push := &proto.RoleBuildStatePush{}
+			model_to_proto.MRBuild(roleBuid, &push.MRBuild)
+			server.DefaultConnMgr.PushByRoleId(army.RId, "role.roleBuildState", push)
+			server.DefaultConnMgr.PushByRoleId(roleBuid.RId, "role.roleBuildState", push)
 		}else{
 			//占领系统领地
 			this.OccupySystemBuild(army.RId, army.ToX, army.ToY)
@@ -202,8 +206,13 @@ func (this* armyLogic) executeBuild(army* model.Army)  {
 			wr.DestroyDurable = 100
 			wr.Occupy = 1
 			this.sys.DelArmy(army.ToX, army.ToY)
+
+			push := &proto.RoleBuildStatePush{}
+			model_to_proto.MRBuild(roleBuid, &push.MRBuild)
+			server.DefaultConnMgr.PushByRoleId(army.RId, "role.roleBuildState", push)
 		}
 	}
+
 
 	push := &proto.WarReportPush{}
 	push.List = make([]proto.WarReport, len(warReports))
@@ -219,6 +228,7 @@ func (this* armyLogic) executeBuild(army* model.Army)  {
 		}
 		server.DefaultConnMgr.PushByRoleId(army.RId, "war.reportPush", push)
 	}
+
 }
 
 func (this* armyLogic) OccupyRoleBuild(rid, x, y int)  {
@@ -250,10 +260,6 @@ func (this* armyLogic) OccupyRoleBuild(rid, x, y int)  {
 		b.DB.Sync()
 		b.RId = rid
 
-		push := &proto.RoleBuildStatePush{}
-		model_to_proto.MRBuild(b, &push.MRBuild)
-		server.DefaultConnMgr.PushByRoleId(oldId, "role.roleBuildState", push)
-		server.DefaultConnMgr.PushByRoleId(newId, "role.roleBuildState", push)
 	}
 }
 
@@ -275,9 +281,6 @@ func (this* armyLogic) OccupySystemBuild(rid, x, y int)  {
 				newRole.IronYield += rb.Iron
 				newRole.DB.Sync()
 			}
-			push := &proto.RoleBuildStatePush{}
-			model_to_proto.MRBuild(rb, &push.MRBuild)
-			server.DefaultConnMgr.PushByRoleId(newId, "role.roleBuildState", push)
 		}
 	}
 }
