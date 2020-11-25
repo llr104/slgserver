@@ -107,9 +107,9 @@ func (this* armyLogic) executeBuild(army* model.Army)  {
 	roleBuid, isRoleBuild := RBMgr.PositionBuild(army.ToX, army.ToY)
 
 	posId := ToPosition(army.ToX, army.ToY)
-	posArmys, ok := this.posArmys[posId]
+	posArmys, isRoleEnemy := this.posArmys[posId]
 	var enemys []*model.Army
-	if ok == false {
+	if isRoleEnemy == false {
 		enemys = this.sys.GetArmy(army.ToX, army.ToY)
 	}else{
 		for _, v := range posArmys {
@@ -167,10 +167,19 @@ func (this* armyLogic) executeBuild(army* model.Army)  {
 		}
 
 		warReports = append(warReports, wr)
-		enemy.DB.Sync()
+		enemy.ToSoldier()
+		enemy.ToGeneral()
+
+		if isRoleEnemy {
+			if winCnt >= 2 {
+				AMgr.ArmyBack(enemy)
+			}
+			enemy.DB.Sync()
+		}
+
 	}
 	army.DB.Sync()
-	
+
 	//三盘两胜
 	isWinCnt := 0
 	for _, s := range army.SoldierArray {
@@ -194,11 +203,6 @@ func (this* armyLogic) executeBuild(army* model.Army)  {
 			}else{
 				wr.Occupy = 0
 			}
-
-			push := &proto.RoleBuildStatePush{}
-			model_to_proto.MRBuild(roleBuid, &push.MRBuild)
-			server.DefaultConnMgr.PushByRoleId(army.RId, "role.roleBuildState", push)
-			server.DefaultConnMgr.PushByRoleId(roleBuid.RId, "role.roleBuildState", push)
 		}else{
 			//占领系统领地
 			this.OccupySystemBuild(army.RId, army.ToX, army.ToY)
@@ -206,13 +210,15 @@ func (this* armyLogic) executeBuild(army* model.Army)  {
 			wr.DestroyDurable = 100
 			wr.Occupy = 1
 			this.sys.DelArmy(army.ToX, army.ToY)
-
-			push := &proto.RoleBuildStatePush{}
-			model_to_proto.MRBuild(roleBuid, &push.MRBuild)
-			server.DefaultConnMgr.PushByRoleId(army.RId, "role.roleBuildState", push)
 		}
 	}
 
+	statePush := &proto.RoleBuildStatePush{}
+	model_to_proto.MRBuild(roleBuid, &statePush.MRBuild)
+	server.DefaultConnMgr.PushByRoleId(army.RId, "role.roleBuildState", statePush)
+	if isRoleBuild {
+		server.DefaultConnMgr.PushByRoleId(roleBuid.RId, "role.roleBuildState", statePush)
+	}
 
 	push := &proto.WarReportPush{}
 	push.List = make([]proto.WarReport, len(warReports))
