@@ -44,6 +44,13 @@ func (this *armyLogic) running(){
 				model_to_proto.Army(army, &ap.Army)
 				//通知部队变化了
 				server.DefaultConnMgr.PushByRoleId(army.RId, "general.armyState", ap)
+
+				if army.Cmd == model.ArmyCmdBack {
+					posId := ToPosition(army.ToX, army.ToY)
+					if _, ok := this.posArmys[posId]; ok {
+						delete(this.posArmys[posId], army.Id)
+					}
+				}
 			}
 			case army := <-this.arriveArmys:{
 				if army.Cmd == model.ArmyCmdAttack {
@@ -69,11 +76,9 @@ func (this *armyLogic) running(){
 
 				} else if army.Cmd == model.ArmyCmdBack {
 					//如果该队伍在驻守，需要移除
-					posId := ToPosition(army.ToX, army.ToY)
-					if _, ok := this.posArmys[posId]; ok {
-						delete(this.posArmys[posId], army.Id)
-					}
-					AMgr.ArmyBack(army)
+					army.State = model.ArmyStop
+					army.Cmd = model.ArmyCmdIdle
+					this.Update(army)
 				}
 				army.DB.Sync()
 			}
