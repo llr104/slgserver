@@ -27,7 +27,7 @@ func (this*Account) InitRouter(r *net.Router) {
 
 	g.AddRouter("login", this.login)
 	g.AddRouter("reLogin", this.reLogin)
-	g.AddRouter("logout", this.logout,middleware.CheckLogin())
+	g.AddRouter("logout", this.logout, middleware.CheckLogin())
 }
 
 func (this*Account) login(req *net.WsMsgReq, rsp *net.WsMsgRsp) {

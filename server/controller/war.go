@@ -19,7 +19,8 @@ type War struct {
 }
 
 func (this*War) InitRouter(r *net.Router) {
-	g := r.Group("war").Use(middleware.ElapsedTime(), middleware.Log(), middleware.CheckRole())
+	g := r.Group("war").Use(middleware.ElapsedTime(),
+		middleware.Log(), middleware.CheckRole())
 	g.AddRouter("report", this.report)
 	g.AddRouter("read", this.read)
 }

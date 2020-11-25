@@ -25,7 +25,8 @@ type Role struct {
 }
 
 func (this*Role) InitRouter(r *net.Router) {
-	g := r.Group("role").Use(middleware.ElapsedTime(), middleware.Log(), middleware.CheckLogin())
+	g := r.Group("role").Use(middleware.ElapsedTime(),
+		middleware.Log(), middleware.CheckLogin())
 	g.AddRouter("create", this.create)
 	g.AddRouter("roleList", this.roleList)
 	g.AddRouter("enterServer", this.enterServer)
