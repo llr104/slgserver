@@ -238,3 +238,14 @@ func (this* GeneralMgr) GetNPCGenerals(cnt int) ([]model.General, bool) {
 		}
 	}
 }
+
+func (this *GeneralMgr) GetDestroy(army *model.Army) int{
+	destroy := 0
+	for _, gid := range army.GeneralArray {
+		g, ok := this.FindGeneral(gid)
+		if ok {
+			destroy += g.Destroy
+		}
+	}
+	return destroy
+}

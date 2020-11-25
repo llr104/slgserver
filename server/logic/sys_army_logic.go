@@ -5,10 +5,9 @@ import (
 	"sync"
 )
 
-var SysArmy* sysArmyLogic
 
-func init() {
-	SysArmy = &sysArmyLogic{
+func NewSysArmy() *sysArmyLogic {
+	return &sysArmyLogic{
 		sysArmys: make(map[int][]*model.Army),
 	}
 }
@@ -44,6 +43,9 @@ func (this * sysArmyLogic) GetArmy(x, y int) []*model.Army{
 				army.ToSoldier()
 
 				armys = append(armys, army)
+				posId := ToPosition(x, y)
+				this.sysArmys[posId] = armys
+
 				return armys
 			}else{
 				return armys
@@ -52,6 +54,13 @@ func (this * sysArmyLogic) GetArmy(x, y int) []*model.Army{
 			return armys
 		}
 	}
+}
+
+func (this * sysArmyLogic) DelArmy(x, y int) {
+	this.mutex.Lock()
+	defer this.mutex.Unlock()
+	posId := ToPosition(x, y)
+	delete(this.sysArmys, posId)
 }
 
 

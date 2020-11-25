@@ -19,13 +19,14 @@ var ArmyLogic *armyLogic
 
 func init() {
 	ArmyLogic = &armyLogic{armys: make(chan *model.Army, 100),
-		posArmys: make(map[int]map[int]*model.Army)}
+		posArmys: make(map[int]map[int]*model.Army), sys: NewSysArmy()}
 	go ArmyLogic.running()
 }
 
 type armyLogic struct {
-	armys    chan *model.Army
-	posArmys map[int]map[int]*model.Army	//key:posId,armyId
+	sys 		*sysArmyLogic
+	armys    	chan *model.Army
+	posArmys 	map[int]map[int]*model.Army	//玩家驻守的军队 key:posId,armyId
 }
 
 func (this *armyLogic) running(){
@@ -99,101 +100,125 @@ func (this *armyLogic) battle(army* model.Army) {
 		return
 	}
 
-	_, ok = RBMgr.PositionBuild(army.ToX, army.ToY)
-	if ok {
-		//打玩家占领的领地
-		army.SoldierArray[0] = util.MaxInt(0, army.SoldierArray[0]-50)
-		army.SoldierArray[1] = util.MaxInt(0, army.SoldierArray[1]-50)
-		army.SoldierArray[2] = util.MaxInt(0, army.SoldierArray[2]-50)
-		this.OccupyRoleBuild(army.RId, army.ToX, army.ToY)
+	this.executeBuild(army)
+}
+
+func (this* armyLogic) executeBuild(army* model.Army)  {
+	roleBuid, isRoleBuild := RBMgr.PositionBuild(army.ToX, army.ToY)
+
+	posId := ToPosition(army.ToX, army.ToY)
+	posArmys, ok := this.posArmys[posId]
+	var enemys []*model.Army
+	if ok == false {
+		enemys = this.sys.GetArmy(army.ToX, army.ToY)
 	}else{
+		for _, v := range posArmys {
+			enemys = append(enemys, v)
+		}
+	}
 
-		enemys := SysArmy.GetArmy(army.ToX, army.ToY)
-		warReports := make([]*model.WarReport, 0)
+	warReports := make([]*model.WarReport, 0)
+	general1 := make([]proto.General, 0)
+	for _, id := range army.GeneralArray {
+		g, ok := GMgr.FindGeneral(id)
+		if ok {
+			pg := proto.General{}
+			model_to_proto.General(g, &pg)
+			general1 = append(general1, pg)
+		}
+	}
 
-		general1 := make([]proto.General, 0)
-		for _, id := range army.GeneralArray {
+	gdata1, _ := json.Marshal(general1)
+
+	for _, enemy := range enemys {
+		//战报处理
+		general2 := make([]proto.General, 0)
+		for _, id := range enemy.GeneralArray {
 			g, ok := GMgr.FindGeneral(id)
 			if ok {
 				pg := proto.General{}
 				model_to_proto.General(g, &pg)
-				general1 = append(general1, pg)
+				general2 = append(general2, pg)
 			}
 		}
 
-		gdata1, _ := json.Marshal(general1)
+		gdata2, _ := json.Marshal(general2)
+		begArmy1, _ := json.Marshal(army)
+		begArmy2, _ := json.Marshal(enemy)
 
-		for _, enemy := range enemys {
-			//战报处理
-			general2 := make([]proto.General, 0)
-			for _, id := range enemy.GeneralArray {
-				g, ok := GMgr.FindGeneral(id)
-				if ok {
-					pg := proto.General{}
-					model_to_proto.General(g, &pg)
-					general2 = append(general2, pg)
-				}
-			}
-
-			gdata2, _ := json.Marshal(general2)
-
-			begArmy1, _ := json.Marshal(army)
-			begArmy2, _ := json.Marshal(enemy)
-
-			winCnt := 0
-			for i, s1 := range army.SoldierArray {
-				s2 := enemy.SoldierArray[i]
-				enemy.SoldierArray[i] = util.MaxInt(0, enemy.SoldierArray[i]-s1)
-				army.SoldierArray[i] = util.MaxInt(0, army.SoldierArray[i]-s2)
-				if army.SoldierArray[i] > 0{
-					winCnt+=1
-				}
-			}
-			endArmy1, _ := json.Marshal(army)
-			endArmy2, _ := json.Marshal(enemy)
-
-			wr := &model.WarReport{X: army.ToX, Y: army.ToY, AttackRid: army.RId,
-				AttackIsRead: false, DefenseIsRead: false, DefenseRid: enemy.RId,
-				BegAttackArmy: string(begArmy1), BegDefenseArmy: string(begArmy2),
-				EndAttackArmy: string(endArmy1), EndDefenseArmy: string(endArmy2),
-				AttackIsWin: winCnt>=2, CTime: time.Now(), AttackGeneral: string(gdata1),
-				DefenseGeneral: string(gdata2),
-			}
-
-			warReports = append(warReports, wr)
-		}
-
-		//三盘两胜
-		isWinCnt := 0
-		for _, s := range army.SoldierArray {
-			if s>0{
-				isWinCnt+=1
+		winCnt := 0
+		for i, s1 := range army.SoldierArray {
+			s2 := enemy.SoldierArray[i]
+			enemy.SoldierArray[i] = util.MaxInt(0, enemy.SoldierArray[i]-s1)
+			army.SoldierArray[i] = util.MaxInt(0, army.SoldierArray[i]-s2)
+			if army.SoldierArray[i] > 0{
+				winCnt+=1
 			}
 		}
-		if isWinCnt>=2 {
+		endArmy1, _ := json.Marshal(army)
+		endArmy2, _ := json.Marshal(enemy)
+
+		wr := &model.WarReport{X: army.ToX, Y: army.ToY, AttackRid: army.RId,
+			AttackIsRead: false, DefenseIsRead: false, DefenseRid: enemy.RId,
+			BegAttackArmy: string(begArmy1), BegDefenseArmy: string(begArmy2),
+			EndAttackArmy: string(endArmy1), EndDefenseArmy: string(endArmy2),
+			AttackIsWin: winCnt>=2, CTime: time.Now(), AttackGeneral: string(gdata1),
+			DefenseGeneral: string(gdata2),
+		}
+
+		warReports = append(warReports, wr)
+	}
+
+	//三盘两胜
+	isWinCnt := 0
+	for _, s := range army.SoldierArray {
+		if s>0{
+			isWinCnt+=1
+		}
+	}
+	if isWinCnt>=2 {
+		if isRoleBuild {
+			destory := GMgr.GetDestroy(army)
+			wr := warReports[len(warReports)-1]
+			wr.DestroyDurable = util.MinInt(destory, roleBuid.CurDurable)
+			roleBuid.CurDurable = util.MaxInt(0, roleBuid.CurDurable - destory)
+			if roleBuid.CurDurable == 0{
+				//攻占了玩家的领地
+				wr.Occupy = 1
+				roleBuid.RId = army.RId
+				roleBuid.CurDurable = roleBuid.MaxDurable
+				this.OccupyRoleBuild(army.RId, army.ToX, army.ToY)
+			}else{
+				wr.Occupy = 0
+				push := &proto.RoleBuildStatePush{}
+				model_to_proto.MRBuild(roleBuid, &push.MRBuild)
+				server.DefaultConnMgr.PushByRoleId(army.RId, "role.roleBuildState", push)
+				server.DefaultConnMgr.PushByRoleId(roleBuid.RId, "role.roleBuildState", push)
+			}
+		}else{
 			//占领系统领地
 			this.OccupySystemBuild(army.RId, army.ToX, army.ToY)
 			wr := warReports[len(warReports)-1]
 			wr.DestroyDurable = 100
 			wr.Occupy = 1
-		}
-
-		push := &proto.WarReportPush{}
-		push.List = make([]proto.WarReport, len(warReports))
-		for i, wr := range warReports {
-			fmt.Println(wr.CTime)
-			_, err := db.MasterDB.InsertOne(wr)
-			fmt.Println(wr.CTime)
-
-			if err != nil{
-				log.DefaultLog.Warn("db error", zap.Error(err))
-			}else{
-				model_to_proto.WarReport(wr, &push.List[i])
-			}
-			server.DefaultConnMgr.PushByRoleId(army.RId, "war.reportPush", push)
+			this.sys.DelArmy(army.ToX, army.ToY)
 		}
 	}
 
+	push := &proto.WarReportPush{}
+	push.List = make([]proto.WarReport, len(warReports))
+	for i, wr := range warReports {
+		fmt.Println(wr.CTime)
+		_, err := db.MasterDB.InsertOne(wr)
+		fmt.Println(wr.CTime)
+
+		if err != nil{
+			log.DefaultLog.Warn("db error", zap.Error(err))
+		}else{
+			model_to_proto.WarReport(wr, &push.List[i])
+		}
+		server.DefaultConnMgr.PushByRoleId(army.RId, "war.reportPush", push)
+	}
 }
 
 func (this* armyLogic) OccupyRoleBuild(rid, x, y int)  {
