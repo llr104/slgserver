@@ -23,6 +23,7 @@ func init() {
 		updateArmys:  make(chan *model.Army, 100),
 		posArmys: make(map[int]map[int]*model.Army),
 		sys: NewSysArmy()}
+
 	go ArmyLogic.running()
 }
 
@@ -46,10 +47,7 @@ func (this *armyLogic) running(){
 				server.DefaultConnMgr.PushByRoleId(army.RId, proto.ArmyStatePushMsg, ap)
 
 				if army.Cmd == model.ArmyCmdBack {
-					posId := ToPosition(army.ToX, army.ToY)
-					if _, ok := this.posArmys[posId]; ok {
-						delete(this.posArmys[posId], army.Id)
-					}
+					this.deleteArmy(army.ToX, army.ToY)
 				}
 			}
 			case army := <-this.arriveArmys:{
@@ -60,15 +58,11 @@ func (this *armyLogic) running(){
 					AMgr.ArmyBack(army)
 				}else if army.Cmd == model.ArmyCmdDefend {
 					//呆在哪里不动
-					posId := ToPosition(army.ToX, army.ToY)
-					roleBuild, ok := RBMgr.PositionBuild(army.ToX, army.ToY)
-					if ok && roleBuild.RId == army.RId {
+					ok := RBMgr.BuildIsRId(army.ToX, army.ToY, army.RId)
+					if ok {
 						//目前是自己的领地才能驻守
-						if _, ok := this.posArmys[posId]; ok == false {
-							this.posArmys[posId] = make(map[int]*model.Army)
-						}
-						this.posArmys[posId][army.Id] = army
 						army.State = model.ArmyStop
+						this.addArmy(army)
 						this.Update(army)
 					}else{
 						AMgr.ArmyBack(army)
@@ -76,9 +70,32 @@ func (this *armyLogic) running(){
 
 				}else if army.Cmd == model.ArmyCmdReclamation {
 					if army.State == model.ArmyRunning{
-						AMgr.Reclamation(army)
+
+						ok := RBMgr.BuildIsRId(army.ToX, army.ToY, army.RId)
+						if ok  {
+							//目前是自己的领地才能屯田
+							army.State = model.ArmyStop
+							this.addArmy(army)
+							AMgr.Reclamation(army)
+						}else{
+							AMgr.ArmyBack(army)
+						}
+
 					}else {
 						AMgr.ArmyBack(army)
+						//增加场量
+						rr, ok := RResMgr.Get(army.RId)
+						if ok {
+							b, ok1 := RBMgr.PositionBuild(army.ToX, army.ToY)
+							if ok1 {
+								rr.Stone += b.Stone
+								rr.Iron += b.Iron
+								rr.Wood += b.Wood
+								rr.Gold += rr.Gold
+								rr.Grain += rr.Grain
+								rr.DB.Sync()
+							}
+						}
 					}
 				}else if army.Cmd == model.ArmyCmdBack {
 					//如果该队伍在驻守，需要移除
@@ -112,6 +129,20 @@ func (this *armyLogic) Update(army* model.Army) {
 func (this *armyLogic) GiveUp(posId int) {
 	this.giveUpId <- posId
 }
+
+func (this *armyLogic) deleteArmy(x, y int) {
+	posId := ToPosition(x, y)
+	delete(this.posArmys, posId)
+}
+
+func (this* armyLogic) addArmy(army* model.Army)  {
+	posId := ToPosition(army.ToX, army.ToY)
+	if _, ok := this.posArmys[posId]; ok == false {
+		this.posArmys[posId] = make(map[int]*model.Army)
+	}
+	this.posArmys[posId][army.Id] = army
+}
+
 //简单战斗
 func (this *armyLogic) battle(army* model.Army) {
 	_, ok := RCMgr.PositionCity(army.ToX, army.ToY)

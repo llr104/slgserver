@@ -97,7 +97,22 @@ func (this* RoleResMgr) TryUseNeed(rid int, need*facility.NeedRes) bool{
 	}else {
 		return false
 	}
+}
 
+func (this* RoleResMgr) TryUseDecree(rid int, decree int) bool{
+	this.mutex.Lock()
+	defer this.mutex.Unlock()
+	rr, ok := this.rolesRes[rid]
+	if ok {
+		if rr.Decree >= decree {
+			rr.Decree -= decree
+			return true
+		}else{
+			return false
+		}
+	}else{
+		return false
+	}
 }
 
 func (this* RoleResMgr) CutDown(rid int, b *model.MapRoleBuild) (*model.RoleRes, bool)  {

@@ -343,11 +343,9 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 
 		//判断驻守的地方是否是自己的领地
 		if reqObj.Cmd == model.ArmyCmdDefend || reqObj.Cmd == model.ArmyCmdReclamation {
-			if rb, ok := logic.RBMgr.PositionBuild(reqObj.X, reqObj.Y); ok {
-				if rb.RId != role.RId{
-					rsp.Body.Code = constant.BuildNotMe
-					return
-				}
+			if logic.RBMgr.BuildIsRId(reqObj.X, reqObj.Y, role.RId) == false {
+				rsp.Body.Code = constant.BuildNotMe
+				return
 			}
 		}
 
@@ -356,6 +354,14 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 		if ok == false{
 			rsp.Body.Code = constant.PhysicalPowerNotEnough
 			return
+		}
+
+		if army.Cmd == model.ArmyCmdReclamation{
+			cost := static_conf.Basic.General.ReclamationCost
+			if logic.RResMgr.TryUseDecree(army.RId, cost) == false{
+				rsp.Body.Code = constant.DecreeNotEnough
+				return
+			}
 		}
 
 		p := &proto.GeneralPush{}

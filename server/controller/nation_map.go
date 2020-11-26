@@ -129,17 +129,12 @@ func (this*NationMap) giveUp(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
 
-	rb, ok := logic.RBMgr.PositionBuild(x, y)
-	if ok == false{
-		rsp.Body.Code = constant.CannotGiveUp
-		return
-	}
-
-	if rb.RId != role.RId{
+	if logic.RBMgr.BuildIsRId(x, y, role.RId) == false{
 		rsp.Body.Code = constant.BuildNotMe
 		return
 	}
 
+	rb, _ := logic.RBMgr.PositionBuild(x, y)
 	rr, ok := logic.RResMgr.CutDown(role.RId, rb)
 	logic.RBMgr.RemoveFromRole(rb)
 

@@ -12,7 +12,8 @@
     "physical_power_limit": 100,
     "cost_physical_power": 10,
     "recovery_physical_power": 10,
-    "reclamation_time": 3600
+    "reclamation_time": 3600,
+    "reclamation_cost": 3
   }
 
 }

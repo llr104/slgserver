@@ -151,6 +151,9 @@ func (this* ArmyMgr) PushAction(army *model.Army)  {
 }
 
 func (this* ArmyMgr) ArmyBack(army *model.Army)  {
+	army.State = model.ArmyRunning
+	army.Cmd = model.ArmyCmdBack
+
 	this.mutex.Lock()
 	t := army.End.Unix()
 	if actions, ok := this.armyByEndTime[t]; ok {

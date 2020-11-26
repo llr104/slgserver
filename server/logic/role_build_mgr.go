@@ -222,3 +222,12 @@ func (this* RoleBuildMgr) ScanBlock(x, y, length int) []*model.MapRoleBuild {
 
 	return rb
 }
+
+func (this* RoleBuildMgr) BuildIsRId(x, y, rid int) bool {
+	b, ok := this.PositionBuild(x, y)
+	if ok {
+		return b.RId == rid
+	}else{
+		return false
+	}
+}

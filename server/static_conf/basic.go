@@ -33,10 +33,11 @@ type conscript struct {
 
 type general struct {
 	Des                   string `json:"des"`
-	PhysicalPowerLimit    int    `json:"physical_power_limit"`    	//体力上限
-	CostPhysicalPower     int    `json:"cost_physical_power"`     	//消耗体力
-	RecoveryPhysicalPower int    `json:"recovery_physical_power"` 	//恢复体力
-	ReclamationTime       int    `json:"reclamation_time"`			//屯田消耗时间，单位秒
+	PhysicalPowerLimit    int    `json:"physical_power_limit"`    //体力上限
+	CostPhysicalPower     int    `json:"cost_physical_power"`     //消耗体力
+	RecoveryPhysicalPower int    `json:"recovery_physical_power"` //恢复体力
+	ReclamationTime       int    `json:"reclamation_time"`        //屯田消耗时间，单位秒
+	ReclamationCost       int    `json:"reclamation_cost"`        //屯田消耗政令
 }
 
 type basic struct {

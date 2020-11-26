@@ -28,3 +28,5 @@ const BuildNotMe = 21					//领地不是自己的
 const ArmyNotMain = 22					//军队没有主将
 const UnReachable = 23					//不可到达
 const PhysicalPowerNotEnough = 24		//体力不足
+const DecreeNotEnough = 25				//政令不足
+
