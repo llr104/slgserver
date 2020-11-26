@@ -9,7 +9,8 @@
   },
   "general": {
     "des": "武将的一些配置",
-    "physical_power_limit": 100
+    "physical_power_limit": 100,
+    "cost_physical_power": 10
   }
 
 }
