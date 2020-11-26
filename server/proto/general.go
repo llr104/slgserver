@@ -91,5 +91,5 @@ type ArmyStatePush struct {
 //武将变化推送
 const GeneralPushMsg = "general.push"
 type GeneralPush struct {
-	General []General `json:"general"`
+	Generals []General `json:"generals"`
 }

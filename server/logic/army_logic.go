@@ -188,14 +188,6 @@ func (this* armyLogic) executeBuild(army* model.Army)  {
 				ag.Level = level
 				ag.Exp = exp
 				ag.DB.Sync()
-
-				if ag.RId > 0{
-					p := &proto.GeneralPush{}
-					p.General = make([]proto.General, 0)
-					model_to_proto.General(ag, &p.General[0])
-					server.DefaultConnMgr.PushByRoleId(ag.RId, proto.GeneralPushMsg, p)
-				}
-
 			}
 
 			if eg, ok := GMgr.GetByGId(eGid); ok {
@@ -204,13 +196,6 @@ func (this* armyLogic) executeBuild(army* model.Army)  {
 				eg.Level = level
 				eg.Exp = exp
 				eg.DB.Sync()
-
-				if eg.RId > 0{
-					p := &proto.GeneralPush{}
-					p.General = make([]proto.General, 0)
-					model_to_proto.General(eg, &p.General[0])
-					server.DefaultConnMgr.PushByRoleId(eg.RId, proto.GeneralPushMsg, p)
-				}
 			}
 		}
 
@@ -226,7 +211,14 @@ func (this* armyLogic) executeBuild(army* model.Army)  {
 		}
 		endGeneralData1, _ := json.Marshal(endGeneral1)
 
+		//武将变化推送
+		p := &proto.GeneralPush{}
+		p.Generals = endGeneral1
+		server.DefaultConnMgr.PushByRoleId(army.RId, proto.GeneralPushMsg, p)
+
+
 		endGeneral2 := make([]proto.General, 0)
+		p.Generals = make([]proto.General, 0)
 		for _, id := range enemy.GeneralArray {
 			g, ok := GMgr.GetByGId(id)
 			if ok {
@@ -236,6 +228,10 @@ func (this* armyLogic) executeBuild(army* model.Army)  {
 			}
 		}
 		endGeneralData2, _ := json.Marshal(endGeneral2)
+
+		//武将变化推送
+		p.Generals = endGeneral2
+		server.DefaultConnMgr.PushByRoleId(enemy.RId, proto.GeneralPushMsg, p)
 
 		model_to_proto.Army(army, pArmy)
 		model_to_proto.Army(army, pEnemy)

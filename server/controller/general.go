@@ -359,10 +359,10 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 		}
 
 		p := &proto.GeneralPush{}
-		p.General = make([]proto.General, len(army.GeneralArray))
+		p.Generals = make([]proto.General, len(army.GeneralArray))
 		for i, gid := range army.GeneralArray {
 			g, _ := logic.GMgr.GetByGId(gid)
-			model_to_proto.General(g, &p.General[i])
+			model_to_proto.General(g, &p.Generals[i])
 		}
 		server.DefaultConnMgr.PushByRoleId(army.RId, proto.GeneralPushMsg, p)
 

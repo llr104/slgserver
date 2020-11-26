@@ -113,6 +113,9 @@ func (this* ConnMgr) RemoveConn(conn *net.WSConn){
 }
 
 func (this* ConnMgr) PushByRoleId(rid int, msgName string, data interface{}) bool {
+	if rid <= 0{
+		return false
+	}
 	this.rm.Lock()
 	defer this.rm.Unlock()
 	conn, ok := this.roleCache[rid]
