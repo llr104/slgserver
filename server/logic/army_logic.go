@@ -183,7 +183,7 @@ func (this* armyLogic) executeBuild(army* model.Army)  {
 		 	aGid := army.GeneralArray[i]
 			eGid := enemy.GeneralArray[i]
 			if ag, ok := GMgr.GetByGId(aGid); ok {
-				ag.Exp += akill*10
+				ag.Exp += (soldiers2-enemy.SoldierArray[i])*10
 				level, exp := general.GenBasic.ExpToLevel(ag.Exp)
 				ag.Level = level
 				ag.Exp = exp
@@ -191,7 +191,7 @@ func (this* armyLogic) executeBuild(army* model.Army)  {
 			}
 
 			if eg, ok := GMgr.GetByGId(eGid); ok {
-				eg.Exp += ekill*10
+				eg.Exp += (soldiers1-army.SoldierArray[i])*10
 				level, exp := general.GenBasic.ExpToLevel(eg.Exp)
 				eg.Level = level
 				eg.Exp = exp
