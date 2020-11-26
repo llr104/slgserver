@@ -43,7 +43,7 @@ func (this *armyLogic) running(){
 				ap.CityId = army.CityId
 				model_to_proto.Army(army, &ap.Army)
 				//通知部队变化了
-				server.DefaultConnMgr.PushByRoleId(army.RId, "general.armyState", ap)
+				server.DefaultConnMgr.PushByRoleId(army.RId, proto.ArmyStatePushMsg, ap)
 
 				if army.Cmd == model.ArmyCmdBack {
 					posId := ToPosition(army.ToX, army.ToY)
@@ -193,7 +193,7 @@ func (this* armyLogic) executeBuild(army* model.Army)  {
 					p := &proto.GeneralPush{}
 					p.General = make([]proto.General, 0)
 					model_to_proto.General(ag, &p.General[0])
-					server.DefaultConnMgr.PushByRoleId(ag.RId, "gerenal.push", p)
+					server.DefaultConnMgr.PushByRoleId(ag.RId, proto.GeneralPushMsg, p)
 				}
 
 			}
@@ -209,7 +209,7 @@ func (this* armyLogic) executeBuild(army* model.Army)  {
 					p := &proto.GeneralPush{}
 					p.General = make([]proto.General, 0)
 					model_to_proto.General(eg, &p.General[0])
-					server.DefaultConnMgr.PushByRoleId(eg.RId, "gerenal.push", p)
+					server.DefaultConnMgr.PushByRoleId(eg.RId, proto.GeneralPushMsg, p)
 				}
 			}
 		}
@@ -314,9 +314,9 @@ func (this* armyLogic) executeBuild(army* model.Army)  {
 		}
 
 		model_to_proto.MRBuild(newRoleBuild, &statePush.MRBuild, name)
-		server.DefaultConnMgr.PushByRoleId(army.RId, "role.roleBuildState", statePush)
+		server.DefaultConnMgr.PushByRoleId(army.RId, proto.BuildStatePushMsg, statePush)
 		if isRoleBuild {
-			server.DefaultConnMgr.PushByRoleId(roleBuid.RId, "role.roleBuildState", statePush)
+			server.DefaultConnMgr.PushByRoleId(roleBuid.RId, proto.BuildStatePushMsg, statePush)
 		}
 	}
 
@@ -332,9 +332,9 @@ func (this* armyLogic) executeBuild(army* model.Army)  {
 			model_to_proto.WarReport(wr, &push.List[i])
 		}
 
-		server.DefaultConnMgr.PushByRoleId(army.RId, "war.reportPush", push)
+		server.DefaultConnMgr.PushByRoleId(army.RId, proto.WarReportPushMsg, push)
 		if isRoleBuild {
-			server.DefaultConnMgr.PushByRoleId(roleBuid.RId, "war.reportPush", push)
+			server.DefaultConnMgr.PushByRoleId(roleBuid.RId, proto.WarReportPushMsg, push)
 		}
 	}
 

@@ -364,7 +364,7 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 			g, _ := logic.GMgr.GetByGId(gid)
 			model_to_proto.General(g, &p.General[i])
 		}
-		server.DefaultConnMgr.PushByRoleId(army.RId, "gerenal.push", p)
+		server.DefaultConnMgr.PushByRoleId(army.RId, proto.GeneralPushMsg, p)
 
 		army.Start = time.Now()
 		army.End = time.Now().Add(20*time.Second)

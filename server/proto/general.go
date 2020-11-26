@@ -81,11 +81,15 @@ type AssignArmyRsp struct {
 	Army		Army	`json:"army"`
 }
 
+//军队变化推送
+const ArmyStatePushMsg = "general.armyStatePush"
 type ArmyStatePush struct {
 	CityId	int  	`json:"cityId"`
 	Army	Army	`json:"army"`
 }
 
+//武将变化推送
+const GeneralPushMsg = "general.push"
 type GeneralPush struct {
 	General []General `json:"general"`
 }

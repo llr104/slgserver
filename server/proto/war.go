@@ -23,6 +23,7 @@ type WarReport struct {
 }
 
 //战报推送
+const WarReportPushMsg = "war.reportPush"
 type WarReportPush struct {
 	List	[]WarReport	`json:"list"`
 }
