@@ -72,6 +72,18 @@ func (this* GeneralMgr) toDatabase() {
 	}
 }
 
+func (this* GeneralMgr) add(g *model.General) {
+	this.mutex.Lock()
+
+	if _,ok := this.genByRole[g.RId]; ok == false{
+		this.genByRole[g.RId] = make([]*model.General, 0)
+	}
+	this.genByRole[g.RId] = append(this.genByRole[g.RId], g)
+	this.genByGId[g.Id] = g
+
+	this.mutex.Unlock()
+}
+
 func (this* GeneralMgr) Get(rid int) ([]*model.General, bool){
 	this.mutex.Lock()
 	r, ok := this.genByRole[rid]
@@ -81,17 +93,14 @@ func (this* GeneralMgr) Get(rid int) ([]*model.General, bool){
 		return r, true
 	}
 
-	m := make([]*model.General, 0)
-	err := db.MasterDB.Table(new(model.General)).Where("rid=?", rid).Find(&m)
+	gs := make([]*model.General, 0)
+	err := db.MasterDB.Table(new(model.General)).Where("rid=?", rid).Find(&gs)
 	if err == nil {
-		if len(m) > 0 {
-			this.mutex.Lock()
-			this.genByRole[rid] = m
-			for _, v := range m {
-				this.genByGId[v.Id] = v
+		if len(gs) > 0 {
+			for _, g := range gs {
+				this.add(g)
 			}
-			this.mutex.Unlock()
-			return m, true
+			return gs, true
 		}else{
 			log.DefaultLog.Warn("general not fount", zap.Int("rid", rid))
 			return nil, false
@@ -111,22 +120,12 @@ func (this* GeneralMgr) FindGeneral(gid int) (*model.General, bool){
 		return g, true
 	}else{
 
-		m := &model.General{}
-		r, err := db.MasterDB.Table(new(model.General)).Where("id=?", gid).Get(m)
+		g := &model.General{}
+		r, err := db.MasterDB.Table(new(model.General)).Where("id=?", gid).Get(g)
 		if err == nil{
 			if r {
-				this.mutex.Lock()
-				this.genByGId[m.Id] = m
-
-				if rg,ok := this.genByRole[m.RId];ok{
-					this.genByRole[m.RId] = append(rg, m)
-				}else{
-					this.genByRole[m.RId] = make([]*model.General, 0)
-					this.genByRole[m.RId] = append(this.genByRole[m.RId], m)
-				}
-
-				this.mutex.Unlock()
-				return m, true
+				this.add(g)
+				return g, true
 			}else{
 				log.DefaultLog.Warn("general gid not found", zap.Int("gid", gid))
 				return nil, false
@@ -146,7 +145,14 @@ func (this* GeneralMgr) NewGeneral(cfgId int, rid int) (*model.General, bool) {
 			PhysicalPower: static_conf.Basic.General.PhysicalPowerLimit,
 			Level: 1, CreatedAt: time.Now(),
 		}
-		return g, true
+
+		if _, err := db.MasterDB.Table(model.General{}).Insert(g); err != nil {
+			log.DefaultLog.Warn("db error", zap.Error(err))
+			return nil, false
+		}else{
+			this.add(g)
+			return g, true
+		}
 	}else{
 		return nil, false
 	}
@@ -166,29 +172,17 @@ func (this* GeneralMgr) GetAndTryCreate(rid int) ([]*model.General, bool){
 		sess.Begin()
 
 		for _, v := range general.General.GMap {
-			r, ok := this.NewGeneral(v.CfgId, rid)
+			g, ok := this.NewGeneral(v.CfgId, rid)
 			if ok == false{
-				continue
-			}
-
-			gs = append(gs, r)
-
-			if _, err := db.MasterDB.Table(model.General{}).Insert(r); err != nil {
 				sess.Rollback()
-				log.DefaultLog.Warn("db error", zap.Error(err))
 				return nil, false
 			}
+			gs = append(gs, g)
 		}
 		if err := sess.Commit(); err != nil{
 			log.DefaultLog.Warn("db error", zap.Error(err))
 			return nil, false
 		}else{
-			this.mutex.Lock()
-			this.genByRole[rid] = gs
-			for _, v := range gs {
-				this.genByGId[v.Id] = v
-			}
-			this.mutex.Unlock()
 			return gs, true
 		}
 	}
@@ -216,12 +210,6 @@ func (this* GeneralMgr) createNPC() ([]*model.General, bool){
 		log.DefaultLog.Warn("db error", zap.Error(err))
 		return nil, false
 	}else{
-		this.mutex.Lock()
-		this.genByRole[0] = gs
-		for _, v := range gs {
-			this.genByGId[v.Id] = v
-		}
-		this.mutex.Unlock()
 		return gs, true
 	}
 }
