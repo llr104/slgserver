@@ -6,6 +6,7 @@ import (
 	"slgserver/db"
 	"slgserver/log"
 	"slgserver/model"
+	"slgserver/server/static_conf"
 	"slgserver/server/static_conf/general"
 	"sync"
 	"time"
@@ -138,6 +139,23 @@ func (this* GeneralMgr) FindGeneral(gid int) (*model.General, bool){
 	}
 }
 
+func (this* GeneralMgr) NewGeneral(cfgId int, rid int) (*model.General, bool) {
+	cfg, ok := general.General.GMap[cfgId]
+	if ok {
+		g := &model.General{RId: rid, Name: cfg.Name, CfgId: cfg.CfgId,
+			Force: cfg.Force, Strategy: cfg.Strategy, Defense: cfg.Defense, Speed: cfg.Speed,
+			ForceGrow: cfg.ForceGrow, StrategyGrow: cfg.StrategyGrow,
+			DefenseGrow: cfg.DefenseGrow, DestroyGrow: cfg.DestroyGrow, SpeedGrow: cfg.SpeedGrow,
+			Cost: cfg.Cost, Order: 0, CityId: 0,
+			PhysicalPower: static_conf.Basic.General.PhysicalPowerLimit,
+			Level: 1, CreatedAt: time.Now(),
+		}
+		return g, true
+	}else{
+		return nil, false
+	}
+}
+
 /*
 如果不存在尝试去创建
 */
@@ -151,12 +169,12 @@ func (this* GeneralMgr) GetAndTryCreate(rid int) ([]*model.General, bool){
 		sess := db.MasterDB.NewSession()
 		sess.Begin()
 
-		for _, v := range general.General.List {
-			r := &model.General{RId: rid, Name: v.Name, CfgId: v.CfgId,
-				Force: v.Force, Strategy: v.Strategy, Defense: v.Defense,
-				Speed: v.Speed, Cost: v.Cost, Order: 0, CityId: 0,
-				Level: 1, CreatedAt: time.Now(),
+		for _, v := range general.General.GMap {
+			r, ok := this.NewGeneral(v.CfgId, rid)
+			if ok == false{
+				continue
 			}
+
 			gs = append(gs, r)
 
 			if _, err := db.MasterDB.Table(model.General{}).Insert(r); err != nil {
@@ -186,14 +204,12 @@ func (this* GeneralMgr) createNPC() ([]*model.General, bool){
 	sess := db.MasterDB.NewSession()
 	sess.Begin()
 
-	for _, v := range general.General.List {
-		r := &model.General{RId: 0, Name: v.Name, CfgId: v.CfgId,
-			Force: v.Force, Strategy: v.Strategy, Defense: v.Defense,
-			Speed: v.Speed, Cost: v.Cost, Order: 0, CityId: 0, Destroy: v.Destroy,
-			Level: 1, CreatedAt: time.Now(),
+	for _, v := range general.General.GMap {
+		r, ok := this.NewGeneral(v.CfgId, 0)
+		if ok == false {
+			continue
 		}
 		gs = append(gs, r)
-
 		if _, err := db.MasterDB.Table(model.General{}).Insert(r); err != nil {
 			sess.Rollback()
 			log.DefaultLog.Warn("db error", zap.Error(err))

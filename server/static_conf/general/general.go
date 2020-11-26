@@ -14,19 +14,25 @@ import (
 var General general
 
 type g struct {
-	Name     string `json:"name"`
-	CfgId    int    `json:"cfgId"`
-	Force    int    `json:"force"`
-	Strategy int    `json:"strategy"`
-	Defense  int    `json:"defense"`
-	Speed    int    `json:"speed"`
-	Destroy  int    `json:"destroy"`
-	Cost     int    `json:"cost"`
+	Name     		string	`json:"name"`
+	CfgId    		int		`json:"cfgId"`
+	Force    		int		`json:"force"`
+	Strategy 		int		`json:"strategy"`
+	Defense  		int		`json:"defense"`
+	Speed    		int		`json:"speed"`
+	Destroy  		int		`json:"destroy"`
+	ForceGrow    	int		`json:"force_grow"`
+	StrategyGrow 	int		`json:"strategy_grow"`
+	DefenseGrow  	int		`json:"defense_grow"`
+	SpeedGrow   	int		`json:"speed_grow"`
+	DestroyGrow 	int		`json:"destroy_grow"`
+	Cost			int		`json:"cost"`
 }
 
 type general struct {
-	Title	string	`json:"title"`
-	List	[]g
+	Title string	`json:"title"`
+	GArr  []g		`json:"list"`
+	GMap  map[int]g
 }
 
 func (this *general) Load()  {
@@ -34,11 +40,16 @@ func (this *general) Load()  {
 	fileName := path.Join(jsonDir, "general", "general.json")
 	jdata, err := ioutil.ReadFile(fileName)
 	if err != nil {
-		log.DefaultLog.Error("general load file error", zap.Error(err), zap.String("file", fileName))
+		log.DefaultLog.Error("general load file error",
+			zap.Error(err),
+			zap.String("file", fileName))
 		os.Exit(0)
 	}
 
 	json.Unmarshal(jdata, this)
-
+	this.GMap = make(map[int]g)
+	for _, v := range this.GArr {
+		this.GMap[v.CfgId] = v
+	}
 	fmt.Println(this)
 }

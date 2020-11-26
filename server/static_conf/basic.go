@@ -31,8 +31,14 @@ type conscript struct {
 	CostGold  int    `json:"cost_gold"`
 }
 
+type general struct {
+	Des                string `json:"des"`
+	PhysicalPowerLimit int    `json:"physical_power_limit"`
+}
+
 type basic struct {
-	ConScript conscript
+	ConScript 	conscript
+	General		general
 }
 
 func (this *basic) Load()  {

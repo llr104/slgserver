@@ -80,11 +80,17 @@ func General(m *model.General, p *proto.General)  {
 	p.Speed = m.Speed
 	p.Defense = m.Defense
 	p.Strategy = m.Strategy
+	p.Destroy = m.Destroy
 	p.Force = m.Force
+	p.SpeedGrow = m.SpeedGrow
+	p.DefenseGrow = m.DefenseGrow
+	p.StrategyGrow = m.StrategyGrow
+	p.DestroyGrow = m.DestroyGrow
+	p.ForceGrow = m.ForceGrow
+	p.PhysicalPower = m.PhysicalPower
 	p.Name = m.Name
 	p.Id = m.Id
 	p.CfgId = m.CfgId
-	p.Destroy = m.Destroy
 	p.Level = m.Level
 	p.Exp = m.Exp
 }

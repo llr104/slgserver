@@ -1,19 +1,25 @@
 package proto
 
 type General struct {
-	Id        	int     `json:"id"`
-	Name      	string  `json:"name"`
-	CfgId     	int		`json:"cfgId"`
-	Force     	int     `json:"force"`
-	Strategy  	int     `json:"strategy"`
-	Defense   	int     `json:"defense"`
-	Speed     	int     `json:"speed"`
-	Destroy   	int     `json:"destroy"`
-	Cost      	int     `json:"cost"`
-	Order     	int8    `json:"order"`
-	Level		int8    `json:"level"`
-	Exp			int		`json:"exp"`
-	CityId    	int     `json:"cityId"`
+	Id        		int     `json:"id"`
+	Name      		string  `json:"name"`
+	CfgId     		int		`json:"cfgId"`
+	Force     		int     `json:"force"`
+	Strategy  		int     `json:"strategy"`
+	Defense   		int     `json:"defense"`
+	Speed     		int     `json:"speed"`
+	Destroy   		int     `json:"destroy"`
+	ForceGrow    	int		`json:"force_grow"`
+	StrategyGrow 	int		`json:"strategy_grow"`
+	DefenseGrow  	int		`json:"defense_grow"`
+	SpeedGrow   	int		`json:"speed_grow"`
+	DestroyGrow 	int		`json:"destroy_grow"`
+	PhysicalPower 	int     `json:"physical_power"`
+	Cost      		int     `json:"cost"`
+	Order     		int8    `json:"order"`
+	Level			int8    `json:"level"`
+	Exp				int		`json:"exp"`
+	CityId    		int     `json:"cityId"`
 }
 
 type MyGeneralReq struct {
