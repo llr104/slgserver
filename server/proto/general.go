@@ -87,5 +87,5 @@ type ArmyStatePush struct {
 }
 
 type GeneralPush struct {
-	General General `json:"general"`
+	General []General `json:"general"`
 }

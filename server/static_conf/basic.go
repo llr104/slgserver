@@ -32,9 +32,10 @@ type conscript struct {
 }
 
 type general struct {
-	Des                string `json:"des"`
-	PhysicalPowerLimit int    `json:"physical_power_limit"`	//体力上限
-	CostPhysicalPower  int    `json:"cost_physical_power"`	//消耗体力
+	Des                   string `json:"des"`
+	PhysicalPowerLimit    int    `json:"physical_power_limit"`    //体力上限
+	CostPhysicalPower     int    `json:"cost_physical_power"`     //消耗体力
+	RecoveryPhysicalPower int    `json:"recovery_physical_power"` //恢复体力
 }
 
 type basic struct {

@@ -213,11 +213,11 @@ func (this* ArmyMgr) Get(aid int) (*model.Army, bool){
 			return army, true
 		}else{
 			if err == nil{
-				log.DefaultLog.Warn("ArmyMgr Get armyId db not found",
+				log.DefaultLog.Warn("ArmyMgr GetByRId armyId db not found",
 					zap.Int("armyId", aid))
 				return nil, false
 			}else{
-				log.DefaultLog.Warn("ArmyMgr Get db error", zap.Int("armyId", aid))
+				log.DefaultLog.Warn("ArmyMgr GetByRId db error", zap.Int("armyId", aid))
 				return nil, false
 			}
 		}

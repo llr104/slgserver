@@ -5,6 +5,7 @@ import (
 	"slgserver/constant"
 	"slgserver/model"
 	"slgserver/net"
+	"slgserver/server"
 	"slgserver/server/logic"
 	"slgserver/server/middleware"
 	"slgserver/server/model_to_proto"
@@ -45,7 +46,7 @@ func (this*General) myGenerals(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
-	gs, ok := logic.GMgr.GetAndTryCreate(role.RId)
+	gs, ok := logic.GMgr.GetByRIdTryCreate(role.RId)
 	if ok {
 		rsp.Body.Code = constant.OK
 		rspObj.Generals = make([]proto.General, len(gs))
@@ -114,7 +115,7 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	newG, ok := logic.GMgr.FindGeneral(reqObj.GeneralId)
+	newG, ok := logic.GMgr.GetByGId(reqObj.GeneralId)
 	if ok == false{
 		rsp.Body.Code = constant.GeneralNotFound
 		return
@@ -158,7 +159,7 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 		oldGId := army.GeneralArray[reqObj.Position]
 		if oldGId > 0{
-			if oldG, ok := logic.GMgr.FindGeneral(oldGId); ok{
+			if oldG, ok := logic.GMgr.GetByGId(oldGId); ok{
 				//旧的下阵
 				oldG.CityId = 0
 				oldG.Order = 0
@@ -222,7 +223,7 @@ func (this*General) conscript(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 			reqObj.Cnts[i] = 0
 			continue
 		}
-		if g, ok := logic.GMgr.FindGeneral(gid); ok {
+		if g, ok := logic.GMgr.GetByGId(gid); ok {
 			l, e := general.GenBasic.GetLevel(g.Level)
 			if e == nil{
 				if l.Soldiers < reqObj.Cnts[i]+army.SoldierArray[i]{
@@ -340,15 +341,30 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 			return
 		}
 
-
 		//判断驻守的地方是否是自己的领地
 		if reqObj.Cmd == model.ArmyCmdDefend {
 			if rb, ok := logic.RBMgr.PositionBuild(reqObj.X, reqObj.Y); ok {
 				if rb.RId != role.RId{
 					rsp.Body.Code = constant.BuildNotMe
+					return
 				}
 			}
 		}
+
+		//最后才消耗体力
+		ok = logic.GMgr.TryUsePhysicalPower(army)
+		if ok == false{
+			rsp.Body.Code = constant.PhysicalPowerNotEnough
+			return
+		}
+
+		p := &proto.GeneralPush{}
+		p.General = make([]proto.General, len(army.GeneralArray))
+		for i, gid := range army.GeneralArray {
+			g, _ := logic.GMgr.GetByGId(gid)
+			model_to_proto.General(g, &p.General[i])
+		}
+		server.DefaultConnMgr.PushByRoleId(army.RId, "gerenal.push", p)
 
 		army.Start = time.Now()
 		army.End = time.Now().Add(20*time.Second)

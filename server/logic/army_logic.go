@@ -148,7 +148,7 @@ func (this* armyLogic) executeBuild(army* model.Army)  {
 		//武将战斗前
 		begGeneral1 := make([]proto.General, 0)
 		for _, id := range army.GeneralArray {
-			g, ok := GMgr.FindGeneral(id)
+			g, ok := GMgr.GetByGId(id)
 			if ok {
 				pg := proto.General{}
 				model_to_proto.General(g, &pg)
@@ -159,7 +159,7 @@ func (this* armyLogic) executeBuild(army* model.Army)  {
 
 		begGeneral2 := make([]proto.General, 0)
 		for _, id := range enemy.GeneralArray {
-			g, ok := GMgr.FindGeneral(id)
+			g, ok := GMgr.GetByGId(id)
 			if ok {
 				pg := proto.General{}
 				model_to_proto.General(g, &pg)
@@ -182,7 +182,7 @@ func (this* armyLogic) executeBuild(army* model.Army)  {
 
 		 	aGid := army.GeneralArray[i]
 			eGid := enemy.GeneralArray[i]
-			if ag, ok := GMgr.FindGeneral(aGid); ok {
+			if ag, ok := GMgr.GetByGId(aGid); ok {
 				ag.Exp += akill*10
 				level, exp := general.GenBasic.ExpToLevel(ag.Exp)
 				ag.Level = level
@@ -191,13 +191,14 @@ func (this* armyLogic) executeBuild(army* model.Army)  {
 
 				if ag.RId > 0{
 					p := &proto.GeneralPush{}
-					model_to_proto.General(ag, &p.General)
+					p.General = make([]proto.General, 0)
+					model_to_proto.General(ag, &p.General[0])
 					server.DefaultConnMgr.PushByRoleId(ag.RId, "gerenal.push", p)
 				}
 
 			}
 
-			if eg, ok := GMgr.FindGeneral(eGid); ok {
+			if eg, ok := GMgr.GetByGId(eGid); ok {
 				eg.Exp += ekill*10
 				level, exp := general.GenBasic.ExpToLevel(eg.Exp)
 				eg.Level = level
@@ -206,7 +207,8 @@ func (this* armyLogic) executeBuild(army* model.Army)  {
 
 				if eg.RId > 0{
 					p := &proto.GeneralPush{}
-					model_to_proto.General(eg, &p.General)
+					p.General = make([]proto.General, 0)
+					model_to_proto.General(eg, &p.General[0])
 					server.DefaultConnMgr.PushByRoleId(eg.RId, "gerenal.push", p)
 				}
 			}
@@ -215,7 +217,7 @@ func (this* armyLogic) executeBuild(army* model.Army)  {
 		//武将战斗后
 		endGeneral1 := make([]proto.General, 0)
 		for _, id := range army.GeneralArray {
-			g, ok := GMgr.FindGeneral(id)
+			g, ok := GMgr.GetByGId(id)
 			if ok {
 				pg := proto.General{}
 				model_to_proto.General(g, &pg)
@@ -226,7 +228,7 @@ func (this* armyLogic) executeBuild(army* model.Army)  {
 
 		endGeneral2 := make([]proto.General, 0)
 		for _, id := range enemy.GeneralArray {
-			g, ok := GMgr.FindGeneral(id)
+			g, ok := GMgr.GetByGId(id)
 			if ok {
 				pg := proto.General{}
 				model_to_proto.General(g, &pg)

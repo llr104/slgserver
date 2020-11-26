@@ -8,6 +8,7 @@ import (
 	"slgserver/model"
 	"slgserver/server/static_conf"
 	"slgserver/server/static_conf/general"
+	"slgserver/util"
 	"sync"
 	"time"
 )
@@ -21,6 +22,90 @@ type GeneralMgr struct {
 var GMgr = &GeneralMgr{
 	genByRole: make(map[int][]*model.General),
 	genByGId: make(map[int]*model.General),
+}
+
+
+
+func (this* GeneralMgr) toDatabase() {
+	for true {
+		time.Sleep(2*time.Second)
+		this.mutex.RLock()
+		cnt :=0
+		for _, v := range this.genByGId {
+			if v.DB.NeedSync() {
+				v.DB.BeginSync()
+				_, err := db.MasterDB.Table(model.General{}).ID(v.Id).Cols("level",
+					"exp", "order", "cityId", "physical_power").Update(v)
+
+				if err != nil{
+					log.DefaultLog.Warn("db error", zap.Error(err))
+				}
+				v.DB.EndSync()
+				cnt+=1
+			}
+
+			//一次最多更新20个
+			if cnt>20{
+				break
+			}
+		}
+
+		this.mutex.RUnlock()
+	}
+}
+
+func (this* GeneralMgr) updatePhysicalPower() {
+	limit := static_conf.Basic.General.PhysicalPowerLimit
+	recoverCnt := static_conf.Basic.General.RecoveryPhysicalPower
+	for true {
+		time.Sleep(1*time.Hour)
+		this.mutex.RLock()
+		for _, g := range this.genByGId {
+			if g.PhysicalPower < limit{
+				g.PhysicalPower = util.MinInt(limit, g.PhysicalPower+recoverCnt)
+				g.DB.Sync()
+			}
+		}
+		this.mutex.RUnlock()
+	}
+}
+
+func (this* GeneralMgr) createNPC() ([]*model.General, bool){
+	//创建
+	gs := make([]*model.General, 0)
+	sess := db.MasterDB.NewSession()
+	sess.Begin()
+
+	for _, v := range general.General.GMap {
+		r, ok := this.NewGeneral(v.CfgId, 0)
+		if ok == false {
+			continue
+		}
+		gs = append(gs, r)
+		if _, err := db.MasterDB.Table(model.General{}).Insert(r); err != nil {
+			sess.Rollback()
+			log.DefaultLog.Warn("db error", zap.Error(err))
+			return nil, false
+		}
+	}
+	if err := sess.Commit(); err != nil{
+		log.DefaultLog.Warn("db error", zap.Error(err))
+		return nil, false
+	}else{
+		return gs, true
+	}
+}
+
+func (this* GeneralMgr) add(g *model.General) {
+	this.mutex.Lock()
+
+	if _,ok := this.genByRole[g.RId]; ok == false{
+		this.genByRole[g.RId] = make([]*model.General, 0)
+	}
+	this.genByRole[g.RId] = append(this.genByRole[g.RId], g)
+	this.genByGId[g.Id] = g
+
+	this.mutex.Unlock()
 }
 
 func (this* GeneralMgr) Load(){
@@ -43,48 +128,10 @@ func (this* GeneralMgr) Load(){
 	}
 
 	go this.toDatabase()
-
-}
-func (this* GeneralMgr) toDatabase() {
-	for true {
-		time.Sleep(2*time.Second)
-		this.mutex.RLock()
-		cnt :=0
-		for _, v := range this.genByGId {
-			if v.DB.NeedSync() {
-				v.DB.BeginSync()
-				_, err := db.MasterDB.Table(model.General{}).ID(v.Id).Cols( "force", "strategy",
-					"defense", "speed", "destroy", "level", "exp", "order", "cityId").Update(v)
-				if err != nil{
-					log.DefaultLog.Warn("db error", zap.Error(err))
-				}
-				v.DB.EndSync()
-				cnt+=1
-			}
-
-			//一次最多更新20个
-			if cnt>20{
-				break
-			}
-		}
-
-		this.mutex.RUnlock()
-	}
+	go this.updatePhysicalPower()
 }
 
-func (this* GeneralMgr) add(g *model.General) {
-	this.mutex.Lock()
-
-	if _,ok := this.genByRole[g.RId]; ok == false{
-		this.genByRole[g.RId] = make([]*model.General, 0)
-	}
-	this.genByRole[g.RId] = append(this.genByRole[g.RId], g)
-	this.genByGId[g.Id] = g
-
-	this.mutex.Unlock()
-}
-
-func (this* GeneralMgr) Get(rid int) ([]*model.General, bool){
+func (this* GeneralMgr) GetByRId(rid int) ([]*model.General, bool){
 	this.mutex.Lock()
 	r, ok := this.genByRole[rid]
 	this.mutex.Unlock()
@@ -112,7 +159,7 @@ func (this* GeneralMgr) Get(rid int) ([]*model.General, bool){
 }
 
 //查找将领
-func (this* GeneralMgr) FindGeneral(gid int) (*model.General, bool){
+func (this* GeneralMgr) GetByGId(gid int) (*model.General, bool){
 	this.mutex.RLock()
 	g, ok := this.genByGId[gid]
 	this.mutex.RUnlock()
@@ -161,8 +208,8 @@ func (this* GeneralMgr) NewGeneral(cfgId int, rid int) (*model.General, bool) {
 /*
 如果不存在尝试去创建
 */
-func (this* GeneralMgr) GetAndTryCreate(rid int) ([]*model.General, bool){
-	r, ok := this.Get(rid)
+func (this* GeneralMgr) GetByRIdTryCreate(rid int) ([]*model.General, bool){
+	r, ok := this.GetByRId(rid)
 	if ok {
 		return r, true
 	}else{
@@ -188,35 +235,10 @@ func (this* GeneralMgr) GetAndTryCreate(rid int) ([]*model.General, bool){
 	}
 }
 
-func (this* GeneralMgr) createNPC() ([]*model.General, bool){
-	//创建
-	gs := make([]*model.General, 0)
-	sess := db.MasterDB.NewSession()
-	sess.Begin()
-
-	for _, v := range general.General.GMap {
-		r, ok := this.NewGeneral(v.CfgId, 0)
-		if ok == false {
-			continue
-		}
-		gs = append(gs, r)
-		if _, err := db.MasterDB.Table(model.General{}).Insert(r); err != nil {
-			sess.Rollback()
-			log.DefaultLog.Warn("db error", zap.Error(err))
-			return nil, false
-		}
-	}
-	if err := sess.Commit(); err != nil{
-		log.DefaultLog.Warn("db error", zap.Error(err))
-		return nil, false
-	}else{
-		return gs, true
-	}
-}
 
 //获取npc武将
 func (this* GeneralMgr) GetNPCGenerals(cnt int) ([]model.General, bool) {
-	gs, ok := this.Get(0)
+	gs, ok := this.GetByRId(0)
 	if ok == false {
 		return make([]model.General, 0), false
 	}else{
@@ -246,10 +268,34 @@ func (this* GeneralMgr) GetNPCGenerals(cnt int) ([]model.General, bool) {
 func (this *GeneralMgr) GetDestroy(army *model.Army) int{
 	destroy := 0
 	for _, gid := range army.GeneralArray {
-		g, ok := this.FindGeneral(gid)
+		g, ok := this.GetByGId(gid)
 		if ok {
 			destroy += g.GetDestroy()
 		}
 	}
 	return destroy
+}
+
+//尝试使用体力
+func (this *GeneralMgr) TryUsePhysicalPower(army *model.Army) bool{
+
+	cost := static_conf.Basic.General.CostPhysicalPower
+	for _, gid := range army.GeneralArray {
+		g, ok := this.GetByGId(gid)
+		if ok {
+			if g.PhysicalPower < cost{
+				return false
+			}
+		}else{
+			return false
+		}
+	}
+
+	for _, gid := range army.GeneralArray {
+		g, _ := this.GetByGId(gid)
+		g.PhysicalPower -= cost
+		g.DB.Sync()
+	}
+
+	return true
 }
