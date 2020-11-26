@@ -110,6 +110,14 @@ func (this* ArmyMgr) insertMutil(armys[] *model.Army)  {
 	}
 }
 
+func (this* ArmyMgr) addAction(t int64, army *model.Army)  {
+	_, ok := this.armyByEndTime[t]
+	if ok == false {
+		this.armyByEndTime[t] = make([]*model.Army, 0)
+	}
+	this.armyByEndTime[t] = append(this.armyByEndTime[t], army)
+}
+
 //把行动丢进来
 func (this* ArmyMgr) PushAction(army *model.Army)  {
 	this.mutex.Lock()
@@ -117,22 +125,12 @@ func (this* ArmyMgr) PushAction(army *model.Army)  {
 
 	if army.Cmd == model.ArmyCmdAttack || army.Cmd == model.ArmyCmdDefend{
 		t := army.End.Unix()
-		_, ok := this.armyByEndTime[t]
-		if ok == false {
-			this.armyByEndTime[t] = make([]*model.Army, 0)
-		}
-		this.armyByEndTime[t] = append(this.armyByEndTime[t], army)
+		this.addAction(t, army)
 
 	}else if army.Cmd == model.ArmyCmdReclamation{
 		costTime := static_conf.Basic.General.ReclamationTime
 		t := army.End.Unix()+int64(costTime)
-
-		_, ok := this.armyByEndTime[t]
-		if ok == false {
-			this.armyByEndTime[t] = make([]*model.Army, 0)
-		}
-		this.armyByEndTime[t] = append(this.armyByEndTime[t], army)
-
+		this.addAction(t, army)
 	}else if army.Cmd == model.ArmyCmdBack{
 		cur := time.Now()
 		diff := army.End.Unix()-army.Start.Unix()
@@ -141,9 +139,8 @@ func (this* ArmyMgr) PushAction(army *model.Army)  {
 		}
 		army.Start = cur
 		army.End = cur.Add(time.Duration(diff) * time.Second)
-		army.State = model.ArmyRunning
 		army.Cmd = model.ArmyCmdBack
-		army.DB.Sync()
+		this.addAction(army.End.Unix(), army)
 	}
 
 	ArmyLogic.Update(army)

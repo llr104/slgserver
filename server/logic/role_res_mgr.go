@@ -106,6 +106,7 @@ func (this* RoleResMgr) TryUseDecree(rid int, decree int) bool{
 	if ok {
 		if rr.Decree >= decree {
 			rr.Decree -= decree
+			rr.DB.Sync()
 			return true
 		}else{
 			return false

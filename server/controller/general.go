@@ -310,7 +310,9 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 
 	if reqObj.Cmd == model.ArmyCmdBack {
 		//撤退
-		if army.Cmd == model.ArmyCmdAttack || army.Cmd == model.ArmyCmdDefend {
+		if army.Cmd == model.ArmyCmdAttack ||
+			army.Cmd == model.ArmyCmdDefend ||
+			army.Cmd == model.ArmyCmdReclamation {
 			logic.AMgr.ArmyBack(army)
 			rsp.Body.Code = constant.OK
 			model_to_proto.Army(army, &rspObj.Army)
