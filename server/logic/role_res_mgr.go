@@ -119,11 +119,26 @@ func (this* RoleResMgr) produce() {
 		time.Sleep(60*10*time.Second)
 		this.mutex.Lock()
 		for _, v := range this.rolesRes {
-			v.Wood += util.MinInt(v.WoodYield/6, v.DepotCapacity)
-			v.Iron += util.MinInt(v.IronYield/6, v.DepotCapacity)
-			v.Stone += util.MinInt(v.StoneYield/6, v.DepotCapacity)
-			v.Grain += util.MinInt(v.GrainYield/6, v.DepotCapacity)
-			v.Gold += util.MinInt(v.GoldYield/6, v.DepotCapacity)
+			//加判断是因为爆仓了，资源不无故减少
+			if v.WoodYield < v.DepotCapacity{
+				v.Wood += util.MinInt(v.WoodYield/6, v.DepotCapacity)
+			}
+
+			if v.IronYield < v.DepotCapacity{
+				v.Iron += util.MinInt(v.IronYield/6, v.DepotCapacity)
+			}
+
+			if v.StoneYield < v.DepotCapacity{
+				v.Stone += util.MinInt(v.StoneYield/6, v.DepotCapacity)
+			}
+
+			if v.GrainYield < v.DepotCapacity{
+				v.Grain += util.MinInt(v.GrainYield/6, v.DepotCapacity)
+			}
+
+			if v.GoldYield < v.DepotCapacity{
+				v.Grain += util.MinInt(v.GoldYield/6, v.DepotCapacity)
+			}
 
 			if index%6 == 0{
 				v.Decree+=1

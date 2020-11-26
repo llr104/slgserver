@@ -7,16 +7,16 @@ import (
 )
 
 const (
-	ArmyCmdIdle   = 0
-	ArmyCmdAttack = 1
-	ArmyCmdDefend = 2
-	ArmyCmdBack   = 3
+	ArmyCmdIdle   		= 0	//空闲
+	ArmyCmdAttack 		= 1	//攻击
+	ArmyCmdDefend 		= 2	//驻守
+	ArmyCmdReclamation 	= 3	//屯垦
+	ArmyCmdBack   		= 4 //撤退
 )
 
 const (
 	ArmyStop  		= 0
 	ArmyRunning  	= 1
-
 )
 
 //军队

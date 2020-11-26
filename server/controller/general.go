@@ -342,7 +342,7 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 		}
 
 		//判断驻守的地方是否是自己的领地
-		if reqObj.Cmd == model.ArmyCmdDefend {
+		if reqObj.Cmd == model.ArmyCmdDefend || reqObj.Cmd == model.ArmyCmdReclamation {
 			if rb, ok := logic.RBMgr.PositionBuild(reqObj.X, reqObj.Y); ok {
 				if rb.RId != role.RId{
 					rsp.Body.Code = constant.BuildNotMe

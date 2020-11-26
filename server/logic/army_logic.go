@@ -74,7 +74,13 @@ func (this *armyLogic) running(){
 						AMgr.ArmyBack(army)
 					}
 
-				} else if army.Cmd == model.ArmyCmdBack {
+				}else if army.Cmd == model.ArmyCmdReclamation {
+					if army.State == model.ArmyRunning{
+						AMgr.Reclamation(army)
+					}else {
+						AMgr.ArmyBack(army)
+					}
+				}else if army.Cmd == model.ArmyCmdBack {
 					//如果该队伍在驻守，需要移除
 					army.State = model.ArmyStop
 					army.Cmd = model.ArmyCmdIdle
@@ -133,7 +139,6 @@ func (this* armyLogic) executeBuild(army* model.Army)  {
 	}
 
 	warReports := make([]*model.WarReport, 0)
-
 
 	for _, enemy := range enemys {
 		//战报处理
@@ -215,7 +220,7 @@ func (this* armyLogic) executeBuild(army* model.Army)  {
 		p1 := &proto.GeneralPush{}
 		p1.Generals = endGeneral1
 		server.DefaultConnMgr.PushByRoleId(army.RId, proto.GeneralPushMsg, p1)
-		
+
 		endGeneral2 := make([]proto.General, 0)
 		for _, id := range enemy.GeneralArray {
 			g, ok := GMgr.GetByGId(id)

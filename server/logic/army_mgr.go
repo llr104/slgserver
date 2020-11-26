@@ -5,6 +5,7 @@ import (
 	"slgserver/db"
 	"slgserver/log"
 	"slgserver/model"
+	"slgserver/server/static_conf"
 	"sync"
 	"time"
 )
@@ -114,13 +115,39 @@ func (this* ArmyMgr) PushAction(army *model.Army)  {
 	this.mutex.Lock()
 	defer this.mutex.Unlock()
 
-	t := army.End.Unix()
-	_, ok := this.armyByEndTime[t]
-	if ok == false {
-		this.armyByEndTime[t] = make([]*model.Army, 0)
+	if army.Cmd == model.ArmyCmdAttack || army.Cmd == model.ArmyCmdDefend{
+		t := army.End.Unix()
+		_, ok := this.armyByEndTime[t]
+		if ok == false {
+			this.armyByEndTime[t] = make([]*model.Army, 0)
+		}
+		this.armyByEndTime[t] = append(this.armyByEndTime[t], army)
+
+	}else if army.Cmd == model.ArmyCmdReclamation{
+		costTime := static_conf.Basic.General.ReclamationTime
+		t := army.End.Unix()+int64(costTime)
+
+		_, ok := this.armyByEndTime[t]
+		if ok == false {
+			this.armyByEndTime[t] = make([]*model.Army, 0)
+		}
+		this.armyByEndTime[t] = append(this.armyByEndTime[t], army)
+
+	}else if army.Cmd == model.ArmyCmdBack{
+		cur := time.Now()
+		diff := army.End.Unix()-army.Start.Unix()
+		if cur.Unix() < army.End.Unix(){
+			diff = cur.Unix()-army.Start.Unix()
+		}
+		army.Start = cur
+		army.End = cur.Add(time.Duration(diff) * time.Second)
+		army.State = model.ArmyRunning
+		army.Cmd = model.ArmyCmdBack
+		army.DB.Sync()
 	}
-	this.armyByEndTime[t] = append(this.armyByEndTime[t], army)
+
 	ArmyLogic.Update(army)
+
 }
 
 func (this* ArmyMgr) ArmyBack(army *model.Army)  {
@@ -136,21 +163,14 @@ func (this* ArmyMgr) ArmyBack(army *model.Army)  {
 		}
 	}
 	this.mutex.Unlock()
-
-	cur := time.Now()
-	diff := army.End.Unix()-army.Start.Unix()
-	if cur.Unix() < army.End.Unix(){
-		diff = cur.Unix()-army.Start.Unix()
-	}
-	army.Start = cur
-	army.End = cur.Add(time.Duration(diff) * time.Second)
-	army.State = model.ArmyRunning
-	army.Cmd = model.ArmyCmdBack
-	army.DB.Sync()
-
 	this.PushAction(army)
 }
 
+func (this* ArmyMgr) Reclamation(army *model.Army)  {
+	army.State = model.ArmyStop
+	army.Cmd = model.ArmyCmdReclamation
+	this.PushAction(army)
+}
 
 func (this* ArmyMgr) running() {
 	for true {
