@@ -128,9 +128,14 @@ func (this* ArmyMgr) PushAction(army *model.Army)  {
 		this.addAction(t, army)
 
 	}else if army.Cmd == model.ArmyCmdReclamation{
-		costTime := static_conf.Basic.General.ReclamationTime
-		t := army.End.Unix()+int64(costTime)
-		this.addAction(t, army)
+		if army.State == model.ArmyRunning{
+			t := army.End.Unix()
+			this.addAction(t, army)
+		}else{
+			costTime := static_conf.Basic.General.ReclamationTime
+			t := army.End.Unix()+int64(costTime)
+			this.addAction(t, army)
+		}
 	}else if army.Cmd == model.ArmyCmdBack{
 		cur := time.Now()
 		diff := army.End.Unix()-army.Start.Unix()

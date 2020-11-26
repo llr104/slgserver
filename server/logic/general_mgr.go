@@ -281,6 +281,10 @@ func (this *GeneralMgr) TryUsePhysicalPower(army *model.Army) bool{
 
 	cost := static_conf.Basic.General.CostPhysicalPower
 	for _, gid := range army.GeneralArray {
+		if gid == 0{
+			continue
+		}
+
 		g, ok := this.GetByGId(gid)
 		if ok {
 			if g.PhysicalPower < cost{
@@ -292,6 +296,10 @@ func (this *GeneralMgr) TryUsePhysicalPower(army *model.Army) bool{
 	}
 
 	for _, gid := range army.GeneralArray {
+		if gid == 0{
+			continue
+		}
+
 		g, _ := this.GetByGId(gid)
 		g.PhysicalPower -= cost
 		g.DB.Sync()

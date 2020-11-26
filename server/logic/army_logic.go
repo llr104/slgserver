@@ -74,7 +74,6 @@ func (this *armyLogic) running(){
 						ok := RBMgr.BuildIsRId(army.ToX, army.ToY, army.RId)
 						if ok  {
 							//目前是自己的领地才能屯田
-							army.State = model.ArmyStop
 							this.addArmy(army)
 							AMgr.Reclamation(army)
 						}else{
@@ -157,6 +156,10 @@ func (this *armyLogic) battle(army* model.Army) {
 
 func (this* armyLogic) executeBuild(army* model.Army)  {
 	roleBuid, isRoleBuild := RBMgr.PositionBuild(army.ToX, army.ToY)
+	oldRid := 0
+	if isRoleBuild {
+		oldRid = roleBuid.RId
+	}
 
 	posId := ToPosition(army.ToX, army.ToY)
 	posArmys, isRoleEnemy := this.posArmys[posId]
@@ -345,9 +348,9 @@ func (this* armyLogic) executeBuild(army* model.Army)  {
 		}
 
 		model_to_proto.MRBuild(newRoleBuild, &statePush.MRBuild, name)
-		server.DefaultConnMgr.PushByRoleId(army.RId, proto.BuildStatePushMsg, statePush)
-		if isRoleBuild {
-			server.DefaultConnMgr.PushByRoleId(roleBuid.RId, proto.BuildStatePushMsg, statePush)
+		server.DefaultConnMgr.PushByRoleId(newRoleBuild.RId, proto.BuildStatePushMsg, statePush)
+		if oldRid  >0 {
+			server.DefaultConnMgr.PushByRoleId(oldRid, proto.BuildStatePushMsg, statePush)
 		}
 	}
 
@@ -364,8 +367,8 @@ func (this* armyLogic) executeBuild(army* model.Army)  {
 		}
 
 		server.DefaultConnMgr.PushByRoleId(army.RId, proto.WarReportPushMsg, push)
-		if isRoleBuild {
-			server.DefaultConnMgr.PushByRoleId(roleBuid.RId, proto.WarReportPushMsg, push)
+		if oldRid > 0 {
+			server.DefaultConnMgr.PushByRoleId(oldRid, proto.WarReportPushMsg, push)
 		}
 	}
 

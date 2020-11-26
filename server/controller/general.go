@@ -358,7 +358,7 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 			return
 		}
 
-		if army.Cmd == model.ArmyCmdReclamation{
+		if reqObj.Cmd == model.ArmyCmdReclamation{
 			cost := static_conf.Basic.General.ReclamationCost
 			if logic.RResMgr.TryUseDecree(army.RId, cost) == false{
 				rsp.Body.Code = constant.DecreeNotEnough
@@ -369,8 +369,10 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 		p := &proto.GeneralPush{}
 		p.Generals = make([]proto.General, len(army.GeneralArray))
 		for i, gid := range army.GeneralArray {
-			g, _ := logic.GMgr.GetByGId(gid)
-			model_to_proto.General(g, &p.Generals[i])
+			g, ok := logic.GMgr.GetByGId(gid)
+			if ok {
+				model_to_proto.General(g, &p.Generals[i])
+			}
 		}
 		server.DefaultConnMgr.PushByRoleId(army.RId, proto.GeneralPushMsg, p)
 
