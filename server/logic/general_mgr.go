@@ -142,11 +142,7 @@ func (this* GeneralMgr) FindGeneral(gid int) (*model.General, bool){
 func (this* GeneralMgr) NewGeneral(cfgId int, rid int) (*model.General, bool) {
 	cfg, ok := general.General.GMap[cfgId]
 	if ok {
-		g := &model.General{RId: rid, Name: cfg.Name, CfgId: cfg.CfgId,
-			Force: cfg.Force, Strategy: cfg.Strategy, Defense: cfg.Defense, Speed: cfg.Speed,
-			ForceGrow: cfg.ForceGrow, StrategyGrow: cfg.StrategyGrow,
-			DefenseGrow: cfg.DefenseGrow, DestroyGrow: cfg.DestroyGrow, SpeedGrow: cfg.SpeedGrow,
-			Cost: cfg.Cost, Order: 0, CityId: 0,
+		g := &model.General{RId: rid, CfgId: cfg.CfgId, Cost: cfg.Cost, Order: 0, CityId: 0,
 			PhysicalPower: static_conf.Basic.General.PhysicalPowerLimit,
 			Level: 1, CreatedAt: time.Now(),
 		}
@@ -264,7 +260,7 @@ func (this *GeneralMgr) GetDestroy(army *model.Army) int{
 	for _, gid := range army.GeneralArray {
 		g, ok := this.FindGeneral(gid)
 		if ok {
-			destroy += g.Destroy
+			destroy += g.GetDestroy()
 		}
 	}
 	return destroy

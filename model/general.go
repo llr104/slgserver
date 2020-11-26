@@ -1,23 +1,15 @@
 package model
 
-import "time"
+import (
+	"slgserver/server/static_conf/general"
+	"time"
+)
 
 type General struct {
 	DB 				dbSync		`xorm:"-"`
 	Id        		int     	`xorm:"id pk autoincr"`
 	RId       		int     	`xorm:"rid"`
-	Name      		string  	`xorm:"name"`
 	CfgId     		int     	`xorm:"cfgId"`
-	Force         	int       	`xorm:"force"`
-	Strategy      	int       	`xorm:"strategy"`
-	Defense       	int       	`xorm:"defense"`
-	Speed         	int       	`xorm:"speed"`
-	Destroy       	int       	`xorm:"destroy"`
-	ForceGrow     	int       	`xorm:"force_grow"`
-	StrategyGrow  	int       	`xorm:"strategy_grow"`
-	DefenseGrow   	int       	`xorm:"defense_grow"`
-	SpeedGrow     	int       	`xorm:"speed_grow"`
-	DestroyGrow   	int       	`xorm:"destroy_grow"`
 	PhysicalPower 	int       	`xorm:"physical_power"`
 	Level         	int8      	`xorm:"level"`
 	Cost          	int       	`xorm:"cost"`
@@ -31,3 +23,10 @@ func (this *General) TableName() string {
 	return "general"
 }
 
+func (this* General) GetDestroy() int{
+	cfg, ok := general.General.GMap[this.CfgId]
+	if ok {
+		return (cfg.Destroy+cfg.DestroyGrow*int(this.Level))/100
+	}
+	return 0
+}
