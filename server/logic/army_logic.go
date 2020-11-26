@@ -9,6 +9,7 @@ import (
 	"slgserver/server"
 	"slgserver/server/model_to_proto"
 	"slgserver/server/proto"
+	"slgserver/server/static_conf/general"
 	"slgserver/util"
 	"time"
 )
@@ -132,32 +133,10 @@ func (this* armyLogic) executeBuild(army* model.Army)  {
 	}
 
 	warReports := make([]*model.WarReport, 0)
-	general1 := make([]proto.General, 0)
-	for _, id := range army.GeneralArray {
-		g, ok := GMgr.FindGeneral(id)
-		if ok {
-			pg := proto.General{}
-			model_to_proto.General(g, &pg)
-			general1 = append(general1, pg)
-		}
-	}
 
-	gdata1, _ := json.Marshal(general1)
 
 	for _, enemy := range enemys {
 		//战报处理
-		general2 := make([]proto.General, 0)
-		for _, id := range enemy.GeneralArray {
-			g, ok := GMgr.FindGeneral(id)
-			if ok {
-				pg := proto.General{}
-				model_to_proto.General(g, &pg)
-				general2 = append(general2, pg)
-			}
-		}
-
-		gdata2, _ := json.Marshal(general2)
-
 		pArmy := &proto.Army{}
 		pEnemy := &proto.Army{}
 		model_to_proto.Army(army, pArmy)
@@ -166,15 +145,82 @@ func (this* armyLogic) executeBuild(army* model.Army)  {
 		begArmy1, _ := json.Marshal(pArmy)
 		begArmy2, _ := json.Marshal(pEnemy)
 
+		//武将战斗前
+		begGeneral1 := make([]proto.General, 0)
+		for _, id := range army.GeneralArray {
+			g, ok := GMgr.FindGeneral(id)
+			if ok {
+				pg := proto.General{}
+				model_to_proto.General(g, &pg)
+				begGeneral1 = append(begGeneral1, pg)
+			}
+		}
+		begGeneralData1, _ := json.Marshal(begGeneral1)
+
+		begGeneral2 := make([]proto.General, 0)
+		for _, id := range enemy.GeneralArray {
+			g, ok := GMgr.FindGeneral(id)
+			if ok {
+				pg := proto.General{}
+				model_to_proto.General(g, &pg)
+				begGeneral2 = append(begGeneral2, pg)
+			}
+		}
+		begGeneralData2, _ := json.Marshal(begGeneral2)
+
 		winCnt := 0
-		for i, s1 := range army.SoldierArray {
-			s2 := enemy.SoldierArray[i]
-			enemy.SoldierArray[i] = util.MaxInt(0, enemy.SoldierArray[i]-s1)
-			army.SoldierArray[i] = util.MaxInt(0, army.SoldierArray[i]-s2)
+		for i, soldiers1 := range army.SoldierArray {
+			soldiers2 := enemy.SoldierArray[i]
+			ekill := enemy.SoldierArray[i]-soldiers1
+			akill := army.SoldierArray[i]-soldiers2
+
+			enemy.SoldierArray[i] = util.MaxInt(0, ekill)
+			army.SoldierArray[i] = util.MaxInt(0, akill)
 			if army.SoldierArray[i] > 0{
 				winCnt+=1
 			}
+
+		 	aGid := army.GeneralArray[i]
+			eGid := enemy.GeneralArray[i]
+			if ag, ok := GMgr.FindGeneral(aGid); ok {
+				ag.Exp += akill*10
+				level, exp := general.GenBasic.ExpToLevel(ag.Exp)
+				ag.Level = level
+				ag.Exp = exp
+				ag.DB.Sync()
+			}
+
+			if eg, ok := GMgr.FindGeneral(eGid); ok {
+				eg.Exp += ekill*10
+				level, exp := general.GenBasic.ExpToLevel(eg.Exp)
+				eg.Level = level
+				eg.Exp = exp
+				eg.DB.Sync()
+			}
 		}
+
+		//武将战斗后
+		endGeneral1 := make([]proto.General, 0)
+		for _, id := range army.GeneralArray {
+			g, ok := GMgr.FindGeneral(id)
+			if ok {
+				pg := proto.General{}
+				model_to_proto.General(g, &pg)
+				endGeneral1 = append(endGeneral1, pg)
+			}
+		}
+		endGeneralData1, _ := json.Marshal(endGeneral1)
+
+		endGeneral2 := make([]proto.General, 0)
+		for _, id := range enemy.GeneralArray {
+			g, ok := GMgr.FindGeneral(id)
+			if ok {
+				pg := proto.General{}
+				model_to_proto.General(g, &pg)
+				endGeneral2 = append(endGeneral2, pg)
+			}
+		}
+		endGeneralData2, _ := json.Marshal(endGeneral2)
 
 		model_to_proto.Army(army, pArmy)
 		model_to_proto.Army(army, pEnemy)
@@ -185,8 +231,11 @@ func (this* armyLogic) executeBuild(army* model.Army)  {
 			AttackIsRead: false, DefenseIsRead: false, DefenseRid: enemy.RId,
 			BegAttackArmy: string(begArmy1), BegDefenseArmy: string(begArmy2),
 			EndAttackArmy: string(endArmy1), EndDefenseArmy: string(endArmy2),
-			AttackIsWin: winCnt>=2, CTime: time.Now(), AttackGeneral: string(gdata1),
-			DefenseGeneral: string(gdata2),
+			AttackIsWin: winCnt>=2, CTime: time.Now(),
+			BegAttackGeneral: string(begGeneralData1),
+			BegDefenseGeneral: string(begGeneralData2),
+			EndAttackGeneral: string(endGeneralData1),
+			EndDefenseGeneral: string(endGeneralData2),
 		}
 
 		warReports = append(warReports, wr)

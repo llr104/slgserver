@@ -104,8 +104,10 @@ func WarReport(m *model.WarReport, p *proto.WarReport)  {
 	p.BegDefenseArmy = m.BegDefenseArmy
 	p.EndAttackArmy = m.EndAttackArmy
 	p.EndDefenseArmy = m.EndDefenseArmy
-	p.AttackGeneral = m.AttackGeneral
-	p.DefenseGeneral = m.DefenseGeneral
+	p.BegAttackGeneral = m.BegAttackGeneral
+	p.BegDefenseGeneral = m.BegDefenseGeneral
+	p.EndAttackGeneral = m.EndAttackGeneral
+	p.EndDefenseGeneral = m.EndDefenseGeneral
 	p.AttackIsWin = m.AttackIsWin
 	p.AttackIsRead = m.AttackIsRead
 	p.DefenseIsRead = m.DefenseIsRead
