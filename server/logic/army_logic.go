@@ -215,10 +215,8 @@ func (this* armyLogic) executeBuild(army* model.Army)  {
 		p1 := &proto.GeneralPush{}
 		p1.Generals = endGeneral1
 		server.DefaultConnMgr.PushByRoleId(army.RId, proto.GeneralPushMsg, p1)
-
-
+		
 		endGeneral2 := make([]proto.General, 0)
-		p1.Generals = make([]proto.General, 0)
 		for _, id := range enemy.GeneralArray {
 			g, ok := GMgr.GetByGId(id)
 			if ok {
