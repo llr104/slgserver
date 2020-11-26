@@ -188,6 +188,13 @@ func (this* armyLogic) executeBuild(army* model.Army)  {
 				ag.Level = level
 				ag.Exp = exp
 				ag.DB.Sync()
+
+				if ag.RId > 0{
+					p := &proto.GeneralPush{}
+					model_to_proto.General(ag, &p.General)
+					server.DefaultConnMgr.PushByRoleId(ag.RId, "gerenal.push", p)
+				}
+
 			}
 
 			if eg, ok := GMgr.FindGeneral(eGid); ok {
@@ -196,6 +203,12 @@ func (this* armyLogic) executeBuild(army* model.Army)  {
 				eg.Level = level
 				eg.Exp = exp
 				eg.DB.Sync()
+
+				if eg.RId > 0{
+					p := &proto.GeneralPush{}
+					model_to_proto.General(eg, &p.General)
+					server.DefaultConnMgr.PushByRoleId(eg.RId, "gerenal.push", p)
+				}
 			}
 		}
 

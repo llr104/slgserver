@@ -96,3 +96,7 @@ type ArmyStatePush struct {
 	CityId	int  	`json:"cityId"`
 	Army	Army	`json:"army"`
 }
+
+type GeneralPush struct {
+	General General `json:"general"`
+}

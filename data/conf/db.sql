@@ -179,7 +179,7 @@ CREATE TABLE IF NOT EXISTS `war_report` (
    `beg_attack_general` varchar(1024) NOT NULL COMMENT '开始攻击方武将',
    `beg_defense_general` varchar(1024) NOT NULL COMMENT '开始防守方武将',
    `end_attack_general` varchar(1024) NOT NULL COMMENT '结束攻击方武将',
-   `en_defense_general` varchar(1024) NOT NULL COMMENT '结束防守方武将',
+   `end_defense_general` varchar(1024) NOT NULL COMMENT '结束防守方武将',
    `attack_is_win` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否攻击方胜利 0:否 1:是',
    `attack_is_read` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '攻击方战报是否已阅 0:未阅 1:已阅',
    `defense_is_read` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '攻击方战报是否已阅 0:未阅 1:已阅',
