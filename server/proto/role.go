@@ -96,7 +96,6 @@ type MyRoleBuildRsp struct {
 /*
 建筑发生变化
 */
-const BuildStatePushMsg = "role.buildStatePush"
 type RoleBuildStatePush struct {
 	MRBuild MapRoleBuild `json:"mr_build"` //角色建筑，包含被占领的基础建筑
 }

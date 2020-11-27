@@ -9,7 +9,7 @@ import (
 	"slgserver/config"
 	"slgserver/log"
 	"slgserver/net"
-	"slgserver/server"
+	conn2 "slgserver/server/conn"
 	"slgserver/server/run"
 )
 
@@ -47,12 +47,12 @@ func wsHandler(resp http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	conn := server.DefaultConnMgr.NewConn(wsSocket, needSecret)
+	conn := conn2.ConnMgr.NewConn(wsSocket, needSecret)
 	log.DefaultLog.Info("client connect", zap.String("addr", wsSocket.RemoteAddr().String()))
 
 	conn.SetRouter(run.MyRouter)
 	conn.SetOnClose(func(conn *net.WSConn) {
-		server.DefaultConnMgr.RemoveConn(conn)
+		conn2.ConnMgr.RemoveConn(conn)
 		log.DefaultLog.Info("client disconnect", zap.String("addr", wsSocket.RemoteAddr().String()))
 	})
 

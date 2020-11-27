@@ -4,11 +4,10 @@ import (
 	"encoding/json"
 	"github.com/goinggo/mapstructure"
 	"slgserver/constant"
-	"slgserver/model"
 	"slgserver/net"
 	"slgserver/server/logic"
 	"slgserver/server/middleware"
-	"slgserver/server/model_to_proto"
+	"slgserver/server/model"
 	"slgserver/server/proto"
 	"slgserver/server/static_conf/facility"
 )
@@ -134,7 +133,7 @@ func (this*City) upFacility(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 						roleRes.GoldYield += newP.Yield
 					}
 				}
-				roleRes.DB.Sync()
+				roleRes.Execute()
 			}
 		}else if facility.FWareHouse.IsContain(reqObj.FType){
 			if roleRes, ok:= logic.RResMgr.Get(role.RId); ok {
@@ -144,7 +143,7 @@ func (this*City) upFacility(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		}
 
 		if roleRes, ok:= logic.RResMgr.Get(role.RId); ok {
-			model_to_proto.RRes(roleRes, &rspObj.RoleRes)
+			rspObj.RoleRes = roleRes.ToProto().(proto.RoleRes)
 		}
 	}
 

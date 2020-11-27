@@ -1,6 +1,9 @@
 package model
 
-import "time"
+import (
+	"slgserver/server/proto"
+	"time"
+)
 
 type Role struct {
 	RId			int			`xorm:"rid pk autoincr"`
@@ -20,3 +23,15 @@ func (this *Role) TableName() string {
 	return "role"
 }
 
+func (this*Role) ToProto() interface{}{
+	p := proto.Role{}
+	p.UId = this.UId
+	p.SId = this.SId
+	p.RId = this.RId
+	p.Sex = this.Sex
+	p.NickName = this.NickName
+	p.HeadId = this.HeadId
+	p.Balance = this.Balance
+	p.Profile = this.Profile
+	return p
+}

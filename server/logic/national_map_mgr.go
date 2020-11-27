@@ -8,7 +8,7 @@ import (
 	"slgserver/config"
 	"slgserver/db"
 	"slgserver/log"
-	"slgserver/model"
+	"slgserver/server/model"
 	"slgserver/util"
 	"sync"
 )

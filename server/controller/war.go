@@ -1,14 +1,14 @@
 package controller
+
 import (
 	"github.com/goinggo/mapstructure"
 	"go.uber.org/zap"
 	"slgserver/constant"
 	"slgserver/db"
 	"slgserver/log"
-	"slgserver/model"
 	"slgserver/net"
 	"slgserver/server/middleware"
-	"slgserver/server/model_to_proto"
+	"slgserver/server/model"
 	"slgserver/server/proto"
 )
 
@@ -49,7 +49,7 @@ func (this*War) report(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 	rspObj.List = make([]proto.WarReport, len(l))
 	for i, v := range l {
-		model_to_proto.WarReport(v, &rspObj.List[i])
+		rspObj.List[i] = v.ToProto().(proto.WarReport)
 	}
 }
 

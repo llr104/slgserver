@@ -4,7 +4,7 @@ import (
 	"go.uber.org/zap"
 	"slgserver/db"
 	"slgserver/log"
-	"slgserver/model"
+	"slgserver/server/model"
 	"slgserver/server/static_conf"
 	"slgserver/util"
 	"sync"
@@ -14,8 +14,8 @@ import (
 
 type RoleBuildMgr struct {
 	mutex sync.RWMutex
-	dbRB  map[int]*model.MapRoleBuild //key:dbId
-	posRB map[int]*model.MapRoleBuild //key:posId
+	dbRB  map[int]*model.MapRoleBuild    //key:dbId
+	posRB map[int]*model.MapRoleBuild    //key:posId
 	roleRB map[int][]*model.MapRoleBuild //key:roleId
 }
 
@@ -107,7 +107,10 @@ func (this* RoleBuildMgr) AddBuild(rid, x, y int) (*model.MapRoleBuild, bool) {
 	this.mutex.Unlock()
 	if ok {
 		rb.RId = rid
-		rb.DB.Sync()
+		if r, ok := RMgr.Get(rb.RId); ok {
+			rb.RNick = r.NickName
+		}
+		rb.Execute()
 
 		this.mutex.Lock()
 		if _, ok := this.roleRB[rid]; ok == false{
@@ -160,7 +163,8 @@ func (this* RoleBuildMgr) RemoveFromRole(build *model.MapRoleBuild)  {
 	this.mutex.Unlock()
 
 	build.RId = 0
-	build.DB.Sync()
+	build.RNick = ""
+	build.Execute()
 }
 
 func (this* RoleBuildMgr) GetRoleBuild(rid int) ([]*model.MapRoleBuild, bool) {

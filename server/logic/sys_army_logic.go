@@ -1,7 +1,7 @@
 package logic
 
 import (
-	"slgserver/model"
+	"slgserver/server/model"
 	"sync"
 )
 
@@ -14,10 +14,10 @@ func NewSysArmy() *sysArmyLogic {
 
 type sysArmyLogic struct {
 	mutex 		sync.Mutex
-	sysArmys    map[int][]*model.Army   //key:posId 系统建筑军队
+	sysArmys    map[int][]*model.Army //key:posId 系统建筑军队
 }
 
-func (this * sysArmyLogic) GetArmy(x, y int) []*model.Army{
+func (this * sysArmyLogic) GetArmy(x, y int) []*model.Army {
 	this.mutex.Lock()
 	defer this.mutex.Unlock()
 	posId := ToPosition(x, y)

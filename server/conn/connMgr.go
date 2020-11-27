@@ -1,17 +1,16 @@
-package server
+package conn
 
 import (
 	"github.com/gorilla/websocket"
 	"go.uber.org/zap"
 	"slgserver/log"
-	"slgserver/model"
 	"slgserver/net"
 	"sync"
 )
 
-var DefaultConnMgr = ConnMgr{}
+var ConnMgr = Mgr{}
 var cid = 0
-type ConnMgr struct {
+type Mgr struct {
 	cm        sync.RWMutex
 	um        sync.RWMutex
 	rm        sync.RWMutex
@@ -21,7 +20,7 @@ type ConnMgr struct {
 	roleCache map[int]*net.WSConn
 }
 
-func (this* ConnMgr) NewConn(wsSocket *websocket.Conn, needSecret bool) *net.WSConn{
+func (this*Mgr) NewConn(wsSocket *websocket.Conn, needSecret bool) *net.WSConn{
 	this.cm.Lock()
 	defer this.cm.Unlock()
 
@@ -45,7 +44,7 @@ func (this* ConnMgr) NewConn(wsSocket *websocket.Conn, needSecret bool) *net.WSC
 	return c
 }
 
-func (this* ConnMgr) UserLogin(conn *net.WSConn, session string, uid int) {
+func (this*Mgr) UserLogin(conn *net.WSConn, session string, uid int) {
 	this.um.Lock()
 	defer this.um.Unlock()
 
@@ -66,30 +65,18 @@ func (this* ConnMgr) UserLogin(conn *net.WSConn, session string, uid int) {
 	conn.SetProperty("uid", uid)
 }
 
-func (this* ConnMgr) UserLogout(conn *net.WSConn) {
-	this.um.Lock()
-	defer this.um.Unlock()
-	uid, err := conn.GetProperty("uid")
-	if err == nil {
-		delete(this.userCache, uid.(int))
-	}
-	conn.RemoveProperty("session")
-	conn.RemoveProperty("uid")
-	conn.RemoveProperty("role")
-
+func (this*Mgr) UserLogout(conn *net.WSConn) {
+	this.RemoveConn(conn)
 }
 
-func (this* ConnMgr) RoleEnter(conn *net.WSConn) {
+func (this*Mgr) RoleEnter(conn *net.WSConn, rid int) {
 	this.rm.Lock()
 	defer this.rm.Unlock()
-
-	if r, err := conn.GetProperty("role"); err == nil{
-		role := r.(*model.Role)
-		this.roleCache[role.RId] = conn
-	}
+	conn.SetProperty("rid", rid)
+	this.roleCache[rid] = conn
 }
 
-func (this* ConnMgr) RemoveConn(conn *net.WSConn){
+func (this*Mgr) RemoveConn(conn *net.WSConn){
 	this.cm.Lock()
 	cid, err := conn.GetProperty("cid")
 	if err == nil {
@@ -105,15 +92,20 @@ func (this* ConnMgr) RemoveConn(conn *net.WSConn){
 	this.um.Unlock()
 
 	this.rm.Lock()
-	if r, err := conn.GetProperty("role"); err == nil{
-		role := r.(*model.Role)
-		delete(this.roleCache, role.RId)
+	rid, err := conn.GetProperty("rid")
+	if err == nil {
+		delete(this.roleCache, rid.(int))
 	}
 	this.rm.Unlock()
+
+	conn.RemoveProperty("session")
+	conn.RemoveProperty("uid")
+	conn.RemoveProperty("role")
+	conn.RemoveProperty("rid")
 }
 
-func (this* ConnMgr) PushByRoleId(rid int, msgName string, data interface{}) bool {
-	if rid <= 0{
+func (this*Mgr) PushByRoleId(rid int, msgName string, data interface{}) bool {
+	if rid <= 0	{
 		return false
 	}
 	this.rm.Lock()
@@ -127,9 +119,34 @@ func (this* ConnMgr) PushByRoleId(rid int, msgName string, data interface{}) boo
 	}
 }
 
-func (this* ConnMgr) Count() int{
+func (this*Mgr) Count() int{
 	this.cm.RLock()
 	defer this.cm.RUnlock()
 
 	return len(this.connCache)
+}
+
+func (this*Mgr) Push(pushSync PushSync){
+
+	proto := pushSync.ToProto()
+	rids := pushSync.BelongToRId()
+	isCellView := pushSync.IsCellView()
+
+	if isCellView {
+		//是否格子视野内推送，现在暂时全部推送，后面实现格子推送
+		this.pushAll(pushSync.PushMsgName(), proto)
+	}else{
+		for _, rid := range rids {
+			this.PushByRoleId(rid, pushSync.PushMsgName(), proto)
+		}
+	}
+}
+
+func (this*Mgr) pushAll(msgName string, data interface{}) {
+
+	this.rm.Lock()
+	defer this.rm.Unlock()
+	for _, conn := range this.roleCache {
+		conn.Send(msgName, data)
+	}
 }

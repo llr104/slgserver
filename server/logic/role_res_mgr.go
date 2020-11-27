@@ -4,7 +4,7 @@ import (
 	"go.uber.org/zap"
 	"slgserver/db"
 	"slgserver/log"
-	"slgserver/model"
+	"slgserver/server/model"
 	"slgserver/server/static_conf/facility"
 	"slgserver/util"
 	"sync"
@@ -70,7 +70,7 @@ func (this* RoleResMgr) Get(rid int) (*model.RoleRes, bool){
 func (this* RoleResMgr) Add(res *model.RoleRes) (){
 	this.mutex.Lock()
 	defer this.mutex.Unlock()
-	res.DB.Sync()
+	res.Execute()
 	this.rolesRes[res.RId] = res
 }
 
@@ -89,7 +89,7 @@ func (this* RoleResMgr) TryUseNeed(rid int, need*facility.NeedRes) bool{
 			rr.Grain -= need.Grain
 			rr.Gold -= need.Gold
 
-			rr.DB.Sync()
+			rr.Execute()
 			return true
 		}else{
 			return false
@@ -106,7 +106,7 @@ func (this* RoleResMgr) TryUseDecree(rid int, decree int) bool{
 	if ok {
 		if rr.Decree >= decree {
 			rr.Decree -= decree
-			rr.DB.Sync()
+			rr.Execute()
 			return true
 		}else{
 			return false
@@ -123,7 +123,7 @@ func (this* RoleResMgr) CutDown(rid int, b *model.MapRoleBuild) (*model.RoleRes,
 		rr.IronYield = util.MaxInt(rr.IronYield-b.Iron, 0)
 		rr.StoneYield = util.MaxInt(rr.StoneYield-b.Stone, 0)
 		rr.WoodYield = util.MaxInt(rr.WoodYield-b.Wood, 0)
-		rr.DB.Sync()
+		rr.Execute()
 		return rr, true
 	}
 	return nil, false
@@ -160,7 +160,7 @@ func (this* RoleResMgr) produce() {
 				v.Decree+=1
 			}
 
-			v.DB.Sync()
+			v.Execute()
 		}
 		index++
 

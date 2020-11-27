@@ -3,12 +3,10 @@ package controller
 import (
 	"github.com/goinggo/mapstructure"
 	"slgserver/constant"
-	"slgserver/model"
 	"slgserver/net"
-	"slgserver/server"
 	"slgserver/server/logic"
 	"slgserver/server/middleware"
-	"slgserver/server/model_to_proto"
+	"slgserver/server/model"
 	"slgserver/server/proto"
 	"slgserver/server/static_conf"
 	"slgserver/server/static_conf/facility"
@@ -51,7 +49,7 @@ func (this*General) myGenerals(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		rsp.Body.Code = constant.OK
 		rspObj.Generals = make([]proto.General, len(gs))
 		for i, v := range gs {
-			model_to_proto.General(v, &rspObj.Generals[i])
+			rspObj.Generals[i] = v.ToProto().(proto.General)
 		}
 	}else{
 		rsp.Body.Code = constant.DBError
@@ -83,7 +81,7 @@ func (this*General) armyList(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	as, _ := logic.AMgr.GetByCity(reqObj.CityId)
 	rspObj.Armys = make([]proto.Army, len(as))
 	for i, v := range as {
-		model_to_proto.Army(v, &rspObj.Armys[i])
+		rspObj.Armys[i] = v.ToProto().(proto.Army)
 	}
 }
 
@@ -143,13 +141,13 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 			if gId == newG.Id{
 				army.GeneralArray[i] = 0
 				army.SoldierArray[i] = 0
-				army.DB.Sync()
+				army.Execute()
 				break
 			}
 		}
 		newG.Order = 0
 		newG.CityId = 0
-		newG.DB.Sync()
+		newG.Execute()
 	}else{
 
 		if newG.CityId != 0{
@@ -171,7 +169,7 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 		newG.Order = reqObj.Order
 		newG.CityId = reqObj.CityId
-		newG.DB.Sync()
+		newG.Execute()
 	}
 
 	if c, ok := logic.RCMgr.Get(army.CityId); ok{
@@ -179,9 +177,9 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		army.FromY = c.Y
 	}
 
-	army.DB.Sync()
+	army.Execute()
 	//队伍
-	model_to_proto.Army(army, &rspObj.Army)
+	rspObj.Army = army.ToProto().(proto.Army)
 }
 
 //征兵
@@ -259,14 +257,14 @@ func (this*General) conscript(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 			army.SoldierArray[i] += reqObj.Cnts[i]
 		}
 
-		army.DB.Sync()
+		army.Execute()
 
 		//队伍
-		model_to_proto.Army(army, &rspObj.Army)
+		rspObj.Army = army.ToProto().(proto.Army)
 
 		//资源
 		if rRes, ok := logic.RResMgr.Get(role.RId); ok {
-			model_to_proto.RRes(rRes, &rspObj.RoleRes)
+			rspObj.RoleRes = rRes.ToProto().(proto.RoleRes)
 		}
 
 		rsp.Body.Code = constant.OK
@@ -315,7 +313,8 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 			army.Cmd == model.ArmyCmdReclamation {
 			logic.AMgr.ArmyBack(army)
 			rsp.Body.Code = constant.OK
-			model_to_proto.Army(army, &rspObj.Army)
+			rspObj.Army = army.ToProto().(proto.Army)
+
 		}
 
 	}else{
@@ -358,7 +357,7 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 			return
 		}
 
-		if reqObj.Cmd == model.ArmyCmdReclamation{
+		if reqObj.Cmd == model.ArmyCmdReclamation {
 			cost := static_conf.Basic.General.ReclamationCost
 			if logic.RResMgr.TryUseDecree(army.RId, cost) == false{
 				rsp.Body.Code = constant.DecreeNotEnough
@@ -366,15 +365,13 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 			}
 		}
 
-		p := &proto.GeneralPush{}
-		p.Generals = make([]proto.General, len(army.GeneralArray))
-		for i, gid := range army.GeneralArray {
+
+		for _, gid := range army.GeneralArray {
 			g, ok := logic.GMgr.GetByGId(gid)
 			if ok {
-				model_to_proto.General(g, &p.Generals[i])
+				g.Execute()
 			}
 		}
-		server.DefaultConnMgr.PushByRoleId(army.RId, proto.GeneralPushMsg, p)
 
 		army.Start = time.Now()
 		army.End = time.Now().Add(20*time.Second)
@@ -382,9 +379,9 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 		army.ToY = reqObj.Y
 		army.Cmd = reqObj.Cmd
 		army.State = model.ArmyRunning
-		army.DB.Sync()
+		army.Execute()
 		logic.AMgr.PushAction(army)
-		model_to_proto.Army(army, &rspObj.Army)
+		rspObj.Army = army.ToProto().(proto.Army)
 		rsp.Body.Code = constant.OK
 
 	}

@@ -3,11 +3,10 @@ package controller
 import (
 	"github.com/goinggo/mapstructure"
 	"slgserver/constant"
-	"slgserver/model"
 	"slgserver/net"
 	"slgserver/server/logic"
 	"slgserver/server/middleware"
-	"slgserver/server/model_to_proto"
+	"slgserver/server/model"
 	"slgserver/server/proto"
 	"slgserver/server/static_conf"
 )
@@ -69,18 +68,17 @@ func (this*NationMap) scan(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	rb := logic.RBMgr.Scan(x, y)
 	rspObj.MRBuilds = make([]proto.MapRoleBuild, len(rb))
 	for i, v := range rb {
-		name := ""
 		vRole, ok := logic.RMgr.Get(v.RId)
 		if ok {
-			name = vRole.NickName
+			v.RNick = vRole.NickName
 		}
-		model_to_proto.MRBuild(v, &rspObj.MRBuilds[i], name)
+		rspObj.MRBuilds[i] = v.ToProto().(proto.MapRoleBuild)
 	}
 
 	cb := logic.RCMgr.Scan(x, y)
 	rspObj.MCBuilds = make([]proto.MapRoleCity, len(cb))
 	for i, v := range cb {
-		model_to_proto.MCBuild(v, &rspObj.MCBuilds[i])
+		rspObj.MCBuilds[i] = v.ToProto().(proto.MapRoleCity)
 	}
 }
 
@@ -97,19 +95,17 @@ func (this*NationMap) scanBlock(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	rb := logic.RBMgr.ScanBlock(x, y, reqObj.Length)
 	rspObj.MRBuilds = make([]proto.MapRoleBuild, len(rb))
 	for i, v := range rb {
-		name := ""
 		vRole, ok := logic.RMgr.Get(v.RId)
 		if ok {
-			name = vRole.NickName
+			v.RNick = vRole.NickName
 		}
-
-		model_to_proto.MRBuild(v, &rspObj.MRBuilds[i], name)
+		rspObj.MRBuilds[i] = v.ToProto().(proto.MapRoleBuild)
 	}
 
 	cb := logic.RCMgr.ScanBlock(x, y, reqObj.Length)
 	rspObj.MCBuilds = make([]proto.MapRoleCity, len(cb))
 	for i, v := range cb {
-		model_to_proto.MCBuild(v, &rspObj.MCBuilds[i])
+		rspObj.MCBuilds[i] = v.ToProto().(proto.MapRoleCity)
 	}
 }
 
@@ -142,7 +138,7 @@ func (this*NationMap) giveUp(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	logic.ArmyLogic.GiveUp(logic.ToPosition(reqObj.X, reqObj.Y))
 
 	if ok {
-		model_to_proto.RRes(rr, &rspObj.RoleRes)
+		rspObj.RoleRes = rr.ToProto().(proto.RoleRes)
 		rsp.Body.Code = constant.OK
 	}else{
 		rsp.Body.Code = constant.DBError

@@ -4,7 +4,7 @@ import (
 	"go.uber.org/zap"
 	"slgserver/db"
 	"slgserver/log"
-	"slgserver/model"
+	"slgserver/server/model"
 	"sync"
 )
 

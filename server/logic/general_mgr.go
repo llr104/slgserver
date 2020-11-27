@@ -5,7 +5,7 @@ import (
 	"math/rand"
 	"slgserver/db"
 	"slgserver/log"
-	"slgserver/model"
+	"slgserver/server/model"
 	"slgserver/server/static_conf"
 	"slgserver/server/static_conf/general"
 	"slgserver/util"
@@ -63,7 +63,7 @@ func (this* GeneralMgr) updatePhysicalPower() {
 		for _, g := range this.genByGId {
 			if g.PhysicalPower < limit{
 				g.PhysicalPower = util.MinInt(limit, g.PhysicalPower+recoverCnt)
-				g.DB.Sync()
+				g.Execute()
 			}
 		}
 		this.mutex.RUnlock()
@@ -302,7 +302,7 @@ func (this *GeneralMgr) TryUsePhysicalPower(army *model.Army) bool{
 
 		g, _ := this.GetByGId(gid)
 		g.PhysicalPower -= cost
-		g.DB.Sync()
+		g.Execute()
 	}
 
 	return true

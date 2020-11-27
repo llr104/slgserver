@@ -4,7 +4,7 @@ import (
 	"go.uber.org/zap"
 	"slgserver/db"
 	"slgserver/log"
-	"slgserver/model"
+	"slgserver/server/model"
 	"slgserver/server/static_conf"
 	"sync"
 	"time"
@@ -12,10 +12,10 @@ import (
 
 type ArmyMgr struct {
 	mutex        	sync.RWMutex
-	armyById     	map[int]*model.Army   	//key:armyId
-	armyByCityId 	map[int][]*model.Army 	//key:cityId
-	armyByEndTime	map[int64][]*model.Army	//key:到达时间
-	armyByRId		map[int][]*model.Army	//key:rid
+	armyById     	map[int]*model.Army      //key:armyId
+	armyByCityId 	map[int][]*model.Army    //key:cityId
+	armyByEndTime	map[int64][]*model.Army //key:到达时间
+	armyByRId		map[int][]*model.Army   //key:rid
 }
 
 var AMgr = &ArmyMgr{
@@ -72,7 +72,7 @@ func (this* ArmyMgr) Load() {
 						a.State = model.ArmyStop
 					}
 				}
-				a.DB.Sync()
+				a.Execute()
 			}
 			delete(this.armyByEndTime, kT)
 		}else{
@@ -86,7 +86,7 @@ func (this* ArmyMgr) Load() {
 	go this.toDatabase()
 }
 
-func (this* ArmyMgr) insertOne(army* model.Army)  {
+func (this* ArmyMgr) insertOne(army*model.Army)  {
 
 	aid := army.Id
 	cid := army.CityId
@@ -123,12 +123,12 @@ func (this* ArmyMgr) PushAction(army *model.Army)  {
 	this.mutex.Lock()
 	defer this.mutex.Unlock()
 
-	if army.Cmd == model.ArmyCmdAttack || army.Cmd == model.ArmyCmdDefend{
+	if army.Cmd == model.ArmyCmdAttack || army.Cmd == model.ArmyCmdDefend {
 		t := army.End.Unix()
 		this.addAction(t, army)
 
-	}else if army.Cmd == model.ArmyCmdReclamation{
-		if army.State == model.ArmyRunning{
+	}else if army.Cmd == model.ArmyCmdReclamation {
+		if army.State == model.ArmyRunning {
 			t := army.End.Unix()
 			this.addAction(t, army)
 		}else{
@@ -136,7 +136,7 @@ func (this* ArmyMgr) PushAction(army *model.Army)  {
 			t := army.End.Unix()+int64(costTime)
 			this.addAction(t, army)
 		}
-	}else if army.Cmd == model.ArmyCmdBack{
+	}else if army.Cmd == model.ArmyCmdBack {
 		cur := time.Now()
 		diff := army.End.Unix()-army.Start.Unix()
 		if cur.Unix() < army.End.Unix(){

@@ -7,12 +7,11 @@ import (
 	"slgserver/constant"
 	"slgserver/db"
 	"slgserver/log"
-	"slgserver/model"
 	"slgserver/net"
-	"slgserver/server"
+	"slgserver/server/conn"
 	"slgserver/server/logic"
 	"slgserver/server/middleware"
-	"slgserver/server/model_to_proto"
+	"slgserver/server/model"
 	"slgserver/server/proto"
 	"slgserver/server/static_conf/facility"
 	"time"
@@ -92,8 +91,8 @@ func (this*Role) roleList(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	err := db.MasterDB.Table(r).Where("uid=?", uid).Find(&r)
 	if err == nil{
 		rl := make([]proto.Role, len(r))
-		for i, d := range r {
-			model_to_proto.Role(d, &rl[i])
+		for i, v := range r {
+			rl[i] = v.ToProto().(proto.Role)
 		}
 		rspObj.Roles = rl
 		rsp.Body.Code = constant.OK
@@ -123,12 +122,11 @@ func (this*Role) enterServer(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	}
 	if b {
 		rsp.Body.Code = constant.OK
-		model_to_proto.Role(role, &rspObj.Role)
+		rspObj.Role = role.ToProto().(proto.Role)
 
 		req.Conn.SetProperty("sid", role.SId)
 		req.Conn.SetProperty("role", role)
-
-		server.DefaultConnMgr.RoleEnter(req.Conn)
+		conn.ConnMgr.RoleEnter(req.Conn, role.RId)
 
 		var e error = nil
 		roleRes, ok := logic.RResMgr.Get(role.RId)
@@ -156,7 +154,7 @@ func (this*Role) enterServer(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 		if e == nil {
 			logic.RResMgr.Add(roleRes)
-			model_to_proto.RRes(roleRes, &rspObj.RoleRes)
+			rspObj.RoleRes = roleRes.ToProto().(proto.RoleRes)
 			rsp.Body.Code = constant.OK
 		}else{
 			rsp.Body.Code = constant.DBError
@@ -187,7 +185,7 @@ func (this*Role) enterServer(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 					}
 
 					//生成城市里面的设施
-					logic.RFMgr.GetAndTryCreate(c.CityId)
+					logic.RFMgr.GetAndTryCreate(c.CityId, c.RId)
 					break
 				}
 			}
@@ -215,7 +213,7 @@ func (this*Role) myCity(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		rspObj.Citys = make([]proto.MapRoleCity, len(citys))
 		//赋值发送
 		for i, v := range citys {
-			model_to_proto.MCBuild(v, &rspObj.Citys[i])
+			rspObj.Citys[i] = v.ToProto().(proto.MapRoleCity)
 		}
 
 	}else{
@@ -240,7 +238,7 @@ func (this*Role) myRoleRes(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		rsp.Body.Code = constant.RoleNotExist
 		return
 	}else{
-		model_to_proto.RRes(roleRes, &rspObj.RoleRes)
+		rspObj.RoleRes = roleRes.ToProto().(proto.RoleRes)
 		rsp.Body.Code = constant.OK
 	}
 }
@@ -261,7 +259,7 @@ func (this*Role) myProperty(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	if ok {
 		rspObj.Citys = make([]proto.MapRoleCity, len(c))
 		for i, v := range c {
-			model_to_proto.MCBuild(v, &rspObj.Citys[i])
+			rspObj.Citys[i] = v.ToProto().(proto.MapRoleCity)
 		}
 	}else{
 		rspObj.Citys = make([]proto.MapRoleCity, 0)
@@ -273,7 +271,8 @@ func (this*Role) myProperty(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	if ok {
 		rspObj.MRBuilds = make([]proto.MapRoleBuild, len(ra))
 		for i, v := range ra {
-			model_to_proto.MRBuild(v, &rspObj.MRBuilds[i], role.NickName)
+			v.RNick = role.NickName
+			rspObj.MRBuilds[i] = v.ToProto().(proto.MapRoleBuild)
 		}
 	}else{
 		rspObj.MRBuilds = make([]proto.MapRoleBuild, 0)
@@ -282,7 +281,7 @@ func (this*Role) myProperty(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	//资源
 	roleRes, ok := logic.RResMgr.Get(role.RId)
 	if ok {
-		model_to_proto.RRes(roleRes, &rspObj.RoleRes)
+		rspObj.RoleRes = roleRes.ToProto().(proto.RoleRes)
 	}else{
 		rsp.Body.Code = constant.RoleNotExist
 		return
@@ -293,7 +292,7 @@ func (this*Role) myProperty(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	if ok {
 		rspObj.Generals = make([]proto.General, len(gs))
 		for i, v := range gs {
-			model_to_proto.General(v, &rspObj.Generals[i])
+			rspObj.Generals[i] = v.ToProto().(proto.General)
 		}
 	}else{
 		rsp.Body.Code = constant.DBError
@@ -305,7 +304,7 @@ func (this*Role) myProperty(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	if ok {
 		rspObj.Armys = make([]proto.Army, len(ar))
 		for i, v := range ar {
-			model_to_proto.Army(v, &rspObj.Armys[i])
+			rspObj.Armys[i] = v.ToProto().(proto.Army)
 		}
 	}else{
 		rspObj.Armys = make([]proto.Army, 0)
@@ -328,7 +327,8 @@ func (this*Role) myRoleBuild(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	if ok {
 		rspObj.MRBuilds = make([]proto.MapRoleBuild, len(ra))
 		for i, v := range ra {
-			model_to_proto.MRBuild(v, &rspObj.MRBuilds[i], role.NickName)
+			v.RNick = role.NickName
+			rspObj.MRBuilds[i] = v.ToProto().(proto.MapRoleBuild)
 		}
 	}else{
 		rspObj.MRBuilds = make([]proto.MapRoleBuild, 0)

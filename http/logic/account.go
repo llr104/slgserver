@@ -7,7 +7,7 @@ import (
 	"slgserver/constant"
 	"slgserver/db"
 	myhttp "slgserver/http"
-	"slgserver/model"
+	"slgserver/server/model"
 	"slgserver/util"
 	"time"
 )

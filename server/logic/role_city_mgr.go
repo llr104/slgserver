@@ -4,16 +4,16 @@ import (
 	"go.uber.org/zap"
 	"slgserver/db"
 	"slgserver/log"
-	"slgserver/model"
+	"slgserver/server/model"
 	"slgserver/util"
 	"sync"
 )
 
 type RoleCityMgr struct {
 	mutex  sync.RWMutex
-	dbCity map[int]*model.MapRoleCity	//key: cid
-	posCity map[int]*model.MapRoleCity	//key: pos
-	roleCity map[int][]*model.MapRoleCity	//key: rid
+	dbCity map[int]*model.MapRoleCity     //key: cid
+	posCity map[int]*model.MapRoleCity    //key: pos
+	roleCity map[int][]*model.MapRoleCity //key: rid
 }
 
 var RCMgr = &RoleCityMgr{

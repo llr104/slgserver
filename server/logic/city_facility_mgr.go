@@ -6,7 +6,7 @@ import (
 	"slgserver/constant"
 	"slgserver/db"
 	"slgserver/log"
-	"slgserver/model"
+	"slgserver/server/model"
 	"slgserver/server/static_conf/facility"
 	"sync"
 	"time"
@@ -70,7 +70,7 @@ func (this* FacilityMgr) Get(cid int) (*model.CityFacility, bool){
 /*
 如果不存在尝试去创建
 */
-func (this* FacilityMgr) GetAndTryCreate(cid int) (*model.CityFacility, bool){
+func (this* FacilityMgr) GetAndTryCreate(cid, rid int) (*model.CityFacility, bool){
 	r, ok := this.Get(cid)
 	if ok {
 		return r, true
@@ -85,7 +85,7 @@ func (this* FacilityMgr) GetAndTryCreate(cid int) (*model.CityFacility, bool){
 			}
 
 			sdata, _ := json.Marshal(fs)
-			cf := &model.CityFacility{CityId: cid, Facilities: string(sdata)}
+			cf := &model.CityFacility{CityId: cid, RId: rid, Facilities: string(sdata)}
 			db.MasterDB.Table(cf).Insert(cf)
 
 			this.mutex.Lock()
@@ -137,7 +137,7 @@ func (this* FacilityMgr) UpFacility(rid, cid int, fType int8) (*Facility, int){
 						out = fac
 						if t, err := json.Marshal(facilities); err == nil{
 							f.Facilities = string(t)
-							f.DB.Sync()
+							f.Execute()
 							return out, constant.OK
 						}else{
 							return nil, constant.UpError

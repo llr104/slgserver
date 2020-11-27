@@ -8,7 +8,7 @@ type dbSync struct {
 	needSyncToDB 	bool
 }
 
-func (this* dbSync) Disable(b bool) {
+func (this*dbSync) Disable(b bool) {
 	this.disable = b
 }
 
@@ -45,5 +45,9 @@ func (this *dbSync) Sync()  {
 	this.mutex.Lock()
 	defer this.mutex.Unlock()
 	this.needSyncToDB = true
+}
+
+type PushAndDB interface {
+	Execute()
 }
 
