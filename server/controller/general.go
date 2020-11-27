@@ -161,6 +161,7 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 				//旧的下阵
 				oldG.CityId = 0
 				oldG.Order = 0
+				oldG.SyncExecute()
 			}
 		}
 		//新的上阵
@@ -366,20 +367,12 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 		}
 
 
-		for _, gid := range army.GeneralArray {
-			g, ok := logic.GMgr.GetByGId(gid)
-			if ok {
-				g.SyncExecute()
-			}
-		}
-
 		army.Start = time.Now()
 		army.End = time.Now().Add(20*time.Second)
 		army.ToX = reqObj.X
 		army.ToY = reqObj.Y
 		army.Cmd = reqObj.Cmd
 		army.State = model.ArmyRunning
-		army.SyncExecute()
 		logic.AMgr.PushAction(army)
 		rspObj.Army = army.ToProto().(proto.Army)
 		rsp.Body.Code = constant.OK
