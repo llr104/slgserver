@@ -2,6 +2,7 @@ package logic
 
 import (
 	"encoding/json"
+	"fmt"
 	"go.uber.org/zap"
 	"slgserver/db"
 	"slgserver/log"
@@ -17,103 +18,118 @@ var ArmyLogic *armyLogic
 
 func init() {
 	ArmyLogic = &armyLogic{arriveArmys: make(chan *model.Army, 100),
-		giveUpId: make(chan int, 100),
-		updateArmys:  make(chan *model.Army, 100),
-		posArmys: make(map[int]map[int]*model.Army),
-		sys: NewSysArmy()}
+		giveUpId:       make(chan int, 100),
+		updateArmys:    make(chan *model.Army, 100),
+		stopInPosArmys: make(map[int]map[int]*model.Army),
+		passbyPosArmys: make(map[int]map[int]*model.Army),
+		sys:            NewSysArmy()}
 
 	go ArmyLogic.running()
 }
 
 type armyLogic struct {
-	sys         *sysArmyLogic
-	giveUpId    chan int
-	arriveArmys chan *model.Army
-	updateArmys chan *model.Army
-	posArmys    map[int]map[int]*model.Army //玩家驻守的军队 key:posId,armyId
+	sys            *sysArmyLogic
+	giveUpId       chan int
+	arriveArmys    chan *model.Army
+	updateArmys    chan *model.Army
+	stopInPosArmys map[int]map[int]*model.Army //玩家停留位置的军队 key:posId,armyId
+	passbyPosArmys map[int]map[int]*model.Army //玩家路过位置的军队 key:posId,armyId
 }
 
 func (this *armyLogic) running(){
+	passbyTimer := time.NewTicker(10 * time.Second)
 	for {
 		select {
+			case <-passbyTimer.C:{
+				fmt.Println("需要更新玩家军队的位置了")
+			}
 			case army := <-this.updateArmys:{
-				army.SyncExecute()
-				if army.Cmd == model.ArmyCmdBack {
-					this.deleteArmy(army.ToX, army.ToY)
-				}
+				this.exeUpdate(army)
 			}
 			case army := <-this.arriveArmys:{
-				if army.Cmd == model.ArmyCmdAttack {
-					if IsCanArrive(army.ToX, army.ToY, army.RId){
-						this.battle(army)
-					}
-					AMgr.ArmyBack(army)
-				}else if army.Cmd == model.ArmyCmdDefend {
-					//呆在哪里不动
-					ok := RBMgr.BuildIsRId(army.ToX, army.ToY, army.RId)
-					if ok {
-						//目前是自己的领地才能驻守
-						army.State = model.ArmyStop
-						this.addArmy(army)
-						this.Update(army)
-					}else{
-						AMgr.ArmyBack(army)
-					}
-
-				}else if army.Cmd == model.ArmyCmdReclamation {
-					if army.State == model.ArmyRunning {
-
-						ok := RBMgr.BuildIsRId(army.ToX, army.ToY, army.RId)
-						if ok  {
-							//目前是自己的领地才能屯田
-							this.addArmy(army)
-							AMgr.Reclamation(army)
-						}else{
-							AMgr.ArmyBack(army)
-						}
-
-					}else {
-						AMgr.ArmyBack(army)
-						//增加场量
-						rr, ok := RResMgr.Get(army.RId)
-						if ok {
-							b, ok1 := RBMgr.PositionBuild(army.ToX, army.ToY)
-							if ok1 {
-								rr.Stone += b.Stone
-								rr.Iron += b.Iron
-								rr.Wood += b.Wood
-								rr.Gold += rr.Gold
-								rr.Grain += rr.Grain
-								rr.SyncExecute()
-							}
-						}
-					}
-				}else if army.Cmd == model.ArmyCmdBack {
-					//如果该队伍在驻守，需要移除
-					army.State = model.ArmyStop
-					army.Cmd = model.ArmyCmdIdle
-					this.Update(army)
-				}
-				army.SyncExecute()
+				this.exeArrive(army)
 			}
 			case giveUpId := <- this.giveUpId:{
-				armys, ok := this.posArmys[giveUpId]
+				armys, ok := this.stopInPosArmys[giveUpId]
 				if ok {
 					for _, army := range armys {
 						AMgr.ArmyBack(army)
 					}
-					delete(this.posArmys, giveUpId)
+					delete(this.stopInPosArmys, giveUpId)
 				}
 			}
 		}
 	}
 }
 
-func (this *armyLogic) Arrive(army*model.Army) {
+func (this *armyLogic) exeUpdate(army *model.Army) {
+	army.SyncExecute()
+	if army.Cmd == model.ArmyCmdBack {
+		this.deleteArmy(army.ToX, army.ToY)
+	}
+}
+
+func (this *armyLogic) exeArrive(army *model.Army) {
+	if army.Cmd == model.ArmyCmdAttack {
+		if IsCanArrive(army.ToX, army.ToY, army.RId){
+			this.battle(army)
+		}
+		AMgr.ArmyBack(army)
+	}else if army.Cmd == model.ArmyCmdDefend {
+		//呆在哪里不动
+		ok := RBMgr.BuildIsRId(army.ToX, army.ToY, army.RId)
+		if ok {
+			//目前是自己的领地才能驻守
+			army.State = model.ArmyStop
+			this.addArmy(army)
+			this.Update(army)
+		}else{
+			AMgr.ArmyBack(army)
+		}
+
+	}else if army.Cmd == model.ArmyCmdReclamation {
+		if army.State == model.ArmyRunning {
+
+			ok := RBMgr.BuildIsRId(army.ToX, army.ToY, army.RId)
+			if ok  {
+				//目前是自己的领地才能屯田
+				this.addArmy(army)
+				AMgr.Reclamation(army)
+			}else{
+				AMgr.ArmyBack(army)
+			}
+
+		}else {
+			AMgr.ArmyBack(army)
+			//增加场量
+			rr, ok := RResMgr.Get(army.RId)
+			if ok {
+				b, ok1 := RBMgr.PositionBuild(army.ToX, army.ToY)
+				if ok1 {
+					rr.Stone += b.Stone
+					rr.Iron += b.Iron
+					rr.Wood += b.Wood
+					rr.Gold += rr.Gold
+					rr.Grain += rr.Grain
+					rr.SyncExecute()
+				}
+			}
+		}
+	}else if army.Cmd == model.ArmyCmdBack {
+		//如果该队伍在驻守，需要移除
+		army.State = model.ArmyStop
+		army.Cmd = model.ArmyCmdIdle
+		this.Update(army)
+	}
+}
+
+
+
+func (this *armyLogic) Arrive(army *model.Army) {
 	this.arriveArmys <- army
 }
 
-func (this *armyLogic) Update(army*model.Army) {
+func (this *armyLogic) Update(army *model.Army) {
 	this.updateArmys <- army
 }
 
@@ -123,19 +139,19 @@ func (this *armyLogic) GiveUp(posId int) {
 
 func (this *armyLogic) deleteArmy(x, y int) {
 	posId := ToPosition(x, y)
-	delete(this.posArmys, posId)
+	delete(this.stopInPosArmys, posId)
 }
 
-func (this* armyLogic) addArmy(army*model.Army)  {
+func (this* armyLogic) addArmy(army *model.Army)  {
 	posId := ToPosition(army.ToX, army.ToY)
-	if _, ok := this.posArmys[posId]; ok == false {
-		this.posArmys[posId] = make(map[int]*model.Army)
+	if _, ok := this.stopInPosArmys[posId]; ok == false {
+		this.stopInPosArmys[posId] = make(map[int]*model.Army)
 	}
-	this.posArmys[posId][army.Id] = army
+	this.stopInPosArmys[posId][army.Id] = army
 }
 
 //简单战斗
-func (this *armyLogic) battle(army*model.Army) {
+func (this *armyLogic) battle(army *model.Army) {
 	_, ok := RCMgr.PositionCity(army.ToX, army.ToY)
 	if ok {
 		//打城池
@@ -146,11 +162,11 @@ func (this *armyLogic) battle(army*model.Army) {
 	this.executeBuild(army)
 }
 
-func (this* armyLogic) executeBuild(army*model.Army)  {
+func (this* armyLogic) executeBuild(army *model.Army)  {
 	roleBuid, _ := RBMgr.PositionBuild(army.ToX, army.ToY)
 
 	posId := ToPosition(army.ToX, army.ToY)
-	posArmys, isRoleEnemy := this.posArmys[posId]
+	posArmys, isRoleEnemy := this.stopInPosArmys[posId]
 	var enemys []*model.Army
 	if isRoleEnemy == false {
 		enemys = this.sys.GetArmy(army.ToX, army.ToY)
@@ -266,7 +282,7 @@ func (this* armyLogic) executeBuild(army*model.Army)  {
 		if isRoleEnemy {
 			if winCnt >= 2 {
 				if isRoleEnemy {
-					delete(this.posArmys, posId)
+					delete(this.stopInPosArmys, posId)
 				}
 				AMgr.ArmyBack(enemy)
 			}
