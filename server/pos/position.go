@@ -4,6 +4,7 @@ import "sync"
 
 var RPMgr = RolePosMgr{
 	posCaches: make(map[position]map[int]int),
+	ridCaches: make(map[int]position),
 }
 
 type position struct {
@@ -38,6 +39,7 @@ func (this *RolePosMgr) Push(x, y, rid int) {
 		this.posCaches[p] = make(map[int]int)
 	}
 	this.posCaches[p][rid] = rid
+	this.ridCaches[rid] = p
 }
 
 func (this *RolePosMgr) GetCellRoleIds(x, y, width, height int) []int{
@@ -47,7 +49,7 @@ func (this *RolePosMgr) GetCellRoleIds(x, y, width, height int) []int{
 	l := make([]int, 0)
 	for i := x-width; i <= x+width; i++ {
 		for j := y-height; j <= y+height; j++ {
-			pos := position{x, y}
+			pos := position{i, j}
 			r, ok := this.posCaches[pos]
 			if ok {
 				for _, v := range r {
