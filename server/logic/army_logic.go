@@ -42,6 +42,8 @@ func (this *armyLogic) running(){
 		select {
 			case <-passbyTimer.C:{
 				fmt.Println("需要更新玩家军队的位置了")
+				d := Distance(1,1,3,3)
+				fmt.Println(d)
 			}
 			case army := <-this.updateArmys:{
 				this.exeUpdate(army)

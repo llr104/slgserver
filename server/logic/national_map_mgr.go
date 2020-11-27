@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"go.uber.org/zap"
 	"io/ioutil"
+	"math"
 	"os"
 	"slgserver/config"
 	"slgserver/db"
@@ -17,6 +18,8 @@ var MapWith = 40
 var MapHeight = 40
 const ScanWith = 3
 const ScanHeight = 3
+const CellWith = 100
+const CellHeight = 100
 
 type NMArray struct {
 	arr []model.NationalMap
@@ -31,6 +34,12 @@ type mapData struct {
 
 func ToPosition(x, y int) int {
 	return x+MapHeight*y
+}
+
+func Distance(begX, begY, endX, endY int) float64 {
+	w := math.Abs(float64(endX - begX))*CellWith
+	h := math.Abs(float64(endY - begY))*CellHeight
+	return math.Sqrt(w*w + h*h)
 }
 
 type NationalMapMgr struct {
