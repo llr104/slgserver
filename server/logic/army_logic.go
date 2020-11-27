@@ -356,11 +356,6 @@ func (this* armyLogic) OccupyRoleBuild(rid, x, y int)  {
 			newRole.SyncExecute()
 		}
 		b.RId = rid
-
-		if r, ok := RMgr.Get(b.RId); ok {
-			b.RNick = r.NickName
-		}
-		b.SyncExecute()
 	}
 }
 

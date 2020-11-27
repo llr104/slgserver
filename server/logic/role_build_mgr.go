@@ -110,7 +110,6 @@ func (this* RoleBuildMgr) AddBuild(rid, x, y int) (*model.MapRoleBuild, bool) {
 		if r, ok := RMgr.Get(rb.RId); ok {
 			rb.RNick = r.NickName
 		}
-		rb.SyncExecute()
 
 		this.mutex.Lock()
 		if _, ok := this.roleRB[rid]; ok == false{
