@@ -112,3 +112,12 @@ type MyRolePropertyRsp struct {
 	Armys		[]Army			`json:"armys"`
 }
 
+type UpPositionReq struct {
+	X	int	`json:"x"`
+	Y	int	`json:"y"`
+}
+
+type UpPositionRsp struct {
+	X	int	`json:"x"`
+	Y	int	`json:"y"`
+}

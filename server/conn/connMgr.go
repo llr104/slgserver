@@ -20,7 +20,7 @@ type Mgr struct {
 	roleCache map[int]*net.WSConn
 }
 
-func (this*Mgr) NewConn(wsSocket *websocket.Conn, needSecret bool) *net.WSConn{
+func (this *Mgr) NewConn(wsSocket *websocket.Conn, needSecret bool) *net.WSConn{
 	this.cm.Lock()
 	defer this.cm.Unlock()
 
@@ -44,7 +44,7 @@ func (this*Mgr) NewConn(wsSocket *websocket.Conn, needSecret bool) *net.WSConn{
 	return c
 }
 
-func (this*Mgr) UserLogin(conn *net.WSConn, session string, uid int) {
+func (this *Mgr) UserLogin(conn *net.WSConn, session string, uid int) {
 	this.um.Lock()
 	defer this.um.Unlock()
 
@@ -65,18 +65,18 @@ func (this*Mgr) UserLogin(conn *net.WSConn, session string, uid int) {
 	conn.SetProperty("uid", uid)
 }
 
-func (this*Mgr) UserLogout(conn *net.WSConn) {
+func (this *Mgr) UserLogout(conn *net.WSConn) {
 	this.RemoveConn(conn)
 }
 
-func (this*Mgr) RoleEnter(conn *net.WSConn, rid int) {
+func (this *Mgr) RoleEnter(conn *net.WSConn, rid int) {
 	this.rm.Lock()
 	defer this.rm.Unlock()
 	conn.SetProperty("rid", rid)
 	this.roleCache[rid] = conn
 }
 
-func (this*Mgr) RemoveConn(conn *net.WSConn){
+func (this *Mgr) RemoveConn(conn *net.WSConn){
 	this.cm.Lock()
 	cid, err := conn.GetProperty("cid")
 	if err == nil {
@@ -104,7 +104,7 @@ func (this*Mgr) RemoveConn(conn *net.WSConn){
 	conn.RemoveProperty("rid")
 }
 
-func (this*Mgr) PushByRoleId(rid int, msgName string, data interface{}) bool {
+func (this *Mgr) PushByRoleId(rid int, msgName string, data interface{}) bool {
 	if rid <= 0	{
 		return false
 	}
@@ -119,14 +119,14 @@ func (this*Mgr) PushByRoleId(rid int, msgName string, data interface{}) bool {
 	}
 }
 
-func (this*Mgr) Count() int{
+func (this *Mgr) Count() int{
 	this.cm.RLock()
 	defer this.cm.RUnlock()
 
 	return len(this.connCache)
 }
 
-func (this*Mgr) Push(pushSync PushSync){
+func (this *Mgr) Push(pushSync PushSync){
 
 	proto := pushSync.ToProto()
 	rids := pushSync.BelongToRId()
@@ -142,7 +142,7 @@ func (this*Mgr) Push(pushSync PushSync){
 	}
 }
 
-func (this*Mgr) pushAll(msgName string, data interface{}) {
+func (this *Mgr) pushAll(msgName string, data interface{}) {
 
 	this.rm.Lock()
 	defer this.rm.Unlock()

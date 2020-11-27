@@ -12,6 +12,7 @@ import (
 	"slgserver/server/logic"
 	"slgserver/server/middleware"
 	"slgserver/server/model"
+	"slgserver/server/pos"
 	"slgserver/server/proto"
 	"slgserver/server/static_conf/facility"
 	"time"
@@ -33,6 +34,7 @@ func (this*Role) InitRouter(r *net.Router) {
 	g.AddRouter("myRoleRes", this.myRoleRes, middleware.CheckRole())
 	g.AddRouter("myRoleBuild", this.myRoleBuild, middleware.CheckRole())
 	g.AddRouter("myProperty", this.myProperty, middleware.CheckRole())
+	g.AddRouter("upPosition", this.upPosition)
 }
 
 func (this*Role) create(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
@@ -333,5 +335,21 @@ func (this*Role) myRoleBuild(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	}else{
 		rspObj.MRBuilds = make([]proto.MapRoleBuild, 0)
 	}
+
+}
+
+func (this*Role) upPosition(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+	reqObj := &proto.UpPositionReq{}
+	rspObj := &proto.UpPositionRsp{}
+	mapstructure.Decode(req.Body.Msg, reqObj)
+	rsp.Body.Msg = rspObj
+	rsp.Body.Code = constant.OK
+
+	rspObj.X = reqObj.X
+	rspObj.Y = reqObj.Y
+
+	r, _ := req.Conn.GetProperty("role")
+	role := r.(*model.Role)
+	pos.RPMgr.Push(reqObj.X, reqObj.Y, role.RId)
 
 }

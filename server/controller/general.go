@@ -33,6 +33,7 @@ func (this*General) InitRouter(r *net.Router) {
 	g.AddRouter("conscript", this.conscript)
 	g.AddRouter("assignArmy", this.assignArmy)
 
+
 }
 
 func (this*General) myGenerals(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
@@ -380,4 +381,5 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 		rsp.Body.Code = constant.OK
 	}
 }
+
 
