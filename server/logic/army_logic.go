@@ -147,7 +147,7 @@ func (this *armyLogic) battle(army*model.Army) {
 }
 
 func (this* armyLogic) executeBuild(army*model.Army)  {
-	roleBuid, isRoleBuild := RBMgr.PositionBuild(army.ToX, army.ToY)
+	roleBuid, _ := RBMgr.PositionBuild(army.ToX, army.ToY)
 
 	posId := ToPosition(army.ToX, army.ToY)
 	posArmys, isRoleEnemy := this.posArmys[posId]
@@ -284,7 +284,7 @@ func (this* armyLogic) executeBuild(army*model.Army)  {
 		}
 	}
 	if isWinCnt>=2 {
-		if isRoleBuild {
+		if roleBuid != nil {
 			destory := GMgr.GetDestroy(army)
 			wr := warReports[len(warReports)-1]
 			wr.DestroyDurable = util.MinInt(destory, roleBuid.CurDurable)

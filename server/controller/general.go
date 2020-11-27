@@ -315,9 +315,7 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 			logic.AMgr.ArmyBack(army)
 			rsp.Body.Code = constant.OK
 			rspObj.Army = army.ToProto().(proto.Army)
-
 		}
-
 	}else{
 
 		if army.Cmd != model.ArmyCmdIdle {
@@ -352,7 +350,8 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 		}
 
 		//最后才消耗体力
-		ok = logic.GMgr.TryUsePhysicalPower(army)
+		cost := static_conf.Basic.General.CostPhysicalPower
+		ok = logic.GMgr.PhysicalPowerIsEnough(army, cost)
 		if ok == false{
 			rsp.Body.Code = constant.PhysicalPowerNotEnough
 			return
@@ -360,12 +359,15 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 
 		if reqObj.Cmd == model.ArmyCmdReclamation {
 			cost := static_conf.Basic.General.ReclamationCost
-			if logic.RResMgr.TryUseDecree(army.RId, cost) == false{
+			if logic.RResMgr.DecreeIsEnough(army.RId, cost) == false{
 				rsp.Body.Code = constant.DecreeNotEnough
 				return
+			}else{
+				logic.RResMgr.TryUseDecree(army.RId, cost)
 			}
 		}
 
+		logic.GMgr.TryUsePhysicalPower(army, cost)
 
 		army.Start = time.Now()
 		army.End = time.Now().Add(20*time.Second)
@@ -376,8 +378,6 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 		logic.AMgr.PushAction(army)
 		rspObj.Army = army.ToProto().(proto.Army)
 		rsp.Body.Code = constant.OK
-
 	}
-
 }
 

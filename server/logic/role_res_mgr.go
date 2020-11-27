@@ -70,7 +70,6 @@ func (this* RoleResMgr) Get(rid int) (*model.RoleRes, bool){
 func (this* RoleResMgr) Add(res *model.RoleRes) (){
 	this.mutex.Lock()
 	defer this.mutex.Unlock()
-	res.SyncExecute()
 	this.rolesRes[res.RId] = res
 }
 
@@ -95,6 +94,22 @@ func (this* RoleResMgr) TryUseNeed(rid int, need*facility.NeedRes) bool{
 			return false
 		}
 	}else {
+		return false
+	}
+}
+
+//政令是否足够
+func (this* RoleResMgr) DecreeIsEnough(rid int, cost int) bool {
+	this.mutex.Lock()
+	defer this.mutex.Unlock()
+	rr, ok := this.rolesRes[rid]
+	if ok {
+		if rr.Decree >= cost {
+			return true
+		}else{
+			return false
+		}
+	}else{
 		return false
 	}
 }

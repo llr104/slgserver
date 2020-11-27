@@ -273,10 +273,8 @@ func (this *GeneralMgr) GetDestroy(army *model.Army) int{
 	return destroy
 }
 
-//尝试使用体力
-func (this *GeneralMgr) TryUsePhysicalPower(army *model.Army) bool{
-
-	cost := static_conf.Basic.General.CostPhysicalPower
+//体力是否足够
+func (this* GeneralMgr) PhysicalPowerIsEnough(army *model.Army, cost int) bool{
 	for _, gid := range army.GeneralArray {
 		if gid == 0{
 			continue
@@ -290,6 +288,15 @@ func (this *GeneralMgr) TryUsePhysicalPower(army *model.Army) bool{
 		}else{
 			return false
 		}
+	}
+	return true
+}
+
+//尝试使用体力
+func (this *GeneralMgr) TryUsePhysicalPower(army *model.Army, cost int) bool{
+
+	if this.PhysicalPowerIsEnough(army, cost) == false{
+		return false
 	}
 
 	for _, gid := range army.GeneralArray {
