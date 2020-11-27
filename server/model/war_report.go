@@ -33,19 +33,23 @@ func (this *WarReport) TableName() string {
 }
 
 /* 推送同步 begin */
-func (this*WarReport) IsCellView() bool{
-	return true
+func (this *WarReport) IsCellView() bool{
+	return false
 }
 
-func (this*WarReport) BelongToRId() []int{
+func (this *WarReport) BelongToRId() []int{
 	return []int{this.AttackRid, this.DefenseRid}
 }
 
-func (this*WarReport) PushMsgName() string{
+func (this *WarReport) PushMsgName() string{
 	return "warReport.push"
 }
 
-func (this*WarReport) ToProto() interface{}{
+func (this *WarReport) Position() (int, int){
+	return this.X, this.Y
+}
+
+func (this *WarReport) ToProto() interface{}{
 	p := proto.WarReport{}
 	p.CTime = this.CTime.UnixNano()/1e6
 	p.Id = this.Id
@@ -69,11 +73,11 @@ func (this*WarReport) ToProto() interface{}{
 	return p
 }
 
-func (this*WarReport) Push(){
+func (this *WarReport) Push(){
 	conn.ConnMgr.Push(this)
 }
 /* 推送同步 end */
 
-func (this*WarReport) SyncExecute() {
+func (this *WarReport) SyncExecute() {
 	this.Push()
 }

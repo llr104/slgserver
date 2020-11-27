@@ -66,21 +66,21 @@ func (this *Army) AfterSet(name string, cell xorm.Cell){
 	}
 }
 
-func (this*Army) ToSoldier() {
+func (this *Army) ToSoldier() {
 	if this.SoldierArray != nil {
 		data, _ := json.Marshal(this.SoldierArray)
 		this.Soldiers = string(data)
 	}
 }
 
-func (this*Army) ToGeneral() {
+func (this *Army) ToGeneral() {
 	if this.GeneralArray != nil {
 		data, _ := json.Marshal(this.GeneralArray)
 		this.Generals = string(data)
 	}
 }
 
-func (this*Army) BeforeInsert() {
+func (this *Army) BeforeInsert() {
 
 	data, _ := json.Marshal(this.GeneralArray)
 	this.Generals = string(data)
@@ -89,7 +89,7 @@ func (this*Army) BeforeInsert() {
 	this.Soldiers = string(data)
 }
 
-func (this*Army) BeforeUpdate() {
+func (this *Army) BeforeUpdate() {
 
 	data, _ := json.Marshal(this.GeneralArray)
 	this.Generals = string(data)
@@ -99,19 +99,23 @@ func (this*Army) BeforeUpdate() {
 }
 
 /* 推送同步 begin */
-func (this*Army) IsCellView() bool{
-	return true
+func (this *Army) IsCellView() bool{
+	return false
 }
 
-func (this*Army) BelongToRId() []int{
+func (this *Army) BelongToRId() []int{
 	return []int{this.RId}
 }
 
-func (this*Army) PushMsgName() string{
+func (this *Army) PushMsgName() string{
 	return "army.push"
 }
 
-func (this*Army) ToProto() interface{}{
+func (this *Army) Position() (int, int){
+	return -1, -1
+}
+
+func (this *Army) ToProto() interface{}{
 	p := proto.Army{}
 	p.CityId = this.CityId
 	p.Id = this.Id
@@ -129,12 +133,12 @@ func (this*Army) ToProto() interface{}{
 	return p
 }
 
-func (this*Army) Push(){
+func (this *Army) Push(){
 	conn.ConnMgr.Push(this)
 }
 /* 推送同步 end */
 
-func (this*Army) SyncExecute() {
+func (this *Army) SyncExecute() {
 	this.DB.Sync()
 	this.Push()
 }

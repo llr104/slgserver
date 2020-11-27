@@ -23,7 +23,7 @@ func (this *Role) TableName() string {
 	return "role"
 }
 
-func (this*Role) ToProto() interface{}{
+func (this *Role) ToProto() interface{}{
 	p := proto.Role{}
 	p.UId = this.UId
 	p.SId = this.SId

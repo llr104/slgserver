@@ -25,7 +25,7 @@ func (this *General) TableName() string {
 	return "general"
 }
 
-func (this*General) GetDestroy() int{
+func (this *General) GetDestroy() int{
 	cfg, ok := general.General.GMap[this.CfgId]
 	if ok {
 		return (cfg.Destroy+cfg.DestroyGrow*int(this.Level))/100
@@ -35,19 +35,23 @@ func (this*General) GetDestroy() int{
 
 
 /* 推送同步 begin */
-func (this*General) IsCellView() bool{
+func (this *General) IsCellView() bool{
 	return false
 }
 
-func (this*General) BelongToRId() []int{
+func (this *General) BelongToRId() []int{
 	return []int{this.RId}
 }
 
-func (this*General) PushMsgName() string{
+func (this *General) PushMsgName() string{
 	return "general.push"
 }
 
-func (this*General) ToProto() interface{}{
+func (this *General) Position() (int, int){
+	return -1, -1
+}
+
+func (this *General) ToProto() interface{}{
 	p := proto.General{}
 	p.CityId = this.CityId
 	p.Order = this.Order
@@ -60,12 +64,12 @@ func (this*General) ToProto() interface{}{
 	return p
 }
 
-func (this*General) Push(){
+func (this *General) Push(){
 	conn.ConnMgr.Push(this)
 }
 /* 推送同步 end */
 
-func (this*General) SyncExecute() {
+func (this *General) SyncExecute() {
 	this.DB.Sync()
 	this.Push()
 }
