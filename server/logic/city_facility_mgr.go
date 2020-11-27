@@ -137,7 +137,7 @@ func (this* FacilityMgr) UpFacility(rid, cid int, fType int8) (*Facility, int){
 						out = fac
 						if t, err := json.Marshal(facilities); err == nil{
 							f.Facilities = string(t)
-							f.Execute()
+							f.SyncExecute()
 							return out, constant.OK
 						}else{
 							return nil, constant.UpError

@@ -62,7 +62,7 @@ func (this*MapRoleBuild) Push(){
 }
 /* 推送同步 end */
 
-func (this*MapRoleBuild) Execute() {
+func (this*MapRoleBuild) SyncExecute() {
 	this.DB.Sync()
 	this.Push()
 }

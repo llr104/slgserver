@@ -141,13 +141,13 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 			if gId == newG.Id{
 				army.GeneralArray[i] = 0
 				army.SoldierArray[i] = 0
-				army.Execute()
+				army.SyncExecute()
 				break
 			}
 		}
 		newG.Order = 0
 		newG.CityId = 0
-		newG.Execute()
+		newG.SyncExecute()
 	}else{
 
 		if newG.CityId != 0{
@@ -169,7 +169,7 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 		newG.Order = reqObj.Order
 		newG.CityId = reqObj.CityId
-		newG.Execute()
+		newG.SyncExecute()
 	}
 
 	if c, ok := logic.RCMgr.Get(army.CityId); ok{
@@ -177,7 +177,7 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		army.FromY = c.Y
 	}
 
-	army.Execute()
+	army.SyncExecute()
 	//队伍
 	rspObj.Army = army.ToProto().(proto.Army)
 }
@@ -257,7 +257,7 @@ func (this*General) conscript(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 			army.SoldierArray[i] += reqObj.Cnts[i]
 		}
 
-		army.Execute()
+		army.SyncExecute()
 
 		//队伍
 		rspObj.Army = army.ToProto().(proto.Army)
@@ -369,7 +369,7 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 		for _, gid := range army.GeneralArray {
 			g, ok := logic.GMgr.GetByGId(gid)
 			if ok {
-				g.Execute()
+				g.SyncExecute()
 			}
 		}
 
@@ -379,7 +379,7 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 		army.ToY = reqObj.Y
 		army.Cmd = reqObj.Cmd
 		army.State = model.ArmyRunning
-		army.Execute()
+		army.SyncExecute()
 		logic.AMgr.PushAction(army)
 		rspObj.Army = army.ToProto().(proto.Army)
 		rsp.Body.Code = constant.OK

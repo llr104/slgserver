@@ -74,6 +74,6 @@ func (this*WarReport) Push(){
 }
 /* 推送同步 end */
 
-func (this*WarReport) Execute() {
+func (this*WarReport) SyncExecute() {
 	this.Push()
 }

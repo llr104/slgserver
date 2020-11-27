@@ -56,7 +56,7 @@ func (this*MapRoleCity) Push(){
 }
 /* 推送同步 end */
 
-func (this*MapRoleCity) Execute() {
+func (this*MapRoleCity) SyncExecute() {
 	this.DB.Sync()
 	this.Push()
 }

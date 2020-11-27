@@ -133,7 +133,7 @@ func (this*City) upFacility(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 						roleRes.GoldYield += newP.Yield
 					}
 				}
-				roleRes.Execute()
+				roleRes.SyncExecute()
 			}
 		}else if facility.FWareHouse.IsContain(reqObj.FType){
 			if roleRes, ok:= logic.RResMgr.Get(role.RId); ok {

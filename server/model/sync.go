@@ -48,6 +48,6 @@ func (this *dbSync) Sync()  {
 }
 
 type PushAndDB interface {
-	Execute()
+	SyncExecute()
 }
 

@@ -63,7 +63,7 @@ func (this*RoleRes) Push(){
 }
 /* 推送同步 end */
 
-func (this*RoleRes) Execute() {
+func (this*RoleRes) SyncExecute() {
 	this.DB.Sync()
 	this.Push()
 }

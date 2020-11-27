@@ -63,7 +63,7 @@ func (this* GeneralMgr) updatePhysicalPower() {
 		for _, g := range this.genByGId {
 			if g.PhysicalPower < limit{
 				g.PhysicalPower = util.MinInt(limit, g.PhysicalPower+recoverCnt)
-				g.Execute()
+				g.SyncExecute()
 			}
 		}
 		this.mutex.RUnlock()
@@ -302,7 +302,7 @@ func (this *GeneralMgr) TryUsePhysicalPower(army *model.Army) bool{
 
 		g, _ := this.GetByGId(gid)
 		g.PhysicalPower -= cost
-		g.Execute()
+		g.SyncExecute()
 	}
 
 	return true

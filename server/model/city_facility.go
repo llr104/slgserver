@@ -44,7 +44,7 @@ func (this*CityFacility) Push(){
 
 /* 推送同步 end */
 
-func (this*CityFacility) Execute() {
+func (this*CityFacility) SyncExecute() {
 	this.DB.Sync()
 	this.Push()
 }

@@ -37,7 +37,7 @@ func (this *armyLogic) running(){
 	for {
 		select {
 			case army := <-this.updateArmys:{
-				army.Execute()
+				army.SyncExecute()
 				if army.Cmd == model.ArmyCmdBack {
 					this.deleteArmy(army.ToX, army.ToY)
 				}
@@ -84,7 +84,7 @@ func (this *armyLogic) running(){
 								rr.Wood += b.Wood
 								rr.Gold += rr.Gold
 								rr.Grain += rr.Grain
-								rr.Execute()
+								rr.SyncExecute()
 							}
 						}
 					}
@@ -94,7 +94,7 @@ func (this *armyLogic) running(){
 					army.Cmd = model.ArmyCmdIdle
 					this.Update(army)
 				}
-				army.Execute()
+				army.SyncExecute()
 			}
 			case giveUpId := <- this.giveUpId:{
 				armys, ok := this.posArmys[giveUpId]
@@ -210,7 +210,7 @@ func (this* armyLogic) executeBuild(army*model.Army)  {
 				level, exp := general.GenBasic.ExpToLevel(ag.Exp)
 				ag.Level = level
 				ag.Exp = exp
-				ag.Execute()
+				ag.SyncExecute()
 			}
 
 			if eg, ok := GMgr.GetByGId(eGid); ok {
@@ -218,7 +218,7 @@ func (this* armyLogic) executeBuild(army*model.Army)  {
 				level, exp := general.GenBasic.ExpToLevel(eg.Exp)
 				eg.Level = level
 				eg.Exp = exp
-				eg.Execute()
+				eg.SyncExecute()
 			}
 		}
 
@@ -228,7 +228,7 @@ func (this* armyLogic) executeBuild(army*model.Army)  {
 			g, ok := GMgr.GetByGId(id)
 			if ok {
 				endGeneral1 = append(endGeneral1, g.ToProto().(proto.General))
-				g.Execute()
+				g.SyncExecute()
 			}
 		}
 		endGeneralData1, _ := json.Marshal(endGeneral1)
@@ -238,7 +238,7 @@ func (this* armyLogic) executeBuild(army*model.Army)  {
 			g, ok := GMgr.GetByGId(id)
 			if ok {
 				endGeneral2 = append(endGeneral2, g.ToProto().(proto.General))
-				g.Execute()
+				g.SyncExecute()
 			}
 		}
 		endGeneralData2, _ := json.Marshal(endGeneral2)
@@ -270,11 +270,11 @@ func (this* armyLogic) executeBuild(army*model.Army)  {
 				}
 				AMgr.ArmyBack(enemy)
 			}
-			enemy.Execute()
+			enemy.SyncExecute()
 		}
 
 	}
-	army.Execute()
+	army.SyncExecute()
 
 	//三盘两胜
 	isWinCnt := 0
@@ -315,7 +315,7 @@ func (this* armyLogic) executeBuild(army*model.Army)  {
 		if r, ok := RMgr.Get(newRoleBuild.RId); ok {
 			roleBuid.RNick = r.NickName
 		}
-		newRoleBuild.Execute()
+		newRoleBuild.SyncExecute()
 	}
 
 	for _, wr := range warReports {
@@ -323,7 +323,7 @@ func (this* armyLogic) executeBuild(army*model.Army)  {
 		if err != nil{
 			log.DefaultLog.Warn("db error", zap.Error(err))
 		}else{
-			wr.Execute()
+			wr.SyncExecute()
 		}
 	}
 
@@ -345,7 +345,7 @@ func (this* armyLogic) OccupyRoleBuild(rid, x, y int)  {
 			oldRole.GrainYield -= b.Grain
 			oldRole.StoneYield -= b.Stone
 			oldRole.IronYield -= b.Iron
-			oldRole.Execute()
+			oldRole.SyncExecute()
 		}
 		//占领的增加产量
 		if newRole, ok := RResMgr.Get(newId); ok{
@@ -353,14 +353,14 @@ func (this* armyLogic) OccupyRoleBuild(rid, x, y int)  {
 			newRole.GrainYield += b.Grain
 			newRole.StoneYield += b.Stone
 			newRole.IronYield += b.Iron
-			newRole.Execute()
+			newRole.SyncExecute()
 		}
 		b.RId = rid
 
 		if r, ok := RMgr.Get(b.RId); ok {
 			b.RNick = r.NickName
 		}
-		b.Execute()
+		b.SyncExecute()
 	}
 }
 
@@ -380,7 +380,7 @@ func (this* armyLogic) OccupySystemBuild(rid, x, y int)  {
 				newRole.GrainYield += rb.Grain
 				newRole.StoneYield += rb.Stone
 				newRole.IronYield += rb.Iron
-				newRole.Execute()
+				newRole.SyncExecute()
 			}
 		}
 	}

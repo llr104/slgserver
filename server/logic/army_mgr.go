@@ -72,7 +72,7 @@ func (this* ArmyMgr) Load() {
 						a.State = model.ArmyStop
 					}
 				}
-				a.Execute()
+				a.SyncExecute()
 			}
 			delete(this.armyByEndTime, kT)
 		}else{

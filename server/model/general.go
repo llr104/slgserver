@@ -65,7 +65,7 @@ func (this*General) Push(){
 }
 /* 推送同步 end */
 
-func (this*General) Execute() {
+func (this*General) SyncExecute() {
 	this.DB.Sync()
 	this.Push()
 }

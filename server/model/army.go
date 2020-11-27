@@ -134,7 +134,7 @@ func (this*Army) Push(){
 }
 /* 推送同步 end */
 
-func (this*Army) Execute() {
+func (this*Army) SyncExecute() {
 	this.DB.Sync()
 	this.Push()
 }
