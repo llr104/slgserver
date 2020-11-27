@@ -79,14 +79,11 @@ func (this* GeneralMgr) createNPC() ([]*model.General, bool){
 	for _, v := range general.General.GMap {
 		r, ok := this.NewGeneral(v.CfgId, 0)
 		if ok == false {
-			continue
-		}
-		gs = append(gs, r)
-		if _, err := db.MasterDB.Table(model.General{}).Insert(r); err != nil {
 			sess.Rollback()
-			log.DefaultLog.Warn("db error", zap.Error(err))
 			return nil, false
 		}
+		gs = append(gs, r)
+
 	}
 	if err := sess.Commit(); err != nil{
 		log.DefaultLog.Warn("db error", zap.Error(err))
