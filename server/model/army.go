@@ -101,7 +101,7 @@ func (this *Army) BeforeUpdate() {
 
 /* 推送同步 begin */
 func (this *Army) IsCellView() bool{
-	return false
+	return true
 }
 
 func (this *Army) BelongToRId() []int{
