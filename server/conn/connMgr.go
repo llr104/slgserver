@@ -135,14 +135,14 @@ func (this *Mgr) Push(pushSync PushSync){
 	x, y := pushSync.Position()
 
 	if isCellView {
-		rids := pos.RPMgr.GetCellRoleIds(x, y, 5, 4)
-		for _, rid := range rids {
+		cellRIds := pos.RPMgr.GetCellRoleIds(x, y, 5, 4)
+		for _, rid := range cellRIds {
 			this.PushByRoleId(rid, pushSync.PushMsgName(), proto)
 		}
-	}else{
-		for _, rid := range rids {
-			this.PushByRoleId(rid, pushSync.PushMsgName(), proto)
-		}
+	}
+
+	for _, rid := range rids {
+		this.PushByRoleId(rid, pushSync.PushMsgName(), proto)
 	}
 }
 
