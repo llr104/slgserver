@@ -9,13 +9,13 @@ import (
 	"slgserver/config"
 	"slgserver/db"
 	"slgserver/log"
+	"slgserver/server/global"
 	"slgserver/server/model"
 	"slgserver/util"
 	"sync"
 )
 
-var MapWith = 40
-var MapHeight = 40
+
 const ScanWith = 3
 const ScanHeight = 3
 
@@ -32,7 +32,7 @@ type mapData struct {
 }
 
 func ToPosition(x, y int) int {
-	return x+MapHeight*y
+	return x+global.MapHeight*y
 }
 
 func Distance(begX, begY, endX, endY int) float64 {
@@ -75,8 +75,8 @@ func (this* NationalMapMgr) Load() {
 	}
 
 	//转成服务用的结构
-	MapWith = m.Width
-	MapHeight = m.Height
+	global.MapWith = m.Width
+	global.MapHeight = m.Height
 
 	this.mutex.Lock()
 	defer this.mutex.Unlock()
@@ -91,7 +91,7 @@ func (this* NationalMapMgr) Load() {
 	for i, v := range m.List {
 		t := int8(v[0])
 		l := int8(v[1])
-		d := model.NationalMap{X: i/MapWith, Y: i%MapWith, MId: i, Type: t, Level: l}
+		d := model.NationalMap{X: i/global.MapWith, Y: i%global.MapWith, MId: i, Type: t, Level: l}
 		this.conf[i] = d
 		if isNeedDb {
 			db.MasterDB.Insert(d)

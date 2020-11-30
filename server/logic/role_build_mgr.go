@@ -4,6 +4,7 @@ import (
 	"go.uber.org/zap"
 	"slgserver/db"
 	"slgserver/log"
+	"slgserver/server/global"
 	"slgserver/server/model"
 	"slgserver/server/static_conf"
 	"slgserver/util"
@@ -174,7 +175,7 @@ func (this* RoleBuildMgr) GetRoleBuild(rid int) ([]*model.MapRoleBuild, bool) {
 }
 
 func (this* RoleBuildMgr) Scan(x, y int) []*model.MapRoleBuild {
-	if x < 0 || x >= MapWith || y < 0 || y >= MapHeight {
+	if x < 0 || x >= global.MapWith || y < 0 || y >= global.MapHeight {
 		return nil
 	}
 
@@ -182,9 +183,9 @@ func (this* RoleBuildMgr) Scan(x, y int) []*model.MapRoleBuild {
 	defer this.mutex.RUnlock()
 
 	minX := util.MaxInt(0, x-ScanWith)
-	maxX := util.MinInt(MapWith, x+ScanWith)
+	maxX := util.MinInt(global.MapWith, x+ScanWith)
 	minY := util.MaxInt(0, y-ScanHeight)
-	maxY := util.MinInt(MapHeight, y+ScanHeight)
+	maxY := util.MinInt(global.MapHeight, y+ScanHeight)
 
 	rb := make([]*model.MapRoleBuild, 0)
 	for i := minX; i <= maxX; i++ {
@@ -201,7 +202,7 @@ func (this* RoleBuildMgr) Scan(x, y int) []*model.MapRoleBuild {
 }
 
 func (this* RoleBuildMgr) ScanBlock(x, y, length int) []*model.MapRoleBuild {
-	if x < 0 || x >= MapWith || y < 0 || y >= MapHeight {
+	if x < 0 || x >= global.MapWith || y < 0 || y >= global.MapHeight {
 		return nil
 	}
 
@@ -209,8 +210,8 @@ func (this* RoleBuildMgr) ScanBlock(x, y, length int) []*model.MapRoleBuild {
 	this.mutex.RLock()
 	defer this.mutex.RUnlock()
 
-	maxX := util.MinInt(MapWith, x+length-1)
-	maxY := util.MinInt(MapHeight, y+length-1)
+	maxX := util.MinInt(global.MapWith, x+length-1)
+	maxY := util.MinInt(global.MapHeight, y+length-1)
 
 	rb := make([]*model.MapRoleBuild, 0)
 	for i := x; i <= maxX; i++ {

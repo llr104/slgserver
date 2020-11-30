@@ -4,6 +4,7 @@ import (
 	"go.uber.org/zap"
 	"slgserver/db"
 	"slgserver/log"
+	"slgserver/server/global"
 	"slgserver/server/model"
 	"slgserver/util"
 	"sync"
@@ -76,7 +77,7 @@ func (this* RoleCityMgr) Add(city *model.MapRoleCity) {
 }
 
 func (this* RoleCityMgr) Scan(x, y int) []*model.MapRoleCity {
-	if x < 0 || x >= MapWith || y < 0 || y >= MapHeight {
+	if x < 0 || x >= global.MapWith || y < 0 || y >= global.MapHeight {
 		return nil
 	}
 
@@ -102,15 +103,15 @@ func (this* RoleCityMgr) Scan(x, y int) []*model.MapRoleCity {
 }
 
 func (this* RoleCityMgr) ScanBlock(x, y, length int) []*model.MapRoleCity {
-	if x < 0 || x >= MapWith || y < 0 || y >= MapHeight {
+	if x < 0 || x >= global.MapWith || y < 0 || y >= global.MapHeight {
 		return nil
 	}
 
 	this.mutex.RLock()
 	defer this.mutex.RUnlock()
 
-	maxX := util.MinInt(MapWith, x+length-1)
-	maxY := util.MinInt(MapHeight, y+length-1)
+	maxX := util.MinInt(global.MapWith, x+length-1)
+	maxY := util.MinInt(global.MapHeight, y+length-1)
 
 	cb := make([]*model.MapRoleCity, 0)
 	for i := x; i <= maxX; i++ {

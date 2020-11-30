@@ -3,6 +3,7 @@ package model
 import (
 	"encoding/json"
 	"slgserver/server/conn"
+	"slgserver/server/global"
 	"slgserver/server/proto"
 	"slgserver/util"
 	"time"
@@ -130,8 +131,8 @@ func (this *Army) Position() (int, int){
 		y = int(rate*float32(diffY)) + this.FromY
 	}
 
-	x = util.MinInt(util.MaxInt(x, 0), 40)
-	y = util.MinInt(util.MaxInt(y, 0), 40)
+	x = util.MinInt(util.MaxInt(x, 0), global.MapWith)
+	y = util.MinInt(util.MaxInt(y, 0), global.MapHeight)
 
 	return x, y
 }

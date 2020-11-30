@@ -1,13 +1,15 @@
 package logic
 
+import "slgserver/server/global"
+
 //是否能到达
 func IsCanArrive(x, y, rid int) bool {
 	for i := x-1; i <= x+1; i++ {
-		if i < 0 || i >= MapWith{
+		if i < 0 || i >= global.MapWith{
 			continue
 		}
 		for j := y-1; j <=y+1 ; j++ {
-			if j < 0 || j >= MapHeight {
+			if j < 0 || j >= global.MapHeight {
 				continue
 			}
 			if i == x && j == y {

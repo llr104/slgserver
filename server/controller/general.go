@@ -4,6 +4,7 @@ import (
 	"github.com/goinggo/mapstructure"
 	"slgserver/constant"
 	"slgserver/net"
+	"slgserver/server/global"
 	"slgserver/server/logic"
 	"slgserver/server/middleware"
 	"slgserver/server/model"
@@ -329,8 +330,8 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 			return
 		}
 
-		if reqObj.X < 0 || reqObj.X >= logic.MapWith ||
-			reqObj.Y < 0 || reqObj.Y >= logic.MapHeight{
+		if reqObj.X < 0 || reqObj.X >= global.MapWith ||
+			reqObj.Y < 0 || reqObj.Y >= global.MapHeight{
 			rsp.Body.Code = constant.InvalidParam
 			return
 		}

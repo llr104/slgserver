@@ -9,6 +9,7 @@ import (
 	"slgserver/log"
 	"slgserver/net"
 	"slgserver/server/conn"
+	"slgserver/server/global"
 	"slgserver/server/logic"
 	"slgserver/server/middleware"
 	"slgserver/server/model"
@@ -169,8 +170,8 @@ func (this*Role) enterServer(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 			citys := make([]*model.MapRoleCity, 0)
 			//随机生成一个城市
 			for true {
-				x := rand.Intn(logic.MapWith)
-				y := rand.Intn(logic.MapHeight)
+				x := rand.Intn(global.MapWith)
+				y := rand.Intn(global.MapHeight)
 				if logic.NMMgr.IsCanBuild(x, y) && logic.RBMgr.IsEmpty(x, y) && logic.RCMgr.IsEmpty(x, y){
 					//建立城市
 					c := &model.MapRoleCity{RId: role.RId, X: x, Y: y, IsMain: 1,

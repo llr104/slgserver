@@ -5,6 +5,7 @@ import (
 	"go.uber.org/zap"
 	"slgserver/db"
 	"slgserver/log"
+	"slgserver/server/global"
 	"slgserver/server/model"
 	"slgserver/server/proto"
 	"slgserver/server/static_conf/general"
@@ -147,15 +148,15 @@ func (this *armyLogic) exeArrive(army *model.Army) {
 
 func (this *armyLogic) ScanBlock(x, y, length int) []*model.Army {
 
-	if x < 0 || x >= MapWith || y < 0 || y >= MapHeight {
+	if x < 0 || x >= global.MapWith || y < 0 || y >= global.MapHeight {
 		return nil
 	}
 
 	this.passby.Lock()
 	defer this.passby.Unlock()
 
-	maxX := util.MinInt(MapWith, x+length-1)
-	maxY := util.MinInt(MapHeight, y+length-1)
+	maxX := util.MinInt(global.MapWith, x+length-1)
+	maxY := util.MinInt(global.MapHeight, y+length-1)
 
 	out := make([]*model.Army, 0)
 	for i := x; i <= maxX; i++ {
