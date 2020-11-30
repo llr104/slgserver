@@ -162,7 +162,7 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 			return
 		}
 
-	
+
 		oldGId := army.GeneralArray[reqObj.Position]
 		if oldGId > 0{
 			if oldG, ok := logic.GMgr.GetByGId(oldGId); ok{
