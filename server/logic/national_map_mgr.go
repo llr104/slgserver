@@ -18,8 +18,7 @@ var MapWith = 40
 var MapHeight = 40
 const ScanWith = 3
 const ScanHeight = 3
-const CellWith = 200
-const CellHeight = 200
+
 
 type NMArray struct {
 	arr []model.NationalMap
@@ -37,14 +36,14 @@ func ToPosition(x, y int) int {
 }
 
 func Distance(begX, begY, endX, endY int) float64 {
-	w := math.Abs(float64(endX - begX))*CellWith
-	h := math.Abs(float64(endY - begY))*CellHeight
+	w := math.Abs(float64(endX - begX))
+	h := math.Abs(float64(endY - begY))
 	return math.Sqrt(w*w + h*h)
 }
 
 func TravelTime(speed, begX, begY, endX, endY int) int {
 	dis := Distance(begX, begY, endX, endY)
-	t := dis / float64(speed)*10000
+	t := dis / float64(speed)*1000000
 	return int(t)
 }
 

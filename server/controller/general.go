@@ -174,10 +174,8 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		newG.SyncExecute()
 	}
 
-	if c, ok := logic.RCMgr.Get(army.CityId); ok{
-		army.FromX = c.X
-		army.FromY = c.Y
-	}
+	army.FromX = city.X
+	army.FromY = city.Y
 
 	army.SyncExecute()
 	//队伍
@@ -369,15 +367,17 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 		}
 
 		logic.GMgr.TryUsePhysicalPower(army, cost)
+		
+		army.ToX = reqObj.X
+		army.ToY = reqObj.Y
+		army.Cmd = reqObj.Cmd
+		army.State = model.ArmyRunning
 
 		speed := logic.AMgr.GetSpeed(army)
 		t := logic.TravelTime(speed, army.FromX, army.FromY, army.ToX, army.ToY)
 		army.Start = time.Now()
 		army.End = time.Now().Add(time.Duration(t) * time.Millisecond)
-		army.ToX = reqObj.X
-		army.ToY = reqObj.Y
-		army.Cmd = reqObj.Cmd
-		army.State = model.ArmyRunning
+
 		logic.AMgr.PushAction(army)
 		rspObj.Army = army.ToProto().(proto.Army)
 		rsp.Body.Code = constant.OK
