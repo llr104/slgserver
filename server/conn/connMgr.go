@@ -133,16 +133,20 @@ func (this *Mgr) Push(pushSync PushSync){
 	rids := pushSync.BelongToRId()
 	isCellView := pushSync.IsCellView()
 	x, y := pushSync.Position()
+	cells := make(map[int]int)
 
 	if isCellView {
 		cellRIds := pos.RPMgr.GetCellRoleIds(x, y, 5, 4)
 		for _, rid := range cellRIds {
 			this.PushByRoleId(rid, pushSync.PushMsgName(), proto)
+			cells[rid] = rid
 		}
 	}
 
 	for _, rid := range rids {
-		this.PushByRoleId(rid, pushSync.PushMsgName(), proto)
+		if _, ok := cells[rid]; ok == false{
+			this.PushByRoleId(rid, pushSync.PushMsgName(), proto)
+		}
 	}
 }
 
