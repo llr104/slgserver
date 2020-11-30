@@ -321,4 +321,23 @@ func (this* ArmyMgr) GetSpeed(army* model.Army) int{
 	return speed
 }
 
+//能否上阵
+func (this* ArmyMgr) IsCanDispose(rid int, cfgId int) bool{
+	armys, ok := this.GetByRId(rid)
+	if ok == false{
+		return false
+	}
+
+	for _, army := range armys {
+		for _, gId := range army.GeneralArray {
+			if g, ok := GMgr.GetByGId(gId); ok {
+				if g.CfgId == cfgId && g.CityId != 0{
+					return false
+				}
+			}
+		}
+	}
+	return true
+}
+
 

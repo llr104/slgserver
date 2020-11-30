@@ -126,6 +126,11 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
+	if logic.AMgr.IsCanDispose(role.RId, newG.CfgId) == false{
+		rsp.Body.Code = constant.GeneralRepeat
+		return
+	}
+
 	army, err := logic.AMgr.GetOrCreate(role.RId, reqObj.CityId, reqObj.Order)
 	if err != nil{
 		rsp.Body.Code = constant.DBError
@@ -157,6 +162,7 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 			return
 		}
 
+		logic.AMgr.GetByRId()
 		oldGId := army.GeneralArray[reqObj.Position]
 		if oldGId > 0{
 			if oldG, ok := logic.GMgr.GetByGId(oldGId); ok{

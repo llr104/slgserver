@@ -30,4 +30,5 @@ const UnReachable = 23					//不可到达
 const PhysicalPowerNotEnough = 24		//体力不足
 const DecreeNotEnough = 25				//政令不足
 const GoldNotEnough = 26				//金币不足
+const GeneralRepeat = 27				//重复上阵
 
