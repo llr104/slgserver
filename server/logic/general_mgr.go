@@ -233,18 +233,14 @@ func (this* GeneralMgr) GetByRIdTryCreate(rid int) ([]*model.General, bool){
 }
 
 
-
-
 /*
 随机创建一个
 */
-func (this* GeneralMgr) RandCreateGeneral(rid int,nums int) ([]*model.General, bool){
+func (this* GeneralMgr) RandCreateGeneral(rid int, nums int) ([]*model.General, bool){
 	//创建
 	gs := make([]*model.General, 0)
 	sess := db.MasterDB.NewSession()
 	sess.Begin()
-
-
 
 	for i := 0; i < nums; i++ {
 		r := rand.Intn(len(general.General.GArr))
@@ -255,8 +251,6 @@ func (this* GeneralMgr) RandCreateGeneral(rid int,nums int) ([]*model.General, b
 		}
 		gs = append(gs, g)
 	}
-
-
 
 	if err := sess.Commit(); err != nil{
 		log.DefaultLog.Warn("db error", zap.Error(err))
