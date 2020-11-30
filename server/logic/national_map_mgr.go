@@ -7,7 +7,6 @@ import (
 	"math"
 	"os"
 	"slgserver/config"
-	"slgserver/db"
 	"slgserver/log"
 	"slgserver/server/global"
 	"slgserver/server/model"
@@ -81,21 +80,11 @@ func (this* NationalMapMgr) Load() {
 	this.mutex.Lock()
 	defer this.mutex.Unlock()
 
-	temp := make([]model.NationalMap, 0)
-	isNeedDb := false
-	cnt, err := db.MasterDB.Table(new(model.NationalMap)).Count(&temp)
-	if cnt == 0 && err == nil{
-		isNeedDb = true
-	}
-
 	for i, v := range m.List {
 		t := int8(v[0])
 		l := int8(v[1])
 		d := model.NationalMap{X: i/global.MapWith, Y: i%global.MapWith, MId: i, Type: t, Level: l}
 		this.conf[i] = d
-		if isNeedDb {
-			db.MasterDB.Insert(d)
-		}
 	}
 
 }

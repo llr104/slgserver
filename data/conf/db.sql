@@ -65,17 +65,6 @@ CREATE TABLE IF NOT EXISTS `map_role_city` (
    PRIMARY KEY (`cityId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '玩家城池';
 
-CREATE TABLE IF NOT EXISTS `national_map` (
-   `id` int unsigned NOT NULL AUTO_INCREMENT,
-   `mid` int unsigned NOT NULL,
-   `x` int unsigned NOT NULL COMMENT 'x坐标',
-   `y` int unsigned NOT NULL COMMENT 'y坐标',
-   `type` int unsigned NOT NULL COMMENT '建筑类型',
-   `level` tinyint unsigned NOT NULL DEFAULT 1 COMMENT 'level',
-    UNIQUE KEY (`mid`),
-   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '全国地图';
-
 
 
 CREATE TABLE IF NOT EXISTS `map_role_build` (
