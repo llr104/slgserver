@@ -325,7 +325,7 @@ func (this* ArmyMgr) GetSpeed(army* model.Army) int{
 func (this* ArmyMgr) IsCanDispose(rid int, cfgId int) bool{
 	armys, ok := this.GetByRId(rid)
 	if ok == false{
-		return false
+		return true
 	}
 
 	for _, army := range armys {
