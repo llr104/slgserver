@@ -35,7 +35,7 @@ func (this*Role) InitRouter(r *net.Router) {
 	g.AddRouter("myRoleRes", this.myRoleRes, middleware.CheckRole())
 	g.AddRouter("myRoleBuild", this.myRoleBuild, middleware.CheckRole())
 	g.AddRouter("myProperty", this.myProperty, middleware.CheckRole())
-	g.AddRouter("upPosition", this.upPosition)
+	g.AddRouter("upPosition", this.upPosition, middleware.CheckRole())
 }
 
 func (this*Role) create(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
