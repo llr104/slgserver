@@ -2,7 +2,6 @@ package logic
 
 import (
 	"encoding/json"
-	"fmt"
 	"go.uber.org/zap"
 	"slgserver/db"
 	"slgserver/log"
@@ -10,6 +9,7 @@ import (
 	"slgserver/server/proto"
 	"slgserver/server/static_conf/general"
 	"slgserver/util"
+	"sync"
 	"time"
 )
 
@@ -17,9 +17,11 @@ import (
 var ArmyLogic *armyLogic
 
 func init() {
-	ArmyLogic = &armyLogic{arriveArmys: make(chan *model.Army, 100),
+	ArmyLogic = &armyLogic{
+		arriveArmys: make(chan *model.Army, 100),
 		giveUpId:       make(chan int, 100),
 		updateArmys:    make(chan *model.Army, 100),
+		outArmys:		make(map[int]*model.Army),
 		stopInPosArmys: make(map[int]map[int]*model.Army),
 		passbyPosArmys: make(map[int]map[int]*model.Army),
 		sys:            NewSysArmy()}
@@ -28,12 +30,14 @@ func init() {
 }
 
 type armyLogic struct {
-	sys            *sysArmyLogic
-	giveUpId       chan int
-	arriveArmys    chan *model.Army
-	updateArmys    chan *model.Army
-	stopInPosArmys map[int]map[int]*model.Army //玩家停留位置的军队 key:posId,armyId
-	passbyPosArmys map[int]map[int]*model.Army //玩家路过位置的军队 key:posId,armyId
+	passby			sync.Mutex
+	sys            	*sysArmyLogic
+	giveUpId       	chan int
+	arriveArmys    	chan *model.Army
+	updateArmys    	chan *model.Army
+	outArmys		map[int]*model.Army
+	stopInPosArmys 	map[int]map[int]*model.Army //玩家停留位置的军队 key:posId,armyId
+	passbyPosArmys 	map[int]map[int]*model.Army //玩家路过位置的军队 key:posId,armyId
 }
 
 func (this *armyLogic) running(){
@@ -41,9 +45,20 @@ func (this *armyLogic) running(){
 	for {
 		select {
 			case <-passbyTimer.C:{
-				fmt.Println("需要更新玩家军队的位置了")
-				d := Distance(1,1,3,3)
-				fmt.Println(d)
+				this.passby.Lock()
+				this.passbyPosArmys = make(map[int]map[int]*model.Army)
+				for _, army := range this.outArmys {
+					if army.State == model.ArmyRunning{
+						x, y := army.Position()
+						posId := ToPosition(x, y)
+						if _, ok := this.passbyPosArmys[posId]; ok == false {
+							this.passbyPosArmys[posId] = make(map[int]*model.Army)
+						}
+						this.passbyPosArmys[posId][army.Id] = army
+						army.SyncExecute()
+					}
+				}
+				this.passby.Unlock()
 			}
 			case army := <-this.updateArmys:{
 				this.exeUpdate(army)
@@ -68,6 +83,10 @@ func (this *armyLogic) exeUpdate(army *model.Army) {
 	army.SyncExecute()
 	if army.Cmd == model.ArmyCmdBack {
 		this.deleteArmy(army.ToX, army.ToY)
+	}
+
+	if army.Cmd != model.ArmyCmdIdle {
+		this.outArmys[army.Id] = army
 	}
 }
 
@@ -118,14 +137,38 @@ func (this *armyLogic) exeArrive(army *model.Army) {
 			}
 		}
 	}else if army.Cmd == model.ArmyCmdBack {
-		//如果该队伍在驻守，需要移除
 		army.State = model.ArmyStop
 		army.Cmd = model.ArmyCmdIdle
 		this.Update(army)
 	}
 }
 
+func (this *armyLogic) ScanBlock(x, y, length int) []*model.Army {
 
+	if x < 0 || x >= MapWith || y < 0 || y >= MapHeight {
+		return nil
+	}
+
+	this.passby.Lock()
+	defer this.passby.Unlock()
+
+	maxX := util.MinInt(MapWith, x+length-1)
+	maxY := util.MinInt(MapHeight, y+length-1)
+
+	out := make([]*model.Army, 0)
+	for i := x; i <= maxX; i++ {
+		for j := y; j <= maxY; j++ {
+			posId := ToPosition(i, j)
+			armys, ok := this.passbyPosArmys[posId]
+			if ok {
+				for _, army := range armys {
+					out = append(out, army)
+				}
+			}
+		}
+	}
+	return out
+}
 
 func (this *armyLogic) Arrive(army *model.Army) {
 	this.arriveArmys <- army

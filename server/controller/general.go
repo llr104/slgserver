@@ -367,7 +367,7 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 		}
 
 		logic.GMgr.TryUsePhysicalPower(army, cost)
-		
+
 		army.ToX = reqObj.X
 		army.ToY = reqObj.Y
 		army.Cmd = reqObj.Cmd

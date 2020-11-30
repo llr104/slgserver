@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"slgserver/server/conn"
 	"slgserver/server/proto"
+	"slgserver/util"
 	"time"
 	"xorm.io/xorm"
 )
@@ -112,7 +113,27 @@ func (this *Army) PushMsgName() string{
 }
 
 func (this *Army) Position() (int, int){
-	return -1, -1
+	diffTime := this.End.Unix()-this.Start.Unix()
+	passTime := time.Now().Unix()-this.Start.Unix()
+	rate := float32(passTime)/float32(diffTime)
+	x := 0
+	y := 0
+	if this.Cmd == ArmyCmdBack{
+		diffX := this.ToX - this.FromX
+		diffY := this.ToX - this.FromY
+		x = int(rate*float32(diffX)) + this.FromX
+		y = int(rate*float32(diffY)) + this.FromY
+	}else{
+		diffX := this.FromX - this.ToX
+		diffY := this.FromY - this.ToY
+		x = int(rate*float32(diffX)) + this.FromX
+		y = int(rate*float32(diffY)) + this.FromY
+	}
+
+	x = util.MinInt(util.MaxInt(x, 0), 40)
+	y = util.MinInt(util.MaxInt(y, 0), 40)
+
+	return x, y
 }
 
 func (this *Army) ToProto() interface{}{
