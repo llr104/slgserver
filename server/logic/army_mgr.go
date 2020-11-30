@@ -308,4 +308,17 @@ func (this* ArmyMgr) GetOrCreate(rid int, cid int, order int8) (*model.Army, err
 	}
 }
 
+func (this* ArmyMgr) GetSpeed(army* model.Army) int{
+	speed := 100000
+	for _, gId := range army.GeneralArray {
+		if g, ok := GMgr.GetByGId(gId); ok {
+			s := g.GetSpeed()
+			if s < speed {
+				speed = s
+			}
+		}
+	}
+	return speed
+}
+
 

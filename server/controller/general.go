@@ -370,8 +370,10 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 
 		logic.GMgr.TryUsePhysicalPower(army, cost)
 
+		speed := logic.AMgr.GetSpeed(army)
+		t := logic.TravelTime(speed, army.FromX, army.FromY, army.ToX, army.ToY)
 		army.Start = time.Now()
-		army.End = time.Now().Add(20*time.Second)
+		army.End = time.Now().Add(time.Duration(t) * time.Millisecond)
 		army.ToX = reqObj.X
 		army.ToY = reqObj.Y
 		army.Cmd = reqObj.Cmd

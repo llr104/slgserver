@@ -33,6 +33,14 @@ func (this *General) GetDestroy() int{
 	return 0
 }
 
+func (this *General) GetSpeed() int{
+	cfg, ok := general.General.GMap[this.CfgId]
+	if ok {
+		return (cfg.Speed+cfg.SpeedGrow*int(this.Level))/100
+	}
+	return 0
+}
+
 
 /* 推送同步 begin */
 func (this *General) IsCellView() bool{
