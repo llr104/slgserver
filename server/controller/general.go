@@ -32,6 +32,7 @@ func (this*General) InitRouter(r *net.Router) {
 	g.AddRouter("armyList", this.armyList)
 	g.AddRouter("conscript", this.conscript)
 	g.AddRouter("assignArmy", this.assignArmy)
+	g.AddRouter("drawGeneral", this.drawGenerals)
 
 
 }
@@ -381,6 +382,39 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 		logic.AMgr.PushAction(army)
 		rspObj.Army = army.ToProto().(proto.Army)
 		rsp.Body.Code = constant.OK
+	}
+}
+
+
+
+func (this*General) drawGenerals(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+	reqObj := &proto.DrawGeneralReq{}
+	rspObj := &proto.DrawGeneralRsp{}
+	mapstructure.Decode(req.Body.Msg, reqObj)
+	rsp.Body.Msg = rspObj
+	rsp.Body.Code = constant.OK
+
+	r, _ := req.Conn.GetProperty("role")
+	role := r.(*model.Role)
+
+	cost := static_conf.Basic.General.DrawGeneralCost * reqObj.DrawTimes;
+	ok := logic.RResMgr.GoldIsEnough(role.RId,cost)
+	if ok == false{
+		rsp.Body.Code = constant.GoldNotEnough
+		return
+	}
+
+	gs, ok := logic.GMgr.RandCreateGeneral(role.RId,reqObj.DrawTimes)
+
+	if ok {
+		logic.RResMgr.TryUseGold(role.RId, cost)
+		rsp.Body.Code = constant.OK
+		rspObj.Generals = make([]proto.General, len(gs))
+		for i, v := range gs {
+			rspObj.Generals[i] = v.ToProto().(proto.General)
+		}
+	}else{
+		rsp.Body.Code = constant.DBError
 	}
 }
 

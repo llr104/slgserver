@@ -131,6 +131,44 @@ func (this* RoleResMgr) TryUseDecree(rid int, decree int) bool{
 	}
 }
 
+
+
+//金币是否足够
+func (this* RoleResMgr) GoldIsEnough(rid int, cost int) bool {
+	this.mutex.Lock()
+	defer this.mutex.Unlock()
+	rr, ok := this.rolesRes[rid]
+	if ok {
+		if rr.Gold >= cost {
+			return true
+		}else{
+			return false
+		}
+	}else{
+		return false
+	}
+}
+
+
+func (this* RoleResMgr) TryUseGold(rid int, gold int) bool{
+	this.mutex.Lock()
+	defer this.mutex.Unlock()
+	rr, ok := this.rolesRes[rid]
+	if ok {
+		if rr.Gold >= gold {
+			rr.Gold -= gold
+			rr.SyncExecute()
+			return true
+		}else{
+			return false
+		}
+	}else{
+		return false
+	}
+}
+
+
+
 func (this* RoleResMgr) CutDown(rid int, b *model.MapRoleBuild) (*model.RoleRes, bool)  {
 	rr, ok := this.Get(rid)
 	if ok {
