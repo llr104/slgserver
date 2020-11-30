@@ -22,17 +22,17 @@ var RResMgr = &RoleResMgr{
 
 func (this* RoleResMgr) Load() {
 
-	rr := make([]model.RoleRes, 0)
+	rr := make([]*model.RoleRes, 0)
 	err := db.MasterDB.Find(&rr)
 	if err != nil {
 		log.DefaultLog.Error("RoleResMgr load role_res table error")
 	}
 
 	this.mutex.Lock()
-	defer this.mutex.Unlock()
 	for _, v := range rr {
-		this.rolesRes[v.RId] = &v
+		this.rolesRes[v.RId] = v
 	}
+	this.mutex.Unlock()
 
 	go this.produce()
 	go this.toDatabase()
