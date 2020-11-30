@@ -22,17 +22,17 @@ var RResMgr = &RoleResMgr{
 
 func (this* RoleResMgr) Load() {
 
-	rr := make([]model.RoleRes, 0)
+	rr := make([]*model.RoleRes, 0)
 	err := db.MasterDB.Find(&rr)
 	if err != nil {
 		log.DefaultLog.Error("RoleResMgr load role_res table error")
 	}
 
 	this.mutex.Lock()
-	defer this.mutex.Unlock()
 	for _, v := range rr {
-		this.rolesRes[v.RId] = &v
+		this.rolesRes[v.RId] = v
 	}
+	this.mutex.Unlock()
 
 	go this.produce()
 	go this.toDatabase()
@@ -130,6 +130,44 @@ func (this* RoleResMgr) TryUseDecree(rid int, decree int) bool{
 		return false
 	}
 }
+
+
+
+//金币是否足够
+func (this* RoleResMgr) GoldIsEnough(rid int, cost int) bool {
+	this.mutex.Lock()
+	defer this.mutex.Unlock()
+	rr, ok := this.rolesRes[rid]
+	if ok {
+		if rr.Gold >= cost {
+			return true
+		}else{
+			return false
+		}
+	}else{
+		return false
+	}
+}
+
+
+func (this* RoleResMgr) TryUseGold(rid int, gold int) bool{
+	this.mutex.Lock()
+	defer this.mutex.Unlock()
+	rr, ok := this.rolesRes[rid]
+	if ok {
+		if rr.Gold >= gold {
+			rr.Gold -= gold
+			rr.SyncExecute()
+			return true
+		}else{
+			return false
+		}
+	}else{
+		return false
+	}
+}
+
+
 
 func (this* RoleResMgr) CutDown(rid int, b *model.MapRoleBuild) (*model.RoleRes, bool)  {
 	rr, ok := this.Get(rid)
