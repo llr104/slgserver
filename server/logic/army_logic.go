@@ -87,6 +87,8 @@ func (this *armyLogic) exeUpdate(army *model.Army) {
 
 	if army.Cmd != model.ArmyCmdIdle {
 		this.outArmys[army.Id] = army
+	}else{
+		delete(this.outArmys, army.RId)
 	}
 }
 
