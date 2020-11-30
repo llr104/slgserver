@@ -25,19 +25,23 @@ func (this *MapRoleCity) TableName() string {
 }
 
 /* 推送同步 begin */
-func (this*MapRoleCity) IsCellView() bool{
+func (this *MapRoleCity) IsCellView() bool{
 	return true
 }
 
-func (this*MapRoleCity) BelongToRId() []int{
+func (this *MapRoleCity) BelongToRId() []int{
 	return []int{this.RId}
 }
 
-func (this*MapRoleCity) PushMsgName() string{
+func (this *MapRoleCity) PushMsgName() string{
 	return "roleCity.push"
 }
 
-func (this*MapRoleCity) ToProto() interface{}{
+func (this *MapRoleCity) Position() (int, int){
+	return this.X, this.Y
+}
+
+func (this *MapRoleCity) ToProto() interface{}{
 	p := proto.MapRoleCity{}
 	p.X = this.X
 	p.Y = this.Y
@@ -51,12 +55,12 @@ func (this*MapRoleCity) ToProto() interface{}{
 	return p
 }
 
-func (this*MapRoleCity) Push(){
+func (this *MapRoleCity) Push(){
 	conn.ConnMgr.Push(this)
 }
 /* 推送同步 end */
 
-func (this*MapRoleCity) SyncExecute() {
+func (this *MapRoleCity) SyncExecute() {
 	this.DB.Sync()
 	this.Push()
 }

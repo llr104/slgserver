@@ -30,19 +30,23 @@ func (this *MapRoleBuild) TableName() string {
 
 
 /* 推送同步 begin */
-func (this*MapRoleBuild) IsCellView() bool{
+func (this *MapRoleBuild) IsCellView() bool{
 	return true
 }
 
-func (this*MapRoleBuild) BelongToRId() []int{
+func (this *MapRoleBuild) BelongToRId() []int{
 	return []int{this.RId}
 }
 
-func (this*MapRoleBuild) PushMsgName() string{
+func (this *MapRoleBuild) PushMsgName() string{
 	return "roleBuild.push"
 }
 
-func (this*MapRoleBuild) ToProto() interface{}{
+func (this *MapRoleBuild) Position() (int, int){
+	return this.X, this.Y
+}
+
+func (this *MapRoleBuild) ToProto() interface{}{
 	p := proto.MapRoleBuild{}
 	p.RNick = this.RNick
 	p.X = this.X
@@ -57,12 +61,12 @@ func (this*MapRoleBuild) ToProto() interface{}{
 	return p
 }
 
-func (this*MapRoleBuild) Push(){
+func (this *MapRoleBuild) Push(){
 	conn.ConnMgr.Push(this)
 }
 /* 推送同步 end */
 
-func (this*MapRoleBuild) SyncExecute() {
+func (this *MapRoleBuild) SyncExecute() {
 	this.DB.Sync()
 	this.Push()
 }

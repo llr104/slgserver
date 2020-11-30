@@ -308,4 +308,36 @@ func (this* ArmyMgr) GetOrCreate(rid int, cid int, order int8) (*model.Army, err
 	}
 }
 
+func (this* ArmyMgr) GetSpeed(army* model.Army) int{
+	speed := 100000
+	for _, gId := range army.GeneralArray {
+		if g, ok := GMgr.GetByGId(gId); ok {
+			s := g.GetSpeed()
+			if s < speed {
+				speed = s
+			}
+		}
+	}
+	return speed
+}
+
+//能否上阵
+func (this* ArmyMgr) IsCanDispose(rid int, cfgId int) bool{
+	armys, ok := this.GetByRId(rid)
+	if ok == false{
+		return true
+	}
+
+	for _, army := range armys {
+		for _, gId := range army.GeneralArray {
+			if g, ok := GMgr.GetByGId(gId); ok {
+				if g.CfgId == cfgId && g.CityId != 0{
+					return false
+				}
+			}
+		}
+	}
+	return true
+}
+
 

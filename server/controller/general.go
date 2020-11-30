@@ -32,6 +32,7 @@ func (this*General) InitRouter(r *net.Router) {
 	g.AddRouter("armyList", this.armyList)
 	g.AddRouter("conscript", this.conscript)
 	g.AddRouter("assignArmy", this.assignArmy)
+	g.AddRouter("drawGeneral", this.drawGenerals)
 
 
 }
@@ -125,6 +126,8 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
+
+
 	army, err := logic.AMgr.GetOrCreate(role.RId, reqObj.CityId, reqObj.Order)
 	if err != nil{
 		rsp.Body.Code = constant.DBError
@@ -150,9 +153,13 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		newG.CityId = 0
 		newG.SyncExecute()
 	}else{
-
 		if newG.CityId != 0{
 			rsp.Body.Code = constant.GeneralBusy
+			return
+		}
+
+		if logic.AMgr.IsCanDispose(role.RId, newG.CfgId) == false{
+			rsp.Body.Code = constant.GeneralRepeat
 			return
 		}
 
@@ -174,10 +181,8 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		newG.SyncExecute()
 	}
 
-	if c, ok := logic.RCMgr.Get(army.CityId); ok{
-		army.FromX = c.X
-		army.FromY = c.Y
-	}
+	army.FromX = city.X
+	army.FromY = city.Y
 
 	army.SyncExecute()
 	//队伍
@@ -370,15 +375,52 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 
 		logic.GMgr.TryUsePhysicalPower(army, cost)
 
-		army.Start = time.Now()
-		army.End = time.Now().Add(20*time.Second)
 		army.ToX = reqObj.X
 		army.ToY = reqObj.Y
 		army.Cmd = reqObj.Cmd
 		army.State = model.ArmyRunning
+
+		speed := logic.AMgr.GetSpeed(army)
+		t := logic.TravelTime(speed, army.FromX, army.FromY, army.ToX, army.ToY)
+		army.Start = time.Now()
+		army.End = time.Now().Add(time.Duration(t) * time.Millisecond)
+
 		logic.AMgr.PushAction(army)
 		rspObj.Army = army.ToProto().(proto.Army)
 		rsp.Body.Code = constant.OK
+	}
+}
+
+
+
+func (this*General) drawGenerals(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+	reqObj := &proto.DrawGeneralReq{}
+	rspObj := &proto.DrawGeneralRsp{}
+	mapstructure.Decode(req.Body.Msg, reqObj)
+	rsp.Body.Msg = rspObj
+	rsp.Body.Code = constant.OK
+
+	r, _ := req.Conn.GetProperty("role")
+	role := r.(*model.Role)
+
+	cost := static_conf.Basic.General.DrawGeneralCost * reqObj.DrawTimes;
+	ok := logic.RResMgr.GoldIsEnough(role.RId,cost)
+	if ok == false{
+		rsp.Body.Code = constant.GoldNotEnough
+		return
+	}
+
+	gs, ok := logic.GMgr.RandCreateGeneral(role.RId,reqObj.DrawTimes)
+
+	if ok {
+		logic.RResMgr.TryUseGold(role.RId, cost)
+		rsp.Body.Code = constant.OK
+		rspObj.Generals = make([]proto.General, len(gs))
+		for i, v := range gs {
+			rspObj.Generals[i] = v.ToProto().(proto.General)
+		}
+	}else{
+		rsp.Body.Code = constant.DBError
 	}
 }
 

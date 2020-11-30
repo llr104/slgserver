@@ -5,6 +5,7 @@ import (
 	"go.uber.org/zap"
 	"slgserver/log"
 	"slgserver/net"
+	"slgserver/server/pos"
 	"sync"
 )
 
@@ -131,10 +132,13 @@ func (this *Mgr) Push(pushSync PushSync){
 	proto := pushSync.ToProto()
 	rids := pushSync.BelongToRId()
 	isCellView := pushSync.IsCellView()
+	x, y := pushSync.Position()
 
 	if isCellView {
-		//是否格子视野内推送，现在暂时全部推送，后面实现格子推送
-		this.pushAll(pushSync.PushMsgName(), proto)
+		rids := pos.RPMgr.GetCellRoleIds(x, y, 5, 4)
+		for _, rid := range rids {
+			this.PushByRoleId(rid, pushSync.PushMsgName(), proto)
+		}
 	}else{
 		for _, rid := range rids {
 			this.PushByRoleId(rid, pushSync.PushMsgName(), proto)

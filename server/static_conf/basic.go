@@ -38,6 +38,8 @@ type general struct {
 	RecoveryPhysicalPower int    `json:"recovery_physical_power"` //恢复体力
 	ReclamationTime       int    `json:"reclamation_time"`        //屯田消耗时间，单位秒
 	ReclamationCost       int    `json:"reclamation_cost"`        //屯田消耗政令
+	DrawGeneralCost       int    `json:"draw_general_cost"`        //抽卡消耗金币
+
 }
 
 type basic struct {

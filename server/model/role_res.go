@@ -29,19 +29,19 @@ func (this *RoleRes) TableName() string {
 
 
 /* 推送同步 begin */
-func (this*RoleRes) IsCellView() bool{
+func (this *RoleRes) IsCellView() bool{
 	return false
 }
 
-func (this*RoleRes) BelongToRId() []int{
+func (this *RoleRes) BelongToRId() []int{
 	return []int{this.RId}
 }
 
-func (this*RoleRes) PushMsgName() string{
+func (this *RoleRes) PushMsgName() string{
 	return "roleRes.push"
 }
 
-func (this*RoleRes) ToProto() interface{}{
+func (this *RoleRes) ToProto() interface{}{
 	p := proto.RoleRes{}
 	p.Gold = this.Gold
 	p.Grain = this.Grain
@@ -58,12 +58,16 @@ func (this*RoleRes) ToProto() interface{}{
 	return p
 }
 
-func (this*RoleRes) Push(){
+func (this *RoleRes) Position() (int, int){
+	return -1, -1
+}
+
+func (this *RoleRes) Push(){
 	conn.ConnMgr.Push(this)
 }
 /* 推送同步 end */
 
-func (this*RoleRes) SyncExecute() {
+func (this *RoleRes) SyncExecute() {
 	this.DB.Sync()
 	this.Push()
 }

@@ -41,8 +41,9 @@ type ScanReq struct {
 }
 
 type ScanRsp struct {
-	MRBuilds []MapRoleBuild `json:"mr_builds"` //角色建筑，包含被占领的基础建筑
-	MCBuilds []MapRoleCity  `json:"mc_builds"` //角色城市
+	MRBuilds []MapRoleBuild `json:"mr_builds"` 	//角色建筑，包含被占领的基础建筑
+	MCBuilds []MapRoleCity  `json:"mc_builds"` 	//角色城市
+	Armys 	[]Army  		`json:"armys"` 		//军队
 }
 
 type ScanBlockReq struct {

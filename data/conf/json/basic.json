@@ -13,7 +13,8 @@
     "cost_physical_power": 10,
     "recovery_physical_power": 1,
     "reclamation_time": 30,
-    "reclamation_cost": 1
+    "reclamation_cost": 1,
+    "draw_general_cost": 10
   }
 
 }

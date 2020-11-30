@@ -107,6 +107,13 @@ func (this*NationMap) scanBlock(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	for i, v := range cb {
 		rspObj.MCBuilds[i] = v.ToProto().(proto.MapRoleCity)
 	}
+
+	armys := logic.ArmyLogic.ScanBlock(x, y, reqObj.Length)
+	rspObj.Armys = make([]proto.Army, len(armys))
+	for i, v := range armys {
+		rspObj.Armys[i] = v.ToProto().(proto.Army)
+	}
+
 }
 
 func (this*NationMap) giveUp(req *net.WsMsgReq, rsp *net.WsMsgRsp) {

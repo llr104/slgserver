@@ -3,18 +3,19 @@ package pos
 import "sync"
 
 var RPMgr = RolePosMgr{
-	posCaches: make(map[Position]map[int]int),
+	posCaches: make(map[position]map[int]int),
+	ridCaches: make(map[int]position),
 }
 
-type Position struct {
+type position struct {
 	X		int
 	Y		int
 }
 
 type RolePosMgr struct {
 	mutex     sync.RWMutex
-	posCaches map[Position]map[int]int
-	ridCaches map[int]Position
+	posCaches map[position]map[int]int
+	ridCaches map[int]position
 }
 
 func (this *RolePosMgr) Push(x, y, rid int) {
@@ -32,13 +33,31 @@ func (this *RolePosMgr) Push(x, y, rid int) {
 	}
 
 	//新的写入
-	p := Position{x, y}
+	p := position{x, y}
 	_, ok := this.posCaches[p]
 	if ok == false {
 		this.posCaches[p] = make(map[int]int)
 	}
 	this.posCaches[p][rid] = rid
+	this.ridCaches[rid] = p
 }
 
+func (this *RolePosMgr) GetCellRoleIds(x, y, width, height int) []int{
+	this.mutex.RLock()
+	defer this.mutex.RUnlock()
 
+	l := make([]int, 0)
+	for i := x-width; i <= x+width; i++ {
+		for j := y-height; j <= y+height; j++ {
+			pos := position{i, j}
+			r, ok := this.posCaches[pos]
+			if ok {
+				for _, v := range r {
+					l = append(l, v)
+				}
+			}
+		}
+	}
+	return l
+}
 
