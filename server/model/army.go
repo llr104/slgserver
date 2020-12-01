@@ -42,6 +42,8 @@ type Army struct {
 	ToY              	int       	`xorm:"to_y"`
 	Start            	time.Time 	`json:"-"xorm:"start"`
 	End              	time.Time 	`json:"-"xorm:"end"`
+	CellX				int			`json:"-" xorm:"-"`
+	CellY				int			`json:"-" xorm:"-"`
 }
 
 func (this *Army) TableName() string {
@@ -133,7 +135,6 @@ func (this *Army) Position() (int, int){
 
 	x = util.MinInt(util.MaxInt(x, 0), global.MapWith)
 	y = util.MinInt(util.MaxInt(y, 0), global.MapHeight)
-
 	return x, y
 }
 
@@ -163,4 +164,12 @@ func (this *Army) Push(){
 func (this *Army) SyncExecute() {
 	this.DB.Sync()
 	this.Push()
+	this.CellX, this.CellY = this.Position()
+}
+
+func (this *Army) CheckSyncCell() {
+	x, y := this.Position()
+	if x != this.CellX || y != this.CellY{
+		this.SyncExecute()
+	}
 }
