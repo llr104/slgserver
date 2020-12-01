@@ -3,7 +3,6 @@ package logic
 import (
 	"encoding/json"
 	"go.uber.org/zap"
-	"slgserver/db"
 	"slgserver/log"
 	"slgserver/server/global"
 	"slgserver/server/model"
@@ -383,12 +382,7 @@ func (this* armyLogic) executeBuild(army *model.Army)  {
 	}
 
 	for _, wr := range warReports {
-		_, err := db.MasterDB.InsertOne(wr)
-		if err != nil{
-			log.DefaultLog.Warn("db error", zap.Error(err))
-		}else{
-			wr.SyncExecute()
-		}
+		wr.SyncExecute()
 	}
 
 }
