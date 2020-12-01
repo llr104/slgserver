@@ -39,6 +39,7 @@ func (this *Basic) Load()  {
 	fmt.Println(this)
 
 	General.Load()
+	GenArms.Load()
 }
 
 func (this *Basic) GetLevel(l int8) (*gLevel, error){

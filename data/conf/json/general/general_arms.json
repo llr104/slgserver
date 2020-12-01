@@ -1,0 +1,126 @@
+{
+  "title": "兵种配置表",
+  "arms":[
+    {
+      "id": 1,
+      "name": "步兵",
+      "condition":{
+        "level": 1,
+        "star_lv": 0
+      },
+      "change_cost": {
+        "gold": 1000
+      }
+    },
+    {
+      "id": 2,
+      "name": "弓兵",
+      "condition":{
+        "level": 1,
+        "star_lv": 0
+      },
+      "change_cost": {
+        "gold": 1000
+      }
+    },
+    {
+      "id": 3,
+      "name": "骑兵",
+      "condition":{
+        "level": 1,
+        "star_lv": 0
+      },
+      "change_cost": {
+        "gold": 1000
+      }
+    },
+    {
+      "id": 4,
+      "name": "轻步兵",
+      "condition":{
+        "level": 3,
+        "star_lv": 0
+      },
+      "change_cost": {
+        "gold": 5000
+      }
+    },
+    {
+      "id": 5,
+      "name": "弩兵",
+      "condition":{
+        "level": 3,
+        "star_lv": 0
+      },
+      "change_cost": {
+        "gold": 6000
+      }
+    },
+    {
+      "id": 6,
+      "name": "轻骑兵",
+      "condition":{
+        "level": 3,
+        "star_lv": 0
+      },
+      "change_cost": {
+        "gold": 4000
+      }
+    },
+    {
+      "id": 7,
+      "name": "重甲兵",
+      "condition":{
+        "level": 7,
+        "star_lv": 0
+      },
+      "change_cost": {
+        "gold": 14000
+      }
+    },
+    {
+      "id": 8,
+      "name": "重骑兵",
+      "condition":{
+        "level": 7,
+        "star_lv": 0
+      },
+      "change_cost": {
+        "gold": 18000
+      }
+    },
+    {
+      "id": 9,
+      "name": "百战穿甲兵",
+      "condition":{
+        "level": 10,
+        "star_lv": 1
+      },
+      "change_cost": {
+        "gold": 28000
+      }
+    },
+    {
+      "id": 10,
+      "name": "炮兵",
+      "condition":{
+        "level": 10,
+        "star_lv": 1
+      },
+      "change_cost": {
+        "gold": 24000
+      }
+    },
+    {
+      "id": 11,
+      "name": "黄金火骑兵",
+      "condition":{
+        "level": 10,
+        "star_lv": 1
+      },
+      "change_cost": {
+        "gold": 25000
+      }
+    }
+  ]
+}

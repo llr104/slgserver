@@ -15,7 +15,9 @@
       "speed_grow": 80,
       "destroy_grow": 30,
       "cost": 10,
-      "probability":50
+      "probability":50,
+      "star":3,
+      "arms":[1,2,3]
     },
     {
       "name": "关羽",
@@ -31,7 +33,9 @@
       "speed_grow": 80,
       "destroy_grow": 30,
       "cost": 10,
-      "probability":50
+      "probability":50,
+      "star":3,
+      "arms":[1,2,3]
     },
     {
       "name": "赵云",
@@ -47,7 +51,9 @@
       "speed_grow": 80,
       "destroy_grow": 30,
       "cost": 10,
-      "probability":80
+      "probability":80,
+      "star":3,
+      "arms":[1,2,3]
     },{
       "name": "黄忠",
       "cfgId": 4,
@@ -62,7 +68,9 @@
       "speed_grow": 80,
       "destroy_grow": 30,
       "cost": 10,
-      "probability":10
+      "probability":10,
+      "star":3,
+      "arms":[1,2,3]
     },{
       "name": "马超",
       "cfgId": 5,
@@ -77,7 +85,9 @@
       "speed_grow": 80,
       "destroy_grow": 30,
       "cost": 10,
-      "probability":10
+      "probability":10,
+      "star":3,
+      "arms":[1,2,3]
     },{
       "name": "许褚",
       "cfgId": 6,
@@ -92,7 +102,9 @@
       "speed_grow": 80,
       "destroy_grow": 30,
       "cost": 10,
-      "probability":50
+      "probability":50,
+      "star":3,
+      "arms":[1,2,3]
     },{
       "name": "张辽",
       "cfgId": 7,
@@ -107,7 +119,9 @@
       "speed_grow": 80,
       "destroy_grow": 30,
       "cost": 10,
-      "probability":80
+      "probability":80,
+      "star":3,
+      "arms":[1,2,3]
     },{
       "name": "夏侯惇",
       "cfgId": 8,
@@ -122,7 +136,9 @@
       "speed_grow": 80,
       "destroy_grow": 30,
       "cost": 10,
-      "probability":80
+      "probability":80,
+      "star":3,
+      "arms":[1,2,3]
     },{
       "name": "夏侯渊",
       "cfgId": 9,
@@ -137,7 +153,9 @@
       "speed_grow": 80,
       "destroy_grow": 30,
       "cost": 10,
-      "probability":80
+      "probability":80,
+      "star":3,
+      "arms":[1,2,3]
     },{
       "name": "张郃",
       "cfgId": 10,
@@ -152,7 +170,9 @@
       "speed_grow": 80,
       "destroy_grow": 30,
       "cost": 10,
-      "probability":10
+      "probability":10,
+      "star":3,
+      "arms":[1,2,3]
     },{
       "name": "太史慈",
       "cfgId": 11,
@@ -167,7 +187,9 @@
       "speed_grow": 80,
       "destroy_grow": 30,
       "cost": 10,
-      "probability":20
+      "probability":20,
+      "star":3,
+      "arms":[1,2,3]
     },{
       "name": "周瑜",
       "cfgId": 12,
@@ -182,7 +204,9 @@
       "speed_grow": 80,
       "destroy_grow": 30,
       "cost": 10,
-      "probability":20
+      "probability":20,
+      "star":3,
+      "arms":[1,2,3]
     },{
       "name": "甘宁",
       "cfgId": 13,
@@ -197,7 +221,9 @@
       "speed_grow": 80,
       "destroy_grow": 30,
       "cost": 10,
-      "probability":5
+      "probability":5,
+      "star":3,
+      "arms":[1,2,3]
     },{
       "name": "周泰",
       "cfgId": 14,
@@ -212,7 +238,9 @@
       "speed_grow": 80,
       "destroy_grow": 30,
       "cost": 10,
-      "probability":80
+      "probability":80,
+      "star":3,
+      "arms":[1,2,3]
     },{
       "name": "黄盖",
       "cfgId": 15,
@@ -227,7 +255,9 @@
       "speed_grow": 80,
       "destroy_grow": 30,
       "cost": 10,
-      "probability":10
+      "probability":10,
+      "star":3,
+      "arms":[1,2,3]
     },{
       "name": "孙策",
       "cfgId": 16,
@@ -242,7 +272,43 @@
       "speed_grow": 80,
       "destroy_grow": 30,
       "cost": 10,
-      "probability":10
+      "probability":10,
+      "star":3,
+      "arms":[1,2,3]
+    },{
+      "name": "吕布",
+      "cfgId": 17,
+      "force": 9500,
+      "strategy": 5500,
+      "defense": 9000,
+      "speed": 8800,
+      "destroy": 3000,
+      "force_grow": 100,
+      "strategy_grow": 50,
+      "defense_grow": 50,
+      "speed_grow": 80,
+      "destroy_grow": 30,
+      "cost": 10,
+      "probability":30,
+      "star":4,
+      "arms":[7,8,9]
+    },{
+      "name": "真-吕布",
+      "cfgId": 18,
+      "force": 19500,
+      "strategy": 500,
+      "defense": 19000,
+      "speed": 18800,
+      "destroy": 13000,
+      "force_grow": 100,
+      "strategy_grow": 50,
+      "defense_grow": 50,
+      "speed_grow": 80,
+      "destroy_grow": 30,
+      "cost": 10,
+      "probability":30,
+      "star":5,
+      "arms":[9,10,11]
     }
   ]
 }
