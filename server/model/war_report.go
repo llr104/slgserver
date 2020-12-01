@@ -1,10 +1,44 @@
 package model
 
 import (
+	"go.uber.org/zap"
+	"slgserver/db"
+	"slgserver/log"
 	"slgserver/server/conn"
 	"slgserver/server/proto"
 	"time"
 )
+
+
+/*******db 操作begin********/
+var dbWarReportMgr *warReportDBMgr
+func init() {
+	dbWarReportMgr = &warReportDBMgr{reports: make(chan *WarReport, 100)}
+	go dbWarReportMgr.running()
+}
+
+type warReportDBMgr struct {
+	reports    chan *WarReport
+}
+
+func (this* warReportDBMgr) running()  {
+	for true {
+		select {
+		case r := <- this.reports:
+			if r.Id ==0 {
+				_, err := db.MasterDB.InsertOne(r)
+				if err != nil{
+					log.DefaultLog.Warn("db error", zap.Error(err))
+				}
+			}
+		}
+	}
+}
+
+func (this* warReportDBMgr) push(r *WarReport)  {
+	this.reports <- r
+}
+/*******db 操作end********/
 
 type WarReport struct {
 	Id                int    	`xorm:"id pk autoincr"`
@@ -79,5 +113,6 @@ func (this *WarReport) Push(){
 /* 推送同步 end */
 
 func (this *WarReport) SyncExecute() {
+	dbWarReportMgr.push(this)
 	this.Push()
 }
