@@ -189,14 +189,13 @@ func (this* GeneralMgr) GetByRIdTryCreate(rid int) ([]*model.General, bool){
 		sess := db.MasterDB.NewSession()
 		sess.Begin()
 
-		for _, v := range general.General.GMap {
-			g, ok := this.NewGeneral(v.CfgId, rid)
-			if ok == false{
-				sess.Rollback()
-				return nil, false
-			}
-			gs = append(gs, g)
+		g, ok := this.RandCreateGeneral(rid,3)
+		if ok == false{
+			sess.Rollback()
+			return nil, false
 		}
+		gs = g
+
 		if err := sess.Commit(); err != nil{
 			log.DefaultLog.Warn("db error", zap.Error(err))
 			return nil, false
