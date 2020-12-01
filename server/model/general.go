@@ -64,6 +64,8 @@ type General struct {
 	DefenseAdded  int       `xorm:"defense_added"`
 	SpeedAdded    int       `xorm:"speed_added"`
 	DestroyAdded  int       `xorm:"destroy_added"`
+	StarLv        int       `xorm:"star_lv"`
+	Star          int       `xorm:"star"`
 
 
 }
@@ -116,6 +118,17 @@ func (this *General) ToProto() interface{}{
 	p.CfgId = this.CfgId
 	p.Level = this.Level
 	p.Exp = this.Exp
+	p.CurArms = this.CurArms
+	p.HasPrPoint = this.HasPrPoint
+	p.UsePrPoint = this.UsePrPoint
+	p.AttackDis = this.AttackDis
+	p.ForceAdded = this.ForceAdded
+	p.StrategyAdded = this.StrategyAdded
+	p.DefenseAdded = this.DefenseAdded
+	p.SpeedAdded = this.SpeedAdded
+	p.DestroyAdded = this.DestroyAdded
+	p.StarLv = this.StarLv
+	p.Star = this.Star
 	return p
 }
 

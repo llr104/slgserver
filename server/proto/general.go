@@ -9,6 +9,18 @@ type General struct {
 	Level			int8    `json:"level"`
 	Exp				int		`json:"exp"`
 	CityId    		int     `json:"cityId"`
+	CurArms         int     `json:"curArms"`
+	HasPrPoint      int     `json:"hasPrPoint"`
+	UsePrPoint      int     `json:"usePrPoint"`
+	AttackDis       int     `json:"attack_distance"`
+	ForceAdded      int     `json:"force_added"`
+	StrategyAdded   int     `json:"strategy_added"`
+	DefenseAdded    int     `json:"defense_added"`
+	SpeedAdded      int     `json:"speed_added"`
+	DestroyAdded    int     `json:"destroy_added"`
+	StarLv          int     `json:"star_lv"`
+	Star            int     `json:"star"`
+
 }
 
 type MyGeneralReq struct {

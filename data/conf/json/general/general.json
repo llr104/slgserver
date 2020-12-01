@@ -291,7 +291,7 @@
       "cost": 10,
       "probability":30,
       "star":4,
-      "arms":[7,8,9]
+      "arms":[1,8,9]
     },{
       "name": "真-吕布",
       "cfgId": 18,
@@ -308,7 +308,7 @@
       "cost": 10,
       "probability":30,
       "star":5,
-      "arms":[9,10,11]
+      "arms":[1,10,11]
     }
   ]
 }
