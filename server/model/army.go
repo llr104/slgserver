@@ -2,6 +2,9 @@ package model
 
 import (
 	"encoding/json"
+	"go.uber.org/zap"
+	"slgserver/db"
+	"slgserver/log"
 	"slgserver/server/conn"
 	"slgserver/server/global"
 	"slgserver/server/proto"
@@ -23,9 +26,41 @@ const (
 	ArmyRunning  	= 1
 )
 
+/*******db 操作begin********/
+var dbArmyMgr *armyDBMgr
+func init() {
+	dbArmyMgr = &armyDBMgr{armys: make(chan *Army, 100)}
+	go dbArmyMgr.running()
+}
+
+type armyDBMgr struct {
+	armys    chan *Army
+}
+
+func (this* armyDBMgr) running()  {
+	for true {
+		select {
+		case army := <- this.armys:
+			if army.Id >0 {
+				_, err := db.MasterDB.Table(army).ID(army.Id).Cols("soldiers",
+					"generals", "cmd", "from_x", "from_y", "to_x", "to_y", "start", "end").Update(army)
+				if err != nil{
+					log.DefaultLog.Warn("db error", zap.Error(err))
+				}
+			}else{
+				log.DefaultLog.Warn("update army fail, because id <= 0")
+			}
+		}
+	}
+}
+
+func (this* armyDBMgr) push(army *Army)  {
+	this.armys <- army
+}
+/*******db 操作end********/
+
 //军队
 type Army struct {
-	DB           		dbSync 		`json:"-" xorm:"-"`
 	Id           		int    		`xorm:"id pk autoincr"`
 	RId          		int    		`xorm:"rid"`
 	CityId       		int    		`xorm:"cityId"`
@@ -162,7 +197,7 @@ func (this *Army) Push(){
 /* 推送同步 end */
 
 func (this *Army) SyncExecute() {
-	this.DB.Sync()
+	dbArmyMgr.push(this)
 	this.Push()
 	this.CellX, this.CellY = this.Position()
 }
@@ -173,3 +208,4 @@ func (this *Army) CheckSyncCell() {
 		this.SyncExecute()
 	}
 }
+

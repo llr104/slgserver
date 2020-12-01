@@ -1,13 +1,48 @@
 package model
 
 import (
+	"go.uber.org/zap"
+	"slgserver/db"
+	"slgserver/log"
 	"slgserver/server/conn"
 	"slgserver/server/proto"
 	"time"
 )
 
+/*******db 操作begin********/
+var dbRCMgr *rcDBMgr
+func init() {
+	dbRCMgr = &rcDBMgr{builds: make(chan *MapRoleCity, 100)}
+	go dbRCMgr.running()
+}
+
+type rcDBMgr struct {
+	builds   chan *MapRoleCity
+}
+
+func (this* rcDBMgr) running()  {
+	for true {
+		select {
+		case b := <- this.builds:
+			if b.CityId >0 {
+				_, err := db.MasterDB.Table(b).ID(b.CityId).Cols("level",
+					"cur_durable", "max_durable").Update(b)
+				if err != nil{
+					log.DefaultLog.Warn("db error", zap.Error(err))
+				}
+			}else{
+				log.DefaultLog.Warn("update role city build fail, because CityId <= 0")
+			}
+		}
+	}
+}
+
+func (this* rcDBMgr) push(b *MapRoleCity)  {
+	this.builds <- b
+}
+/*******db 操作end********/
+
 type MapRoleCity struct {
-	DB          dbSync 		`json:"-" xorm:"-"`
 	CityId		int			`xorm:"cityId pk autoincr"`
 	RId			int			`xorm:"rid"`
 	Name		string		`xorm:"name" validate:"min=4,max=20,regexp=^[a-zA-Z0-9_]*$"`
@@ -61,6 +96,6 @@ func (this *MapRoleCity) Push(){
 /* 推送同步 end */
 
 func (this *MapRoleCity) SyncExecute() {
-	this.DB.Sync()
+	dbRCMgr.push(this)
 	this.Push()
 }

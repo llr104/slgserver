@@ -9,7 +9,6 @@ import (
 	"slgserver/server/model"
 	"slgserver/server/static_conf/facility"
 	"sync"
-	"time"
 )
 
 
@@ -39,7 +38,6 @@ func (this* FacilityMgr) Load() {
 		log.DefaultLog.Error("FacilityMgr load city_facility table error")
 	}
 
-	go this.toDatabase()
 }
 
 func (this* FacilityMgr) Get(cid int) (*model.CityFacility, bool){
@@ -137,8 +135,7 @@ func (this* FacilityMgr) UpFacility(rid, cid int, fType int8) (*Facility, int){
 						out = fac
 						if t, err := json.Marshal(facilities); err == nil{
 							f.Facilities = string(t)
-							f.DB.Sync()
-
+							f.SyncExecute()
 							return out, constant.OK
 						}else{
 							return nil, constant.UpError
@@ -158,29 +155,5 @@ func (this* FacilityMgr) UpFacility(rid, cid int, fType int8) (*Facility, int){
 			zap.Int("cityId", cid),
 			zap.Int("type", int(fType)))
 		return nil, constant.UpError
-	}
-}
-func (this* FacilityMgr) toDatabase() {
-	for true {
-		time.Sleep(2*time.Second)
-		this.mutex.RLock()
-		cnt :=0
-		for _, v := range this.facilities {
-			if v.DB.NeedSync() {
-				v.DB.BeginSync()
-				_, err := db.MasterDB.Table(v).ID(v.Id).Cols("facilities").Update(v)
-				if err != nil{
-					log.DefaultLog.Error("FacilityMgr toDatabase error", zap.Error(err))
-				}
-				v.DB.EndSync()
-				cnt+=1
-			}
-
-			//一次最多更新20个
-			if cnt>20{
-				break
-			}
-		}
-		this.mutex.RUnlock()
 	}
 }
