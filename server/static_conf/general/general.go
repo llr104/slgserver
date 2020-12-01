@@ -27,6 +27,7 @@ type g struct {
 	SpeedGrow   	int		`json:"speed_grow"`
 	DestroyGrow 	int		`json:"destroy_grow"`
 	Cost			int		`json:"cost"`
+	Probability		int		`json:"probability"`
 }
 
 type general struct {

@@ -243,8 +243,9 @@ func (this* GeneralMgr) RandCreateGeneral(rid int, nums int) ([]*model.General, 
 	sess.Begin()
 
 	for i := 0; i < nums; i++ {
-		r := rand.Intn(len(general.General.GArr))
-		g, ok := this.NewGeneral(general.General.GArr[r].CfgId, rid)
+		r := rand.Intn(10) * 10
+		d := this.PrToCfgId(r)
+		g, ok := this.NewGeneral(d, rid)
 		if ok == false{
 			sess.Rollback()
 			return nil, false
@@ -260,6 +261,33 @@ func (this* GeneralMgr) RandCreateGeneral(rid int, nums int) ([]*model.General, 
 	}
 }
 
+
+func (this* GeneralMgr) PrToCfgId(rate int) (cfgId int){
+	gs := make([]int, 0)
+	defgs := make([]int, 0)
+
+
+	for i := 0;i < len(general.General.GArr);i++{
+		if general.General.GArr[i].Probability >= 80{
+			defgs = append(defgs,general.General.GArr[i].CfgId)
+		}
+
+	}
+
+	for i := 0;i < len(general.General.GArr);i++{
+		if general.General.GArr[i].Probability <= rate{
+			gs = append(gs,general.General.GArr[i].CfgId)
+		}
+
+	}
+
+
+	if len(gs) == 0{
+		return defgs[0]
+	}
+	r := rand.Intn(len(gs))
+	return gs[r]
+}
 
 //获取npc武将
 func (this* GeneralMgr) GetNPCGenerals(cnt int) ([]model.General, bool) {
