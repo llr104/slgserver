@@ -56,7 +56,7 @@ func (this *armyLogic) running(){
 							this.passbyPosArmys[posId] = make(map[int]*model.Army)
 						}
 						this.passbyPosArmys[posId][army.Id] = army
-						army.SyncExecute()
+						army.CheckSyncCell()
 					}
 				}
 				this.passby.Unlock()
