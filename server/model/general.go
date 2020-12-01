@@ -55,6 +55,17 @@ type General struct {
 	Order         int8      `xorm:"order"`
 	CityId        int       `xorm:"cityId"`
 	CreatedAt     time.Time `xorm:"created_at"`
+	CurArms       int       `xorm:"arms"`
+	HasPrPoint    int       `xorm:"has_pr_point"`
+	UsePrPoint    int       `xorm:"use_pr_point"`
+	AttackDis     int       `xorm:"attack_distance"`
+	ForceAdded    int       `xorm:"force_added"`
+	StrategyAdded int       `xorm:"strategy_added"`
+	DefenseAdded  int       `xorm:"defense_added"`
+	SpeedAdded    int       `xorm:"speed_added"`
+	DestroyAdded  int       `xorm:"destroy_added"`
+
+
 }
 
 func (this *General) TableName() string {
