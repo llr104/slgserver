@@ -83,7 +83,6 @@ func (this* ArmyMgr) Load() {
 	}
 	this.mutex.Unlock()
 	go this.running()
-	go this.toDatabase()
 }
 
 func (this* ArmyMgr) insertOne(army*model.Army)  {
@@ -195,32 +194,6 @@ func (this* ArmyMgr) running() {
 	}
 }
 
-func (this* ArmyMgr) toDatabase() {
-	for true {
-		time.Sleep(2*time.Second)
-		this.mutex.RLock()
-		cnt :=0
-		for _, v := range this.armyById {
-			if v.DB.NeedSync() {
-				v.DB.BeginSync()
-				cnt+=1
-				_, err := db.MasterDB.Table(model.Army{}).ID(v.Id).Cols("soldiers",
-					"generals", "cmd", "from_x", "from_y", "to_x", "to_y", "start", "end").Update(v)
-				if err != nil{
-					log.DefaultLog.Warn("db error", zap.Error(err))
-				}
-				v.DB.EndSync()
-			}
-
-			//一次最多更新20个
-			if cnt>20{
-				break
-			}
-		}
-
-		this.mutex.RUnlock()
-	}
-}
 
 func (this* ArmyMgr) Get(aid int) (*model.Army, bool){
 	this.mutex.RLock()

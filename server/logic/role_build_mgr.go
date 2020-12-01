@@ -9,7 +9,6 @@ import (
 	"slgserver/server/static_conf"
 	"slgserver/util"
 	"sync"
-	"time"
 )
 
 
@@ -46,35 +45,9 @@ func (this* RoleBuildMgr) Load() {
 		}
 		this.roleRB[v.RId] = append(this.roleRB[v.RId], v)
 	}
-	go this.toDatabase()
+
 }
 
-
-func (this* RoleBuildMgr) toDatabase() {
-	for true {
-		time.Sleep(2*time.Second)
-		this.mutex.RLock()
-		cnt :=0
-		for _, v := range this.dbRB {
-			if v.DB.NeedSync() {
-				v.DB.BeginSync()
-				_, err := db.MasterDB.Table(v).ID(v.Id).Cols("rid",
-					"cur_durable", "max_durable").Update(v)
-				if err != nil{
-					log.DefaultLog.Error("RoleResMgr toDatabase error", zap.Error(err))
-				}
-				v.DB.EndSync()
-				cnt+=1
-			}
-
-			//一次最多更新20个
-			if cnt>20{
-				break
-			}
-		}
-		this.mutex.RUnlock()
-	}
-}
 
 /*
 该位置是否被角色占领

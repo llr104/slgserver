@@ -35,7 +35,6 @@ func (this* RoleResMgr) Load() {
 	this.mutex.Unlock()
 
 	go this.produce()
-	go this.toDatabase()
 
 }
 
@@ -221,30 +220,3 @@ func (this* RoleResMgr) produce() {
 	}
 }
 
-func (this* RoleResMgr) toDatabase() {
-	for true {
-		time.Sleep(2*time.Second)
-		this.mutex.RLock()
-		cnt :=0
-		for _, v := range this.rolesRes {
-			if v.DB.NeedSync() {
-				v.DB.BeginSync()
-				_, err := db.MasterDB.Table(v).ID(v.Id).Cols("wood", "iron", "stone",
-					"grain", "gold", "decree", "wood_yield",
-					"iron_yield", "stone_yield", "gold_yield",
-					"gold_yield", "depot_capacity").Update(v)
-				if err != nil{
-					log.DefaultLog.Error("RoleResMgr toDatabase error", zap.Error(err))
-				}
-				v.DB.EndSync()
-				cnt+=1
-			}
-
-			//一次最多更新20个
-			if cnt>20{
-				break
-			}
-		}
-		this.mutex.RUnlock()
-	}
-}

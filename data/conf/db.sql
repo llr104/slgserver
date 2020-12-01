@@ -128,7 +128,6 @@ CREATE TABLE IF NOT EXISTS `general` (
    `star`  int NOT NULL DEFAULT 0 COMMENT '稀有度(星级)',
    `star_lv` int NOT NULL DEFAULT 0 COMMENT '稀有度(星级)进阶等级级',
    `arms` int NOT NULL DEFAULT 0 COMMENT '兵种',
-   `arms_lv` int NOT NULL DEFAULT 1 COMMENT '兵种等级',
    `has_pr_point` int NOT NULL DEFAULT 0 COMMENT '总属性点',
    `use_pr_point` int NOT NULL DEFAULT 0 COMMENT '已用属性点',
    `attack_distance` int NOT NULL DEFAULT 0 COMMENT '攻击距离',

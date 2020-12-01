@@ -1,12 +1,47 @@
 package model
 
 import (
+	"go.uber.org/zap"
+	"slgserver/db"
+	"slgserver/log"
 	"slgserver/server/conn"
 	"slgserver/server/proto"
 )
 
+/*******db 操作begin********/
+var dbRBMgr *rbDBMgr
+func init() {
+	dbRBMgr = &rbDBMgr{builds: make(chan *MapRoleBuild, 100)}
+	go dbRBMgr.running()
+}
+
+type rbDBMgr struct {
+	builds   chan *MapRoleBuild
+}
+
+func (this *rbDBMgr) running()  {
+	for true {
+		select {
+		case b := <- this.builds:
+			if b.Id >0 {
+				_, err := db.MasterDB.Table(b).ID(b.Id).Cols("rid",
+					"cur_durable", "max_durable").Update(b)
+				if err != nil{
+					log.DefaultLog.Warn("db error", zap.Error(err))
+				}
+			}else{
+				log.DefaultLog.Warn("update role build fail, because id <= 0")
+			}
+		}
+	}
+}
+
+func (this *rbDBMgr) push(b *MapRoleBuild)  {
+	this.builds <- b
+}
+/*******db 操作end********/
+
 type MapRoleBuild struct {
-	DB    		dbSync 		`xorm:"-"`
 	Id    		int    		`xorm:"id pk autoincr"`
 	RId   		int    		`xorm:"rid"`
 	RNick		string		`xorm:"-"`
@@ -67,6 +102,6 @@ func (this *MapRoleBuild) Push(){
 /* 推送同步 end */
 
 func (this *MapRoleBuild) SyncExecute() {
-	this.DB.Sync()
+	dbRBMgr.push(this)
 	this.Push()
 }

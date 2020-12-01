@@ -1,22 +1,61 @@
 package model
 
 import (
+	"go.uber.org/zap"
+	"slgserver/db"
+	"slgserver/log"
 	"slgserver/server/conn"
 	"slgserver/server/proto"
 )
 
+/*******db 操作begin********/
+var dbRResMgr *roleResDBMgr
+func init() {
+	dbRResMgr = &roleResDBMgr{ress: make(chan *RoleRes, 100)}
+	go dbRBMgr.running()
+}
+
+type roleResDBMgr struct {
+	ress   chan *RoleRes
+}
+
+func (this *roleResDBMgr) running()  {
+	for true {
+		select {
+		case res := <- this.ress:
+			if res.Id >0 {
+				_, err := db.MasterDB.Table(res).ID(res.Id).Cols(
+					"wood", "iron", "stone",
+					"grain", "gold", "decree", "wood_yield",
+					"iron_yield", "stone_yield", "gold_yield",
+					"gold_yield", "depot_capacity").Update(res)
+				if err != nil{
+					log.DefaultLog.Warn("db error", zap.Error(err))
+				}
+			}else{
+				log.DefaultLog.Warn("update role build fail, because id <= 0")
+			}
+		}
+	}
+}
+
+func (this *roleResDBMgr) push(res *RoleRes)  {
+	this.ress <- res
+}
+/*******db 操作end********/
+
+
 type RoleRes struct {
-	DB        dbSync `xorm:"-"`
-	Id        int    `xorm:"id pk autoincr"`
-	RId       int    `xorm:"rid"`
-	Wood      int    `xorm:"wood"`
-	Iron      int    `xorm:"iron"`
-	Stone     int    `xorm:"stone"`
-	Grain     int    `xorm:"grain"`
-	Gold      int    `xorm:"gold"`
-	Decree    int    `xorm:"decree"`	//令牌
-	WoodYield int    `xorm:"wood_yield"`
-	IronYield int    `xorm:"iron_yield"`
+	Id        		int    		`xorm:"id pk autoincr"`
+	RId       		int    		`xorm:"rid"`
+	Wood      		int    		`xorm:"wood"`
+	Iron      		int    		`xorm:"iron"`
+	Stone     		int    		`xorm:"stone"`
+	Grain     		int    		`xorm:"grain"`
+	Gold      		int    		`xorm:"gold"`
+	Decree    		int    		`xorm:"decree"`	//令牌
+	WoodYield 		int    		`xorm:"wood_yield"`
+	IronYield 		int    		`xorm:"iron_yield"`
 	StoneYield		int			`xorm:"stone_yield"`
 	GrainYield		int			`xorm:"grain_yield"`
 	GoldYield		int			`xorm:"gold_yield"`
@@ -68,6 +107,6 @@ func (this *RoleRes) Push(){
 /* 推送同步 end */
 
 func (this *RoleRes) SyncExecute() {
-	this.DB.Sync()
+	dbRResMgr.push(this)
 	this.Push()
 }

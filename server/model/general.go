@@ -1,14 +1,50 @@
 package model
 
 import (
+	"go.uber.org/zap"
+	"slgserver/db"
+	"slgserver/log"
 	"slgserver/server/conn"
 	"slgserver/server/proto"
 	"slgserver/server/static_conf/general"
 	"time"
 )
 
+/*******db 操作begin********/
+var dbGeneralMgr *generalDBMgr
+func init() {
+	dbGeneralMgr = &generalDBMgr{gs: make(chan *General, 100)}
+	go dbGeneralMgr.running()
+}
+
+type generalDBMgr struct {
+	gs   chan *General
+}
+
+func (this* generalDBMgr) running()  {
+	for true {
+		select {
+		case g := <- this.gs:
+			if g.Id >0 {
+				_, err := db.MasterDB.Table(g).ID(g).Cols("level",
+					"exp", "order", "cityId", "physical_power").Update(g)
+				if err != nil{
+					log.DefaultLog.Warn("db error", zap.Error(err))
+				}
+			}else{
+				log.DefaultLog.Warn("update general fail, because id <= 0")
+			}
+		}
+	}
+}
+
+func (this* generalDBMgr) push(g *General)  {
+	this.gs <- g
+}
+/*******db 操作end********/
+
+
 type General struct {
-	DB            dbSync    `xorm:"-"`
 	Id            int       `xorm:"id pk autoincr"`
 	RId           int       `xorm:"rid"`
 	CfgId         int       `xorm:"cfgId"`
@@ -78,6 +114,6 @@ func (this *General) Push(){
 /* 推送同步 end */
 
 func (this *General) SyncExecute() {
-	this.DB.Sync()
+	dbGeneralMgr.push(this)
 	this.Push()
 }

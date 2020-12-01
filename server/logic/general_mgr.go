@@ -26,33 +26,6 @@ var GMgr = &GeneralMgr{
 
 
 
-func (this* GeneralMgr) toDatabase() {
-	for true {
-		time.Sleep(2*time.Second)
-		this.mutex.RLock()
-		cnt :=0
-		for _, v := range this.genByGId {
-			if v.DB.NeedSync() {
-				v.DB.BeginSync()
-				_, err := db.MasterDB.Table(model.General{}).ID(v.Id).Cols("level",
-					"exp", "order", "cityId", "physical_power").Update(v)
-
-				if err != nil{
-					log.DefaultLog.Warn("db error", zap.Error(err))
-				}
-				v.DB.EndSync()
-				cnt+=1
-			}
-
-			//一次最多更新20个
-			if cnt>20{
-				break
-			}
-		}
-
-		this.mutex.RUnlock()
-	}
-}
 
 func (this* GeneralMgr) updatePhysicalPower() {
 	limit := static_conf.Basic.General.PhysicalPowerLimit
@@ -124,7 +97,6 @@ func (this* GeneralMgr) Load(){
 		this.createNPC()
 	}
 
-	go this.toDatabase()
 	go this.updatePhysicalPower()
 }
 
@@ -309,8 +281,6 @@ func (this* GeneralMgr) GetNPCGenerals(cnt int) ([]model.General, bool) {
 			rgs := make([]model.General, 0)
 			for _, v := range m {
 				t := *gs[v]
-				//npc不需要更新到数据库
-				t.DB.Disable(true)
 				rgs = append(rgs, t)
 			}
 			return rgs, true
