@@ -1,34 +1,33 @@
 {
-  "title": "城内设施-社稷坛配置",
-  "name": "社稷坛",
-  "type": 22,
-  "des": "每升一级可以额外扩建一次",
+  "title": "主城配置",
+  "name": "主城",
+  "type": 0,
+  "des": "提高本城的耐久上限部队统帅上限",
   "additions": [
-    22
+    1,
+    2
   ],
-  "conditions": [
+  "conditions": [],
+  "levels": [
     {
-      "type": 0,
-      "level": 9
-    }
-  ],
-  "levels": [{
-    "level": 1,
-    "values": [
-      1
-    ],
-    "need": {
-      "decree": 0,
-      "grain": 1000,
-      "wood": 1000,
-      "iron": 1000,
-      "stone": 1000
-    }
-  },
+      "level": 1,
+      "values": [
+        100,
+        5
+      ],
+      "need": {
+        "decree": 0,
+        "grain": 1000,
+        "wood": 1000,
+        "iron": 1000,
+        "stone": 1000
+      }
+    },
     {
       "level": 2,
       "values": [
-        2
+        200,
+        10
       ],
       "need": {
         "decree": 0,
@@ -41,7 +40,8 @@
     {
       "level": 3,
       "values": [
-        3
+        300,
+        15
       ],
       "need": {
         "decree": 0,
@@ -54,7 +54,8 @@
     {
       "level": 4,
       "values": [
-        4
+        400,
+        20
       ],
       "need": {
         "decree": 0,
@@ -67,7 +68,8 @@
     {
       "level": 5,
       "values": [
-        5
+        500,
+        25
       ],
       "need": {
         "decree": 0,
@@ -80,7 +82,8 @@
     {
       "level": 6,
       "values": [
-        6
+        600,
+        30
       ],
       "need": {
         "decree": 0,
@@ -93,7 +96,8 @@
     {
       "level": 7,
       "values": [
-        7
+        700,
+        35
       ],
       "need": {
         "decree": 0,
@@ -106,7 +110,36 @@
     {
       "level": 8,
       "values": [
-        8
+        800,
+        40
+      ],
+      "need": {
+        "decree": 0,
+        "grain": 1000,
+        "wood": 1000,
+        "iron": 1000,
+        "stone": 1000
+      }
+    },
+    {
+      "level": 9,
+      "values": [
+        900,
+        45
+      ],
+      "need": {
+        "decree": 0,
+        "grain": 1000,
+        "wood": 1000,
+        "iron": 1000,
+        "stone": 1000
+      }
+    },
+    {
+      "level": 10,
+      "values": [
+        1000,
+        50
       ],
       "need": {
         "decree": 0,

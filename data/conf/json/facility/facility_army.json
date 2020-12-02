@@ -4,20 +4,34 @@
     "name": "疾风营",
     "type": 1,
     "des": "提高本城部队速度",
-    "levels": [{
-      "level": 1,
-      "rate": -5,
-      "need": {
-        "decree": 0,
-        "grain": 1000,
-        "wood": 1000,
-        "iron": 1000,
-        "stone": 1000
+    "additions": [
+      4
+    ],
+    "conditions": [
+      {
+        "type": 0,
+        "level": 2
       }
-    },
+    ],
+    "levels": [
+      {
+        "level": 1,
+        "values": [
+          5
+        ],
+        "need": {
+          "decree": 0,
+          "grain": 1000,
+          "wood": 1000,
+          "iron": 1000,
+          "stone": 1000
+        }
+      },
       {
         "level": 2,
-        "rate": -10,
+        "values": [
+          10
+        ],
         "need": {
           "decree": 0,
           "grain": 1000,
@@ -28,7 +42,9 @@
       },
       {
         "level": 3,
-        "rate": -15,
+        "values": [
+          15
+        ],
         "need": {
           "decree": 0,
           "grain": 1000,
@@ -39,7 +55,9 @@
       },
       {
         "level": 4,
-        "rate": -20,
+        "values": [
+          20
+        ],
         "need": {
           "decree": 0,
           "grain": 1000,
@@ -50,7 +68,9 @@
       },
       {
         "level": 5,
-        "rate": -25,
+        "values": [
+          25
+        ],
         "need": {
           "decree": 0,
           "grain": 1000,
@@ -65,20 +85,34 @@
     "name": "铁壁营",
     "type": 2,
     "des": "提高本城部队防御",
-    "levels": [{
-      "level": 1,
-      "rate": 5,
-      "need": {
-        "decree": 0,
-        "grain": 1000,
-        "wood": 1000,
-        "iron": 1000,
-        "stone": 1000
+    "additions": [
+      5
+    ],
+    "conditions": [
+      {
+        "type": 0,
+        "level": 2
       }
-    },
+    ],
+    "levels": [
+      {
+        "level": 1,
+        "values": [
+          5
+        ],
+        "need": {
+          "decree": 0,
+          "grain": 1000,
+          "wood": 1000,
+          "iron": 1000,
+          "stone": 1000
+        }
+      },
       {
         "level": 2,
-        "rate": 10,
+        "values": [
+          10
+        ],
         "need": {
           "decree": 0,
           "grain": 1000,
@@ -89,7 +123,9 @@
       },
       {
         "level": 3,
-        "rate": 15,
+        "values": [
+          15
+        ],
         "need": {
           "decree": 0,
           "grain": 1000,
@@ -100,7 +136,9 @@
       },
       {
         "level": 4,
-        "rate": 20,
+        "values": [
+          20
+        ],
         "need": {
           "decree": 0,
           "grain": 1000,
@@ -111,7 +149,9 @@
       },
       {
         "level": 5,
-        "rate": 25,
+        "values": [
+          25
+        ],
         "need": {
           "decree": 0,
           "grain": 1000,
@@ -126,20 +166,34 @@
     "name": "军机营",
     "type": 3,
     "des": "提高本城部队谋略",
-    "levels": [{
-      "level": 1,
-      "rate": 5,
-      "need": {
-        "decree": 0,
-        "grain": 1000,
-        "wood": 1000,
-        "iron": 1000,
-        "stone": 1000
+    "additions": [
+      6
+    ],
+    "conditions": [
+      {
+        "type": 0,
+        "level": 3
       }
-    },
+    ],
+    "levels": [
+      {
+        "level": 1,
+        "values": [
+          5
+        ],
+        "need": {
+          "decree": 0,
+          "grain": 1000,
+          "wood": 1000,
+          "iron": 1000,
+          "stone": 1000
+        }
+      },
       {
         "level": 2,
-        "rate": 10,
+        "values": [
+          10
+        ],
         "need": {
           "decree": 0,
           "grain": 1000,
@@ -150,7 +204,9 @@
       },
       {
         "level": 3,
-        "rate": 15,
+        "values": [
+          15
+        ],
         "need": {
           "decree": 0,
           "grain": 1000,
@@ -161,7 +217,9 @@
       },
       {
         "level": 4,
-        "rate": 20,
+        "values": [
+          20
+        ],
         "need": {
           "decree": 0,
           "grain": 1000,
@@ -172,7 +230,9 @@
       },
       {
         "level": 5,
-        "rate": 25,
+        "values": [
+          25
+        ],
         "need": {
           "decree": 0,
           "grain": 1000,
@@ -187,20 +247,34 @@
     "name": "尚武营",
     "type": 4,
     "des": "提高本城部队攻击",
-    "levels": [{
-      "level": 1,
-      "rate": 5,
-      "need": {
-        "decree": 0,
-        "grain": 1000,
-        "wood": 1000,
-        "iron": 1000,
-        "stone": 1000
+    "additions": [
+      7
+    ],
+    "conditions": [
+      {
+        "type": 0,
+        "level": 3
       }
-    },
+    ],
+    "levels": [
+      {
+        "level": 1,
+        "values": [
+          5
+        ],
+        "need": {
+          "decree": 0,
+          "grain": 1000,
+          "wood": 1000,
+          "iron": 1000,
+          "stone": 1000
+        }
+      },
       {
         "level": 2,
-        "rate": 10,
+        "values": [
+          10
+        ],
         "need": {
           "decree": 0,
           "grain": 1000,
@@ -211,7 +285,9 @@
       },
       {
         "level": 3,
-        "rate": 15,
+        "values": [
+          15
+        ],
         "need": {
           "decree": 0,
           "grain": 1000,
@@ -222,7 +298,9 @@
       },
       {
         "level": 4,
-        "rate": 20,
+        "values": [
+          20
+        ],
         "need": {
           "decree": 0,
           "grain": 1000,
@@ -233,7 +311,9 @@
       },
       {
         "level": 5,
-        "rate": 25,
+        "values": [
+          25
+        ],
         "need": {
           "decree": 0,
           "grain": 1000,

@@ -3,21 +3,38 @@
   "name": "封禅台",
   "type": 12,
   "des": "提高本城部队的统帅上限",
-
-  "levels": [{
-    "level": 1,
-    "limit": 50,
-    "need": {
-      "decree": 0,
-      "grain": 1000,
-      "wood": 1000,
-      "iron": 1000,
-      "stone": 1000
+  "additions": [
+    2
+  ],
+  "conditions": [
+    {
+      "type": 0,
+      "level": 8
+    },
+    {
+      "type": 5,
+      "level": 5
     }
-  },
+  ],
+  "levels": [
+    {
+      "level": 1,
+      "values": [
+        50
+      ],
+      "need": {
+        "decree": 0,
+        "grain": 1000,
+        "wood": 1000,
+        "iron": 1000,
+        "stone": 1000
+      }
+    },
     {
       "level": 2,
-      "limit": 100,
+      "values": [
+        100
+      ],
       "need": {
         "decree": 0,
         "grain": 1000,
@@ -28,7 +45,9 @@
     },
     {
       "level": 3,
-      "limit": 150,
+      "values": [
+        150
+      ],
       "need": {
         "decree": 0,
         "grain": 1000,
@@ -39,7 +58,9 @@
     },
     {
       "level": 4,
-      "limit": 200,
+      "values": [
+        200
+      ],
       "need": {
         "decree": 0,
         "grain": 1000,
@@ -50,7 +71,9 @@
     },
     {
       "level": 5,
-      "limit": 250,
+      "values": [
+        250
+      ],
       "need": {
         "decree": 0,
         "grain": 1000,

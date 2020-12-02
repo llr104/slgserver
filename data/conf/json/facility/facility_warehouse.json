@@ -3,21 +3,34 @@
   "name": "社稷坛",
   "type": 25,
   "des": "每升一级增加仓库容量",
-
-  "levels": [{
-    "level": 1,
-    "limit": 10000,
-    "need": {
-      "decree": 0,
-      "grain": 1000,
-      "wood": 1000,
-      "iron": 1000,
-      "stone": 1000
+  "additions": [
+    23
+  ],
+  "conditions": [
+    {
+      "type": 0,
+      "level": 2
     }
-  },
+  ],
+  "levels": [
+    {
+      "level": 1,
+      "values": [
+        10000
+      ],
+      "need": {
+        "decree": 0,
+        "grain": 1000,
+        "wood": 1000,
+        "iron": 1000,
+        "stone": 1000
+      }
+    },
     {
       "level": 2,
-      "limit": 20000,
+      "values": [
+        20000
+      ],
       "need": {
         "decree": 0,
         "grain": 1000,
@@ -28,7 +41,9 @@
     },
     {
       "level": 3,
-      "limit": 30000,
+      "values": [
+        30000
+      ],
       "need": {
         "decree": 0,
         "grain": 1000,
@@ -39,7 +54,9 @@
     },
     {
       "level": 4,
-      "limit": 40000,
+      "values": [
+        40000
+      ],
       "need": {
         "decree": 0,
         "grain": 1000,
@@ -50,7 +67,9 @@
     },
     {
       "level": 5,
-      "limit": 50000,
+      "values": [
+        50000
+      ],
       "need": {
         "decree": 0,
         "grain": 1000,
@@ -61,7 +80,9 @@
     },
     {
       "level": 6,
-      "limit": 60000,
+      "values": [
+        60000
+      ],
       "need": {
         "decree": 0,
         "grain": 1000,
@@ -72,7 +93,9 @@
     },
     {
       "level": 7,
-      "limit": 70000,
+      "values": [
+        70000
+      ],
       "need": {
         "decree": 0,
         "grain": 1000,
@@ -83,7 +106,9 @@
     },
     {
       "level": 8,
-      "limit": 80000,
+      "values": [
+        80000
+      ],
       "need": {
         "decree": 0,
         "grain": 1000,

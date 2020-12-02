@@ -3,9 +3,24 @@
   "des": "开启本城部队征兵，并缩短征兵时间",
   "name": "募兵所",
   "type": 16,
+  "additions": [
+    10
+  ],
+  "conditions": [
+    {
+      "type": 0,
+      "level": 2
+    },
+    {
+      "type": 13,
+      "level": 2
+    }
+  ],
   "levels": [{
     "level": 1,
-    "rate": -5,
+    "values": [
+      5
+    ],
     "need": {
       "decree": 0,
       "grain": 1000,
@@ -16,7 +31,9 @@
   },
     {
       "level": 2,
-      "rate": -10,
+      "values": [
+        10
+      ],
       "need": {
         "decree": 0,
         "grain": 1000,
@@ -27,7 +44,9 @@
     },
     {
       "level": 3,
-      "rate": -15,
+      "values": [
+        15
+      ],
       "need": {
         "decree": 0,
         "grain": 1000,
@@ -38,7 +57,9 @@
     },
     {
       "level": 4,
-      "rate": -20,
+      "values": [
+        20
+      ],
       "need": {
         "decree": 0,
         "grain": 1000,
@@ -49,7 +70,9 @@
     },
     {
       "level": 5,
-      "rate": -25,
+      "values": [
+        25
+      ],
       "need": {
         "decree": 0,
         "grain": 1000,
@@ -60,7 +83,9 @@
     },
     {
       "level": 6,
-      "rate": -30,
+      "values": [
+        30
+      ],
       "need": {
         "decree": 0,
         "grain": 1000,
@@ -71,7 +96,9 @@
     },
     {
       "level": 7,
-      "rate": -35,
+      "values": [
+        35
+      ],
       "need": {
         "decree": 0,
         "grain": 1000,
@@ -82,7 +109,9 @@
     },
     {
       "level": 8,
-      "rate": -40,
+      "values": [
+       40
+      ],
       "need": {
         "decree": 0,
         "grain": 1000,
@@ -93,7 +122,9 @@
     },
     {
       "level": 9,
-      "rate": -45,
+      "values": [
+        45
+      ],
       "need": {
         "decree": 0,
         "grain": 1000,
@@ -104,7 +135,9 @@
     },
     {
       "level": 10,
-      "rate": -50,
+      "values": [
+        50
+      ],
       "need": {
         "decree": 0,
         "grain": 1000,
