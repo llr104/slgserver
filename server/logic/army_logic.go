@@ -234,22 +234,22 @@ func (this* armyLogic) executeBuild(army *model.Army)  {
 		begArmy2, _ := json.Marshal(pEnemy)
 
 		//武将战斗前
-		begGeneral1 := make([]proto.General, 0)
+		begGeneral1 := make([][]int, 0)
 		for _, id := range army.GeneralArray {
 			g, ok := GMgr.GetByGId(id)
 			if ok {
 				pg := g.ToProto().(proto.General)
-				begGeneral1 = append(begGeneral1, pg)
+				begGeneral1 = append(begGeneral1, pg.ToArray())
 			}
 		}
 		begGeneralData1, _ := json.Marshal(begGeneral1)
 
-		begGeneral2 := make([]proto.General, 0)
+		begGeneral2 := make([][]int, 0)
 		for _, id := range enemy.GeneralArray {
 			g, ok := GMgr.GetByGId(id)
 			if ok {
 				pg := g.ToProto().(proto.General)
-				begGeneral2 = append(begGeneral2, pg)
+				begGeneral2 = append(begGeneral2, pg.ToArray())
 			}
 		}
 		begGeneralData2, _ := json.Marshal(begGeneral2)
@@ -257,21 +257,23 @@ func (this* armyLogic) executeBuild(army *model.Army)  {
 		lastWar = NewWar(army, enemy)
 
 		//武将战斗后
-		endGeneral1 := make([]proto.General, 0)
+		endGeneral1 := make([][]int, 0)
 		for _, id := range army.GeneralArray {
 			g, ok := GMgr.GetByGId(id)
 			if ok {
-				endGeneral1 = append(endGeneral1, g.ToProto().(proto.General))
+				pg := g.ToProto().(proto.General)
+				endGeneral1 = append(endGeneral1, pg.ToArray())
 				g.SyncExecute()
 			}
 		}
 		endGeneralData1, _ := json.Marshal(endGeneral1)
 
-		endGeneral2 := make([]proto.General, 0)
+		endGeneral2 := make([][]int, 0)
 		for _, id := range enemy.GeneralArray {
 			g, ok := GMgr.GetByGId(id)
 			if ok {
-				endGeneral2 = append(endGeneral2, g.ToProto().(proto.General))
+				pg := g.ToProto().(proto.General)
+				endGeneral2 = append(endGeneral2, pg.ToArray())
 				g.SyncExecute()
 			}
 		}

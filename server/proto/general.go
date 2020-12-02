@@ -23,6 +23,31 @@ type General struct {
 
 }
 
+func (this* General) ToArray()[]int {
+	r := make([]int, 0)
+
+	r = append(r, this.Id)
+	r = append(r, this.CfgId)
+	r = append(r, this.PhysicalPower)
+	r = append(r, this.Cost)
+	r = append(r, int(this.Order))
+	r = append(r, int(this.Level))
+	r = append(r, this.Exp)
+	r = append(r, this.CityId)
+	r = append(r, this.CurArms)
+	r = append(r, this.HasPrPoint)
+	r = append(r, this.UsePrPoint)
+	r = append(r, this.AttackDis)
+	r = append(r, this.ForceAdded)
+	r = append(r, this.StrategyAdded)
+	r = append(r, this.SpeedAdded)
+	r = append(r, this.DefenseAdded)
+	r = append(r, this.DestroyAdded)
+	r = append(r, this.StarLv)
+	r = append(r, this.Star)
+	return r
+}
+
 type MyGeneralReq struct {
 
 }
