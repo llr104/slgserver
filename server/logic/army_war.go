@@ -148,11 +148,16 @@ func (this* armyWar) round() *warRound {
 	n := rand.Intn(10)
 	attack := this.attackPos
 	defense := this.defensePos
+	attackArmy := this.attack
+	defenseArmy := this.defense
 
 	//随机先手
 	if n % 2 == 0{
 		attack = this.defensePos
 		defense = this.attackPos
+
+		attackArmy = this.defense
+		defenseArmy = this.attack
 	}
 
 	//攻击方回合
@@ -161,7 +166,7 @@ func (this* armyWar) round() *warRound {
 			continue
 		}
 		//计算
-		posDefense := this.randArmyPosition(defense)
+		posDefense, index := this.randArmyPosition(defense)
 		hurm := posAttack.Soldiers*posAttack.Force/1000
 		def := posDefense.Soldiers*posDefense.Defense/1000
 
@@ -169,6 +174,7 @@ func (this* armyWar) round() *warRound {
 		if kill > 0{
 			kill = util.MinInt(kill, posDefense.Soldiers)
 			posDefense.Soldiers -= kill
+			defenseArmy.SoldierArray[index] -= kill
 		}else{
 			kill = 0
 		}
@@ -189,7 +195,7 @@ func (this* armyWar) round() *warRound {
 		}
 
 		//计算
-		posDefense := this.randArmyPosition(attack)
+		posDefense, index := this.randArmyPosition(attack)
 		hurm := posAttack.Soldiers*posAttack.Force/10000
 		def := posDefense.Soldiers*posDefense.Defense/10000
 
@@ -197,6 +203,7 @@ func (this* armyWar) round() *warRound {
 		if kill > 0{
 			kill = util.MinInt(kill, posDefense.Soldiers)
 			posDefense.Soldiers -= kill
+			attackArmy.SoldierArray[index] -= kill
 		}else{
 			kill = 0
 		}
@@ -215,7 +222,7 @@ func (this* armyWar) round() *warRound {
 }
 
 //随机一个目标队伍
-func (this* armyWar) randArmyPosition(pos []*armyPosition) *armyPosition{
+func (this* armyWar) randArmyPosition(pos []*armyPosition) (*armyPosition, int){
 	isEmpty := true
 	for _, v := range pos {
 		if v != nil {
@@ -225,16 +232,16 @@ func (this* armyWar) randArmyPosition(pos []*armyPosition) *armyPosition{
 	}
 
 	if isEmpty {
-		return nil
+		return nil, -1
 	}
 
 	for true {
 		r := rand.Intn(100)
 		index := r % len(pos)
 		if pos[index] != nil{
-			return pos[index]
+			return pos[index], index
 		}
 	}
 
-	return nil
+	return nil, -1
 }
