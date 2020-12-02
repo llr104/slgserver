@@ -1,6 +1,7 @@
 package logic
 
 import (
+	"fmt"
 	"math/rand"
 	"slgserver/server/model"
 	"slgserver/server/static_conf/general"
@@ -116,11 +117,13 @@ func (this* armyWar) init() {
 				Arms: g.CurArms,
 				Position: i,
 			}
-			this.defensePos = append(this.attackPos, pos)
+			this.defensePos = append(this.defensePos, pos)
 		}else{
-			this.defensePos = append(this.attackPos, nil)
+			this.defensePos = append(this.defensePos, nil)
 		}
 	}
+
+	fmt.Println(this.defensePos)
 
 }
 
@@ -159,8 +162,8 @@ func (this* armyWar) round() *warRound {
 		}
 		//计算
 		posDefense := this.randArmyPosition(defense)
-		hurm := posAttack.Soldiers*posAttack.Force/10000
-		def := posDefense.Soldiers*posDefense.Defense/10000
+		hurm := posAttack.Soldiers*posAttack.Force/1000
+		def := posDefense.Soldiers*posDefense.Defense/1000
 
 		kill := hurm-def
 		if kill > 0{
@@ -174,7 +177,7 @@ func (this* armyWar) round() *warRound {
 		war.Battle = append(war.Battle, b.to())
 
 		//大营干死了，直接结束
-		if posDefense.Position == 1 && posDefense.Soldiers == 0 {
+		if posDefense.Position == 0 && posDefense.Soldiers == 0 {
 			goto end
 		}
 	}
@@ -202,7 +205,7 @@ func (this* armyWar) round() *warRound {
 		war.Battle = append(war.Battle, b.to())
 
 		//大营干死了，直接结束
-		if posDefense.Position == 1 && posDefense.Soldiers == 0 {
+		if posDefense.Position == 0 && posDefense.Soldiers == 0 {
 			goto end
 		}
 	}
