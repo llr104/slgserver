@@ -4,6 +4,7 @@ import (
 	"math/rand"
 	"slgserver/server/model"
 	"slgserver/server/static_conf/general"
+	"slgserver/util"
 )
 
 //战斗位置的属性
@@ -35,8 +36,17 @@ type battle struct {
 	DLoss int `json:"d_loss"` //本回合防守方损失的兵力
 }
 
+func (this* battle) to() []int{
+	r := make([]int, 0)
+	r = append(r, this.AId)
+	r = append(r, this.DId)
+	r = append(r, this.ALoss)
+	r = append(r, this.DLoss)
+	return r
+}
+
 type warRound struct {
-	Battle[]	battle	`json:"battle"`
+	Battle	[][]int	`json:"battle"`
 }
 
 type WarResult struct {
@@ -106,9 +116,9 @@ func (this* armyWar) init() {
 				Arms: g.CurArms,
 				Position: i,
 			}
-			this.attackPos = append(this.attackPos, pos)
+			this.defensePos = append(this.attackPos, pos)
 		}else{
-			this.attackPos = append(this.attackPos, nil)
+			this.defensePos = append(this.attackPos, nil)
 		}
 	}
 
@@ -132,7 +142,6 @@ func (this* armyWar) battle() []*warRound{
 func (this* armyWar) round() *warRound {
 
 	war := &warRound{}
-	war.Battle = make([]battle, 0)
 	n := rand.Intn(10)
 	attack := this.attackPos
 	defense := this.defensePos
@@ -150,16 +159,19 @@ func (this* armyWar) round() *warRound {
 		}
 		//计算
 		posDefense := this.randArmyPosition(defense)
-		hurm := posAttack.Soldiers*posAttack.Force
-		def := posDefense.Soldiers*posDefense.Defense
+		hurm := posAttack.Soldiers*posAttack.Force/10000
+		def := posDefense.Soldiers*posDefense.Defense/10000
 
 		kill := hurm-def
 		if kill > 0{
+			kill = util.MinInt(kill, posDefense.Soldiers)
 			posDefense.Soldiers -= kill
+		}else{
+			kill = 0
 		}
 
 		b := battle{AId: posAttack.GId, ALoss: 0, DId: posDefense.GId, DLoss: kill}
-		war.Battle = append(war.Battle, b)
+		war.Battle = append(war.Battle, b.to())
 
 		//大营干死了，直接结束
 		if posDefense.Position == 1 && posDefense.Soldiers == 0 {
@@ -175,16 +187,19 @@ func (this* armyWar) round() *warRound {
 
 		//计算
 		posDefense := this.randArmyPosition(attack)
-		hurm := posAttack.Soldiers*posAttack.Force
-		def := posDefense.Soldiers*posDefense.Defense
+		hurm := posAttack.Soldiers*posAttack.Force/10000
+		def := posDefense.Soldiers*posDefense.Defense/10000
 
 		kill := hurm-def
 		if kill > 0{
+			kill = util.MinInt(kill, posDefense.Soldiers)
 			posDefense.Soldiers -= kill
+		}else{
+			kill = 0
 		}
 
 		b := battle{AId: posAttack.GId, ALoss: 0, DId: posDefense.GId, DLoss: kill}
-		war.Battle = append(war.Battle, b)
+		war.Battle = append(war.Battle, b.to())
 
 		//大营干死了，直接结束
 		if posDefense.Position == 1 && posDefense.Soldiers == 0 {

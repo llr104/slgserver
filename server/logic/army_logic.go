@@ -293,6 +293,7 @@ func (this* armyLogic) executeBuild(army *model.Army)  {
 			EndDefenseGeneral: string(endGeneralData2),
 			Rounds: string(rounds),
 			Result: lastWar.result,
+			CTime: time.Now(),
 		}
 
 		warReports = append(warReports, wr)

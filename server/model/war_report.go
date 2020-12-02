@@ -86,7 +86,7 @@ func (this *WarReport) Position() (int, int){
 
 func (this *WarReport) ToProto() interface{}{
 	p := proto.WarReport{}
-	p.CTime = this.CTime.UnixNano()/1e6
+	p.CTime = int(this.CTime.UnixNano() / 1e6)
 	p.Id = this.Id
 	p.AttackRid = this.AttackRid
 	p.DefenseRid = this.DefenseRid
@@ -99,6 +99,7 @@ func (this *WarReport) ToProto() interface{}{
 	p.EndAttackGeneral = this.EndAttackGeneral
 	p.EndDefenseGeneral = this.EndDefenseGeneral
 	p.Result = this.Result
+	p.Rounds = this.Rounds
 	p.AttackIsRead = this.AttackIsRead
 	p.DefenseIsRead = this.DefenseIsRead
 	p.DestroyDurable = this.DestroyDurable
