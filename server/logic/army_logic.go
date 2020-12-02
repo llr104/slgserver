@@ -7,7 +7,6 @@ import (
 	"slgserver/server/global"
 	"slgserver/server/model"
 	"slgserver/server/proto"
-	"slgserver/server/static_conf/general"
 	"slgserver/util"
 	"sync"
 	"time"
@@ -224,6 +223,7 @@ func (this* armyLogic) executeBuild(army *model.Army)  {
 	}
 
 	warReports := make([]*model.WarReport, 0)
+	var lastWar *WarResult = nil
 
 	for _, enemy := range enemys {
 		//战报处理
@@ -254,36 +254,7 @@ func (this* armyLogic) executeBuild(army *model.Army)  {
 		}
 		begGeneralData2, _ := json.Marshal(begGeneral2)
 
-		winCnt := 0
-		for i, soldiers1 := range army.SoldierArray {
-			soldiers2 := enemy.SoldierArray[i]
-			ekill := enemy.SoldierArray[i]-soldiers1
-			akill := army.SoldierArray[i]-soldiers2
-
-			enemy.SoldierArray[i] = util.MaxInt(0, ekill)
-			army.SoldierArray[i] = util.MaxInt(0, akill)
-			if army.SoldierArray[i] > 0{
-				winCnt+=1
-			}
-
-		 	aGid := army.GeneralArray[i]
-			eGid := enemy.GeneralArray[i]
-			if ag, ok := GMgr.GetByGId(aGid); ok {
-				ag.Exp += (soldiers2-enemy.SoldierArray[i])*10
-				level, exp := general.GenBasic.ExpToLevel(ag.Exp)
-				ag.Level = level
-				ag.Exp = exp
-				ag.SyncExecute()
-			}
-
-			if eg, ok := GMgr.GetByGId(eGid); ok {
-				eg.Exp += (soldiers1-army.SoldierArray[i])*10
-				level, exp := general.GenBasic.ExpToLevel(eg.Exp)
-				eg.Level = level
-				eg.Exp = exp
-				eg.SyncExecute()
-			}
-		}
+		lastWar = NewWar(army, enemy)
 
 		//武将战斗后
 		endGeneral1 := make([]proto.General, 0)
@@ -311,15 +282,17 @@ func (this* armyLogic) executeBuild(army *model.Army)  {
 		endArmy1, _ := json.Marshal(pArmy)
 		endArmy2, _ := json.Marshal(pEnemy)
 
+		rounds, _ := json.Marshal(lastWar.round)
 		wr := &model.WarReport{X: army.ToX, Y: army.ToY, AttackRid: army.RId,
 			AttackIsRead: false, DefenseIsRead: false, DefenseRid: enemy.RId,
 			BegAttackArmy: string(begArmy1), BegDefenseArmy: string(begArmy2),
 			EndAttackArmy: string(endArmy1), EndDefenseArmy: string(endArmy2),
-			AttackIsWin: winCnt>=2, CTime: time.Now(),
 			BegAttackGeneral: string(begGeneralData1),
 			BegDefenseGeneral: string(begGeneralData2),
 			EndAttackGeneral: string(endGeneralData1),
 			EndDefenseGeneral: string(endGeneralData2),
+			Rounds: string(rounds),
+			Result: lastWar.result,
 		}
 
 		warReports = append(warReports, wr)
@@ -327,7 +300,7 @@ func (this* armyLogic) executeBuild(army *model.Army)  {
 		enemy.ToGeneral()
 
 		if isRoleEnemy {
-			if winCnt >= 2 {
+			if lastWar.result > 1 {
 				if isRoleEnemy {
 					delete(this.stopInPosArmys, posId)
 				}
@@ -339,14 +312,7 @@ func (this* armyLogic) executeBuild(army *model.Army)  {
 	}
 	army.SyncExecute()
 
-	//三盘两胜
-	isWinCnt := 0
-	for _, s := range army.SoldierArray {
-		if s>0{
-			isWinCnt+=1
-		}
-	}
-	if isWinCnt>=2 {
+	if lastWar.result > 1 {
 		if roleBuid != nil {
 			destory := GMgr.GetDestroy(army)
 			wr := warReports[len(warReports)-1]

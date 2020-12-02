@@ -41,25 +41,26 @@ func (this* warReportDBMgr) push(r *WarReport)  {
 /*******db 操作end********/
 
 type WarReport struct {
-	Id                int    	`xorm:"id pk autoincr"`
-	AttackRid         int    	`xorm:"attack_rid"`
-	DefenseRid        int    	`xorm:"defense_rid"`
-	BegAttackArmy     string 	`xorm:"beg_attack_army"`
-	BegDefenseArmy    string 	`xorm:"beg_defense_army"`
-	EndAttackArmy     string 	`xorm:"end_attack_army"`
-	EndDefenseArmy    string 	`xorm:"end_defense_army"`
-	BegAttackGeneral  string 	`xorm:"beg_attack_general"`
-	BegDefenseGeneral string 	`xorm:"beg_defense_general"`
-	EndAttackGeneral  string 	`xorm:"end_attack_general"`
-	EndDefenseGeneral string    `xorm:"end_defense_general"`
-	AttackIsWin       bool      `xorm:"attack_is_win"`
-	AttackIsRead      bool      `xorm:"attack_is_read"`
-	DefenseIsRead     bool      `xorm:"defense_is_read"`
-	DestroyDurable    int       `xorm:"destroy_durable"`
-	Occupy            int       `xorm:"occupy"`
-	X                 int       `xorm:"x"`
-	Y                 int       `xorm:"y"`
-	CTime             time.Time `xorm:"ctime"`
+	Id                	int    		`xorm:"id pk autoincr"`
+	AttackRid         	int    		`xorm:"attack_rid"`
+	DefenseRid        	int    		`xorm:"defense_rid"`
+	BegAttackArmy     	string 		`xorm:"beg_attack_army"`
+	BegDefenseArmy    	string 		`xorm:"beg_defense_army"`
+	EndAttackArmy     	string 		`xorm:"end_attack_army"`
+	EndDefenseArmy    	string 		`xorm:"end_defense_army"`
+	BegAttackGeneral  	string 		`xorm:"beg_attack_general"`
+	BegDefenseGeneral 	string 		`xorm:"beg_defense_general"`
+	EndAttackGeneral  	string 		`xorm:"end_attack_general"`
+	EndDefenseGeneral 	string    	`xorm:"end_defense_general"`
+	Result				int      	`xorm:"result"`	//0失败，1打平，2胜利
+	Rounds				string		`xorm:"rounds"` //回合
+	AttackIsRead      	bool      	`xorm:"attack_is_read"`
+	DefenseIsRead     	bool      	`xorm:"defense_is_read"`
+	DestroyDurable    	int       	`xorm:"destroy_durable"`
+	Occupy            	int       	`xorm:"occupy"`
+	X                 	int       	`xorm:"x"`
+	Y                 	int       	`xorm:"y"`
+	CTime             	time.Time 	`xorm:"ctime"`
 }
 
 func (this *WarReport) TableName() string {
@@ -97,7 +98,7 @@ func (this *WarReport) ToProto() interface{}{
 	p.BegDefenseGeneral = this.BegDefenseGeneral
 	p.EndAttackGeneral = this.EndAttackGeneral
 	p.EndDefenseGeneral = this.EndDefenseGeneral
-	p.AttackIsWin = this.AttackIsWin
+	p.Result = this.Result
 	p.AttackIsRead = this.AttackIsRead
 	p.DefenseIsRead = this.DefenseIsRead
 	p.DestroyDurable = this.DestroyDurable
