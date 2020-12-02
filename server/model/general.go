@@ -26,7 +26,7 @@ func (this* generalDBMgr) running()  {
 		select {
 		case g := <- this.gs:
 			if g.Id >0 {
-				_, err := db.MasterDB.Table(g).ID(g).Cols("level",
+				_, err := db.MasterDB.Table(g).ID(g.Id).Cols("level",
 					"exp", "order", "cityId", "physical_power").Update(g)
 				if err != nil{
 					log.DefaultLog.Warn("db error", zap.Error(err))
@@ -66,8 +66,6 @@ type General struct {
 	DestroyAdded  int       `xorm:"destroy_added"`
 	StarLv        int       `xorm:"star_lv"`
 	Star          int       `xorm:"star"`
-
-
 }
 
 func (this *General) TableName() string {
