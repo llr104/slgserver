@@ -74,8 +74,8 @@ func (this* RoleResMgr) Add(res *model.RoleRes) (){
 
 func (this* RoleResMgr) TryUseNeed(rid int, need*facility.NeedRes) bool{
 	this.mutex.Lock()
-	defer this.mutex.Unlock()
 	rr, ok := this.rolesRes[rid]
+	this.mutex.Unlock()
 	if ok {
 		if need.Decree <= rr.Decree && need.Grain <= rr.Grain &&
 			need.Stone <= rr.Stone && need.Wood <= rr.Wood &&
@@ -100,8 +100,8 @@ func (this* RoleResMgr) TryUseNeed(rid int, need*facility.NeedRes) bool{
 //政令是否足够
 func (this* RoleResMgr) DecreeIsEnough(rid int, cost int) bool {
 	this.mutex.Lock()
-	defer this.mutex.Unlock()
 	rr, ok := this.rolesRes[rid]
+	this.mutex.Unlock()
 	if ok {
 		if rr.Decree >= cost {
 			return true
@@ -115,8 +115,8 @@ func (this* RoleResMgr) DecreeIsEnough(rid int, cost int) bool {
 
 func (this* RoleResMgr) TryUseDecree(rid int, decree int) bool{
 	this.mutex.Lock()
-	defer this.mutex.Unlock()
 	rr, ok := this.rolesRes[rid]
+	this.mutex.Unlock()
 	if ok {
 		if rr.Decree >= decree {
 			rr.Decree -= decree
@@ -135,8 +135,9 @@ func (this* RoleResMgr) TryUseDecree(rid int, decree int) bool{
 //金币是否足够
 func (this* RoleResMgr) GoldIsEnough(rid int, cost int) bool {
 	this.mutex.Lock()
-	defer this.mutex.Unlock()
 	rr, ok := this.rolesRes[rid]
+	this.mutex.Unlock()
+
 	if ok {
 		if rr.Gold >= cost {
 			return true
@@ -151,8 +152,8 @@ func (this* RoleResMgr) GoldIsEnough(rid int, cost int) bool {
 
 func (this* RoleResMgr) TryUseGold(rid int, gold int) bool{
 	this.mutex.Lock()
-	defer this.mutex.Unlock()
 	rr, ok := this.rolesRes[rid]
+	this.mutex.Unlock()
 	if ok {
 		if rr.Gold >= gold {
 			rr.Gold -= gold

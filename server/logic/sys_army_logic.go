@@ -18,10 +18,10 @@ type sysArmyLogic struct {
 }
 
 func (this * sysArmyLogic) GetArmy(x, y int) []*model.Army {
-	this.mutex.Lock()
-	defer this.mutex.Unlock()
 	posId := ToPosition(x, y)
-	a,ok := this.sysArmys[posId]
+	this.mutex.Lock()
+	a, ok := this.sysArmys[posId]
+	this.mutex.Unlock()
 	if ok {
 		return a
 	}else{
