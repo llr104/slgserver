@@ -30,6 +30,7 @@ type gArms struct {
 	Name		string          `json:"name"`
 	Condition   gArmsCondit     `json:"condition"`
 	ChangeCost  gArmsCost       `json:"change_cost"`
+	HarmRatio	[][]int			`json:"harm_ratio"`
 }
 
 
