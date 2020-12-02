@@ -47,7 +47,7 @@ func (this* battle) to() []int{
 }
 
 type warRound struct {
-	Battle	[][]int	`json:"battle"`
+	Battle	[][]int	`json:"b"`
 }
 
 type WarResult struct {
@@ -162,11 +162,15 @@ func (this* armyWar) round() *warRound {
 
 	//攻击方回合
 	for _, posAttack := range attack {
-		if posAttack == nil{
+		if posAttack == nil || posAttack.Soldiers == 0{
 			continue
 		}
 		//计算
 		posDefense, index := this.randArmyPosition(defense)
+		if posDefense == nil{
+			continue
+		}
+
 		hurm := posAttack.Soldiers*posAttack.Force/1000
 		def := posDefense.Soldiers*posDefense.Defense/1000
 
@@ -190,7 +194,7 @@ func (this* armyWar) round() *warRound {
 
 	//防守方回合
 	for _, posAttack := range defense {
-		if posAttack == nil{
+		if posAttack == nil && posAttack.Soldiers != 0{
 			continue
 		}
 
@@ -198,6 +202,10 @@ func (this* armyWar) round() *warRound {
 		posDefense, index := this.randArmyPosition(attack)
 		hurm := posAttack.Soldiers*posAttack.Force/10000
 		def := posDefense.Soldiers*posDefense.Defense/10000
+
+		if posDefense == nil{
+			continue
+		}
 
 		kill := hurm-def
 		if kill > 0{
@@ -238,7 +246,7 @@ func (this* armyWar) randArmyPosition(pos []*armyPosition) (*armyPosition, int){
 	for true {
 		r := rand.Intn(100)
 		index := r % len(pos)
-		if pos[index] != nil{
+		if pos[index] != nil && pos[index].Soldiers != 0{
 			return pos[index], index
 		}
 	}
