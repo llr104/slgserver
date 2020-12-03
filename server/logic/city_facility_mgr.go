@@ -65,6 +65,22 @@ func (this* FacilityMgr) Get(cid int) (*model.CityFacility, bool){
 	}
 }
 
+func (this* FacilityMgr) GetFacility(cid int, fType int8) (*Facility, bool){
+	f, ok := this.Get(cid)
+	if ok == false{
+		return nil, false
+	}
+
+	facilities := make([]*Facility, 0)
+	json.Unmarshal([]byte(f.Facilities), &facilities)
+	for _, v := range facilities {
+		if v.Type == fType{
+			return v, true
+		}
+	}
+	return nil, false
+}
+
 /*
 如果不存在尝试去创建
 */
@@ -157,3 +173,5 @@ func (this* FacilityMgr) UpFacility(rid, cid int, fType int8) (*Facility, int){
 		return nil, constant.UpError
 	}
 }
+
+

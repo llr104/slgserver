@@ -51,7 +51,8 @@ func (this *facility) load(jsonName string)  {
 
 	jdata, err := ioutil.ReadFile(jsonName)
 	if err != nil {
-		log.DefaultLog.Error("facility load file error", zap.Error(err), zap.String("file", jsonName))
+		log.DefaultLog.Error("facility load file error",
+			zap.Error(err), zap.String("file", jsonName))
 		os.Exit(0)
 	}
 

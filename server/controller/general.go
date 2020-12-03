@@ -116,6 +116,13 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
+	//校场每升一级一个队伍
+	jc, ok := logic.RFMgr.GetFacility(city.CityId, facility.JiaoChang)
+	if ok == false || jc.Level < reqObj.Order {
+		rsp.Body.Code = constant.ArmyNotEnough
+		return
+	}
+
 	newG, ok := logic.GMgr.GetByGId(reqObj.GeneralId)
 	if ok == false{
 		rsp.Body.Code = constant.GeneralNotFound
@@ -159,6 +166,13 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 		if logic.AMgr.IsCanDispose(role.RId, newG.CfgId) == false{
 			rsp.Body.Code = constant.GeneralRepeat
+			return
+		}
+
+		//判断是否能配前锋
+		tst, ok := logic.RFMgr.GetFacility(city.CityId, facility.TongShuaiTing)
+		if reqObj.Position == 2 && ( ok == false || tst.Level < reqObj.Order) {
+			rsp.Body.Code = constant.TongShuaiNotEnough
 			return
 		}
 
