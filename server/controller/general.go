@@ -36,7 +36,6 @@ func (this*General) InitRouter(r *net.Router) {
 	g.AddRouter("drawGeneral", this.drawGenerals)
 	g.AddRouter("composeGeneral", this.ComposeGeneral)
 
-
 }
 
 func (this*General) myGenerals(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
