@@ -12,14 +12,6 @@ import (
 )
 var Basic basic
 
-type NeedRes struct {
-	Decree 		int	`json:"decree"`
-	Grain		int `json:"grain"`
-	Wood		int `json:"wood"`
-	Iron		int `json:"iron"`
-	Stone		int `json:"stone"`
-	Gold		int	`json:"gold"`
-}
 
 
 type conscript struct {
@@ -39,12 +31,28 @@ type general struct {
 	ReclamationTime       int    `json:"reclamation_time"`        //屯田消耗时间，单位秒
 	ReclamationCost       int    `json:"reclamation_cost"`        //屯田消耗政令
 	DrawGeneralCost       int    `json:"draw_general_cost"`        //抽卡消耗金币
+}
 
+type role struct {
+	Des            string `json:"des"`
+	Wood           int `json:"wood"`
+	Iron          int `json:"iron"`
+	Stone         int `json:"stone"`
+	Grain         int `json:"grain"`
+	Gold          int `json:"gold"`
+	Decree        int `json:"decree"`
+	WoodYield     int `json:"wood_yield"`
+	IronYield     int `json:"iron_yield"`
+	StoneYield    int `json:"stone_yield"`
+	GrainYield    int `json:"grain_yield"`
+	GoldYield     int `json:"gold_yield"`
+	DepotCapacity int `json:"depot_capacity"`
 }
 
 type basic struct {
 	ConScript 	conscript
 	General		general
+	Role		role
 }
 
 func (this *basic) Load()  {

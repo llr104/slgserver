@@ -12,6 +12,10 @@ import (
 )
 
 
+const (
+	Main = 0	//主城
+)
+
 var FConf facilityConf
 
 type conf struct {

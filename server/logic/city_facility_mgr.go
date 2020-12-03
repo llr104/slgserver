@@ -78,7 +78,7 @@ func (this* FacilityMgr) GetAndTryCreate(cid, rid int) (*model.CityFacility, boo
 			fs := make([]Facility, len(facility.FConf.List))
 
 			for i, v := range facility.FConf.List {
-				f := Facility{Type: v.Type, Level: int8(1), Name: v.Name}
+				f := Facility{Type: v.Type, Level: 0, Name: v.Name}
 				fs[i] = f
 			}
 

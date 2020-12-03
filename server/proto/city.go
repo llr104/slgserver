@@ -31,5 +31,5 @@ type UpCityReq struct {
 }
 
 type UpCityRsp struct {
-	CityId		int		`json:"cityId"`
+	City	MapRoleCity	`json:"city"`
 }

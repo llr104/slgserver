@@ -11,7 +11,7 @@ const (
 	TypeForce			= 7	//攻击武力
 	TypeConscriptTime	= 8 //征兵时间
 	TypeReserveLimit 	= 9 //预备役上限
-	TypeGold			= 10
+	TypeUnkonw			= 10
 	TypeHanAddition 	= 11
 	TypeWeiAddition 	= 12
 	TypeShuAddition 	= 13

@@ -122,7 +122,7 @@ func (this*City) upFacility(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 				}else if atype == facility.TypeStone{
 					roleRes.StoneYield -= oldValues[i]
 					roleRes.StoneYield += newValues[i]
-				}else if atype == facility.TypeGold{
+				}else if atype == facility.TypeTax{
 					roleRes.GoldYield -= oldValues[i]
 					roleRes.GoldYield += newValues[i]
 				}else if atype == facility.TypeWarehouseLimit {
@@ -144,7 +144,6 @@ func (this*City) upCity(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	rspObj := &proto.UpCityRsp{}
 	mapstructure.Decode(req.Body.Msg, reqObj)
 	rsp.Body.Msg = rspObj
-	rspObj.CityId = reqObj.CityId
 	rsp.Body.Code = constant.OK
 
 	r, _ := req.Conn.GetProperty("role")
@@ -165,5 +164,42 @@ func (this*City) upCity(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		rsp.Body.Code = constant.CityNotExist
 		return
 	}
+
+	maxLevel := facility.FConf.MaxLevel(facility.Main)
+	if city.Level >= maxLevel{
+		rsp.Body.Code = constant.UpError
+		return
+	}
+
+	needRes, ok := facility.FConf.Need(facility.Main, city.Level+1)
+	if ok == false{
+		rsp.Body.Code = constant.UpError
+		return
+	}
+
+	ok = logic.RResMgr.TryUseNeed(role.RId, needRes)
+	if ok == false{
+		rsp.Body.Code = constant.UpError
+		return
+	}
+
+
+	oldValues := facility.FConf.GetValues(facility.Main, city.Level)
+	newValues := facility.FConf.GetValues(facility.Main, city.Level+1)
+	additions := facility.FConf.GetAdditions(facility.Main)
+
+	for i, atype := range additions {
+		if atype == facility.TypeDurable{
+			city.MaxDurable -= oldValues[i]
+			city.MaxDurable += newValues[i]
+
+			city.CurDurable -= oldValues[i]
+			city.CurDurable += newValues[i]
+		}
+	}
+	city.Level += 1
+	city.SyncExecute()
+
+	rspObj.City = city.ToProto().(proto.MapRoleCity)
 
 }

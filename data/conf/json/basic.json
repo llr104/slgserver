@@ -15,6 +15,21 @@
     "reclamation_time": 30,
     "reclamation_cost": 1,
     "draw_general_cost": 10
+  },
+  "role": {
+    "des": "角色的一些配置",
+    "wood": 10000,
+    "iron": 10000,
+    "stone": 10000,
+    "grain": 10000,
+    "gold": 10000,
+    "decree": 20,
+    "wood_yield": 100,
+    "iron_yield": 100,
+    "stone_yield": 100,
+    "grain_yield": 100,
+    "gold_yield": 100,
+    "depot_capacity": 10000
   }
 
 }

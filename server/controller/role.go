@@ -15,6 +15,7 @@ import (
 	"slgserver/server/model"
 	"slgserver/server/pos"
 	"slgserver/server/proto"
+	"slgserver/server/static_conf"
 	"time"
 )
 
@@ -135,18 +136,18 @@ func (this*Role) enterServer(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		if ok == false{
 
 			roleRes = &model.RoleRes{RId: role.RId,
-				Wood: 10000,
-				Iron: 10000,
-				Stone: 10000,
-				Grain: 10000,
-				Gold: 10000,
-				Decree: 20,
-				WoodYield: 100,
-				IronYield: 100,
-				StoneYield: 100,
-				GrainYield: 100,
-				GoldYield: 100,
-				DepotCapacity: 10000}
+				Wood: static_conf.Basic.Role.Wood,
+				Iron: static_conf.Basic.Role.Iron,
+				Stone: static_conf.Basic.Role.Stone,
+				Grain: static_conf.Basic.Role.Grain,
+				Gold: static_conf.Basic.Role.Gold,
+				Decree: static_conf.Basic.Role.Decree,
+				WoodYield: static_conf.Basic.Role.WoodYield,
+				IronYield: static_conf.Basic.Role.IronYield,
+				StoneYield: static_conf.Basic.Role.StoneYield,
+				GrainYield: static_conf.Basic.Role.GrainYield,
+				GoldYield: static_conf.Basic.Role.GoldYield,
+				DepotCapacity: static_conf.Basic.Role.DepotCapacity}
 
 			_ ,e = db.MasterDB.Insert(roleRes)
 			if e != nil {
