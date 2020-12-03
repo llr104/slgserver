@@ -10,36 +10,6 @@ import (
 )
 
 
-/*******db 操作begin********/
-var dbWarReportMgr *warReportDBMgr
-func init() {
-	dbWarReportMgr = &warReportDBMgr{reports: make(chan *WarReport, 100)}
-	go dbWarReportMgr.running()
-}
-
-type warReportDBMgr struct {
-	reports    chan *WarReport
-}
-
-func (this* warReportDBMgr) running()  {
-	for true {
-		select {
-		case r := <- this.reports:
-			if r.Id ==0 {
-				_, err := db.MasterDB.InsertOne(r)
-				if err != nil{
-					log.DefaultLog.Warn("db error", zap.Error(err))
-				}
-			}
-		}
-	}
-}
-
-func (this* warReportDBMgr) push(r *WarReport)  {
-	this.reports <- r
-}
-/*******db 操作end********/
-
 type WarReport struct {
 	Id                	int    		`xorm:"id pk autoincr"`
 	AttackRid         	int    		`xorm:"attack_rid"`
@@ -115,6 +85,9 @@ func (this *WarReport) Push(){
 /* 推送同步 end */
 
 func (this *WarReport) SyncExecute() {
-	dbWarReportMgr.push(this)
+	_, err := db.MasterDB.InsertOne(this)
+	if err != nil{
+		log.DefaultLog.Warn("db error", zap.Error(err))
+	}
 	this.Push()
 }
