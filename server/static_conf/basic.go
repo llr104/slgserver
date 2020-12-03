@@ -94,7 +94,7 @@ func (this *basic) GetNPC(level int8) (*npcLevel, bool){
 	if level <= 0{
 		return nil, false
 	}
-	if len(this.Npc.Levels) > int(level){
+	if len(this.Npc.Levels) >= int(level){
 		return &this.Npc.Levels[level-1], true
 	}
 	return nil, false
