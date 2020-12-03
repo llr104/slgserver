@@ -1,22 +1,22 @@
 {
-  "title": "城内设施-仓库配置",
-  "name": "仓库",
-  "type": 25,
-  "des": "每升一级增加仓库容量",
+  "title": "城内设施-军机营配置表",
+  "name": "军机营",
+  "type": 3,
+  "des": "提高本城部队谋略",
   "additions": [
-    23
+    6
   ],
   "conditions": [
     {
       "type": 0,
-      "level": 2
+      "level": 3
     }
   ],
   "levels": [
     {
       "level": 1,
       "values": [
-        10000
+        5
       ],
       "need": {
         "decree": 0,
@@ -29,7 +29,7 @@
     {
       "level": 2,
       "values": [
-        20000
+        10
       ],
       "need": {
         "decree": 0,
@@ -42,7 +42,7 @@
     {
       "level": 3,
       "values": [
-        30000
+        15
       ],
       "need": {
         "decree": 0,
@@ -55,7 +55,7 @@
     {
       "level": 4,
       "values": [
-        40000
+        20
       ],
       "need": {
         "decree": 0,
@@ -68,46 +68,7 @@
     {
       "level": 5,
       "values": [
-        50000
-      ],
-      "need": {
-        "decree": 0,
-        "grain": 1000,
-        "wood": 1000,
-        "iron": 1000,
-        "stone": 1000
-      }
-    },
-    {
-      "level": 6,
-      "values": [
-        60000
-      ],
-      "need": {
-        "decree": 0,
-        "grain": 1000,
-        "wood": 1000,
-        "iron": 1000,
-        "stone": 1000
-      }
-    },
-    {
-      "level": 7,
-      "values": [
-        70000
-      ],
-      "need": {
-        "decree": 0,
-        "grain": 1000,
-        "wood": 1000,
-        "iron": 1000,
-        "stone": 1000
-      }
-    },
-    {
-      "level": 8,
-      "values": [
-        80000
+        25
       ],
       "need": {
         "decree": 0,
