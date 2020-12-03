@@ -12,14 +12,15 @@ type WarReport struct {
 	BegDefenseGeneral 	string    	`json:"beg_defense_general"`
 	EndAttackGeneral  	string    	`json:"end_attack_general"`
 	EndDefenseGeneral 	string    	`json:"end_defense_general"`
-	AttackIsWin    		bool   		`json:"attack_is_win"`
+	Result				int      	`json:"result"`	//0失败，1打平，2胜利
+	Rounds				string		`json:"rounds"` //回合
 	AttackIsRead   		bool   		`json:"attack_is_read"`
 	DefenseIsRead  		bool   		`json:"defense_is_read"`
 	DestroyDurable 		int    		`json:"destroy_durable"`
 	Occupy         		int    		`json:"occupy"`
 	X              		int    		`json:"x"`
 	Y              		int    		`json:"y"`
-	CTime          		int64  		`json:"ctime"`
+	CTime          		int  		`json:"ctime"`
 }
 
 //战报推送
