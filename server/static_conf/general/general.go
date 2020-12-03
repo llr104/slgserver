@@ -26,7 +26,7 @@ type g struct {
 	DefenseGrow  	int		`json:"defense_grow"`
 	SpeedGrow   	int		`json:"speed_grow"`
 	DestroyGrow 	int		`json:"destroy_grow"`
-	Cost			int		`json:"cost"`
+	Cost			int8	`json:"cost"`
 	Probability		int		`json:"probability"`
 	Star		    int		`json:"star"`
 	Arms		    []int	`json:"arms"`
@@ -55,4 +55,14 @@ func (this *general) Load()  {
 		this.GMap[v.CfgId] = v
 	}
 	fmt.Println(this)
+}
+
+func (this *general) Cost(cfgId int) int8 {
+	c, ok := this.GMap[cfgId]
+	if ok {
+		return c.Cost
+	}else{
+		return 0
+	}
+
 }
