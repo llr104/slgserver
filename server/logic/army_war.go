@@ -131,10 +131,10 @@ func (this* armyWar) battle() []*warRound{
 	rounds := make([]*warRound, 0)
 	cur := 0
 	for true{
-		r := this.round()
+		r, isEnd := this.round()
 		rounds = append(rounds, r)
 		cur += 1
-		if cur >= maxRound{
+		if cur >= maxRound || isEnd{
 			break
 		}
 	}
@@ -142,7 +142,7 @@ func (this* armyWar) battle() []*warRound{
 }
 
 //回合
-func (this* armyWar) round() *warRound {
+func (this* armyWar) round() (*warRound, bool) {
 
 	war := &warRound{}
 	n := rand.Intn(10)
@@ -151,6 +151,7 @@ func (this* armyWar) round() *warRound {
 	attackArmy := this.attack
 	defenseArmy := this.defense
 
+	isEnd := false
 	//随机先手
 	if n % 2 == 0{
 		attack = this.defensePos
@@ -188,13 +189,14 @@ func (this* armyWar) round() *warRound {
 
 		//大营干死了，直接结束
 		if posDefense.Position == 0 && posDefense.Soldiers == 0 {
+			isEnd = true
 			goto end
 		}
 	}
 
 	//防守方回合
 	for _, posAttack := range defense {
-		if posAttack == nil && posAttack.Soldiers != 0{
+		if posAttack == nil || posAttack.Soldiers == 0{
 			continue
 		}
 
@@ -221,12 +223,13 @@ func (this* armyWar) round() *warRound {
 
 		//大营干死了，直接结束
 		if posDefense.Position == 0 && posDefense.Soldiers == 0 {
+			isEnd = true
 			goto end
 		}
 	}
 
 	end:
-	return war
+	return war, isEnd
 }
 
 //随机一个目标队伍

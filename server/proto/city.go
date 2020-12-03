@@ -25,3 +25,11 @@ type UpFacilityRsp struct {
 	Facility	Facility`json:"facility"`
 	RoleRes		RoleRes	`json:"role_res"`
 }
+
+type UpCityReq struct {
+	CityId int 	`json:"cityId"`
+}
+
+type UpCityRsp struct {
+	CityId		int		`json:"cityId"`
+}

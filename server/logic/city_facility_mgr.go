@@ -122,7 +122,7 @@ func (this* FacilityMgr) UpFacility(rid, cid int, fType int8) (*Facility, int){
 						zap.Int("type", int(fType)))
 					return nil, constant.UpError
 				}else{
-					need, ok := facility.FConf.Need(fType, int(fac.Level+1))
+					need, ok := facility.FConf.Need(fType, fac.Level+1)
 					if ok == false {
 						log.DefaultLog.Warn("UpFacility Need config error",
 							zap.Int("curLevel", int(fac.Level)),

@@ -15,7 +15,6 @@ import (
 	"slgserver/server/model"
 	"slgserver/server/pos"
 	"slgserver/server/proto"
-	"slgserver/server/static_conf/facility"
 	"time"
 )
 
@@ -142,12 +141,12 @@ func (this*Role) enterServer(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 				Grain: 10000,
 				Gold: 10000,
 				Decree: 20,
-				WoodYield: facility.FPRC.FMC.Levels[0].Yield,
-				IronYield: facility.FPRC.LTC.Levels[0].Yield,
-				StoneYield: facility.FPRC.CSC.Levels[0].Yield,
-				GrainYield: facility.FPRC.MF.Levels[0].Yield,
-				GoldYield: facility.FPRC.MJ.Levels[0].Yield,
-				DepotCapacity: facility.FWareHouse.Limit(1)}
+				WoodYield: 100,
+				IronYield: 100,
+				StoneYield: 100,
+				GrainYield: 100,
+				GoldYield: 100,
+				DepotCapacity: 10000}
 
 			_ ,e = db.MasterDB.Insert(roleRes)
 			if e != nil {
