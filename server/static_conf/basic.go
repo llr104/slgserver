@@ -31,6 +31,8 @@ type general struct {
 	ReclamationTime       int    `json:"reclamation_time"`        //屯田消耗时间，单位秒
 	ReclamationCost       int    `json:"reclamation_cost"`        //屯田消耗政令
 	DrawGeneralCost       int    `json:"draw_general_cost"`        //抽卡消耗金币
+	PrPoint               int    `json:"pr_pont"`                  //合成一个武将或者的技能点
+
 }
 
 type role struct {

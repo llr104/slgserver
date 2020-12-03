@@ -78,6 +78,8 @@ func (this* GeneralMgr) add(g *model.General) {
 	this.mutex.Unlock()
 }
 
+
+
 func (this* GeneralMgr) Load(){
 
 	err := db.MasterDB.Table(model.General{}).Find(this.genByGId)
@@ -154,6 +156,34 @@ func (this* GeneralMgr) GetByGId(gid int) (*model.General, bool){
 	}
 }
 
+//这个角色是否有这个武将
+func (this* GeneralMgr) HasGenerl(rid int ,gid int) (*model.General ,bool){
+	r, ok := this.GetByRId(rid)
+	if ok {
+		for _, v := range r {
+			t := v
+			if t.Id == gid {
+				return t,true
+			}
+		}
+	}
+	return nil,false
+}
+
+func (this* GeneralMgr) HasGenerls(rid int ,gids []int) ([]*model.General ,bool){
+	gs := make([]*model.General, 0)
+	for i := 0; i < len(gids); i++ {
+		g,ok := this.HasGenerl(rid,gids[i])
+		if ok{
+			gs = append(gs,g)
+		}else{
+			return gs,false
+		}
+	}
+	return gs,true
+}
+
+
 func (this* GeneralMgr) NewGeneral(cfgId int, rid int) (*model.General, bool) {
 	cfg, ok := general.General.GMap[cfgId]
 	if ok {
@@ -161,7 +191,7 @@ func (this* GeneralMgr) NewGeneral(cfgId int, rid int) (*model.General, bool) {
 			PhysicalPower: static_conf.Basic.General.PhysicalPowerLimit,
 			Level: 1, CreatedAt: time.Now(),CurArms: cfg.Arms[0],HasPrPoint: 0,UsePrPoint: 0,
 			AttackDis: 0,ForceAdded: 0,StrategyAdded: 0,DefenseAdded: 0,SpeedAdded: 0,DestroyAdded: 0,
-			Star: cfg.Star,StarLv: 0,
+			Star: cfg.Star,StarLv: 0,ComposeType: 0,ParentId: 0,
 		}
 
 		if _, err := db.MasterDB.Table(model.General{}).Insert(g); err != nil {
@@ -248,7 +278,7 @@ func (this* GeneralMgr) PrToCfgId(rate int) (cfgId int){
 	}
 
 	for i := 0;i < len(general.General.GArr);i++{
-		if general.General.GArr[i].Probability <= rate{
+		if general.General.GArr[i].Probability >= rate{
 			gs = append(gs,general.General.GArr[i].CfgId)
 		}
 

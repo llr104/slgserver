@@ -14,7 +14,8 @@
     "recovery_physical_power": 1,
     "reclamation_time": 30,
     "reclamation_cost": 1,
-    "draw_general_cost": 10
+    "draw_general_cost": 10,
+    "pr_pont": 10
   },
   "role": {
     "des": "角色的一些配置",

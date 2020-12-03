@@ -32,4 +32,6 @@ const DecreeNotEnough = 25				//政令不足
 const GoldNotEnough = 26				//金币不足
 const GeneralRepeat = 27				//重复上阵
 const CostNotEnough = 28				//cost不足
+const GeneralNoHas =  29				//没有该合成武将
+const GeneralNoSame = 30				//合成武将非同名
 

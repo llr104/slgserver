@@ -10,6 +10,12 @@ import (
 	"time"
 )
 
+
+const (
+	ComposeNot   		= 0	//没有合成
+	ComposeStar 		= 1	//星级合成
+)
+
 /*******db 操作begin********/
 var dbGeneralMgr *generalDBMgr
 func init() {
@@ -27,7 +33,9 @@ func (this* generalDBMgr) running()  {
 		case g := <- this.gs:
 			if g.Id >0 {
 				_, err := db.MasterDB.Table(g).ID(g.Id).Cols("level",
-					"exp", "order", "cityId", "physical_power").Update(g)
+					"exp", "order", "cityId", "physical_power","star_lv","has_pr_point",
+					"use_pr_point","force_added","strategy_added","defense_added","speed_added",
+					"destroy_added","parentId","compose_type").Update(g)
 				if err != nil{
 					log.DefaultLog.Warn("db error", zap.Error(err))
 				}
@@ -65,6 +73,8 @@ type General struct {
 	DestroyAdded  int       `xorm:"destroy_added"`
 	StarLv        int       `xorm:"star_lv"`
 	Star          int       `xorm:"star"`
+	ParentId      int       `xorm:"parentId"`
+	ComposeType   int       `xorm:"compose_type"`
 }
 
 func (this *General) TableName() string {
@@ -125,6 +135,8 @@ func (this *General) ToProto() interface{}{
 	p.DestroyAdded = this.DestroyAdded
 	p.StarLv = this.StarLv
 	p.Star = this.Star
+	p.ComposeType = this.ComposeType
+	p.ParentId = this.ParentId
 	return p
 }
 

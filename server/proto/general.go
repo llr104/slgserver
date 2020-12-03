@@ -20,6 +20,8 @@ type General struct {
 	DestroyAdded    int     `json:"destroy_added"`
 	StarLv          int     `json:"star_lv"`
 	Star            int     `json:"star"`
+	ParentId        int     `json:"parentId"`
+	ComposeType     int     `json:"compose_type"`
 
 }
 
@@ -125,5 +127,17 @@ type DrawGeneralReq struct {
 }
 
 type DrawGeneralRsp struct {
+	Generals []General `json:"generals"`
+}
+
+
+
+//合成
+type ComposeGeneralReq struct {
+	CompId     int     `json:"compId"`
+	GIds		[]int	`json:"gIds"`		//合成材料
+}
+
+type ComposeGeneralRsp struct {
 	Generals []General `json:"generals"`
 }

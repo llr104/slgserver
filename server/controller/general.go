@@ -34,6 +34,7 @@ func (this*General) InitRouter(r *net.Router) {
 	g.AddRouter("conscript", this.conscript)
 	g.AddRouter("assignArmy", this.assignArmy)
 	g.AddRouter("drawGeneral", this.drawGenerals)
+	g.AddRouter("composeGeneral", this.ComposeGeneral)
 
 
 }
@@ -439,4 +440,76 @@ func (this*General) drawGenerals(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	}
 }
 
+
+
+
+func (this*General) ComposeGeneral(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+	reqObj := &proto.ComposeGeneralReq{}
+	rspObj := &proto.ComposeGeneralRsp{}
+	mapstructure.Decode(req.Body.Msg, reqObj)
+	rsp.Body.Msg = rspObj
+	rsp.Body.Code = constant.OK
+
+	r, _ := req.Conn.GetProperty("role")
+	role := r.(*model.Role)
+
+
+
+	gs, ok := logic.GMgr.HasGenerl(role.RId,reqObj.CompId)
+	//是否有这个武将
+	if ok == false{
+		rsp.Body.Code = constant.GeneralNoHas
+		return
+	}
+
+
+	//是否都有这个武将
+	gss ,ok := logic.GMgr.HasGenerls(role.RId,reqObj.GIds)
+	if ok == false{
+		rsp.Body.Code = constant.GeneralNoHas
+		return
+	}
+
+
+	ok = true
+	for _, v := range gss {
+		t := v
+		if t.CfgId != gs.CfgId {
+			ok = false
+		}
+	}
+
+	//是否同一个类型的武将
+	if ok == false {
+		rsp.Body.Code = constant.GeneralNoSame
+		return
+	}
+
+	//是否超过武将星级
+	if gs.Star - gs.StarLv < len(gss){
+		rsp.Body.Code = constant.DBError
+		return
+	}
+
+	gs.StarLv += len(gss)
+	gs.HasPrPoint += static_conf.Basic.General.PrPoint
+	gs.SyncExecute()
+
+
+	for _, v := range gss {
+		t := v
+		t.ParentId = gs.Id
+		t.ComposeType = model.ComposeStar
+		t.SyncExecute()
+	}
+
+	rsp.Body.Code = constant.OK
+
+	rspObj.Generals = make([]proto.General, len(gss))
+	for i, v := range gss {
+		rspObj.Generals[i] = v.ToProto().(proto.General)
+	}
+	rspObj.Generals = append(rspObj.Generals,gs.ToProto().(proto.General))
+
+}
 
