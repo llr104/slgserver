@@ -1,0 +1,147 @@
+{
+  "title": "城内设施-伐木场配置表",
+  "name": "伐木场",
+  "des": "额外获得木材产量",
+  "type": 17,
+  "additions": [
+    17
+  ],
+  "conditions": [
+    {
+      "type": 0,
+      "level": 2
+    }
+  ],
+  "levels": [
+    {
+      "level": 1,
+      "values": [
+        1000
+      ],
+      "need": {
+        "decree": 0,
+        "grain": 1000,
+        "wood": 1000,
+        "iron": 1000,
+        "stone": 1000
+      }
+    },
+    {
+      "level": 2,
+      "values": [
+        2000
+      ],
+      "need": {
+        "decree": 0,
+        "grain": 2000,
+        "wood": 2000,
+        "iron": 2000,
+        "stone": 2000
+      }
+    },
+    {
+      "level": 3,
+      "values": [
+        3000
+      ],
+      "need": {
+        "decree": 0,
+        "grain": 3000,
+        "wood": 3000,
+        "iron": 3000,
+        "stone": 3000
+      }
+    },
+    {
+      "level": 4,
+      "values": [
+        4000
+      ],
+      "need": {
+        "decree": 0,
+        "grain": 4000,
+        "wood": 4000,
+        "iron": 4000,
+        "stone": 4000
+      }
+    },
+    {
+      "level": 5,
+      "values": [
+        5000
+      ],
+      "need": {
+        "decree": 0,
+        "grain": 5000,
+        "wood": 5000,
+        "iron": 5000,
+        "stone": 5000
+      }
+    },
+    {
+      "level": 6,
+      "values": [
+        6000
+      ],
+      "need": {
+        "decree": 0,
+        "grain": 6000,
+        "wood": 6000,
+        "iron": 6000,
+        "stone": 6000
+      }
+    },
+    {
+      "level": 7,
+      "values": [
+        7000
+      ],
+      "need": {
+        "decree": 0,
+        "grain": 7000,
+        "wood": 7000,
+        "iron": 7000,
+        "stone": 7000
+      }
+    },
+    {
+      "level": 8,
+      "values": [
+        8000
+      ],
+      "need": {
+        "decree": 0,
+        "grain": 8000,
+        "wood": 8000,
+        "iron": 8000,
+        "stone": 8000
+      }
+    },
+    {
+      "level": 9,
+      "values": [
+        9000
+      ],
+      "need": {
+        "decree": 0,
+        "grain": 9000,
+        "wood": 9000,
+        "iron": 9000,
+        "stone": 9000
+      }
+    },
+    {
+      "level": 10,
+      "values": [
+        10000
+      ],
+      "need": {
+        "decree": 0,
+        "grain": 10000,
+        "wood": 10000,
+        "iron": 10000,
+        "stone": 10000
+      }
+    }
+  ]
+}
