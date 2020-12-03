@@ -82,7 +82,7 @@ func (this *facilityConf) Need(fType int8, level int8) (*NeedRes, bool) {
 		if int8(len(f.Levels)) < level {
 			return nil, false
 		}else{
-			return &f.Levels[level-1].Need, false
+			return &f.Levels[level-1].Need, true
 		}
 	}else{
 		return nil, false

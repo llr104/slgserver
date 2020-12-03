@@ -195,6 +195,9 @@ func (this*City) upCity(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 			city.CurDurable -= oldValues[i]
 			city.CurDurable += newValues[i]
+		}else if atype == facility.TypeCost{
+			city.Cost -= int8(oldValues[i])
+			city.Cost += int8(newValues[i])
 		}
 	}
 	city.Level += 1

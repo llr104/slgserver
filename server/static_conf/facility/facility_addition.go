@@ -2,9 +2,9 @@ package facility
 
 
 const (
-	TypeDurable   		= 0	//耐久
-	TypeCost 			= 1
-	TypeArmyTeams 		= 2	//队伍数量
+	TypeDurable   		= 1	//耐久
+	TypeCost 			= 2
+	TypeArmyTeams 		= 3	//队伍数量
 	TypeSpeed			= 4	//速度
 	TypeDefense			= 5	//防御
 	TypeStrategy		= 6	//谋略
