@@ -34,25 +34,33 @@ type general struct {
 }
 
 type role struct {
-	Des            string `json:"des"`
-	Wood           int `json:"wood"`
-	Iron          int `json:"iron"`
-	Stone         int `json:"stone"`
-	Grain         int `json:"grain"`
-	Gold          int `json:"gold"`
-	Decree        int `json:"decree"`
-	WoodYield     int `json:"wood_yield"`
-	IronYield     int `json:"iron_yield"`
-	StoneYield    int `json:"stone_yield"`
-	GrainYield    int `json:"grain_yield"`
-	GoldYield     int `json:"gold_yield"`
-	DepotCapacity int `json:"depot_capacity"`
+	Des           string 	`json:"des"`
+	Wood          int 		`json:"wood"`
+	Iron          int 		`json:"iron"`
+	Stone         int 		`json:"stone"`
+	Grain         int 		`json:"grain"`
+	Gold          int 		`json:"gold"`
+	Decree        int 		`json:"decree"`
+	WoodYield     int 		`json:"wood_yield"`
+	IronYield     int 		`json:"iron_yield"`
+	StoneYield    int 		`json:"stone_yield"`
+	GrainYield    int 		`json:"grain_yield"`
+	GoldYield     int 		`json:"gold_yield"`
+	DepotCapacity int 		`json:"depot_capacity"`
 }
 
+type city struct {
+	Des     string `json:"des"`
+	Cost    int8   `json:"cost"`
+	Durable int    `json:"durable"`
+}
+
+
 type basic struct {
-	ConScript 	conscript
-	General		general
-	Role		role
+	ConScript conscript `json:"conscript"`
+	General   general   `json:"general"`
+	Role      role      `json:"role"`
+	City      city      `json:"city"`
 }
 
 func (this *basic) Load()  {

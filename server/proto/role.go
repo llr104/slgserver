@@ -58,15 +58,16 @@ type EnterServerRsp struct {
 }
 
 type MapRoleCity struct {
-	CityId		int			`json:"cityId"`
-	RId			int			`json:"rid"`
-	Name		string		`json:"name"`
-	X			int			`json:"x"`
-	Y			int			`json:"y"`
-	IsMain		bool		`json:"is_main"`
-	Level		int8		`json:"level"`
-	CurDurable	int			`json:"cur_durable"`
-	MaxDurable	int			`json:"max_durable"`
+	CityId     int    `json:"cityId"`
+	RId        int    `json:"rid"`
+	Name       string `json:"name"`
+	X          int    `json:"x"`
+	Y          int    `json:"y"`
+	Cost       int8   `json:"cost"`
+	IsMain     bool   `json:"is_main"`
+	Level      int8   `json:"level"`
+	CurDurable int    `json:"cur_durable"`
+	MaxDurable int    `json:"max_durable"`
 }
 
 type MyCityReq struct {

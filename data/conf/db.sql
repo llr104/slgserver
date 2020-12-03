@@ -61,6 +61,7 @@ CREATE TABLE IF NOT EXISTS `map_role_city` (
    `level` tinyint unsigned NOT NULL DEFAULT 1 COMMENT 'level',
    `max_durable` int unsigned NOT NULL COMMENT '最大耐久',
    `cur_durable` int unsigned NOT NULL COMMENT '当前耐久',
+   `cost` tinyint unsigned NOT NULL COMMENT 'cost',
    `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
    PRIMARY KEY (`cityId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '玩家城池';
@@ -104,7 +105,6 @@ CREATE TABLE IF NOT EXISTS `role_res` (
    `gold` int unsigned NOT NULL COMMENT '金币',
    `decree` int unsigned NOT NULL COMMENT '令牌',
    `depot_capacity` int unsigned NOT NULL COMMENT '仓库容量',
-   
    `wood_yield` int unsigned NOT NULL COMMENT '木产量',
    `iron_yield` int unsigned NOT NULL COMMENT '铁产量',
    `stone_yield` int unsigned NOT NULL COMMENT '石头产量',
@@ -120,7 +120,6 @@ CREATE TABLE IF NOT EXISTS `general` (
    `rid` int unsigned NOT NULL COMMENT "rid",
    `cfgId` int unsigned NOT NULL COMMENT "配置id",
    `physical_power` int unsigned NOT NULL COMMENT '体力',
-   `cost` int unsigned NOT NULL COMMENT 'cost',
    `exp` int unsigned NOT NULL COMMENT '经验',
    `order` tinyint NOT NULL COMMENT '第几队',
    `level` tinyint unsigned NOT NULL DEFAULT 1 COMMENT 'level',

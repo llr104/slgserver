@@ -174,8 +174,15 @@ func (this*Role) enterServer(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 				y := rand.Intn(global.MapHeight)
 				if logic.NMMgr.IsCanBuild(x, y) && logic.RBMgr.IsEmpty(x, y) && logic.RCMgr.IsEmpty(x, y){
 					//建立城市
-					c := &model.MapRoleCity{RId: role.RId, X: x, Y: y, IsMain: 1,
-						CurDurable: 100, MaxDurable: 100, Level: 1, Name: role.NickName, CreatedAt: time.Now()}
+					c := &model.MapRoleCity{RId: role.RId, X: x, Y: y,
+						IsMain: 1,
+						CurDurable: static_conf.Basic.City.Durable,
+						MaxDurable: static_conf.Basic.City.Durable,
+						Level: 1,
+						Name: role.NickName,
+						CreatedAt: time.Now(),
+						Cost: static_conf.Basic.City.Cost,
+					}
 
 					//插入
 					_, err := db.MasterDB.Table(c).Insert(c)

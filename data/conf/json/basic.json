@@ -30,6 +30,11 @@
     "grain_yield": 100,
     "gold_yield": 100,
     "depot_capacity": 10000
+  },
+  "city": {
+    "des": "城池的一些配置",
+    "cost": 75,
+    "durable": 100
   }
 
 }

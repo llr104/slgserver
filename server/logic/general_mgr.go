@@ -157,7 +157,7 @@ func (this* GeneralMgr) GetByGId(gid int) (*model.General, bool){
 func (this* GeneralMgr) NewGeneral(cfgId int, rid int) (*model.General, bool) {
 	cfg, ok := general.General.GMap[cfgId]
 	if ok {
-		g := &model.General{RId: rid, CfgId: cfg.CfgId, Cost: cfg.Cost, Order: 0, CityId: 0,
+		g := &model.General{RId: rid, CfgId: cfg.CfgId, Order: 0, CityId: 0,
 			PhysicalPower: static_conf.Basic.General.PhysicalPowerLimit,
 			Level: 1, CreatedAt: time.Now(),CurArms: cfg.Arms[0],HasPrPoint: 0,UsePrPoint: 0,
 			AttackDis: 0,ForceAdded: 0,StrategyAdded: 0,DefenseAdded: 0,SpeedAdded: 0,DestroyAdded: 0,

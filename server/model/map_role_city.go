@@ -26,7 +26,7 @@ func (this* rcDBMgr) running()  {
 		case b := <- this.builds:
 			if b.CityId >0 {
 				_, err := db.MasterDB.Table(b).ID(b.CityId).Cols("level",
-					"cur_durable", "max_durable").Update(b)
+					"cur_durable", "max_durable", "cost").Update(b)
 				if err != nil{
 					log.DefaultLog.Warn("db error", zap.Error(err))
 				}
@@ -52,6 +52,7 @@ type MapRoleCity struct {
 	Level		int8		`xorm:"level"`
 	CurDurable	int			`xorm:"cur_durable"`
 	MaxDurable	int			`xorm:"max_durable"`
+	Cost       	int8   		`xorm:"cost"`
 	CreatedAt	time.Time	`xorm:"created_at"`
 }
 
@@ -87,6 +88,7 @@ func (this *MapRoleCity) ToProto() interface{}{
 	p.RId = this.RId
 	p.Name = this.Name
 	p.IsMain = this.IsMain == 1
+	p.Cost = this.Cost
 	return p
 }
 

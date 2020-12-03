@@ -50,7 +50,6 @@ type General struct {
 	CfgId         int       `xorm:"cfgId"`
 	PhysicalPower int       `xorm:"physical_power"`
 	Level         int8      `xorm:"level"`
-	Cost          int       `xorm:"cost"`
 	Exp           int       `xorm:"exp"`
 	Order         int8      `xorm:"order"`
 	CityId        int       `xorm:"cityId"`
@@ -110,7 +109,6 @@ func (this *General) ToProto() interface{}{
 	p := proto.General{}
 	p.CityId = this.CityId
 	p.Order = this.Order
-	p.Cost = this.Cost
 	p.PhysicalPower = this.PhysicalPower
 	p.Id = this.Id
 	p.CfgId = this.CfgId
