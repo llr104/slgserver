@@ -57,12 +57,23 @@ type city struct {
 	Durable int    `json:"durable"`
 }
 
+type npcLevel struct {
+	Soilders int `json:"soilders"`
+}
+
+type npc struct {
+	Des    string     `json:"des"`
+	Levels []npcLevel `json:"levels"`
+}
+
+
 
 type basic struct {
 	ConScript conscript `json:"conscript"`
 	General   general   `json:"general"`
 	Role      role      `json:"role"`
 	City      city      `json:"city"`
+	Npc       npc       `json:"npc"`
 }
 
 func (this *basic) Load()  {
@@ -77,4 +88,14 @@ func (this *basic) Load()  {
 	json.Unmarshal(jdata, this)
 
 	fmt.Println(this)
+}
+
+func (this *basic) GetNPC(level int8) (*npcLevel, bool){
+	if level <= 0{
+		return nil, false
+	}
+	if len(this.Npc.Levels) < int(level){
+		return &this.Npc.Levels[level-1], true
+	}
+	return nil, false
 }

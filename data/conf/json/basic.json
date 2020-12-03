@@ -36,6 +36,26 @@
     "des": "城池的一些配置",
     "cost": 75,
     "durable": 100
+  },
+  "npc": {
+    "des": "npc一些配置",
+    "levels": [
+      {
+        "soilders": 100
+      },
+      {
+        "soilders": 200
+      },
+      {
+        "soilders": 300
+      },
+      {
+        "soilders": 400
+      },
+      {
+        "soilders": 500
+      }
+    ]
   }
 
 }

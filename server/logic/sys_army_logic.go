@@ -2,6 +2,7 @@ package logic
 
 import (
 	"slgserver/server/model"
+	"slgserver/server/static_conf"
 	"sync"
 )
 
@@ -35,8 +36,13 @@ func (this * sysArmyLogic) GetArmy(x, y int) []*model.Army {
 		armys := make([]*model.Army, 0)
 		if ok {
 			if cfg, ok := NMMgr.PositionBuild(x, y); ok{
-				n := 20*int(cfg.Level)
-				scnt := []int{n, n, n}
+				soilder := 100*int(cfg.Level)
+				npc, ok1 := static_conf.Basic.GetNPC(cfg.Level)
+				if ok1 {
+					soilder = npc.Soilders
+				}
+
+				scnt := []int{soilder, soilder, soilder}
 				army := &model.Army{RId: 0, Order: 0, CityId: 0,
 					GeneralArray: gsId, SoldierArray: scnt}
 				army.ToGeneral()
