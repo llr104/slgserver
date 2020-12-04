@@ -35,6 +35,7 @@ func (this*General) InitRouter(r *net.Router) {
 	g.AddRouter("assignArmy", this.assignArmy)
 	g.AddRouter("drawGeneral", this.drawGenerals)
 	g.AddRouter("composeGeneral", this.ComposeGeneral)
+	g.AddRouter("addPrGeneral", this.AddPrGeneral)
 
 }
 
@@ -501,7 +502,7 @@ func (this*General) ComposeGeneral(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	}
 
 	gs.StarLv += len(gss)
-	gs.HasPrPoint += static_conf.Basic.General.PrPoint
+	gs.HasPrPoint += static_conf.Basic.General.PrPoint * len(gss)
 	gs.SyncExecute()
 
 
@@ -519,6 +520,42 @@ func (this*General) ComposeGeneral(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		rspObj.Generals[i] = v.ToProto().(proto.General)
 	}
 	rspObj.Generals = append(rspObj.Generals,gs.ToProto().(proto.General))
+
+}
+
+
+
+func (this*General) AddPrGeneral(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+	reqObj := &proto.AddPrGeneralReq{}
+	rspObj := &proto.AddPrGeneralRsp{}
+	mapstructure.Decode(req.Body.Msg, reqObj)
+	rsp.Body.Msg = rspObj
+	rsp.Body.Code = constant.OK
+
+	r, _ := req.Conn.GetProperty("role")
+	role := r.(*model.Role)
+
+	gs, ok := logic.GMgr.HasGenerl(role.RId,reqObj.CompId)
+	//是否有这个武将
+	if ok == false{
+		rsp.Body.Code = constant.GeneralNoHas
+		return
+	}
+
+	gs.ForceAdded = reqObj.ForceAdd
+	gs.StrategyAdded = reqObj.StrategyAdd
+	gs.DefenseAdded = reqObj.DefenseAdd
+	gs.SpeedAdded = reqObj.SpeedAdd
+	gs.DestroyAdded = reqObj.DestroyAdd
+
+
+
+	gs.UsePrPoint = gs.ForceAdded +  gs.StrategyAdded + gs.DefenseAdded + gs.SpeedAdded + gs.DestroyAdded
+	gs.SyncExecute()
+
+	rsp.Body.Code = constant.OK
+
+	rspObj.Generals = gs.ToProto().(proto.General)
 
 }
 
