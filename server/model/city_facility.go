@@ -1,6 +1,7 @@
 package model
 
 import (
+	"encoding/json"
 	"go.uber.org/zap"
 	"slgserver/db"
 	"slgserver/log"
@@ -39,6 +40,13 @@ func (this* cfDBMgr) push(c *CityFacility)  {
 /*******db 操作end********/
 
 
+type Facility struct {
+	Name   string `json:"name"`
+	Level  int8   `json:"level"`
+	Type   int8   `json:"type"`
+}
+
+
 type CityFacility struct {
 	Id         int    `xorm:"id pk autoincr"`
 	RId        int    `xorm:"rid"`
@@ -53,4 +61,10 @@ func (this *CityFacility) TableName() string {
 
 func (this *CityFacility) SyncExecute() {
 	dbCFMgr.push(this)
+}
+
+func (this* CityFacility) Facility()[]Facility {
+	facilities := make([]Facility, 0)
+	json.Unmarshal([]byte(this.Facilities), &facilities)
+	return facilities
 }

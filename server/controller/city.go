@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"encoding/json"
 	"github.com/goinggo/mapstructure"
 	"slgserver/constant"
 	"slgserver/net"
@@ -56,8 +55,7 @@ func (this*City) facilities(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	t := make([]logic.Facility, 0)
-	json.Unmarshal([]byte(f.Facilities), &t)
+	t := f.Facility()
 
 	rspObj.Facilities = make([]proto.Facility, len(t))
 	for i, v := range t {

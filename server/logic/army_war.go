@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math/rand"
 	"slgserver/server/model"
+	"slgserver/server/static_conf/facility"
 	"slgserver/server/static_conf/general"
 	"slgserver/util"
 )
@@ -76,6 +77,25 @@ func NewWar(attack *model.Army, defense *model.Army) *WarResult {
 //初始化军队和武将属性、兵种、加成等
 func (this* armyWar) init() {
 
+	//城内设施加成
+	attackAdds := []int{0,0,0,0}
+	if this.attack.CityId > 0{
+		attackAdds = RFMgr.GetAdditions(this.attack.CityId,
+			facility.TypeForce,
+			facility.TypeDefense,
+			facility.TypeSpeed,
+			facility.TypeStrategy)
+	}
+
+	defenseAdds := []int{0,0,0,0}
+	if this.defense.CityId > 0{
+		defenseAdds = RFMgr.GetAdditions(this.defense.CityId,
+			facility.TypeForce,
+			facility.TypeDefense,
+			facility.TypeSpeed,
+			facility.TypeStrategy)
+	}
+
 	this.attackPos = make([]*armyPosition, 0)
 	this.defensePos = make([]*armyPosition, 0)
 
@@ -88,10 +108,10 @@ func (this* armyWar) init() {
 				pos := &armyPosition{
 					GId: g.Id,
 					Soldiers: this.attack.SoldierArray[i],
-					Force: cfg.Force,
-					Strategy: cfg.Strategy,
-					Defense: cfg.Defense,
-					Speed: cfg.Speed,
+					Force: cfg.Force + attackAdds[0],
+					Defense: cfg.Defense + attackAdds[1],
+					Speed: cfg.Speed + attackAdds[2],
+					Strategy: cfg.Strategy + attackAdds[3],
 					Destroy: cfg.Destroy,
 					Arms: g.CurArms,
 					Position: i,
@@ -109,10 +129,10 @@ func (this* armyWar) init() {
 			pos := &armyPosition{
 				GId: g.Id,
 				Soldiers: this.attack.SoldierArray[i],
-				Force: cfg.Force,
-				Strategy: cfg.Strategy,
-				Defense: cfg.Defense,
-				Speed: cfg.Speed,
+				Force: cfg.Force + defenseAdds[0],
+				Defense: cfg.Defense + defenseAdds[1],
+				Speed: cfg.Speed + defenseAdds[2],
+				Strategy: cfg.Strategy + defenseAdds[3],
 				Destroy: cfg.Destroy,
 				Arms: g.CurArms,
 				Position: i,
@@ -123,8 +143,9 @@ func (this* armyWar) init() {
 		}
 	}
 
-	fmt.Println(this.defensePos)
 
+
+	fmt.Println(this.defensePos)
 }
 
 func (this* armyWar) battle() []*warRound{

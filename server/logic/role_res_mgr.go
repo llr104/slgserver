@@ -228,9 +228,7 @@ func (this* RoleResMgr) produce() {
 				v.Decree+=1
 			}
 
-			log.DefaultLog.Debug("role_res save begin")
 			v.SyncExecute()
-			log.DefaultLog.Debug("role_res save end")
 		}
 		index++
 		this.mutex.RUnlock()

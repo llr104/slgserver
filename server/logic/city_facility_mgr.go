@@ -11,14 +11,6 @@ import (
 	"sync"
 )
 
-
-
-type Facility struct {
-	Name   string `json:"name"`
-	Level  int8   `json:"level"`
-	Type   int8   `json:"type"`
-}
-
 var RFMgr = FacilityMgr{
 	facilities: make(map[int]*model.CityFacility),
 }
@@ -65,22 +57,51 @@ func (this* FacilityMgr) Get(cid int) (*model.CityFacility, bool){
 	}
 }
 
-func (this* FacilityMgr) GetFacility(cid int, fType int8) (*Facility, bool){
-	f, ok := this.Get(cid)
+func (this* FacilityMgr) GetFacility(cid int, fType int8) (*model.Facility, bool){
+	cf, ok := this.Get(cid)
 	if ok == false{
 		return nil, false
 	}
 
-	facilities := make([]*Facility, 0)
-	json.Unmarshal([]byte(f.Facilities), &facilities)
+	facilities := cf.Facility()
 	for _, v := range facilities {
 		if v.Type == fType{
-			return v, true
+			return &v, true
 		}
 	}
 	return nil, false
 }
 
+/*
+获取城内设施加成
+*/
+func (this* FacilityMgr) GetAdditions(cid int, additionType... int8 ) []int{
+	cf, ok := this.Get(cid)
+	if ok == false{
+		return []int{}
+	}
+
+	ret := make([]int, 0)
+	for _, at := range additionType {
+		total := 0
+		facilities := cf.Facility()
+		for _, f := range facilities {
+			if f.Level > 0{
+				adds := facility.FConf.GetAdditions(f.Type)
+				values := facility.FConf.GetValues(f.Type, f.Level)
+
+				for i, add := range adds {
+					if add == at {
+						total += values[i]
+					}
+				}
+			}
+		}
+		ret = append(ret, total)
+	}
+
+	return ret
+}
 /*
 如果不存在尝试去创建
 */
@@ -91,10 +112,10 @@ func (this* FacilityMgr) GetAndTryCreate(cid, rid int) (*model.CityFacility, boo
 	}else{
 		if _, ok:= RCMgr.Get(cid); ok {
 			//创建
-			fs := make([]Facility, len(facility.FConf.List))
+			fs := make([]model.Facility, len(facility.FConf.List))
 
 			for i, v := range facility.FConf.List {
-				f := Facility{Type: v.Type, Level: 0, Name: v.Name}
+				f := model.Facility{Type: v.Type, Level: 0, Name: v.Name}
 				fs[i] = f
 			}
 
@@ -114,7 +135,7 @@ func (this* FacilityMgr) GetAndTryCreate(cid, rid int) (*model.CityFacility, boo
 	}
 }
 
-func (this* FacilityMgr) UpFacility(rid, cid int, fType int8) (*Facility, int){
+func (this* FacilityMgr) UpFacility(rid, cid int, fType int8) (*model.Facility, int){
 	this.mutex.Lock()
 	defer this.mutex.Unlock()
 	f, ok := this.facilities[cid]
@@ -124,8 +145,8 @@ func (this* FacilityMgr) UpFacility(rid, cid int, fType int8) (*Facility, int){
 			zap.Int("type", int(fType)))
 		return nil, constant.CityNotExist
 	}else{
-		facilities := make([]*Facility, 0)
-		var out *Facility
+		facilities := make([]*model.Facility, 0)
+		var out *model.Facility
 		json.Unmarshal([]byte(f.Facilities), &facilities)
 		for _, fac := range facilities {
 			if fac.Type == fType {

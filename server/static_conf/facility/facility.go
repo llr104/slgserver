@@ -21,7 +21,7 @@ type facility struct {
 	Des        string     	`json:"des"`
 	Name       string     	`json:"name"`
 	Type       int8        	`json:"type"`
-	Additions  []int      	`json:"additions"`
+	Additions  []int8      	`json:"additions"`
 	Conditions []conditions	`json:"conditions"`
 	Levels     []fLevel   	`json:"levels"`
 }

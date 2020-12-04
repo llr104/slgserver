@@ -109,12 +109,12 @@ func (this *facilityConf) GetValues(fType int8, level int8) []int {
 }
 
 
-func (this *facilityConf) GetAdditions(fType int8) []int {
+func (this *facilityConf) GetAdditions(fType int8) []int8 {
 	f, ok := this.facilitys[fType]
 	if ok {
 		return f.Additions
 	}else{
-		return []int{}
+		return []int8{}
 	}
 }
 
