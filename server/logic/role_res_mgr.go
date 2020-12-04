@@ -28,22 +28,23 @@ func (this* RoleResMgr) Load() {
 		log.DefaultLog.Error("RoleResMgr load role_res table error")
 	}
 
+	
 	this.mutex.Lock()
 	for _, v := range rr {
 		this.rolesRes[v.RId] = v
 	}
 	this.mutex.Unlock()
-
 	go this.produce()
 
 }
 
 
 func (this* RoleResMgr) Get(rid int) (*model.RoleRes, bool){
+	
 	this.mutex.RLock()
 	r, ok := this.rolesRes[rid]
 	this.mutex.RUnlock()
-
+	
 	if ok {
 		return r, true
 	}
@@ -51,9 +52,11 @@ func (this* RoleResMgr) Get(rid int) (*model.RoleRes, bool){
 	m := &model.RoleRes{}
 	ok, err := db.MasterDB.Table(new(model.RoleRes)).Where("rid=?", rid).Get(m)
 	if ok {
+		
 		this.mutex.Lock()
 		this.rolesRes[rid] = m
 		this.mutex.Unlock()
+		
 		return m, true
 	}else{
 		if err == nil{
@@ -67,15 +70,19 @@ func (this* RoleResMgr) Get(rid int) (*model.RoleRes, bool){
 }
 
 func (this* RoleResMgr) Add(res *model.RoleRes) (){
+	
 	this.mutex.Lock()
-	defer this.mutex.Unlock()
 	this.rolesRes[res.RId] = res
+	this.mutex.Unlock()
+	
 }
 
 func (this* RoleResMgr) TryUseNeed(rid int, need*facility.NeedRes) bool{
+	
 	this.mutex.RLock()
 	rr, ok := this.rolesRes[rid]
 	this.mutex.RUnlock()
+	
 	if ok {
 		if need.Decree <= rr.Decree && need.Grain <= rr.Grain &&
 			need.Stone <= rr.Stone && need.Wood <= rr.Wood &&
@@ -99,9 +106,11 @@ func (this* RoleResMgr) TryUseNeed(rid int, need*facility.NeedRes) bool{
 
 //政令是否足够
 func (this* RoleResMgr) DecreeIsEnough(rid int, cost int) bool {
-	this.mutex.Lock()
+	
+	this.mutex.RLock()
 	rr, ok := this.rolesRes[rid]
-	this.mutex.Unlock()
+	this.mutex.RUnlock()
+	
 	if ok {
 		if rr.Decree >= cost {
 			return true
@@ -114,9 +123,11 @@ func (this* RoleResMgr) DecreeIsEnough(rid int, cost int) bool {
 }
 
 func (this* RoleResMgr) TryUseDecree(rid int, decree int) bool{
+	
 	this.mutex.RLock()
 	rr, ok := this.rolesRes[rid]
 	this.mutex.RUnlock()
+	
 	if ok {
 		if rr.Decree >= decree {
 			rr.Decree -= decree
@@ -134,6 +145,7 @@ func (this* RoleResMgr) TryUseDecree(rid int, decree int) bool{
 
 //金币是否足够
 func (this* RoleResMgr) GoldIsEnough(rid int, cost int) bool {
+	
 	this.mutex.RLock()
 	rr, ok := this.rolesRes[rid]
 	this.mutex.RUnlock()
@@ -151,9 +163,11 @@ func (this* RoleResMgr) GoldIsEnough(rid int, cost int) bool {
 
 
 func (this* RoleResMgr) TryUseGold(rid int, gold int) bool{
+	
 	this.mutex.RLock()
 	rr, ok := this.rolesRes[rid]
 	this.mutex.RUnlock()
+	
 	if ok {
 		if rr.Gold >= gold {
 			rr.Gold -= gold
@@ -185,7 +199,8 @@ func (this* RoleResMgr) produce() {
 	index := 1
 	for true {
 		//每个10分钟处理一次资源更新
-		time.Sleep(60*10*time.Second)
+		time.Sleep(10*time.Second)
+		
 		this.mutex.RLock()
 		for _, v := range this.rolesRes {
 			//加判断是因为爆仓了，资源不无故减少
@@ -213,11 +228,13 @@ func (this* RoleResMgr) produce() {
 				v.Decree+=1
 			}
 
+			log.DefaultLog.Debug("role_res save begin")
 			v.SyncExecute()
+			log.DefaultLog.Debug("role_res save end")
 		}
 		index++
-
 		this.mutex.RUnlock()
+		
 	}
 }
 
