@@ -61,24 +61,25 @@ func (this* armyDBMgr) push(army *Army)  {
 
 //军队
 type Army struct {
-	Id           		int    		`xorm:"id pk autoincr"`
-	RId          		int    		`xorm:"rid"`
-	CityId       		int    		`xorm:"cityId"`
-	Order        		int8   		`xorm:"order"`
-	Generals     		string 		`xorm:"generals"`
-	Soldiers     		string 		`xorm:"soldiers"`
-	GeneralArray 		[]int  		`json:"-" xorm:"-"`
-	SoldierArray 		[]int  		`json:"-" xorm:"-"`
-	Cmd          		int8   		`xorm:"cmd"` //执行命令0:空闲 1:攻击 2：驻军 3:返回
-	State        		int8   		`xorm:"-"` //状态:0:running,1:stop
-	FromX        		int    		`xorm:"from_x"`
-	FromY            	int       	`xorm:"from_y"`
-	ToX              	int       	`xorm:"to_x"`
-	ToY              	int       	`xorm:"to_y"`
-	Start            	time.Time 	`json:"-"xorm:"start"`
-	End              	time.Time 	`json:"-"xorm:"end"`
-	CellX				int			`json:"-" xorm:"-"`
-	CellY				int			`json:"-" xorm:"-"`
+	Id           int        `xorm:"id pk autoincr"`
+	RId          int        `xorm:"rid"`
+	CityId       int        `xorm:"cityId"`
+	Order        int8       `xorm:"order"`
+	Generals     string     `xorm:"generals"`
+	Soldiers     string     `xorm:"soldiers"`
+	GeneralArray []int      `json:"-" xorm:"-"`
+	SoldierArray []int      `json:"-" xorm:"-"`
+	Gens         []*General `json:"-" xorm:"-"`
+	Cmd          int8       `xorm:"cmd"` //执行命令0:空闲 1:攻击 2：驻军 3:返回
+	State        int8       `xorm:"-"` //状态:0:running,1:stop
+	FromX        int        `xorm:"from_x"`
+	FromY        int        `xorm:"from_y"`
+	ToX          int        `xorm:"to_x"`
+	ToY          int        `xorm:"to_y"`
+	Start        time.Time  `json:"-"xorm:"start"`
+	End          time.Time  `json:"-"xorm:"end"`
+	CellX        int        `json:"-" xorm:"-"`
+	CellY        int        `json:"-" xorm:"-"`
 }
 
 func (this *Army) TableName() string {

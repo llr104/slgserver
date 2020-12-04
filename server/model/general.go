@@ -31,7 +31,7 @@ func (this* generalDBMgr) running()  {
 	for true {
 		select {
 		case g := <- this.gs:
-			if g.Id >0 {
+			if g.Id > 0 && g.RId > 0 {
 				_, err := db.MasterDB.Table(g).ID(g.Id).Cols("level",
 					"exp", "order", "cityId", "physical_power","star_lv","has_pr_point",
 					"use_pr_point","force_added","strategy_added","defense_added","speed_added",

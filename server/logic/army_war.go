@@ -98,31 +98,29 @@ func (this* armyWar) init() {
 	this.attackPos = make([]*armyPosition, 0)
 	this.defensePos = make([]*armyPosition, 0)
 
-	for i, gid := range this.attack.GeneralArray {
-		if gid == 0 {
+	for i, g := range this.attack.Gens {
+		if g == nil {
 			this.attackPos = append(this.attackPos, nil)
 		}else{
-			if g, ok := GMgr.GetByGId(gid); ok {
-				pos := &armyPosition{
-					general:  g,
-					soldiers: this.attack.SoldierArray[i],
-					force:    g.GetForce()  + attackAdds[0],
-					defense:  g.GetDefense() + attackAdds[1],
-					speed:    g.GetSpeed() + attackAdds[2],
-					strategy: g.GetStrategy() + attackAdds[3],
-					destroy:  g.GetDestroy(),
-					arms:     g.CurArms,
-					position: i,
-				}
-				this.attackPos = append(this.attackPos, pos)
-			}else{
-				this.attackPos = append(this.attackPos, nil)
+			pos := &armyPosition{
+				general:  g,
+				soldiers: this.attack.SoldierArray[i],
+				force:    g.GetForce()  + attackAdds[0],
+				defense:  g.GetDefense() + attackAdds[1],
+				speed:    g.GetSpeed() + attackAdds[2],
+				strategy: g.GetStrategy() + attackAdds[3],
+				destroy:  g.GetDestroy(),
+				arms:     g.CurArms,
+				position: i,
 			}
+			this.attackPos = append(this.attackPos, pos)
 		}
 	}
 
-	for i, gid := range this.defense.GeneralArray {
-		if g, ok := GMgr.GetByGId(gid); ok {
+	for i, g := range this.defense.Gens {
+		if g == nil {
+			this.defensePos = append(this.defensePos, nil)
+		}else{
 			pos := &armyPosition{
 				general:  g,
 				soldiers: this.defense.SoldierArray[i],
@@ -135,8 +133,6 @@ func (this* armyWar) init() {
 				position: i,
 			}
 			this.defensePos = append(this.defensePos, pos)
-		}else{
-			this.defensePos = append(this.defensePos, nil)
 		}
 	}
 

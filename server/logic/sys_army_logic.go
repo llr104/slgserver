@@ -26,11 +26,12 @@ func (this * sysArmyLogic) GetArmy(x, y int) []*model.Army {
 	if ok {
 		return a
 	}else{
-		gs, ok := GMgr.GetNPCGenerals(3)
+		out, ok := GMgr.GetNPCGenerals(3)
 		gsId := make([]int, 0)
+		gs := make([]*model.General, 3)
 
-		for _, v := range gs {
-			gsId = append(gsId, v.Id)
+		for i := 0; i < len(out) ; i++ {
+			gs[i] = &out[i]
 		}
 
 		armys := make([]*model.Army, 0)
@@ -44,7 +45,7 @@ func (this * sysArmyLogic) GetArmy(x, y int) []*model.Army {
 
 				scnt := []int{soilder, soilder, soilder}
 				army := &model.Army{RId: 0, Order: 0, CityId: 0,
-					GeneralArray: gsId, SoldierArray: scnt}
+					GeneralArray: gsId, Gens: gs, SoldierArray: scnt}
 				army.ToGeneral()
 				army.ToSoldier()
 

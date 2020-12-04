@@ -147,10 +147,11 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 	//下阵
 	if reqObj.Position == -1{
-		for i, gId := range army.GeneralArray {
-			if gId == newG.Id{
+		for i, g := range army.Gens {
+			if g != nil && g.Id == newG.Id{
 				army.GeneralArray[i] = 0
 				army.SoldierArray[i] = 0
+				army.Gens[i] = nil
 				army.SyncExecute()
 				break
 			}
@@ -178,13 +179,11 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 		//判断cost
 		cost := general.General.Cost(newG.CfgId)
-		for i, gid := range army.GeneralArray {
-			if i == reqObj.Position{
+		for i, g := range army.Gens {
+			if g == nil || i == reqObj.Position {
 				continue
 			}
-			if g, ok := logic.GMgr.GetByGId(gid); ok{
-				cost += general.General.Cost(g.CfgId)
-			}
+			cost += general.General.Cost(g.CfgId)
 		}
 
 		if city.Cost < cost{
@@ -192,17 +191,17 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 			return
 		}
 
-		oldGId := army.GeneralArray[reqObj.Position]
-		if oldGId > 0{
-			if oldG, ok := logic.GMgr.GetByGId(oldGId); ok{
-				//旧的下阵
-				oldG.CityId = 0
-				oldG.Order = 0
-				oldG.SyncExecute()
-			}
+		oldG := army.Gens[reqObj.Position]
+		if oldG != nil {
+			//旧的下阵
+			oldG.CityId = 0
+			oldG.Order = 0
+			oldG.SyncExecute()
 		}
+
 		//新的上阵
 		army.GeneralArray[reqObj.Position] = reqObj.GeneralId
+		army.Gens[reqObj.Position] = newG
 		army.SoldierArray[reqObj.Position] = 0
 
 		newG.Order = reqObj.Order
@@ -212,7 +211,6 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 	army.FromX = city.X
 	army.FromY = city.Y
-
 	army.SyncExecute()
 	//队伍
 	rspObj.Army = army.ToProto().(proto.Army)
@@ -252,22 +250,20 @@ func (this*General) conscript(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	}
 
 	//判断是否超过上限
-	for i, gid := range army.GeneralArray {
-		if gid == 0 {
+	for i, g := range army.Gens {
+		if g == nil {
 			reqObj.Cnts[i] = 0
 			continue
 		}
-		if g, ok := logic.GMgr.GetByGId(gid); ok {
-			l, e := general.GenBasic.GetLevel(g.Level)
-			if e == nil{
-				if l.Soldiers < reqObj.Cnts[i]+army.SoldierArray[i]{
-					rsp.Body.Code = constant.OutArmyLimit
-					return
-				}
-			}else{
-				rsp.Body.Code = constant.InvalidParam
+		l, e := general.GenBasic.GetLevel(g.Level)
+		if e == nil{
+			if l.Soldiers < reqObj.Cnts[i]+army.SoldierArray[i]{
+				rsp.Body.Code = constant.OutArmyLimit
 				return
 			}
+		}else{
+			rsp.Body.Code = constant.InvalidParam
+			return
 		}
 	}
 
@@ -336,7 +332,7 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 		return
 	}
 
-	if army.GeneralArray[0] == 0{
+	if army.Gens[0] == nil{
 		rsp.Body.Code = constant.ArmyNotMain
 		return
 	}

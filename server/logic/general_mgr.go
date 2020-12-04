@@ -321,9 +321,8 @@ func (this* GeneralMgr) GetNPCGenerals(cnt int) ([]model.General, bool) {
 
 func (this *GeneralMgr) GetDestroy(army *model.Army) int{
 	destroy := 0
-	for _, gid := range army.GeneralArray {
-		g, ok := this.GetByGId(gid)
-		if ok {
+	for _, g := range army.Gens {
+		if g != nil {
 			destroy += g.GetDestroy()
 		}
 	}
@@ -332,17 +331,11 @@ func (this *GeneralMgr) GetDestroy(army *model.Army) int{
 
 //体力是否足够
 func (this* GeneralMgr) PhysicalPowerIsEnough(army *model.Army, cost int) bool{
-	for _, gid := range army.GeneralArray {
-		if gid == 0{
+	for _, g := range army.Gens {
+		if g == nil{
 			continue
 		}
-
-		g, ok := this.GetByGId(gid)
-		if ok {
-			if g.PhysicalPower < cost{
-				return false
-			}
-		}else{
+		if g.PhysicalPower < cost{
 			return false
 		}
 	}
@@ -356,12 +349,10 @@ func (this *GeneralMgr) TryUsePhysicalPower(army *model.Army, cost int) bool{
 		return false
 	}
 
-	for _, gid := range army.GeneralArray {
-		if gid == 0{
+	for _, g := range army.Gens {
+		if g == nil{
 			continue
 		}
-
-		g, _ := this.GetByGId(gid)
 		g.PhysicalPower -= cost
 		g.SyncExecute()
 	}

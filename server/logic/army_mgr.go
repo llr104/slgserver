@@ -29,31 +29,33 @@ func (this* ArmyMgr) Load() {
 	this.mutex.Lock()
 	db.MasterDB.Table(model.Army{}).Find(this.armyById)
 
-	for _, v := range this.armyById {
-		cid := v.CityId
+	for _, army := range this.armyById {
+		cid := army.CityId
 		c,ok:= this.armyByCityId[cid]
 		if ok {
-			this.armyByCityId[cid] = append(c, v)
+			this.armyByCityId[cid] = append(c, army)
 		}else{
 			this.armyByCityId[cid] = make([]*model.Army, 0)
-			this.armyByCityId[cid] = append(this.armyByCityId[cid], v)
+			this.armyByCityId[cid] = append(this.armyByCityId[cid], army)
 		}
 
 		//rid
-		if _, ok := this.armyByRId[v.RId]; ok == false{
-			this.armyByRId[v.RId] = make([]*model.Army, 0)
+		if _, ok := this.armyByRId[army.RId]; ok == false{
+			this.armyByRId[army.RId] = make([]*model.Army, 0)
 		}
-		this.armyByRId[v.RId] = append(this.armyByRId[v.RId], v)
+		this.armyByRId[army.RId] = append(this.armyByRId[army.RId], army)
 
 		//恢复已经执行行动的军队
-		if v.Cmd != model.ArmyCmdIdle {
-			e := v.End.Unix()
+		if army.Cmd != model.ArmyCmdIdle {
+			e := army.End.Unix()
 			_, ok := this.armyByEndTime[e]
 			if ok == false{
 				this.armyByEndTime[e] = make([]*model.Army, 0)
 			}
-			this.armyByEndTime[e] = append(this.armyByEndTime[e], v)
+			this.armyByEndTime[e] = append(this.armyByEndTime[e], army)
 		}
+
+		this.updateGenerals(army)
 	}
 
 	curTime := time.Now().Unix()
@@ -85,7 +87,7 @@ func (this* ArmyMgr) Load() {
 	go this.running()
 }
 
-func (this* ArmyMgr) insertOne(army*model.Army)  {
+func (this* ArmyMgr) insertOne(army *model.Army)  {
 
 	aid := army.Id
 	cid := army.CityId
@@ -101,9 +103,11 @@ func (this* ArmyMgr) insertOne(army*model.Army)  {
 	}
 	this.armyByRId[army.RId] = append(this.armyByRId[army.RId], army)
 
+	this.updateGenerals(army)
+
 }
 
-func (this* ArmyMgr) insertMutil(armys[] *model.Army)  {
+func (this* ArmyMgr) insertMutil(armys []*model.Army)  {
 	for _, v := range armys {
 		this.insertOne(v)
 	}
@@ -283,8 +287,8 @@ func (this* ArmyMgr) GetOrCreate(rid int, cid int, order int8) (*model.Army, err
 
 func (this* ArmyMgr) GetSpeed(army* model.Army) int{
 	speed := 100000
-	for _, gId := range army.GeneralArray {
-		if g, ok := GMgr.GetByGId(gId); ok {
+	for _, g := range army.Gens {
+		if g != nil {
 			s := g.GetSpeed()
 			if s < speed {
 				speed = s
@@ -302,8 +306,8 @@ func (this* ArmyMgr) IsCanDispose(rid int, cfgId int) bool{
 	}
 
 	for _, army := range armys {
-		for _, gId := range army.GeneralArray {
-			if g, ok := GMgr.GetByGId(gId); ok {
+		for _, g := range army.Gens {
+			if g != nil {
 				if g.CfgId == cfgId && g.CityId != 0{
 					return false
 				}
@@ -311,6 +315,20 @@ func (this* ArmyMgr) IsCanDispose(rid int, cfgId int) bool{
 		}
 	}
 	return true
+}
+
+func (this* ArmyMgr) updateGenerals(armys... *model.Army) {
+	for _, army := range armys {
+		army.Gens = make([]*model.General, 0)
+		for _, gid := range army.GeneralArray {
+			if gid == 0{
+				army.Gens = append(army.Gens, nil)
+			}else{
+				g, _ := GMgr.GetByGId(gid)
+				army.Gens = append(army.Gens, g)
+			}
+		}
+	}
 }
 
 
