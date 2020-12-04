@@ -198,7 +198,7 @@ func (this* armyWar) round() (*warRound, bool) {
 			kill = util.MinInt(kill, posDefense.soldiers)
 			posDefense.soldiers -= kill
 			defenseArmy.SoldierArray[index] -= kill
-			posAttack.general.Exp += kill*2
+			posAttack.general.Exp += kill*10
 		}else{
 			kill = 0
 		}
@@ -233,7 +233,7 @@ func (this* armyWar) round() (*warRound, bool) {
 			kill = util.MinInt(kill, posDefense.soldiers)
 			posDefense.soldiers -= kill
 			attackArmy.SoldierArray[index] -= kill
-			posAttack.general.Exp += kill*2
+			posAttack.general.Exp += kill*10
 		}else{
 			kill = 0
 		}

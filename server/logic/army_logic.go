@@ -7,6 +7,7 @@ import (
 	"slgserver/server/global"
 	"slgserver/server/model"
 	"slgserver/server/proto"
+	"slgserver/server/static_conf/general"
 	"slgserver/util"
 	"sync"
 	"time"
@@ -263,6 +264,9 @@ func (this* armyLogic) executeBuild(army *model.Army)  {
 			if ok {
 				pg := g.ToProto().(proto.General)
 				endGeneral1 = append(endGeneral1, pg.ToArray())
+				level, exp := general.GenBasic.ExpToLevel(g.Exp)
+				g.Level = level
+				g.Exp = exp
 				g.SyncExecute()
 			}
 		}
@@ -274,6 +278,9 @@ func (this* armyLogic) executeBuild(army *model.Army)  {
 			if ok {
 				pg := g.ToProto().(proto.General)
 				endGeneral2 = append(endGeneral2, pg.ToArray())
+				level, exp := general.GenBasic.ExpToLevel(g.Exp)
+				g.Level = level
+				g.Exp = exp
 				g.SyncExecute()
 			}
 		}
