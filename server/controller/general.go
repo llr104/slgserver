@@ -500,7 +500,7 @@ func (this*General) ComposeGeneral(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 	//是否超过武将星级
 	if gs.Star - gs.StarLv < len(gss){
-		rsp.Body.Code = constant.DBError
+		rsp.Body.Code = constant.GeneralStarMax
 		return
 	}
 
