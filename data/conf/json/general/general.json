@@ -1,6 +1,233 @@
 {
-  "title": "奖励配置",
-  "list": [
+  "title": "武将配置",
+  "list": [{
+    "name": "吕布",
+    "cfgId": 17,
+    "force": 9500,
+    "strategy": 5500,
+    "defense": 9000,
+    "speed": 8800,
+    "destroy": 3000,
+    "force_grow": 100,
+    "strategy_grow": 50,
+    "defense_grow": 50,
+    "speed_grow": 80,
+    "destroy_grow": 30,
+    "cost": 10,
+    "probability": 30,
+    "star": 4,
+    "arms": [1, 8, 9],
+    "camp": 1
+  },
+    {
+      "name": "灵帝",
+      "cfgId": 17,
+      "force": 9500,
+      "strategy": 5500,
+      "defense": 9000,
+      "speed": 8800,
+      "destroy": 3000,
+      "force_grow": 100,
+      "strategy_grow": 50,
+      "defense_grow": 50,
+      "speed_grow": 80,
+      "destroy_grow": 30,
+      "cost": 10,
+      "probability": 30,
+      "star": 4,
+      "arms": [1, 8, 9],
+      "camp": 1
+    },
+    {
+      "name": "皇甫嵩",
+      "cfgId": 17,
+      "force": 9500,
+      "strategy": 5500,
+      "defense": 9000,
+      "speed": 8800,
+      "destroy": 3000,
+      "force_grow": 100,
+      "strategy_grow": 50,
+      "defense_grow": 50,
+      "speed_grow": 80,
+      "destroy_grow": 30,
+      "cost": 10,
+      "probability": 30,
+      "star": 4,
+      "arms": [1, 8, 9],
+      "camp": 1
+    },
+    {
+      "name": "卢植",
+      "cfgId": 17,
+      "force": 9500,
+      "strategy": 5500,
+      "defense": 9000,
+      "speed": 8800,
+      "destroy": 3000,
+      "force_grow": 100,
+      "strategy_grow": 50,
+      "defense_grow": 50,
+      "speed_grow": 80,
+      "destroy_grow": 30,
+      "cost": 10,
+      "probability": 30,
+      "star": 4,
+      "arms": [1, 8, 9],
+      "camp": 1
+    },
+    {
+      "name": "朱儁",
+      "cfgId": 17,
+      "force": 9500,
+      "strategy": 5500,
+      "defense": 9000,
+      "speed": 8800,
+      "destroy": 3000,
+      "force_grow": 100,
+      "strategy_grow": 50,
+      "defense_grow": 50,
+      "speed_grow": 80,
+      "destroy_grow": 30,
+      "cost": 10,
+      "probability": 30,
+      "star": 4,
+      "arms": [1, 8, 9],
+      "camp": 1
+    },
+    {
+    "name": "真-吕布",
+    "cfgId": 18,
+    "force": 19500,
+    "strategy": 500,
+    "defense": 19000,
+    "speed": 18800,
+    "destroy": 13000,
+    "force_grow": 100,
+    "strategy_grow": 50,
+    "defense_grow": 50,
+    "speed_grow": 80,
+    "destroy_grow": 30,
+    "cost": 50,
+    "probability": 30,
+    "star": 5,
+    "arms": [1, 10, 11],
+    "camp": 2
+  },
+    {
+      "name": "董卓",
+      "cfgId": 18,
+      "force": 19500,
+      "strategy": 500,
+      "defense": 19000,
+      "speed": 18800,
+      "destroy": 13000,
+      "force_grow": 100,
+      "strategy_grow": 50,
+      "defense_grow": 50,
+      "speed_grow": 80,
+      "destroy_grow": 30,
+      "cost": 50,
+      "probability": 30,
+      "star": 5,
+      "arms": [1, 10, 11],
+      "camp": 2
+    },
+    {
+      "name": "袁绍",
+      "cfgId": 18,
+      "force": 19500,
+      "strategy": 500,
+      "defense": 19000,
+      "speed": 18800,
+      "destroy": 13000,
+      "force_grow": 100,
+      "strategy_grow": 50,
+      "defense_grow": 50,
+      "speed_grow": 80,
+      "destroy_grow": 30,
+      "cost": 50,
+      "probability": 30,
+      "star": 5,
+      "arms": [1, 10, 11],
+      "camp": 2
+    },
+    {
+      "name": "文丑",
+      "cfgId": 18,
+      "force": 19500,
+      "strategy": 500,
+      "defense": 19000,
+      "speed": 18800,
+      "destroy": 13000,
+      "force_grow": 100,
+      "strategy_grow": 50,
+      "defense_grow": 50,
+      "speed_grow": 80,
+      "destroy_grow": 30,
+      "cost": 50,
+      "probability": 30,
+      "star": 5,
+      "arms": [1, 10, 11],
+      "camp": 2
+    },
+    {
+      "name": "颜良",
+      "cfgId": 18,
+      "force": 19500,
+      "strategy": 500,
+      "defense": 19000,
+      "speed": 18800,
+      "destroy": 13000,
+      "force_grow": 100,
+      "strategy_grow": 50,
+      "defense_grow": 50,
+      "speed_grow": 80,
+      "destroy_grow": 30,
+      "cost": 50,
+      "probability": 30,
+      "star": 5,
+      "arms": [1, 10, 11],
+      "camp": 2
+    },
+    {
+      "name": "张绣",
+      "cfgId": 18,
+      "force": 19500,
+      "strategy": 500,
+      "defense": 19000,
+      "speed": 18800,
+      "destroy": 13000,
+      "force_grow": 100,
+      "strategy_grow": 50,
+      "defense_grow": 50,
+      "speed_grow": 80,
+      "destroy_grow": 30,
+      "cost": 50,
+      "probability": 30,
+      "star": 5,
+      "arms": [1, 10, 11],
+      "camp": 2
+    },
+    {
+      "name": "陈宫",
+      "cfgId": 18,
+      "force": 19500,
+      "strategy": 500,
+      "defense": 19000,
+      "speed": 18800,
+      "destroy": 13000,
+      "force_grow": 100,
+      "strategy_grow": 50,
+      "defense_grow": 50,
+      "speed_grow": 80,
+      "destroy_grow": 30,
+      "cost": 50,
+      "probability": 30,
+      "star": 5,
+      "arms": [1, 10, 11],
+      "camp": 2
+    },
     {
       "name": "张飞",
       "cfgId": 1,
@@ -15,9 +242,10 @@
       "speed_grow": 80,
       "destroy_grow": 30,
       "cost": 10,
-      "probability":50,
-      "star":3,
-      "arms":[1,2,3]
+      "probability": 50,
+      "star": 3,
+      "arms": [1, 2, 3],
+      "camp": 4
     },
     {
       "name": "关羽",
@@ -33,9 +261,10 @@
       "speed_grow": 80,
       "destroy_grow": 30,
       "cost": 10,
-      "probability":50,
-      "star":3,
-      "arms":[1,2,3]
+      "probability": 50,
+      "star": 3,
+      "arms": [1, 2, 3],
+      "camp": 4
     },
     {
       "name": "赵云",
@@ -51,10 +280,11 @@
       "speed_grow": 80,
       "destroy_grow": 30,
       "cost": 10,
-      "probability":80,
-      "star":3,
-      "arms":[1,2,3]
-    },{
+      "probability": 80,
+      "star": 3,
+      "arms": [1, 2, 3],
+      "camp": 4
+    }, {
       "name": "黄忠",
       "cfgId": 4,
       "force": 9500,
@@ -68,10 +298,11 @@
       "speed_grow": 80,
       "destroy_grow": 30,
       "cost": 10,
-      "probability":10,
-      "star":3,
-      "arms":[1,2,3]
-    },{
+      "probability": 10,
+      "star": 3,
+      "arms": [1, 2, 3],
+      "camp": 4
+    }, {
       "name": "马超",
       "cfgId": 5,
       "force": 9500,
@@ -85,10 +316,11 @@
       "speed_grow": 80,
       "destroy_grow": 30,
       "cost": 10,
-      "probability":10,
-      "star":3,
-      "arms":[1,2,3]
-    },{
+      "probability": 10,
+      "star": 3,
+      "arms": [1, 2, 3],
+      "camp": 4
+    }, {
       "name": "许褚",
       "cfgId": 6,
       "force": 9500,
@@ -102,10 +334,11 @@
       "speed_grow": 80,
       "destroy_grow": 30,
       "cost": 10,
-      "probability":50,
-      "star":3,
-      "arms":[1,2,3]
-    },{
+      "probability": 50,
+      "star": 3,
+      "arms": [1, 2, 3],
+      "camp": 3
+    }, {
       "name": "张辽",
       "cfgId": 7,
       "force": 9500,
@@ -119,10 +352,11 @@
       "speed_grow": 80,
       "destroy_grow": 30,
       "cost": 10,
-      "probability":80,
-      "star":3,
-      "arms":[1,2,3]
-    },{
+      "probability": 80,
+      "star": 3,
+      "arms": [1, 2, 3],
+      "camp": 3
+    }, {
       "name": "夏侯惇",
       "cfgId": 8,
       "force": 9500,
@@ -136,10 +370,11 @@
       "speed_grow": 80,
       "destroy_grow": 30,
       "cost": 10,
-      "probability":80,
-      "star":3,
-      "arms":[1,2,3]
-    },{
+      "probability": 80,
+      "star": 3,
+      "arms": [1, 2, 3],
+      "camp": 3
+    }, {
       "name": "夏侯渊",
       "cfgId": 9,
       "force": 9500,
@@ -153,10 +388,11 @@
       "speed_grow": 80,
       "destroy_grow": 30,
       "cost": 10,
-      "probability":80,
-      "star":3,
-      "arms":[1,2,3]
-    },{
+      "probability": 80,
+      "star": 3,
+      "arms": [1, 2, 3],
+      "camp": 3
+    }, {
       "name": "张郃",
       "cfgId": 10,
       "force": 9500,
@@ -170,10 +406,11 @@
       "speed_grow": 80,
       "destroy_grow": 30,
       "cost": 10,
-      "probability":10,
-      "star":3,
-      "arms":[1,2,3]
-    },{
+      "probability": 10,
+      "star": 3,
+      "arms": [1, 2, 3],
+      "camp": 3
+    }, {
       "name": "太史慈",
       "cfgId": 11,
       "force": 9500,
@@ -187,10 +424,11 @@
       "speed_grow": 80,
       "destroy_grow": 30,
       "cost": 10,
-      "probability":20,
-      "star":3,
-      "arms":[1,2,3]
-    },{
+      "probability": 20,
+      "star": 3,
+      "arms": [1, 2, 3],
+      "camp": 5
+    }, {
       "name": "周瑜",
       "cfgId": 12,
       "force": 9500,
@@ -204,10 +442,11 @@
       "speed_grow": 80,
       "destroy_grow": 30,
       "cost": 10,
-      "probability":20,
-      "star":3,
-      "arms":[1,2,3]
-    },{
+      "probability": 20,
+      "star": 3,
+      "arms": [1, 2, 3],
+      "camp": 5
+    }, {
       "name": "甘宁",
       "cfgId": 13,
       "force": 9500,
@@ -221,10 +460,11 @@
       "speed_grow": 80,
       "destroy_grow": 30,
       "cost": 10,
-      "probability":5,
-      "star":3,
-      "arms":[1,2,3]
-    },{
+      "probability": 5,
+      "star": 3,
+      "arms": [1, 2, 3],
+      "camp": 5
+    }, {
       "name": "周泰",
       "cfgId": 14,
       "force": 9500,
@@ -238,10 +478,11 @@
       "speed_grow": 80,
       "destroy_grow": 30,
       "cost": 10,
-      "probability":80,
-      "star":3,
-      "arms":[1,2,3]
-    },{
+      "probability": 80,
+      "star": 3,
+      "arms": [1, 2, 3],
+      "camp": 5
+    }, {
       "name": "陆逊",
       "cfgId": 15,
       "force": 9500,
@@ -255,10 +496,11 @@
       "speed_grow": 80,
       "destroy_grow": 30,
       "cost": 10,
-      "probability":10,
-      "star":3,
-      "arms":[1,2,3]
-    },{
+      "probability": 10,
+      "star": 3,
+      "arms": [1, 2, 3],
+      "camp": 5
+    }, {
       "name": "孙策",
       "cfgId": 16,
       "force": 9500,
@@ -272,43 +514,10 @@
       "speed_grow": 80,
       "destroy_grow": 30,
       "cost": 10,
-      "probability":10,
-      "star":3,
-      "arms":[1,2,3]
-    },{
-      "name": "吕布",
-      "cfgId": 17,
-      "force": 9500,
-      "strategy": 5500,
-      "defense": 9000,
-      "speed": 8800,
-      "destroy": 3000,
-      "force_grow": 100,
-      "strategy_grow": 50,
-      "defense_grow": 50,
-      "speed_grow": 80,
-      "destroy_grow": 30,
-      "cost": 10,
-      "probability":30,
-      "star":4,
-      "arms":[1,8,9]
-    },{
-      "name": "真-吕布",
-      "cfgId": 18,
-      "force": 19500,
-      "strategy": 500,
-      "defense": 19000,
-      "speed": 18800,
-      "destroy": 13000,
-      "force_grow": 100,
-      "strategy_grow": 50,
-      "defense_grow": 50,
-      "speed_grow": 80,
-      "destroy_grow": 30,
-      "cost": 50,
-      "probability":30,
-      "star":5,
-      "arms":[1,10,11]
+      "probability": 10,
+      "star": 3,
+      "arms": [1, 2, 3],
+      "camp": 5
     },
     {
       "name": "典韦",
@@ -324,9 +533,10 @@
       "speed_grow": 80,
       "destroy_grow": 30,
       "cost": 50,
-      "probability":5,
-      "star":4,
-      "arms":[1,10,11]
+      "probability": 5,
+      "star": 4,
+      "arms": [1, 10, 11],
+      "camp": 5
     },
     {
       "name": "吕蒙",
@@ -342,9 +552,10 @@
       "speed_grow": 80,
       "destroy_grow": 30,
       "cost": 50,
-      "probability":5,
-      "star":5,
-      "arms":[1,10,11]
+      "probability": 5,
+      "star": 5,
+      "arms": [1, 10, 11],
+      "camp": 5
     }
   ]
 }

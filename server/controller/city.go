@@ -125,7 +125,10 @@ func (this*City) upFacility(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 					roleRes.GoldYield += newValues[i]
 				}else if atype == facility.TypeWarehouseLimit {
 					roleRes.DepotCapacity = newValues[i]
+				}else if atype == facility.TypeCost {
+					city.Cost += int8(newValues[i])
 				}
+				city.SyncExecute()
 				roleRes.SyncExecute()
 			}
 		}

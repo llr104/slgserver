@@ -20,16 +20,17 @@ type g struct {
 	Strategy 		int		`json:"strategy"`
 	Defense  		int		`json:"defense"`
 	Speed    		int		`json:"speed"`
-	Destroy  		int		`json:"destroy"`
-	ForceGrow    	int		`json:"force_grow"`
-	StrategyGrow 	int		`json:"strategy_grow"`
-	DefenseGrow  	int		`json:"defense_grow"`
-	SpeedGrow   	int		`json:"speed_grow"`
-	DestroyGrow 	int		`json:"destroy_grow"`
-	Cost			int8	`json:"cost"`
-	Probability		int		`json:"probability"`
-	Star		    int		`json:"star"`
-	Arms		    []int	`json:"arms"`
+	Destroy      	int   	`json:"destroy"`
+	ForceGrow    	int   	`json:"force_grow"`
+	StrategyGrow 	int   	`json:"strategy_grow"`
+	DefenseGrow  	int   	`json:"defense_grow"`
+	SpeedGrow   	int   	`json:"speed_grow"`
+	DestroyGrow  	int   	`json:"destroy_grow"`
+	Cost         	int8  	`json:"cost"`
+	Probability  	int   	`json:"probability"`
+	Star         	int   	`json:"star"`
+	Arms         	[]int 	`json:"arms"`
+	Camp         	int8  	`json:"camp"`
 }
 
 type general struct {
