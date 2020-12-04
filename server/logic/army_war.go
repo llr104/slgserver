@@ -5,21 +5,20 @@ import (
 	"math/rand"
 	"slgserver/server/model"
 	"slgserver/server/static_conf/facility"
-	"slgserver/server/static_conf/general"
 	"slgserver/util"
 )
 
 //战斗位置的属性
 type armyPosition struct {
-	GId			int		//武将id
-	Soldiers	int		//兵力
-	Force    	int		//武力
-	Strategy	int		//策略
-	Defense  	int		//防御
-	Speed    	int		//速度
-	Destroy  	int		//破坏
-	Arms		int		//兵种
-	Position	int		//位置
+	general  *model.General
+	soldiers int //兵力
+	force    int //武力
+	strategy int //策略
+	defense  int //防御
+	speed    int //速度
+	destroy  int //破坏
+	arms     int //兵种
+	position int //位置
 }
 
 const maxRound = 10
@@ -63,9 +62,9 @@ func NewWar(attack *model.Army, defense *model.Army) *WarResult {
 	wars := w.battle()
 
 	result := &WarResult{round: wars}
-	if w.attackPos[0].Soldiers == 0{
+	if w.attackPos[0].soldiers == 0{
 		result.result = 0
-	}else if w.defensePos[0].Soldiers != 0{
+	}else if w.defensePos[0].soldiers != 0{
 		result.result = 1
 	}else{
 		result.result = 2
@@ -104,17 +103,16 @@ func (this* armyWar) init() {
 			this.attackPos = append(this.attackPos, nil)
 		}else{
 			if g, ok := GMgr.GetByGId(gid); ok {
-				cfg := general.General.GMap[g.CfgId]
 				pos := &armyPosition{
-					GId: g.Id,
-					Soldiers: this.attack.SoldierArray[i],
-					Force: cfg.Force + attackAdds[0],
-					Defense: cfg.Defense + attackAdds[1],
-					Speed: cfg.Speed + attackAdds[2],
-					Strategy: cfg.Strategy + attackAdds[3],
-					Destroy: cfg.Destroy,
-					Arms: g.CurArms,
-					Position: i,
+					general:  g,
+					soldiers: this.attack.SoldierArray[i],
+					force:    g.GetForce()  + attackAdds[0],
+					defense:  g.GetDefense() + attackAdds[1],
+					speed:    g.GetSpeed() + attackAdds[2],
+					strategy: g.GetStrategy() + attackAdds[3],
+					destroy:  g.GetDestroy(),
+					arms:     g.CurArms,
+					position: i,
 				}
 				this.attackPos = append(this.attackPos, pos)
 			}else{
@@ -125,17 +123,16 @@ func (this* armyWar) init() {
 
 	for i, gid := range this.defense.GeneralArray {
 		if g, ok := GMgr.GetByGId(gid); ok {
-			cfg := general.General.GMap[g.CfgId]
 			pos := &armyPosition{
-				GId: g.Id,
-				Soldiers: this.defense.SoldierArray[i],
-				Force: cfg.Force + defenseAdds[0],
-				Defense: cfg.Defense + defenseAdds[1],
-				Speed: cfg.Speed + defenseAdds[2],
-				Strategy: cfg.Strategy + defenseAdds[3],
-				Destroy: cfg.Destroy,
-				Arms: g.CurArms,
-				Position: i,
+				general:  g,
+				soldiers: this.defense.SoldierArray[i],
+				force:    g.GetForce()  + defenseAdds[0],
+				defense:  g.GetDefense() + defenseAdds[1],
+				speed:    g.GetSpeed() + defenseAdds[2],
+				strategy: g.GetStrategy() + defenseAdds[3],
+				destroy:  g.GetDestroy(),
+				arms:     g.CurArms,
+				position: i,
 			}
 			this.defensePos = append(this.defensePos, pos)
 		}else{
@@ -184,7 +181,7 @@ func (this* armyWar) round() (*warRound, bool) {
 
 	//攻击方回合
 	for _, posAttack := range attack {
-		if posAttack == nil || posAttack.Soldiers == 0{
+		if posAttack == nil || posAttack.soldiers == 0{
 			continue
 		}
 		//计算
@@ -193,23 +190,24 @@ func (this* armyWar) round() (*warRound, bool) {
 			continue
 		}
 
-		hurm := posAttack.Soldiers*posAttack.Force/1000
-		def := posDefense.Soldiers*posDefense.Defense/1000
+		hurm := posAttack.soldiers *posAttack.force /1000
+		def := posDefense.soldiers *posDefense.defense /1000
 
 		kill := hurm-def
 		if kill > 0{
-			kill = util.MinInt(kill, posDefense.Soldiers)
-			posDefense.Soldiers -= kill
+			kill = util.MinInt(kill, posDefense.soldiers)
+			posDefense.soldiers -= kill
 			defenseArmy.SoldierArray[index] -= kill
+			posAttack.general.Exp += kill*2
 		}else{
 			kill = 0
 		}
 
-		b := battle{AId: posAttack.GId, ALoss: 0, DId: posDefense.GId, DLoss: kill}
+		b := battle{AId: posAttack.general.Id, ALoss: 0, DId: posDefense.general.Id, DLoss: kill}
 		war.Battle = append(war.Battle, b.to())
 
 		//大营干死了，直接结束
-		if posDefense.Position == 0 && posDefense.Soldiers == 0 {
+		if posDefense.position == 0 && posDefense.soldiers == 0 {
 			isEnd = true
 			goto end
 		}
@@ -217,14 +215,14 @@ func (this* armyWar) round() (*warRound, bool) {
 
 	//防守方回合
 	for _, posAttack := range defense {
-		if posAttack == nil || posAttack.Soldiers == 0{
+		if posAttack == nil || posAttack.soldiers == 0{
 			continue
 		}
 
 		//计算
 		posDefense, index := this.randArmyPosition(attack)
-		hurm := posAttack.Soldiers*posAttack.Force/10000
-		def := posDefense.Soldiers*posDefense.Defense/10000
+		hurm := posAttack.soldiers *posAttack.force /10000
+		def := posDefense.soldiers *posDefense.defense /10000
 
 		if posDefense == nil{
 			continue
@@ -232,18 +230,19 @@ func (this* armyWar) round() (*warRound, bool) {
 
 		kill := hurm-def
 		if kill > 0{
-			kill = util.MinInt(kill, posDefense.Soldiers)
-			posDefense.Soldiers -= kill
+			kill = util.MinInt(kill, posDefense.soldiers)
+			posDefense.soldiers -= kill
 			attackArmy.SoldierArray[index] -= kill
+			posAttack.general.Exp += kill*2
 		}else{
 			kill = 0
 		}
 
-		b := battle{AId: posAttack.GId, ALoss: 0, DId: posDefense.GId, DLoss: kill}
+		b := battle{AId: posAttack.general.Id, ALoss: 0, DId: posDefense.general.Id, DLoss: kill}
 		war.Battle = append(war.Battle, b.to())
 
 		//大营干死了，直接结束
-		if posDefense.Position == 0 && posDefense.Soldiers == 0 {
+		if posDefense.position == 0 && posDefense.soldiers == 0 {
 			isEnd = true
 			goto end
 		}
@@ -270,7 +269,7 @@ func (this* armyWar) randArmyPosition(pos []*armyPosition) (*armyPosition, int){
 	for true {
 		r := rand.Intn(100)
 		index := r % len(pos)
-		if pos[index] != nil && pos[index].Soldiers != 0{
+		if pos[index] != nil && pos[index].soldiers != 0{
 			return pos[index], index
 		}
 	}

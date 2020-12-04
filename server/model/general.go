@@ -84,7 +84,7 @@ func (this *General) TableName() string {
 func (this *General) GetDestroy() int{
 	cfg, ok := general.General.GMap[this.CfgId]
 	if ok {
-		return (cfg.Destroy+cfg.DestroyGrow*int(this.Level))/100
+		return (cfg.Destroy+cfg.DestroyGrow*int(this.Level))/100 + this.DestroyAdded
 	}
 	return 0
 }
@@ -92,11 +92,34 @@ func (this *General) GetDestroy() int{
 func (this *General) GetSpeed() int{
 	cfg, ok := general.General.GMap[this.CfgId]
 	if ok {
-		return (cfg.Speed+cfg.SpeedGrow*int(this.Level))/100
+		return (cfg.Speed+cfg.SpeedGrow*int(this.Level))/100 + this.SpeedAdded
 	}
 	return 0
 }
 
+func (this *General) GetForce() int{
+	cfg, ok := general.General.GMap[this.CfgId]
+	if ok {
+		return (cfg.Force+cfg.ForceGrow*int(this.Level))/100 + this.ForceAdded
+	}
+	return 0
+}
+
+func (this *General) GetDefense() int{
+	cfg, ok := general.General.GMap[this.CfgId]
+	if ok {
+		return (cfg.Defense+cfg.DefenseGrow*int(this.Level))/100 + this.DefenseAdded
+	}
+	return 0
+}
+
+func (this *General) GetStrategy() int{
+	cfg, ok := general.General.GMap[this.CfgId]
+	if ok {
+		return (cfg.Strategy+cfg.StrategyGrow*int(this.Level))/100 + this.StrategyAdded
+	}
+	return 0
+}
 
 /* 推送同步 begin */
 func (this *General) IsCellView() bool{
