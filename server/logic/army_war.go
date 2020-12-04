@@ -128,7 +128,7 @@ func (this* armyWar) init() {
 			cfg := general.General.GMap[g.CfgId]
 			pos := &armyPosition{
 				GId: g.Id,
-				Soldiers: this.attack.SoldierArray[i],
+				Soldiers: this.defense.SoldierArray[i],
 				Force: cfg.Force + defenseAdds[0],
 				Defense: cfg.Defense + defenseAdds[1],
 				Speed: cfg.Speed + defenseAdds[2],
