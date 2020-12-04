@@ -21,7 +21,7 @@
   },
     {
       "name": "灵帝",
-      "cfgId": 17,
+      "cfgId": 21,
       "force": 9500,
       "strategy": 5500,
       "defense": 9000,
@@ -40,7 +40,7 @@
     },
     {
       "name": "皇甫嵩",
-      "cfgId": 17,
+      "cfgId": 22,
       "force": 9500,
       "strategy": 5500,
       "defense": 9000,
@@ -59,7 +59,7 @@
     },
     {
       "name": "卢植",
-      "cfgId": 17,
+      "cfgId": 23,
       "force": 9500,
       "strategy": 5500,
       "defense": 9000,
@@ -78,7 +78,7 @@
     },
     {
       "name": "朱儁",
-      "cfgId": 17,
+      "cfgId": 24,
       "force": 9500,
       "strategy": 5500,
       "defense": 9000,
@@ -116,7 +116,7 @@
   },
     {
       "name": "董卓",
-      "cfgId": 18,
+      "cfgId": 25,
       "force": 19500,
       "strategy": 500,
       "defense": 19000,
@@ -135,7 +135,7 @@
     },
     {
       "name": "袁绍",
-      "cfgId": 18,
+      "cfgId": 26,
       "force": 19500,
       "strategy": 500,
       "defense": 19000,
@@ -154,7 +154,7 @@
     },
     {
       "name": "文丑",
-      "cfgId": 18,
+      "cfgId": 27,
       "force": 19500,
       "strategy": 500,
       "defense": 19000,
@@ -173,7 +173,7 @@
     },
     {
       "name": "颜良",
-      "cfgId": 18,
+      "cfgId": 28,
       "force": 19500,
       "strategy": 500,
       "defense": 19000,
@@ -192,7 +192,7 @@
     },
     {
       "name": "张绣",
-      "cfgId": 18,
+      "cfgId": 29,
       "force": 19500,
       "strategy": 500,
       "defense": 19000,
@@ -211,7 +211,7 @@
     },
     {
       "name": "陈宫",
-      "cfgId": 18,
+      "cfgId": 30,
       "force": 19500,
       "strategy": 500,
       "defense": 19000,

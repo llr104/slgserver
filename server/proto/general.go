@@ -141,3 +141,19 @@ type ComposeGeneralReq struct {
 type ComposeGeneralRsp struct {
 	Generals []General `json:"generals"`
 }
+
+
+
+//加点
+type AddPrGeneralReq struct {
+	CompId       		int     `json:"compId"`
+	ForceAdd     		int     `json:"forceAdd"`
+	StrategyAdd     	int     `json:"strategyAdd"`
+	DefenseAdd     		int     `json:"defenseAdd"`
+	SpeedAdd     		int     `json:"speedAdd"`
+	DestroyAdd     		int     `json:"destroyAdd"`
+}
+
+type AddPrGeneralRsp struct {
+	Generals General `json:"general"`
+}
