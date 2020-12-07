@@ -32,6 +32,8 @@ func (this *coalition) InitRouter(r *net.Router) {
 	g.AddRouter("verify", this.verify)
 	g.AddRouter("member", this.member)
 	g.AddRouter("applyList", this.applyList)
+	g.AddRouter("exit", this.exit)
+	g.AddRouter("dismiss", this.dismiss)
 
 }
 
@@ -249,4 +251,90 @@ func (this *coalition) applyList(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 			rspObj.Applys = append(rspObj.Applys, a)
 		}
 	}
+}
+
+//退出
+func (this *coalition) exit(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+	reqObj := &proto.ExitReq{}
+	rspObj := &proto.ExitRsp{}
+	mapstructure.Decode(req.Body.Msg, reqObj)
+	rsp.Body.Msg = rspObj
+
+	rsp.Body.Code = constant.OK
+
+	r, _ := req.Conn.GetProperty("role")
+	role := r.(*model.Role)
+
+	if ok := logic.RAttributeMgr.IsHasUnion(role.RId); ok == false {
+		rsp.Body.Code = constant.UnionNotFound
+		return
+	}
+
+	attribute, _ := logic.RAttributeMgr.Get(role.RId)
+	u, ok := logic.UnionMgr.Get(attribute.UnionId)
+	if ok == false{
+		rsp.Body.Code = constant.UnionNotFound
+		return
+	}
+
+	//盟主、副盟主不能退出
+	if u.Chairman == role.RId || u.ViceChairman == u.ViceChairman {
+		rsp.Body.Code = constant.UnionNotAllowExit
+		return
+	}
+
+	for i, rid := range u.MemberArray {
+		if rid == role.RId{
+			u.MemberArray = append(u.MemberArray[:i], u.MemberArray[i+1:]...)
+		}
+	}
+
+	attribute.UnionId = 0
+	u.SyncExecute()
+
+}
+
+
+//解散
+func (this *coalition) dismiss(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+	reqObj := &proto.DismissReq{}
+	rspObj := &proto.DisposeRsp{}
+	mapstructure.Decode(req.Body.Msg, reqObj)
+	rsp.Body.Msg = rspObj
+
+	rsp.Body.Code = constant.OK
+
+	r, _ := req.Conn.GetProperty("role")
+	role := r.(*model.Role)
+
+	if ok := logic.RAttributeMgr.IsHasUnion(role.RId); ok == false {
+		rsp.Body.Code = constant.UnionAlreadyHas
+		return
+	}
+
+	attribute, _ := logic.RAttributeMgr.Get(role.RId)
+	u, ok := logic.UnionMgr.Get(attribute.UnionId)
+	if ok == false{
+		rsp.Body.Code = constant.UnionNotFound
+		return
+	}
+
+	//盟主才能解散
+	if u.Chairman != role.RId {
+		rsp.Body.Code = constant.PermissionDenied
+		return
+	}
+
+	for _, rid := range u.MemberArray {
+		a, ok := logic.RAttributeMgr.Get(rid)
+		if ok {
+			a.UnionId = 0
+		}
+	}
+
+	u.State = model.UnionDismiss
+	u.MemberArray = []int{}
+	attribute.UnionId = 0
+	u.SyncExecute()
+
 }

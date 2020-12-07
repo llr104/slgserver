@@ -90,3 +90,22 @@ type VerifyRsp struct {
 	Id     int `json:"id"`		//申请操作的id
 	Decide int `json:"decide"` 	//1是拒绝，2是通过
 }
+
+//退出
+type ExitReq struct {
+
+}
+
+type ExitRsp struct {
+
+}
+
+
+//解散
+type DismissReq struct {
+
+}
+
+type DismissRsp struct {
+
+}

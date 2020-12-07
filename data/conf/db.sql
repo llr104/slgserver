@@ -191,6 +191,7 @@ CREATE TABLE IF NOT EXISTS `coalition` (
    `chairman` int unsigned NOT NULL COMMENT '盟主',
    `vice_chairman` int unsigned NOT NULL COMMENT '副盟主',
    `notice` varchar(256) COMMENT '公告',
+   `state` tinyint unsigned NOT NULL DEFAULT '1' COMMENT '0解散，1运行中',
    `ctime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
    PRIMARY KEY (`id`),
    UNIQUE KEY (`name`)

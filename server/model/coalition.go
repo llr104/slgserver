@@ -10,6 +10,10 @@ import (
 )
 
 
+const (
+	UnionDismiss	= 0 //解散
+	UnionRunning	= 1 //运行中
+)
 
 /*******db 操作begin********/
 var dbCoalitionMgr *coalitionDBMgr
@@ -45,6 +49,7 @@ func (this* coalitionDBMgr) push(coalition *Coalition)  {
 /*******db 操作end********/
 
 
+
 type Coalition struct {
 	Id           int       `xorm:"id pk autoincr"`
 	Name         string    `xorm:"name"`
@@ -54,6 +59,7 @@ type Coalition struct {
 	Chairman     int       `xorm:"chairman"`
 	ViceChairman int       `xorm:"vice_chairman"`
 	Notice       string    `xorm:"notice"`
+	State        int8      `xorm:"state"`
 	Ctime        time.Time `xorm:"ctime"`
 }
 

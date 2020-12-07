@@ -21,7 +21,7 @@ var UnionMgr = &coalitionMgr{
 func (this* coalitionMgr) Load() {
 
 	rr := make([]*model.Coalition, 0)
-	err := db.MasterDB.Find(&rr)
+	err := db.MasterDB.Where("state=?", model.UnionRunning).Find(&rr)
 	if err != nil {
 		log.DefaultLog.Error("coalitionMgr load union table error")
 	}
@@ -45,7 +45,8 @@ func (this* coalitionMgr) Get(id int) (*model.Coalition, bool){
 	}
 
 	m := &model.Coalition{}
-	ok, err := db.MasterDB.Table(new(model.Coalition)).Where("id=?", id).Get(m)
+	ok, err := db.MasterDB.Table(new(model.Coalition)).Where(
+		"id=? and state=?", id,  model.UnionRunning).Get(m)
 	if ok {
 
 		this.mutex.Lock()
@@ -65,7 +66,7 @@ func (this* coalitionMgr) Get(id int) (*model.Coalition, bool){
 }
 
 func (this* coalitionMgr) Create(name string, rid int) (*model.Coalition, bool){
-	m := &model.Coalition{Name: name, Ctime: time.Now(), CreateId: rid, Chairman: rid}
+	m := &model.Coalition{Name: name, Ctime: time.Now(), CreateId: rid, Chairman: rid, State: 1}
 	_, err := db.MasterDB.Table(new(model.Coalition)).InsertOne(m)
 	if err == nil {
 

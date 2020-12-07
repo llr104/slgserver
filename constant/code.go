@@ -41,6 +41,7 @@ const UnionCreateError = 34       //联盟创建失败
 const UnionNotFound = 35          //联盟不存在
 const PermissionDenied = 36       //权限不足
 const UnionAlreadyHas = 37        //已经有联盟
+const UnionNotAllowExit = 38      //不允许退出
 
 
 
