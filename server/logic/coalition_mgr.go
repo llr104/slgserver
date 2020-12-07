@@ -68,7 +68,7 @@ func (this* coalitionMgr) Get(id int) (*model.Coalition, bool){
 func (this* coalitionMgr) Create(name string, rid int) (*model.Coalition, bool){
 	m := &model.Coalition{Name: name, Ctime: time.Now(),
 		CreateId: rid, Chairman: rid, State: model.UnionRunning, MemberArray: []int{rid}}
-	
+
 	_, err := db.MasterDB.Table(new(model.Coalition)).InsertOne(m)
 	if err == nil {
 
