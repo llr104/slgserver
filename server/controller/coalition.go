@@ -38,6 +38,7 @@ func (this *coalition) InitRouter(r *net.Router) {
 	g.AddRouter("modNotice", this.modNotice)
 	g.AddRouter("kick", this.kick)
 	g.AddRouter("appoint", this.appoint)
+	g.AddRouter("abdicate", this.abdicate)
 
 
 }
@@ -487,6 +488,52 @@ func (this *coalition) appoint(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 				u.SyncExecute()
 			}else{
 				rsp.Body.Code = constant.InvalidParam
+			}
+		}else{
+			rsp.Body.Code = constant.NotBelongUnion
+		}
+	}else{
+		rsp.Body.Code = constant.NotBelongUnion
+	}
+
+}
+
+//禅让
+func (this *coalition) abdicate(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+	reqObj := &proto.AbdicateReq{}
+	rspObj := &proto.AbdicateRsp{}
+	mapstructure.Decode(req.Body.Msg, reqObj)
+	rsp.Body.Msg = rspObj
+
+	rsp.Body.Code = constant.OK
+
+	r, _ := req.Conn.GetProperty("role")
+	role := r.(*model.Role)
+
+	if ok := logic.RAttributeMgr.IsHasUnion(role.RId); ok == false {
+		rsp.Body.Code = constant.UnionNotFound
+		return
+	}
+
+	opAr, _ := logic.RAttributeMgr.Get(role.RId)
+	u, ok := logic.UnionMgr.Get(opAr.UnionId)
+	if ok == false{
+		rsp.Body.Code = constant.UnionNotFound
+		return
+	}
+
+	if u.Chairman != role.RId && u.ViceChairman != role.RId {
+		rsp.Body.Code = constant.PermissionDenied
+		return
+	}
+
+	target, ok := logic.RAttributeMgr.Get(reqObj.RId)
+	if ok {
+		if target.UnionId == u.Id{
+			if role.RId == u.Chairman{
+				u.Chairman = reqObj.RId
+			}else if role.RId == u.ViceChairman {
+				u.ViceChairman = reqObj.RId
 			}
 		}else{
 			rsp.Body.Code = constant.NotBelongUnion

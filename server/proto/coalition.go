@@ -147,3 +147,12 @@ type AppointRsp struct {
 	RId		int 	`json:"rid"`
 	Title   int 	`json:"title"` //职位，1副盟主（目前只支持任命副盟主）
 }
+
+//禅让(盟主副盟主)
+type AbdicateReq struct {
+	RId		int 	`json:"rid"`	//禅让给的rid
+}
+
+type AbdicateRsp struct {
+
+}
