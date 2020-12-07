@@ -10,6 +10,7 @@ const (
 	UnionUntreated	= 1 //未处理
 	UnionRefuse		= 1 //拒绝
 	UnionAdopt   	= 2	//通过
+	UnionHas   		= 3	//已经有联盟了
 )
 
 type Member struct {

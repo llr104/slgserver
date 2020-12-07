@@ -10,12 +10,21 @@ type roleAttributeMgr struct {
 	attribute map[int]*model.RoleAttribute
 }
 
-var RoleAttributeMgr = &roleAttributeMgr{
+var RAttributeMgr = &roleAttributeMgr{
 	attribute: make(map[int]*model.RoleAttribute),
 }
 
 func (this* roleAttributeMgr) Load() {
-
+	//加载
+	this.mutex.Lock()
+	l := UnionMgr.List()
+	for _, c := range l {
+		for _, rid := range c.MemberArray {
+			a := &model.RoleAttribute{UnionId: c.Id}
+			this.attribute[rid] = a
+		}
+	}
+	this.mutex.Unlock()
 }
 
 
@@ -31,4 +40,20 @@ func (this* roleAttributeMgr) Get(rid int) (*model.RoleAttribute, bool){
 		return nil, false
 	}
 }
+
+
+func (this* roleAttributeMgr) IsHasUnion(rid int) bool{
+
+	this.mutex.RLock()
+	r, ok := this.attribute[rid]
+	this.mutex.RUnlock()
+
+	if ok {
+		return r.UnionId != 0
+	}else {
+		return  false
+	}
+}
+
+
 

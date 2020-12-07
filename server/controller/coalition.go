@@ -46,6 +46,12 @@ func (this *coalition) create(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	role := r.(*model.Role)
 	rspObj.Name = reqObj.Name
 
+	has := logic.RAttributeMgr.IsHasUnion(role.RId)
+	if has {
+		rsp.Body.Code = constant.UnionAlreadyHas
+		return
+	}
+
 	c, ok := logic.UnionMgr.Create(reqObj.Name, role.RId)
 	if ok {
 		rspObj.Id = c.Id
@@ -96,7 +102,11 @@ func (this *coalition) join(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
 
-	//需要判断是否已经有联盟了，后续加
+	has := logic.RAttributeMgr.IsHasUnion(role.RId)
+	if has {
+		rsp.Body.Code = constant.UnionAlreadyHas
+		return
+	}
 
 	_, ok := logic.UnionMgr.Get(reqObj.Id)
 	if ok == false{
@@ -143,11 +153,20 @@ func (this *coalition) verify(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 				return
 			}
 
-			if reqObj.Decide == proto.UnionAdopt{
-				//同意
+			if ok := logic.RAttributeMgr.IsHasUnion(role.RId); ok {
+				rsp.Body.Code = constant.UnionAlreadyHas
+				apply.State = proto.UnionHas
 			}else{
-				//拒绝
+				if reqObj.Decide == proto.UnionAdopt{
+					//同意
+					c, ok := logic.UnionMgr.Get(reqObj.Id)
+					if ok {
+						c.MemberArray = append(c.MemberArray, role.RId)
+						c.SyncExecute()
+					}
+				}
 			}
+
 			db.MasterDB.Table(apply).ID(apply.Id).Cols("state").Update(apply)
 		}else{
 			rsp.Body.Code = constant.UnionNotFound

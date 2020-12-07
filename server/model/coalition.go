@@ -2,9 +2,48 @@ package model
 
 import (
 	"encoding/json"
+	"go.uber.org/zap"
+	"slgserver/db"
+	"slgserver/log"
 	"time"
 	"xorm.io/xorm"
 )
+
+
+
+/*******db 操作begin********/
+var dbCoalitionMgr *coalitionDBMgr
+func init() {
+	dbCoalitionMgr = &coalitionDBMgr{coalitions: make(chan *Coalition, 100)}
+	go dbCoalitionMgr.running()
+}
+
+type coalitionDBMgr struct {
+	coalitions    chan *Coalition
+}
+
+func (this* coalitionDBMgr) running()  {
+	for true {
+		select {
+		case coalition := <- this.coalitions:
+			if coalition.Id >0 {
+				_, err := db.MasterDB.Table(coalition).ID(coalition.Id).Cols("name",
+					"members", "chairman", "vice_chairman", "notice").Update(coalition)
+				if err != nil{
+					log.DefaultLog.Warn("db error", zap.Error(err))
+				}
+			}else{
+				log.DefaultLog.Warn("update coalition fail, because id <= 0")
+			}
+		}
+	}
+}
+
+func (this* coalitionDBMgr) push(coalition *Coalition)  {
+	this.coalitions <- coalition
+}
+/*******db 操作end********/
+
 
 type Coalition struct {
 	Id           int       `xorm:"id pk autoincr"`
@@ -48,6 +87,11 @@ func (this* Coalition) Cnt() int{
 	return len(this.MemberArray)
 }
 
+func (this *Coalition) SyncExecute() {
+	dbCoalitionMgr.push(this)
+}
+
+
 type CoalitionApply struct {
 	Id          int       `xorm:"id pk autoincr"`
 	CoalitionId int       `xorm:"coalition_id"`
@@ -59,3 +103,5 @@ type CoalitionApply struct {
 func (this *CoalitionApply) TableName() string {
 	return "coalition_apply"
 }
+
+

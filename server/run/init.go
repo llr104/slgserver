@@ -29,8 +29,7 @@ func Init() {
 	logic.RResMgr.Load()
 	logic.GMgr.Load()
 	logic.AMgr.Load()
-
-
+	logic.RAttributeMgr.Load()
 }
 
 func initRouter() {

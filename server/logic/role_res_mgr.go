@@ -74,7 +74,6 @@ func (this*roleResMgr) Add(res *model.RoleRes) (){
 	this.mutex.Lock()
 	this.rolesRes[res.RId] = res
 	this.mutex.Unlock()
-	
 }
 
 func (this*roleResMgr) TryUseNeed(rid int, need*facility.NeedRes) bool{
