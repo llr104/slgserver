@@ -106,20 +106,6 @@ func (this *Army) AfterSet(name string, cell xorm.Cell){
 	}
 }
 
-func (this *Army) ToSoldier() {
-	if this.SoldierArray != nil {
-		data, _ := json.Marshal(this.SoldierArray)
-		this.Soldiers = string(data)
-	}
-}
-
-func (this *Army) ToGeneral() {
-	if this.GeneralArray != nil {
-		data, _ := json.Marshal(this.GeneralArray)
-		this.Generals = string(data)
-	}
-}
-
 func (this *Army) BeforeInsert() {
 
 	data, _ := json.Marshal(this.GeneralArray)
@@ -137,6 +123,22 @@ func (this *Army) BeforeUpdate() {
 	data, _ = json.Marshal(this.SoldierArray)
 	this.Soldiers = string(data)
 }
+
+
+func (this *Army) ToSoldier() {
+	if this.SoldierArray != nil {
+		data, _ := json.Marshal(this.SoldierArray)
+		this.Soldiers = string(data)
+	}
+}
+
+func (this *Army) ToGeneral() {
+	if this.GeneralArray != nil {
+		data, _ := json.Marshal(this.GeneralArray)
+		this.Generals = string(data)
+	}
+}
+
 
 /* 推送同步 begin */
 func (this *Army) IsCellView() bool{

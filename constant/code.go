@@ -37,4 +37,6 @@ const GeneralNoSame = 30				//合成武将非同名
 const ArmyNotEnough = 31				//队伍数不足
 const TongShuaiNotEnough = 32			//统帅不足
 const GeneralStarMax = 33			    //升级到最大星级
+const UnionCreateError = 34			    //联盟创建失败
+const UnionNotFound = 35			    //联盟不存在
 

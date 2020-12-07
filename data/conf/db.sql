@@ -183,4 +183,18 @@ CREATE TABLE IF NOT EXISTS `war_report` (
    PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '战报表';
 
+CREATE TABLE IF NOT EXISTS `coalition` (
+   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+   `name` varchar(20) NOT NULL COMMENT '联盟名字',
+   `members` varchar(2048) NOT NULL COMMENT '成员',
+   `create_id` int unsigned NOT NULL COMMENT '创建者id',
+   `chairman` int unsigned NOT NULL COMMENT '盟主',
+   `vice_chairman` int unsigned NOT NULL COMMENT '副盟主',
+   `notice` varchar(256) COMMENT '公告',
+   `ctime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+   PRIMARY KEY (`id`),
+   UNIQUE KEY (`name`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '联盟';
+
+
 

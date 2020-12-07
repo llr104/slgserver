@@ -40,4 +40,5 @@ func initRouter() {
 	controller.DefaultCity.InitRouter(MyRouter)
 	controller.DefaultGeneral.InitRouter(MyRouter)
 	controller.DefaultWar.InitRouter(MyRouter)
+	controller.DefaultCoalition.InitRouter(MyRouter)
 }
