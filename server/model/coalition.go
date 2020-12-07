@@ -32,7 +32,7 @@ func (this* coalitionDBMgr) running()  {
 		case coalition := <- this.coalitions:
 			if coalition.Id >0 {
 				_, err := db.MasterDB.Table(coalition).ID(coalition.Id).Cols("name",
-					"members", "chairman", "vice_chairman", "notice").Update(coalition)
+					"members", "chairman", "vice_chairman", "notice", "state").Update(coalition)
 				if err != nil{
 					log.DefaultLog.Warn("db error", zap.Error(err))
 				}

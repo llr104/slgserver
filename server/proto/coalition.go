@@ -109,3 +109,41 @@ type DismissReq struct {
 type DismissRsp struct {
 
 }
+
+
+type NoticeReq struct {
+	Id	int		`json:"id"`
+}
+
+type NoticeRsp struct {
+	Text 	string	`json:"text"`
+}
+
+//修改公告
+type ModNoticeReq struct {
+	Text 	string	`json:"text"`
+}
+
+type ModNoticeRsp struct {
+
+}
+
+//踢人
+type KickReq struct {
+	RId		int 	`json:"rid"`
+}
+
+type KickRsp struct {
+	RId		int 	`json:"rid"`
+}
+
+//任命
+type AppointReq struct {
+	RId		int 	`json:"rid"`
+	Title   int 	`json:"title"` //职位，1副盟主（目前只支持任命副盟主）
+}
+
+type AppointRsp struct {
+	RId		int 	`json:"rid"`
+	Title   int 	`json:"title"` //职位，1副盟主（目前只支持任命副盟主）
+}

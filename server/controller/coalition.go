@@ -23,7 +23,7 @@ type coalition struct {
 }
 
 func (this *coalition) InitRouter(r *net.Router) {
-	g := r.Group("city").Use(middleware.ElapsedTime(), middleware.Log(),
+	g := r.Group("union").Use(middleware.ElapsedTime(), middleware.Log(),
 		middleware.CheckLogin(), middleware.CheckRole())
 
 	g.AddRouter("create", this.create)
@@ -34,6 +34,11 @@ func (this *coalition) InitRouter(r *net.Router) {
 	g.AddRouter("applyList", this.applyList)
 	g.AddRouter("exit", this.exit)
 	g.AddRouter("dismiss", this.dismiss)
+	g.AddRouter("notice", this.notice)
+	g.AddRouter("modNotice", this.modNotice)
+	g.AddRouter("kick", this.kick)
+	g.AddRouter("appoint", this.appoint)
+
 
 }
 
@@ -308,7 +313,7 @@ func (this *coalition) dismiss(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	role := r.(*model.Role)
 
 	if ok := logic.RAttributeMgr.IsHasUnion(role.RId); ok == false {
-		rsp.Body.Code = constant.UnionAlreadyHas
+		rsp.Body.Code = constant.UnionNotFound
 		return
 	}
 
@@ -336,5 +341,158 @@ func (this *coalition) dismiss(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	u.MemberArray = []int{}
 	attribute.UnionId = 0
 	u.SyncExecute()
+
+}
+
+//公告
+func (this *coalition) notice(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+	reqObj := &proto.NoticeReq{}
+	rspObj := &proto.NoticeRsp{}
+	mapstructure.Decode(req.Body.Msg, reqObj)
+	rsp.Body.Msg = rspObj
+	rsp.Body.Code = constant.OK
+
+	u, ok := logic.UnionMgr.Get(reqObj.Id)
+	if ok == false{
+		rsp.Body.Code = constant.UnionNotFound
+		return
+	}
+
+	rspObj.Text = u.Notice
+}
+
+//修改公告
+func (this *coalition) modNotice(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+	reqObj := &proto.ModNoticeReq{}
+	rspObj := &proto.ModNoticeReq{}
+	mapstructure.Decode(req.Body.Msg, reqObj)
+	rsp.Body.Msg = rspObj
+
+	rsp.Body.Code = constant.OK
+	r, _ := req.Conn.GetProperty("role")
+	role := r.(*model.Role)
+
+	if len(reqObj.Text) > 200 {
+		rsp.Body.Code = constant.ContentTooLong
+		return
+	}
+
+	if ok := logic.RAttributeMgr.IsHasUnion(role.RId); ok == false {
+		rsp.Body.Code = constant.UnionNotFound
+		return
+	}
+
+	attribute, _ := logic.RAttributeMgr.Get(role.RId)
+	u, ok := logic.UnionMgr.Get(attribute.UnionId)
+	if ok == false{
+		rsp.Body.Code = constant.UnionNotFound
+		return
+	}
+
+	if u.Chairman != role.RId && u.ViceChairman != role.RId {
+		rsp.Body.Code = constant.PermissionDenied
+		return
+	}
+
+	rspObj.Text = reqObj.Text
+	u.Notice = reqObj.Text
+	u.SyncExecute()
+}
+
+//踢人
+func (this *coalition) kick(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+	reqObj := &proto.KickReq{}
+	rspObj := &proto.KickRsp{}
+	mapstructure.Decode(req.Body.Msg, reqObj)
+	rsp.Body.Msg = rspObj
+	rspObj.RId = reqObj.RId
+
+	rsp.Body.Code = constant.OK
+
+	r, _ := req.Conn.GetProperty("role")
+	role := r.(*model.Role)
+
+	if ok := logic.RAttributeMgr.IsHasUnion(role.RId); ok == false {
+		rsp.Body.Code = constant.UnionNotFound
+		return
+	}
+
+	opAr, _ := logic.RAttributeMgr.Get(role.RId)
+	u, ok := logic.UnionMgr.Get(opAr.UnionId)
+	if ok == false{
+		rsp.Body.Code = constant.UnionNotFound
+		return
+	}
+
+	if u.Chairman != role.RId && u.ViceChairman != role.RId {
+		rsp.Body.Code = constant.PermissionDenied
+		return
+	}
+
+	target, ok := logic.RAttributeMgr.Get(reqObj.RId)
+	if ok {
+		if target.UnionId == u.Id{
+			for i, rid := range u.MemberArray {
+				if rid == reqObj.RId{
+					u.MemberArray = append(u.MemberArray[:i], u.MemberArray[i+1:]...)
+				}
+			}
+			target.UnionId = 0
+			u.SyncExecute()
+		}else{
+			rsp.Body.Code = constant.NotBelongUnion
+		}
+	}else{
+		rsp.Body.Code = constant.NotBelongUnion
+	}
+
+}
+
+//任命
+func (this *coalition) appoint(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+	reqObj := &proto.AppointReq{}
+	rspObj := &proto.AppointRsp{}
+	mapstructure.Decode(req.Body.Msg, reqObj)
+	rsp.Body.Msg = rspObj
+	rspObj.RId = reqObj.RId
+
+	rsp.Body.Code = constant.OK
+
+	r, _ := req.Conn.GetProperty("role")
+	role := r.(*model.Role)
+
+	if ok := logic.RAttributeMgr.IsHasUnion(role.RId); ok == false {
+		rsp.Body.Code = constant.UnionNotFound
+		return
+	}
+
+	opAr, _ := logic.RAttributeMgr.Get(role.RId)
+	u, ok := logic.UnionMgr.Get(opAr.UnionId)
+	if ok == false{
+		rsp.Body.Code = constant.UnionNotFound
+		return
+	}
+
+	if u.Chairman != role.RId {
+		rsp.Body.Code = constant.PermissionDenied
+		return
+	}
+
+	target, ok := logic.RAttributeMgr.Get(reqObj.RId)
+	if ok {
+		if target.UnionId == u.Id{
+			if reqObj.Title == proto.UnionViceChairman{
+				u.ViceChairman = reqObj.RId
+				rspObj.Title = reqObj.Title
+				u.SyncExecute()
+			}else{
+				rsp.Body.Code = constant.InvalidParam
+			}
+		}else{
+			rsp.Body.Code = constant.NotBelongUnion
+		}
+	}else{
+		rsp.Body.Code = constant.NotBelongUnion
+	}
 
 }
