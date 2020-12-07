@@ -83,11 +83,11 @@ func (this* coalitionMgr) Create(name string, rid int) (*model.Coalition, bool){
 
 func (this* coalitionMgr) List() []*model.Coalition {
 	r := make([]*model.Coalition, 0)
-	this.mutex.Lock()
+	this.mutex.RLock()
 	for _, coalition := range this.unions {
 		r = append(r, coalition)
 	}
-	this.mutex.Unlock()
+	this.mutex.RUnlock()
 	return r
 }
 

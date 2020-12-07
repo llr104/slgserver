@@ -29,6 +29,7 @@ func Init() {
 	logic.RResMgr.Load()
 	logic.GMgr.Load()
 	logic.AMgr.Load()
+	logic.UnionMgr.Load()
 	logic.RAttributeMgr.Load()
 }
 
