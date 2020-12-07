@@ -13,13 +13,13 @@ import (
 	"time"
 )
 
-type GeneralMgr struct {
+type generalMgr struct {
 	mutex     sync.RWMutex
 	genByRole map[int][]*model.General
 	genByGId  map[int]*model.General
 }
 
-var GMgr = &GeneralMgr{
+var GMgr = &generalMgr{
 	genByRole: make(map[int][]*model.General),
 	genByGId: make(map[int]*model.General),
 }
@@ -27,7 +27,7 @@ var GMgr = &GeneralMgr{
 
 
 
-func (this* GeneralMgr) updatePhysicalPower() {
+func (this*generalMgr) updatePhysicalPower() {
 	limit := static_conf.Basic.General.PhysicalPowerLimit
 	recoverCnt := static_conf.Basic.General.RecoveryPhysicalPower
 	for true {
@@ -43,7 +43,7 @@ func (this* GeneralMgr) updatePhysicalPower() {
 	}
 }
 
-func (this* GeneralMgr) createNPC() ([]*model.General, bool){
+func (this*generalMgr) createNPC() ([]*model.General, bool){
 	//创建
 	gs := make([]*model.General, 0)
 	sess := db.MasterDB.NewSession()
@@ -66,7 +66,7 @@ func (this* GeneralMgr) createNPC() ([]*model.General, bool){
 	}
 }
 
-func (this* GeneralMgr) add(g *model.General) {
+func (this*generalMgr) add(g *model.General) {
 	this.mutex.Lock()
 
 	if _,ok := this.genByRole[g.RId]; ok == false{
@@ -80,7 +80,7 @@ func (this* GeneralMgr) add(g *model.General) {
 
 
 
-func (this* GeneralMgr) Load(){
+func (this*generalMgr) Load(){
 
 	err := db.MasterDB.Table(model.General{}).Find(this.genByGId)
 	if err != nil {
@@ -102,7 +102,7 @@ func (this* GeneralMgr) Load(){
 	go this.updatePhysicalPower()
 }
 
-func (this* GeneralMgr) GetByRId(rid int) ([]*model.General, bool){
+func (this*generalMgr) GetByRId(rid int) ([]*model.General, bool){
 	this.mutex.Lock()
 	r, ok := this.genByRole[rid]
 	this.mutex.Unlock()
@@ -130,7 +130,7 @@ func (this* GeneralMgr) GetByRId(rid int) ([]*model.General, bool){
 }
 
 //查找将领
-func (this* GeneralMgr) GetByGId(gid int) (*model.General, bool){
+func (this*generalMgr) GetByGId(gid int) (*model.General, bool){
 	this.mutex.RLock()
 	g, ok := this.genByGId[gid]
 	this.mutex.RUnlock()
@@ -157,7 +157,7 @@ func (this* GeneralMgr) GetByGId(gid int) (*model.General, bool){
 }
 
 //这个角色是否有这个武将
-func (this* GeneralMgr) HasGenerl(rid int ,gid int) (*model.General ,bool){
+func (this*generalMgr) HasGenerl(rid int ,gid int) (*model.General ,bool){
 	r, ok := this.GetByRId(rid)
 	if ok {
 		for _, v := range r {
@@ -170,7 +170,7 @@ func (this* GeneralMgr) HasGenerl(rid int ,gid int) (*model.General ,bool){
 	return nil,false
 }
 
-func (this* GeneralMgr) HasGenerls(rid int ,gids []int) ([]*model.General ,bool){
+func (this*generalMgr) HasGenerls(rid int ,gids []int) ([]*model.General ,bool){
 	gs := make([]*model.General, 0)
 	for i := 0; i < len(gids); i++ {
 		g,ok := this.HasGenerl(rid,gids[i])
@@ -184,7 +184,7 @@ func (this* GeneralMgr) HasGenerls(rid int ,gids []int) ([]*model.General ,bool)
 }
 
 
-func (this* GeneralMgr) NewGeneral(cfgId int, rid int) (*model.General, bool) {
+func (this*generalMgr) NewGeneral(cfgId int, rid int) (*model.General, bool) {
 	cfg, ok := general.General.GMap[cfgId]
 	if ok {
 		g := &model.General{RId: rid, CfgId: cfg.CfgId, Order: 0, CityId: 0,
@@ -209,7 +209,7 @@ func (this* GeneralMgr) NewGeneral(cfgId int, rid int) (*model.General, bool) {
 /*
 如果不存在尝试去创建
 */
-func (this* GeneralMgr) GetByRIdTryCreate(rid int) ([]*model.General, bool){
+func (this*generalMgr) GetByRIdTryCreate(rid int) ([]*model.General, bool){
 	r, ok := this.GetByRId(rid)
 	if ok {
 		return r, true
@@ -239,7 +239,7 @@ func (this* GeneralMgr) GetByRIdTryCreate(rid int) ([]*model.General, bool){
 /*
 随机创建一个
 */
-func (this* GeneralMgr) RandCreateGeneral(rid int, nums int) ([]*model.General, bool){
+func (this*generalMgr) RandCreateGeneral(rid int, nums int) ([]*model.General, bool){
 	//创建
 	gs := make([]*model.General, 0)
 	sess := db.MasterDB.NewSession()
@@ -265,7 +265,7 @@ func (this* GeneralMgr) RandCreateGeneral(rid int, nums int) ([]*model.General, 
 }
 
 
-func (this* GeneralMgr) PrToCfgId(rate int) (cfgId int){
+func (this*generalMgr) PrToCfgId(rate int) (cfgId int){
 	gs := make([]int, 0)
 	defgs := make([]int, 0)
 
@@ -293,7 +293,7 @@ func (this* GeneralMgr) PrToCfgId(rate int) (cfgId int){
 }
 
 //获取npc武将
-func (this* GeneralMgr) GetNPCGenerals(cnt int) ([]model.General, bool) {
+func (this*generalMgr) GetNPCGenerals(cnt int) ([]model.General, bool) {
 	gs, ok := this.GetByRId(0)
 	if ok == false {
 		return make([]model.General, 0), false
@@ -319,7 +319,7 @@ func (this* GeneralMgr) GetNPCGenerals(cnt int) ([]model.General, bool) {
 	}
 }
 
-func (this *GeneralMgr) GetDestroy(army *model.Army) int{
+func (this *generalMgr) GetDestroy(army *model.Army) int{
 	destroy := 0
 	for _, g := range army.Gens {
 		if g != nil {
@@ -330,7 +330,7 @@ func (this *GeneralMgr) GetDestroy(army *model.Army) int{
 }
 
 //体力是否足够
-func (this* GeneralMgr) PhysicalPowerIsEnough(army *model.Army, cost int) bool{
+func (this*generalMgr) PhysicalPowerIsEnough(army *model.Army, cost int) bool{
 	for _, g := range army.Gens {
 		if g == nil{
 			continue
@@ -343,7 +343,7 @@ func (this* GeneralMgr) PhysicalPowerIsEnough(army *model.Army, cost int) bool{
 }
 
 //尝试使用体力
-func (this *GeneralMgr) TryUsePhysicalPower(army *model.Army, cost int) bool{
+func (this *generalMgr) TryUsePhysicalPower(army *model.Army, cost int) bool{
 
 	if this.PhysicalPowerIsEnough(army, cost) == false{
 		return false

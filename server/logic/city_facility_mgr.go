@@ -11,28 +11,28 @@ import (
 	"sync"
 )
 
-var RFMgr = FacilityMgr{
+var RFMgr = facilityMgr{
 	facilities: make(map[int]*model.CityFacility),
 }
 
-type FacilityMgr struct {
+type facilityMgr struct {
 	mutex sync.RWMutex
 	facilities map[int]*model.CityFacility
 }
 
-func (this* FacilityMgr) Load() {
+func (this*facilityMgr) Load() {
 
 	this.mutex.Lock()
 	defer this.mutex.Unlock()
 
 	err := db.MasterDB.Find(this.facilities)
 	if err != nil {
-		log.DefaultLog.Error("FacilityMgr load city_facility table error")
+		log.DefaultLog.Error("facilityMgr load city_facility table error")
 	}
 
 }
 
-func (this* FacilityMgr) Get(cid int) (*model.CityFacility, bool){
+func (this*facilityMgr) Get(cid int) (*model.CityFacility, bool){
 	this.mutex.RLock()
 	r, ok := this.facilities[cid]
 	this.mutex.RUnlock()
@@ -57,7 +57,7 @@ func (this* FacilityMgr) Get(cid int) (*model.CityFacility, bool){
 	}
 }
 
-func (this* FacilityMgr) GetFacility(cid int, fType int8) (*model.Facility, bool){
+func (this*facilityMgr) GetFacility(cid int, fType int8) (*model.Facility, bool){
 	cf, ok := this.Get(cid)
 	if ok == false{
 		return nil, false
@@ -75,7 +75,7 @@ func (this* FacilityMgr) GetFacility(cid int, fType int8) (*model.Facility, bool
 /*
 获取城内设施加成
 */
-func (this* FacilityMgr) GetAdditions(cid int, additionType... int8 ) []int{
+func (this*facilityMgr) GetAdditions(cid int, additionType... int8 ) []int{
 	cf, ok := this.Get(cid)
 	if ok == false{
 		return []int{}
@@ -105,7 +105,7 @@ func (this* FacilityMgr) GetAdditions(cid int, additionType... int8 ) []int{
 /*
 如果不存在尝试去创建
 */
-func (this* FacilityMgr) GetAndTryCreate(cid, rid int) (*model.CityFacility, bool){
+func (this*facilityMgr) GetAndTryCreate(cid, rid int) (*model.CityFacility, bool){
 	r, ok := this.Get(cid)
 	if ok {
 		return r, true
@@ -135,7 +135,7 @@ func (this* FacilityMgr) GetAndTryCreate(cid, rid int) (*model.CityFacility, boo
 	}
 }
 
-func (this* FacilityMgr) UpFacility(rid, cid int, fType int8) (*model.Facility, int){
+func (this*facilityMgr) UpFacility(rid, cid int, fType int8) (*model.Facility, int){
 	this.mutex.Lock()
 	defer this.mutex.Unlock()
 	f, ok := this.facilities[cid]

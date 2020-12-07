@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-type ArmyMgr struct {
+type armyMgr struct {
 	mutex        	sync.RWMutex
 	armyById     	map[int]*model.Army      //key:armyId
 	armyByCityId 	map[int][]*model.Army    //key:cityId
@@ -18,14 +18,14 @@ type ArmyMgr struct {
 	armyByRId		map[int][]*model.Army   //key:rid
 }
 
-var AMgr = &ArmyMgr{
+var AMgr = &armyMgr{
 	armyById:     make(map[int]*model.Army),
 	armyByCityId: make(map[int][]*model.Army),
 	armyByEndTime: make(map[int64][]*model.Army),
 	armyByRId: make(map[int][]*model.Army),
 }
 
-func (this* ArmyMgr) Load() {
+func (this*armyMgr) Load() {
 	this.mutex.Lock()
 	db.MasterDB.Table(model.Army{}).Find(this.armyById)
 
@@ -87,7 +87,7 @@ func (this* ArmyMgr) Load() {
 	go this.running()
 }
 
-func (this* ArmyMgr) insertOne(army *model.Army)  {
+func (this*armyMgr) insertOne(army *model.Army)  {
 
 	aid := army.Id
 	cid := army.CityId
@@ -107,13 +107,13 @@ func (this* ArmyMgr) insertOne(army *model.Army)  {
 
 }
 
-func (this* ArmyMgr) insertMutil(armys []*model.Army)  {
+func (this*armyMgr) insertMutil(armys []*model.Army)  {
 	for _, v := range armys {
 		this.insertOne(v)
 	}
 }
 
-func (this* ArmyMgr) addAction(t int64, army *model.Army)  {
+func (this*armyMgr) addAction(t int64, army *model.Army)  {
 	_, ok := this.armyByEndTime[t]
 	if ok == false {
 		this.armyByEndTime[t] = make([]*model.Army, 0)
@@ -122,7 +122,7 @@ func (this* ArmyMgr) addAction(t int64, army *model.Army)  {
 }
 
 //把行动丢进来
-func (this* ArmyMgr) PushAction(army *model.Army)  {
+func (this*armyMgr) PushAction(army *model.Army)  {
 	this.mutex.Lock()
 	defer this.mutex.Unlock()
 
@@ -155,7 +155,7 @@ func (this* ArmyMgr) PushAction(army *model.Army)  {
 
 }
 
-func (this* ArmyMgr) ArmyBack(army *model.Army)  {
+func (this*armyMgr) ArmyBack(army *model.Army)  {
 	army.State = model.ArmyRunning
 	army.Cmd = model.ArmyCmdBack
 
@@ -174,13 +174,13 @@ func (this* ArmyMgr) ArmyBack(army *model.Army)  {
 	this.PushAction(army)
 }
 
-func (this* ArmyMgr) Reclamation(army *model.Army)  {
+func (this*armyMgr) Reclamation(army *model.Army)  {
 	army.State = model.ArmyStop
 	army.Cmd = model.ArmyCmdReclamation
 	this.PushAction(army)
 }
 
-func (this* ArmyMgr) running() {
+func (this*armyMgr) running() {
 	for true {
 		t := time.Now().Unix()
 		time.Sleep(100*time.Millisecond)
@@ -199,7 +199,7 @@ func (this* ArmyMgr) running() {
 }
 
 
-func (this* ArmyMgr) Get(aid int) (*model.Army, bool){
+func (this*armyMgr) Get(aid int) (*model.Army, bool){
 	this.mutex.RLock()
 	a, ok := this.armyById[aid]
 	this.mutex.RUnlock()
@@ -215,18 +215,18 @@ func (this* ArmyMgr) Get(aid int) (*model.Army, bool){
 			return army, true
 		}else{
 			if err == nil{
-				log.DefaultLog.Warn("ArmyMgr GetByRId armyId db not found",
+				log.DefaultLog.Warn("armyMgr GetByRId armyId db not found",
 					zap.Int("armyId", aid))
 				return nil, false
 			}else{
-				log.DefaultLog.Warn("ArmyMgr GetByRId db error", zap.Int("armyId", aid))
+				log.DefaultLog.Warn("armyMgr GetByRId db error", zap.Int("armyId", aid))
 				return nil, false
 			}
 		}
 	}
 }
 
-func (this* ArmyMgr) GetByCity(cid int) ([]*model.Army, bool){
+func (this*armyMgr) GetByCity(cid int) ([]*model.Army, bool){
 	this.mutex.RLock()
 	a,ok := this.armyByCityId[cid]
 	this.mutex.RUnlock()
@@ -236,7 +236,7 @@ func (this* ArmyMgr) GetByCity(cid int) ([]*model.Army, bool){
 		m := make([]*model.Army, 0)
 		err := db.MasterDB.Table(model.Army{}).Where("cityId=?", cid).Find(&m)
 		if err!=nil{
-			log.DefaultLog.Warn("ArmyMgr GetByCity db error", zap.Int("cityId", cid))
+			log.DefaultLog.Warn("armyMgr GetByCity db error", zap.Int("cityId", cid))
 			return m, false
 		}else{
 			this.mutex.Lock()
@@ -247,14 +247,14 @@ func (this* ArmyMgr) GetByCity(cid int) ([]*model.Army, bool){
 	}
 }
 
-func (this* ArmyMgr) GetByRId(rid int) ([]*model.Army, bool){
+func (this*armyMgr) GetByRId(rid int) ([]*model.Army, bool){
 	this.mutex.RLock()
 	a,ok := this.armyByRId[rid]
 	this.mutex.RUnlock()
 	return a, ok
 }
 
-func (this* ArmyMgr) GetOrCreate(rid int, cid int, order int8) (*model.Army, error){
+func (this*armyMgr) GetOrCreate(rid int, cid int, order int8) (*model.Army, error){
 
 	this.mutex.RLock()
 	armys, ok := this.armyByCityId[cid]
@@ -285,7 +285,7 @@ func (this* ArmyMgr) GetOrCreate(rid int, cid int, order int8) (*model.Army, err
 	}
 }
 
-func (this* ArmyMgr) GetSpeed(army* model.Army) int{
+func (this*armyMgr) GetSpeed(army* model.Army) int{
 	speed := 100000
 	for _, g := range army.Gens {
 		if g != nil {
@@ -299,7 +299,7 @@ func (this* ArmyMgr) GetSpeed(army* model.Army) int{
 }
 
 //能否上阵
-func (this* ArmyMgr) IsCanDispose(rid int, cfgId int) bool{
+func (this*armyMgr) IsCanDispose(rid int, cfgId int) bool{
 	armys, ok := this.GetByRId(rid)
 	if ok == false{
 		return true
@@ -317,7 +317,7 @@ func (this* ArmyMgr) IsCanDispose(rid int, cfgId int) bool{
 	return true
 }
 
-func (this* ArmyMgr) updateGenerals(armys... *model.Army) {
+func (this*armyMgr) updateGenerals(armys... *model.Army) {
 	for _, army := range armys {
 		army.Gens = make([]*model.General, 0)
 		for _, gid := range army.GeneralArray {

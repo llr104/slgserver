@@ -8,16 +8,16 @@ import (
 	"sync"
 )
 
-type RoleMgr struct {
+type roleMgr struct {
 	mutex  sync.RWMutex
 	roles map[int]*model.Role
 }
 
-var RMgr = &RoleMgr{
+var RMgr = &roleMgr{
 	roles: make(map[int]*model.Role),
 }
 
-func (this* RoleMgr) Get(rid int) (*model.Role, bool){
+func (this*roleMgr) Get(rid int) (*model.Role, bool){
 	this.mutex.Lock()
 	r, ok := this.roles[rid]
 	this.mutex.Unlock()

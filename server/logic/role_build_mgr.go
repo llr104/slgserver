@@ -12,7 +12,7 @@ import (
 )
 
 
-type RoleBuildMgr struct {
+type roleBuildMgr struct {
 	mutex sync.RWMutex
 	dbRB  map[int]*model.MapRoleBuild    //key:dbId
 	posRB map[int]*model.MapRoleBuild    //key:posId
@@ -20,19 +20,19 @@ type RoleBuildMgr struct {
 }
 
 
-var RBMgr = &RoleBuildMgr{
+var RBMgr = &roleBuildMgr{
 	dbRB: make(map[int]*model.MapRoleBuild),
 	posRB: make(map[int]*model.MapRoleBuild),
 	roleRB: make(map[int][]*model.MapRoleBuild),
 }
 
-func (this* RoleBuildMgr) Load() {
+func (this*roleBuildMgr) Load() {
 	this.mutex.Lock()
 	defer this.mutex.Unlock()
 
 	err := db.MasterDB.Find(this.dbRB)
 	if err != nil {
-		log.DefaultLog.Error("RoleBuildMgr load role_build table error", zap.Error(err))
+		log.DefaultLog.Error("roleBuildMgr load role_build table error", zap.Error(err))
 	}
 
 	//转成posRB 和 roleRB
@@ -52,7 +52,7 @@ func (this* RoleBuildMgr) Load() {
 /*
 该位置是否被角色占领
 */
-func (this* RoleBuildMgr) IsEmpty(x, y int) bool {
+func (this*roleBuildMgr) IsEmpty(x, y int) bool {
 	this.mutex.RLock()
 	defer this.mutex.RUnlock()
 	posId := ToPosition(x, y)
@@ -60,7 +60,7 @@ func (this* RoleBuildMgr) IsEmpty(x, y int) bool {
 	return !ok
 }
 
-func (this* RoleBuildMgr) PositionBuild(x, y int) (*model.MapRoleBuild, bool) {
+func (this*roleBuildMgr) PositionBuild(x, y int) (*model.MapRoleBuild, bool) {
 	this.mutex.RLock()
 	defer this.mutex.RUnlock()
 	posId := ToPosition(x, y)
@@ -73,7 +73,7 @@ func (this* RoleBuildMgr) PositionBuild(x, y int) (*model.MapRoleBuild, bool) {
 }
 
 
-func (this* RoleBuildMgr) AddBuild(rid, x, y int) (*model.MapRoleBuild, bool) {
+func (this*roleBuildMgr) AddBuild(rid, x, y int) (*model.MapRoleBuild, bool) {
 
 	posId := ToPosition(x, y)
 	this.mutex.Lock()
@@ -122,7 +122,7 @@ func (this* RoleBuildMgr) AddBuild(rid, x, y int) (*model.MapRoleBuild, bool) {
 	return nil, false
 }
 
-func (this* RoleBuildMgr) RemoveFromRole(build *model.MapRoleBuild)  {
+func (this*roleBuildMgr) RemoveFromRole(build *model.MapRoleBuild)  {
 	this.mutex.Lock()
 	rb,ok := this.roleRB[build.RId]
 	if ok {
@@ -140,14 +140,14 @@ func (this* RoleBuildMgr) RemoveFromRole(build *model.MapRoleBuild)  {
 	build.SyncExecute()
 }
 
-func (this* RoleBuildMgr) GetRoleBuild(rid int) ([]*model.MapRoleBuild, bool) {
+func (this*roleBuildMgr) GetRoleBuild(rid int) ([]*model.MapRoleBuild, bool) {
 	this.mutex.RLock()
 	defer this.mutex.RUnlock()
 	ra, ok := this.roleRB[rid]
 	return ra, ok
 }
 
-func (this* RoleBuildMgr) Scan(x, y int) []*model.MapRoleBuild {
+func (this*roleBuildMgr) Scan(x, y int) []*model.MapRoleBuild {
 	if x < 0 || x >= global.MapWith || y < 0 || y >= global.MapHeight {
 		return nil
 	}
@@ -174,7 +174,7 @@ func (this* RoleBuildMgr) Scan(x, y int) []*model.MapRoleBuild {
 	return rb
 }
 
-func (this* RoleBuildMgr) ScanBlock(x, y, length int) []*model.MapRoleBuild {
+func (this*roleBuildMgr) ScanBlock(x, y, length int) []*model.MapRoleBuild {
 	if x < 0 || x >= global.MapWith || y < 0 || y >= global.MapHeight {
 		return nil
 	}
@@ -200,7 +200,7 @@ func (this* RoleBuildMgr) ScanBlock(x, y, length int) []*model.MapRoleBuild {
 	return rb
 }
 
-func (this* RoleBuildMgr) BuildIsRId(x, y, rid int) bool {
+func (this*roleBuildMgr) BuildIsRId(x, y, rid int) bool {
 	b, ok := this.PositionBuild(x, y)
 	if ok {
 		return b.RId == rid
