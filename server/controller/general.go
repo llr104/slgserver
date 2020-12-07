@@ -542,6 +542,12 @@ func (this*General) AddPrGeneral(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
+	all:= reqObj.ForceAdd + reqObj.StrategyAdd +  reqObj.DefenseAdd + reqObj.SpeedAdd + reqObj.DestroyAdd
+	if gs.HasPrPoint < all{
+		rsp.Body.Code = constant.DBError
+		return
+	}
+
 	gs.ForceAdded = reqObj.ForceAdd
 	gs.StrategyAdded = reqObj.StrategyAdd
 	gs.DefenseAdded = reqObj.DefenseAdd
@@ -550,7 +556,7 @@ func (this*General) AddPrGeneral(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 
 
-	gs.UsePrPoint = gs.ForceAdded +  gs.StrategyAdded + gs.DefenseAdded + gs.SpeedAdded + gs.DestroyAdded
+	gs.UsePrPoint = all
 	gs.SyncExecute()
 
 	rsp.Body.Code = constant.OK
