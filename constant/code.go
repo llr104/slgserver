@@ -39,4 +39,7 @@ const TongShuaiNotEnough = 32			//统帅不足
 const GeneralStarMax = 33			    //升级到最大星级
 const UnionCreateError = 34			    //联盟创建失败
 const UnionNotFound = 35			    //联盟不存在
+const PermissionDenied = 36			    //权限不足
+
+
 

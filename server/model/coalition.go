@@ -47,3 +47,15 @@ func (this *Coalition) BeforeUpdate() {
 func (this* Coalition) Cnt() int{
 	return len(this.MemberArray)
 }
+
+type CoalitionApply struct {
+	Id          int       `xorm:"id pk autoincr"`
+	CoalitionId int       `xorm:"coalition_id"`
+	RId         int       `xorm:"rid"`
+	State       int8      `xorm:"state"`
+	Ctime       time.Time `xorm:"ctime"`
+}
+
+func (this *CoalitionApply) TableName() string {
+	return "coalition_apply"
+}
