@@ -66,7 +66,10 @@ type npc struct {
 	Levels []npcLevel `json:"levels"`
 }
 
-
+type union struct {
+	Des         string `json:"des"`
+	MemberLimit int    `json:"member_limit"`
+}
 
 type basic struct {
 	ConScript conscript `json:"conscript"`
@@ -74,6 +77,7 @@ type basic struct {
 	Role      role      `json:"role"`
 	City      city      `json:"city"`
 	Npc       npc       `json:"npc"`
+	Union     union     `json:"union"`
 }
 
 func (this *basic) Load()  {

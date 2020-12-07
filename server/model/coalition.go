@@ -2,6 +2,7 @@ package model
 
 import (
 	"encoding/json"
+	"fmt"
 	"go.uber.org/zap"
 	"slgserver/db"
 	"slgserver/log"
@@ -74,6 +75,10 @@ func (this *Coalition) AfterSet(name string, cell xorm.Cell){
 			ss, ok := (*cell).([]uint8)
 			if ok {
 				json.Unmarshal(ss, &this.MemberArray)
+			}
+			if this.MemberArray == nil{
+				this.MemberArray = []int{}
+				fmt.Println(this.MemberArray)
 			}
 		}
 	}

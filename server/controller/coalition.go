@@ -11,6 +11,7 @@ import (
 	"slgserver/server/middleware"
 	"slgserver/server/model"
 	"slgserver/server/proto"
+	"slgserver/server/static_conf"
 	"time"
 )
 
@@ -116,9 +117,14 @@ func (this *coalition) join(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	_, ok := logic.UnionMgr.Get(reqObj.Id)
+	u, ok := logic.UnionMgr.Get(reqObj.Id)
 	if ok == false{
 		rsp.Body.Code = constant.UnionNotFound
+		return
+	}
+
+	if len(u.MemberArray) >= static_conf.Basic.Union.MemberLimit{
+		rsp.Body.Code = constant.PeopleIsFull
 		return
 	}
 
@@ -158,6 +164,11 @@ func (this *coalition) verify(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 			if u.Chairman != role.RId && u.ViceChairman != u.ViceChairman {
 				rsp.Body.Code = constant.PermissionDenied
+				return
+			}
+
+			if len(u.MemberArray) >= static_conf.Basic.Union.MemberLimit{
+				rsp.Body.Code = constant.PeopleIsFull
 				return
 			}
 

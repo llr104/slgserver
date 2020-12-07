@@ -44,6 +44,7 @@ const UnionAlreadyHas = 37        //已经有联盟
 const UnionNotAllowExit = 38      //不允许退出
 const ContentTooLong = 39		  //内容太长
 const NotBelongUnion = 40		  //不属于该联盟
+const PeopleIsFull = 41		  	  //用户已满
 
 
 
