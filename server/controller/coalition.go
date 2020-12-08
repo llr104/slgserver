@@ -169,7 +169,7 @@ func (this *coalition) verify(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	if ok && err == nil{
 		if u, ok := logic.UnionMgr.Get(apply.UnionId); ok {
 
-			if u.Chairman != role.RId && u.ViceChairman != u.ViceChairman {
+			if u.Chairman != role.RId && u.ViceChairman != role.RId {
 				rsp.Body.Code = constant.PermissionDenied
 				return
 			}
@@ -187,15 +187,7 @@ func (this *coalition) verify(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 					c, ok := logic.UnionMgr.Get(apply.UnionId)
 					if ok {
 						c.MemberArray = append(c.MemberArray, apply.RId)
-						logic.RAttributeMgr.EnterUnion(apply.RId, apply.UnionId)
-
-						if citys, ok := logic.RCMgr.GetByRId(apply.RId); ok {
-							for _, city := range citys {
-								city.UnionId = apply.UnionId
-								city.SyncExecute()
-							}
-						}
-
+						logic.Union.MemberEnter(apply.RId, apply.UnionId)
 						c.SyncExecute()
 					}
 				}
@@ -268,7 +260,7 @@ func (this *coalition) applyList(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	if u.Chairman != role.RId && u.ViceChairman != u.ViceChairman {
+	if u.Chairman != role.RId && u.ViceChairman != role.RId {
 		rsp.Body.Code = constant.PermissionDenied
 		return
 	}
@@ -315,7 +307,7 @@ func (this *coalition) exit(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	}
 
 	//盟主、副盟主不能退出
-	if u.Chairman == role.RId || u.ViceChairman == u.ViceChairman {
+	if u.Chairman == role.RId || u.ViceChairman == role.RId {
 		rsp.Body.Code = constant.UnionNotAllowExit
 		return
 	}
