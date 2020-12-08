@@ -84,7 +84,7 @@ func (this *General) TableName() string {
 func (this *General) GetDestroy() int{
 	cfg, ok := general.General.GMap[this.CfgId]
 	if ok {
-		return (cfg.Destroy+cfg.DestroyGrow*int(this.Level))/100 + this.DestroyAdded
+		return cfg.Destroy+cfg.DestroyGrow*int(this.Level) + this.DestroyAdded
 	}
 	return 0
 }
@@ -92,7 +92,7 @@ func (this *General) GetDestroy() int{
 func (this *General) GetSpeed() int{
 	cfg, ok := general.General.GMap[this.CfgId]
 	if ok {
-		return (cfg.Speed+cfg.SpeedGrow*int(this.Level))/100 + this.SpeedAdded
+		return cfg.Speed+cfg.SpeedGrow*int(this.Level) + this.SpeedAdded
 	}
 	return 0
 }
@@ -100,7 +100,7 @@ func (this *General) GetSpeed() int{
 func (this *General) GetForce() int{
 	cfg, ok := general.General.GMap[this.CfgId]
 	if ok {
-		return (cfg.Force+cfg.ForceGrow*int(this.Level))/100 + this.ForceAdded
+		return cfg.Force+cfg.ForceGrow*int(this.Level) + this.ForceAdded
 	}
 	return 0
 }
@@ -108,7 +108,7 @@ func (this *General) GetForce() int{
 func (this *General) GetDefense() int{
 	cfg, ok := general.General.GMap[this.CfgId]
 	if ok {
-		return (cfg.Defense+cfg.DefenseGrow*int(this.Level))/100 + this.DefenseAdded
+		return cfg.Defense+cfg.DefenseGrow*int(this.Level) + this.DefenseAdded
 	}
 	return 0
 }
@@ -116,7 +116,7 @@ func (this *General) GetDefense() int{
 func (this *General) GetStrategy() int{
 	cfg, ok := general.General.GMap[this.CfgId]
 	if ok {
-		return (cfg.Strategy+cfg.StrategyGrow*int(this.Level))/100 + this.StrategyAdded
+		return cfg.Strategy+cfg.StrategyGrow*int(this.Level) + this.StrategyAdded
 	}
 	return 0
 }

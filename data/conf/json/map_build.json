@@ -8,7 +8,7 @@
     "wood": 0,
     "iron": 0,
     "stone": 0,
-    "durable": 1000,
+    "durable": 10000,
     "defender": 5
    },
    {"type": 52,
@@ -18,7 +18,7 @@
      "wood": 1000,
      "iron": 0,
      "stone": 0,
-     "durable": 100,
+     "durable": 10000,
      "defender": 1
    },
    {"type": 52,
@@ -28,7 +28,7 @@
      "wood": 2000,
      "iron": 0,
      "stone": 0,
-     "durable": 100,
+     "durable": 10000,
      "defender": 2
    },
    {"type": 52,
@@ -48,7 +48,7 @@
      "wood": 4000,
      "iron": 0,
      "stone": 0,
-     "durable": 100,
+     "durable": 10000,
      "defender": 4
    },
    {"type": 52,
@@ -58,7 +58,7 @@
      "wood": 5000,
      "iron": 0,
      "stone": 0,
-     "durable": 100,
+     "durable": 10000,
      "defender": 5
    },
 
@@ -71,7 +71,7 @@
      "wood": 0,
      "iron": 1000,
      "stone": 0,
-     "durable": 100,
+     "durable": 10000,
      "defender": 1
    },
    {"type": 53,
@@ -91,7 +91,7 @@
      "wood": 0,
      "iron": 3000,
      "stone": 0,
-     "durable": 100,
+     "durable": 10000,
      "defender": 3
    },
    {"type": 53,
@@ -101,7 +101,7 @@
      "wood": 0,
      "iron": 4000,
      "stone": 0,
-     "durable": 100,
+     "durable": 10000,
      "defender": 4
    },
    {"type": 53,
@@ -111,7 +111,7 @@
      "wood": 0,
      "iron": 5000,
      "stone": 0,
-     "durable": 100,
+     "durable": 10000,
      "defender": 5
    },
 
@@ -124,7 +124,7 @@
      "wood": 0,
      "iron": 0,
      "stone": 1000,
-     "durable": 100,
+     "durable": 10000,
      "defender": 1
    },
    {"type": 54,
@@ -134,7 +134,7 @@
      "wood": 0,
      "iron": 0,
      "stone": 2000,
-     "durable": 100,
+     "durable": 10000,
      "defender": 2
    },
    {"type": 54,
@@ -144,7 +144,7 @@
      "wood": 0,
      "iron": 0,
      "stone": 3000,
-     "durable": 100,
+     "durable": 10000,
      "defender": 3
    },
    {"type": 54,
@@ -154,7 +154,7 @@
      "wood": 0,
      "iron": 0,
      "stone": 4000,
-     "durable": 100,
+     "durable": 10000,
      "defender": 4
    },
    {"type": 54,
@@ -164,7 +164,7 @@
      "wood": 0,
      "iron": 0,
      "stone": 5000,
-     "durable": 100,
+     "durable": 10000,
      "defender": 5
    },
 
@@ -178,7 +178,7 @@
      "wood": 0,
      "iron": 0,
      "stone": 0,
-     "durable": 100,
+     "durable": 10000,
      "defender": 1
    },
    {"type": 55,
@@ -188,7 +188,7 @@
      "wood": 0,
      "iron": 0,
      "stone": 0,
-     "durable": 100,
+     "durable": 10000,
      "defender": 2
    },
    {"type": 55,
@@ -198,7 +198,7 @@
      "wood": 0,
      "iron": 0,
      "stone": 0,
-     "durable": 100,
+     "durable": 10000,
      "defender": 3
    },
    {"type": 55,
@@ -208,7 +208,7 @@
      "wood": 0,
      "iron": 0,
      "stone": 0,
-     "durable": 100,
+     "durable": 10000,
      "defender": 4
    },
    {"type": 55,
@@ -218,7 +218,7 @@
      "wood": 0,
      "iron": 0,
      "stone": 0,
-     "durable": 100,
+     "durable": 10000,
      "defender": 5
    }
  ]
