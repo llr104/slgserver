@@ -81,6 +81,7 @@ func (this *coalition) list(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	l := logic.UnionMgr.List()
 	rspObj.List = make([]proto.Union, len(l))
 	for i, v := range l {
+		rspObj.List[i].Id = v.Id
 		rspObj.List[i].Name = v.Name
 		rspObj.List[i].Notice = v.Notice
 		rspObj.List[i].Cnt = v.Cnt()
