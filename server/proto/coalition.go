@@ -20,10 +20,11 @@ type Member struct {
 }
 
 type Union struct {
+	Id     int      `json:"id"`     //联盟id
 	Name   string   `json:"name"`   //联盟名字
 	Cnt    int      `json:"cnt"`    //联盟人数
 	Notice string   `json:"notice"` //公告
-	Major  []Member `json:"major"` //联盟主要人物，盟主副盟主
+	Major  []Member `json:"major"`  //联盟主要人物，盟主副盟主
 }
 
 type ApplyItem struct {
@@ -39,7 +40,7 @@ type CreateReq struct {
 }
 
 type CreateRsp struct {
-	Id		int		`json:"id"`
+	Id		int		`json:"id"`	//联盟id
 	Name	string	`json:"name"`
 }
 
@@ -53,7 +54,7 @@ type ListRsp struct {
 
 //申请加入联盟
 type JoinReq struct {
-	Id	int		`json:"id"`
+	Id	int		`json:"id"`	//联盟id
 }
 
 type JoinRsp struct {
@@ -62,11 +63,11 @@ type JoinRsp struct {
 
 //联盟成员
 type MemberReq struct {
-	Id	int		`json:"id"`
+	Id	int		`json:"id"`	//联盟id
 }
 
 type MemberRsp struct {
-	Id			int			`json:"id"`
+	Id			int			`json:"id"`	//联盟id
 	Members  	[]Member 	`json:"Members"`
 }
 
@@ -112,7 +113,7 @@ type DismissRsp struct {
 
 
 type NoticeReq struct {
-	Id	int		`json:"id"`
+	Id	int		`json:"id"`	//联盟id
 }
 
 type NoticeRsp struct {
