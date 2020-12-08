@@ -22,6 +22,10 @@ func Init() {
 	static_conf.Basic.Load()
 	static_conf.MapBuildConf.Load()
 
+	//需要先加载联盟相关的信息
+	logic.UnionMgr.Load()
+	logic.RAttributeMgr.Load()
+
 	logic.NMMgr.Load()
 	logic.RCMgr.Load()
 	logic.RBMgr.Load()
@@ -29,8 +33,7 @@ func Init() {
 	logic.RResMgr.Load()
 	logic.GMgr.Load()
 	logic.AMgr.Load()
-	logic.UnionMgr.Load()
-	logic.RAttributeMgr.Load()
+
 }
 
 func initRouter() {

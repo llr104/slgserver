@@ -45,6 +45,7 @@ type MapRoleBuild struct {
 	Id    		int    		`xorm:"id pk autoincr"`
 	RId   		int    		`xorm:"rid"`
 	RNick		string		`xorm:"-"`
+	UnionId		int			`xorm:"-"`	//联盟id
 	Type  		int8   		`xorm:"type"`
 	Level 		int8   		`xorm:"level"`
 	X     		int    		`xorm:"x"`
@@ -84,6 +85,7 @@ func (this *MapRoleBuild) Position() (int, int){
 func (this *MapRoleBuild) ToProto() interface{}{
 	p := proto.MapRoleBuild{}
 	p.RNick = this.RNick
+	p.UnionId = this.UnionId
 	p.X = this.X
 	p.Y = this.Y
 	p.Type = this.Type

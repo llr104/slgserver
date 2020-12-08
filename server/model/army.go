@@ -64,6 +64,7 @@ func (this* armyDBMgr) push(army *Army)  {
 type Army struct {
 	Id           int        `xorm:"id pk autoincr"`
 	RId          int        `xorm:"rid"`
+	UnionId      int        `xorm:"-"` //联盟id
 	CityId       int        `xorm:"cityId"`
 	Order        int8       `xorm:"order"`
 	Generals     string     `xorm:"generals"`
@@ -183,6 +184,7 @@ func (this *Army) ToProto() interface{}{
 	p := proto.Army{}
 	p.CityId = this.CityId
 	p.Id = this.Id
+	p.UnionId = this.UnionId
 	p.Order = this.Order
 	p.Generals = this.GeneralArray
 	p.Soldiers = this.SoldierArray

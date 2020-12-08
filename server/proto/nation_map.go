@@ -25,6 +25,7 @@ type MapRoleBuild struct {
 	RId			int			`json:"rid"`
 	RNick		string 		`json:"RNick"` //角色昵称
 	Name		string		`json:"name"`
+	UnionId		int			`json:"union_id"`	//联盟id
 	X			int    		`json:"x"`
 	Y			int    		`json:"y"`
 	Type		int8		`json:"type"`

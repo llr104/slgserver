@@ -307,7 +307,7 @@ func (this *coalition) exit(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		}
 	}
 
-	attribute.UnionId = 0
+	logic.Union.MemberExit(role.RId)
 	u.SyncExecute()
 
 }
@@ -344,10 +344,7 @@ func (this *coalition) dismiss(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	}
 
 	for _, rid := range u.MemberArray {
-		a, ok := logic.RAttributeMgr.Get(rid)
-		if ok {
-			a.UnionId = 0
-		}
+		logic.Union.MemberExit(rid)
 	}
 
 	u.State = model.UnionDismiss
@@ -450,6 +447,7 @@ func (this *coalition) kick(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 					u.MemberArray = append(u.MemberArray[:i], u.MemberArray[i+1:]...)
 				}
 			}
+			logic.Union.MemberExit(reqObj.RId)
 			target.UnionId = 0
 			u.SyncExecute()
 		}else{
@@ -458,7 +456,6 @@ func (this *coalition) kick(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	}else{
 		rsp.Body.Code = constant.NotBelongUnion
 	}
-
 }
 
 //任命

@@ -347,9 +347,7 @@ func (this* armyLogic) executeBuild(army *model.Army)  {
 
 	//领地发生变化
 	if newRoleBuild, ok := RBMgr.PositionBuild(army.ToX, army.ToY); ok {
-		if r, ok := RMgr.Get(newRoleBuild.RId); ok {
-			newRoleBuild.RNick = r.NickName
-		}
+		RoleBuildExtra(newRoleBuild)
 		newRoleBuild.SyncExecute()
 	}
 
