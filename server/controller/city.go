@@ -109,24 +109,36 @@ func (this*City) upFacility(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		if ok {
 			for i, atype := range additions {
 				if atype == facility.TypeWood{
-					roleRes.WoodYield -= oldValues[i]
+					if len(oldValues) > i{
+						roleRes.WoodYield -= oldValues[i]
+					}
 					roleRes.WoodYield += newValues[i]
 				}else if atype == facility.TypeGrain{
-					roleRes.GrainYield -= oldValues[i]
+					if len(oldValues) > i{
+						roleRes.GrainYield -= oldValues[i]
+					}
 					roleRes.GrainYield += newValues[i]
 				}else if atype == facility.TypeIron{
-					roleRes.IronYield -= oldValues[i]
+					if len(oldValues) > i{
+						roleRes.IronYield -= oldValues[i]
+					}
 					roleRes.IronYield += newValues[i]
 				}else if atype == facility.TypeStone{
-					roleRes.StoneYield -= oldValues[i]
+					if len(oldValues) > i{
+						roleRes.StoneYield -= oldValues[i]
+					}
 					roleRes.StoneYield += newValues[i]
 				}else if atype == facility.TypeTax{
-					roleRes.GoldYield -= oldValues[i]
+					if len(oldValues) > i{
+						roleRes.GoldYield -= oldValues[i]
+					}
 					roleRes.GoldYield += newValues[i]
 				}else if atype == facility.TypeWarehouseLimit {
 					roleRes.DepotCapacity = newValues[i]
 				}else if atype == facility.TypeCost {
-					city.Cost -= int8(oldValues[i])
+					if len(oldValues) > i{
+						city.Cost -= int8(oldValues[i])
+					}
 					city.Cost += int8(newValues[i])
 				}
 				city.SyncExecute()
@@ -192,13 +204,17 @@ func (this*City) upCity(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 	for i, atype := range additions {
 		if atype == facility.TypeDurable{
-			city.MaxDurable -= oldValues[i]
-			city.MaxDurable += newValues[i]
+			if len(oldValues) > i{
+				city.MaxDurable -= oldValues[i]
+				city.CurDurable -= oldValues[i]
+			}
 
-			city.CurDurable -= oldValues[i]
+			city.MaxDurable += newValues[i]
 			city.CurDurable += newValues[i]
 		}else if atype == facility.TypeCost{
-			city.Cost -= int8(oldValues[i])
+			if len(oldValues) > i{
+				city.Cost -= int8(oldValues[i])
+			}
 			city.Cost += int8(newValues[i])
 		}
 	}
