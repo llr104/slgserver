@@ -94,7 +94,8 @@ func (this *armyLogic) exeUpdate(army *model.Army) {
 
 func (this *armyLogic) exeArrive(army *model.Army) {
 	if army.Cmd == model.ArmyCmdAttack {
-		if IsCanArrive(army.ToX, army.ToY, army.RId){
+		if IsCanArrive(army.ToX, army.ToY, army.RId) &&
+			IsCanDefend(army.ToX, army.ToY, army.RId) == false{
 			this.battle(army)
 		}
 		AMgr.ArmyBack(army)

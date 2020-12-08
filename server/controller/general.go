@@ -375,7 +375,6 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 			return
 		}
 
-		//判断驻守的地方是否是自己的领地
 		if reqObj.Cmd == model.ArmyCmdDefend {
 			if logic.IsCanDefend(reqObj.X, reqObj.Y, role.RId) == false {
 				rsp.Body.Code = constant.BuildCanNotDefend
@@ -384,6 +383,11 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 		}else if reqObj.Cmd == model.ArmyCmdReclamation{
 			if logic.RBMgr.BuildIsRId(reqObj.X, reqObj.Y, role.RId) == false {
 				rsp.Body.Code = constant.BuildNotMe
+				return
+			}
+		}else if reqObj.Cmd == model.ArmyCmdAttack{
+			if logic.IsCanDefend(reqObj.X, reqObj.Y, role.RId) == true {
+				rsp.Body.Code = constant.BuildCanNotAttack
 				return
 			}
 		}
