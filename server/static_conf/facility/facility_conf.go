@@ -81,7 +81,7 @@ func (this *facilityConf) Need(fType int8, level int8) (*NeedRes, bool) {
 
 	f, ok := this.facilitys[fType]
 	if ok {
-		if int8(len(f.Levels)) > level {
+		if int8(len(f.Levels)) >= level {
 			return &f.Levels[level-1].Need, true
 		}else{
 			return nil, false
@@ -98,7 +98,7 @@ func (this *facilityConf) GetValues(fType int8, level int8) []int {
 
 	f, ok := this.facilitys[fType]
 	if ok {
-		if int8(len(f.Levels)) > level {
+		if int8(len(f.Levels)) >= level {
 			 return f.Levels[level-1].Values
 		}else{
 			return []int{}
