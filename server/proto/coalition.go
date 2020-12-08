@@ -10,7 +10,6 @@ const (
 	UnionUntreated	= 0 //未处理
 	UnionRefuse		= 1 //拒绝
 	UnionAdopt   	= 2	//通过
-	UnionHas   		= 3	//已经有联盟了
 )
 
 type Member struct {
@@ -83,13 +82,13 @@ type ApplyRsp struct {
 
 //审核
 type VerifyReq struct {
-	Id     int `json:"id"`		//申请操作的id
-	Decide int `json:"decide"` 	//1是拒绝，2是通过
+	Id     int 	`json:"id"`			//申请操作的id
+	Decide int8 `json:"decide"` 	//1是拒绝，2是通过
 }
 
 type VerifyRsp struct {
-	Id     int `json:"id"`		//申请操作的id
-	Decide int `json:"decide"` 	//1是拒绝，2是通过
+	Id     int 	`json:"id"`			//申请操作的id
+	Decide int8 `json:"decide"` 	//1是拒绝，2是通过
 }
 
 //退出

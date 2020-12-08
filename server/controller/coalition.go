@@ -129,6 +129,15 @@ func (this *coalition) join(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
+	//判断当前是否已经有申请
+	has, _ = db.MasterDB.Table(model.CoalitionApply{}).Where(
+		"union_id=? and state=? and rid=?",
+		reqObj.Id, proto.UnionUntreated, role.RId).Get(&model.CoalitionApply{})
+	if has {
+		rsp.Body.Code = constant.HasApply
+		return
+	}
+
 	//写入申请列表
 	c := &model.CoalitionApply{
 		RId: role.RId,
@@ -160,7 +169,7 @@ func (this *coalition) verify(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 	apply := &model.CoalitionApply{}
 	ok, err := db.MasterDB.Table(model.CoalitionApply{}).Where(
-		"coalition_id=? and state=?", reqObj.Id, proto.UnionUntreated).Get(&apply)
+		"id=? and state=?", reqObj.Id, proto.UnionUntreated).Get(apply)
 	if ok && err == nil{
 		if u, ok := logic.UnionMgr.Get(apply.UnionId); ok {
 
@@ -176,7 +185,6 @@ func (this *coalition) verify(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 			if ok := logic.RAttributeMgr.IsHasUnion(apply.RId); ok {
 				rsp.Body.Code = constant.UnionAlreadyHas
-				apply.State = proto.UnionHas
 			}else{
 				if reqObj.Decide == proto.UnionAdopt{
 					//同意
@@ -188,7 +196,7 @@ func (this *coalition) verify(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 					}
 				}
 			}
-
+			apply.State = reqObj.Decide
 			db.MasterDB.Table(apply).ID(apply.Id).Cols("state").Update(apply)
 		}else{
 			rsp.Body.Code = constant.UnionNotFound
