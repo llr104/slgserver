@@ -50,12 +50,14 @@ func (this*generalMgr) createNPC() ([]*model.General, bool){
 	sess.Begin()
 
 	for _, v := range general.General.GMap {
-		r, ok := this.NewGeneral(v.CfgId, 0)
-		if ok == false {
-			sess.Rollback()
-			return nil, false
+		if v.Star == 3{
+			r, ok := this.NewGeneral(v.CfgId, 0)
+			if ok == false {
+				sess.Rollback()
+				return nil, false
+			}
+			gs = append(gs, r)
 		}
-		gs = append(gs, r)
 
 	}
 	if err := sess.Commit(); err != nil{
