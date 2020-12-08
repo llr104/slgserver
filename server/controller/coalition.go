@@ -258,7 +258,7 @@ func (this *coalition) applyList(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 	applys := make([]*model.CoalitionApply, 0)
 	err := db.MasterDB.Table(model.CoalitionApply{}).Where(
-		"coalition_id=? and state=?", reqObj.Id, 0).Find(&applys)
+		"union_id=? and state=?", reqObj.Id, 0).Find(&applys)
 	if err != nil{
 		rsp.Body.Code = constant.DBError
 		return
