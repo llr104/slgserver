@@ -20,7 +20,7 @@
     {
       "level": 1,
       "values": [
-        50
+        5
       ],
       "need": {
         "decree": 0,
@@ -33,7 +33,7 @@
     {
       "level": 2,
       "values": [
-        100
+        10
       ],
       "need": {
         "decree": 0,
@@ -46,7 +46,7 @@
     {
       "level": 3,
       "values": [
-        150
+        15
       ],
       "need": {
         "decree": 0,
@@ -59,7 +59,7 @@
     {
       "level": 4,
       "values": [
-        200
+        20
       ],
       "need": {
         "decree": 0,
@@ -72,7 +72,7 @@
     {
       "level": 5,
       "values": [
-        250
+        25
       ],
       "need": {
         "decree": 0,
