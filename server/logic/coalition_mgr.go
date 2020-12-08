@@ -72,7 +72,7 @@ func (this* coalitionMgr) Create(name string, rid int) (*model.Coalition, bool){
 	_, err := db.MasterDB.Table(new(model.Coalition)).InsertOne(m)
 	if err == nil {
 
-		RAttributeMgr.EnterUnion(rid, m.Id)
+		Union.MemberEnter(rid, m.Id)
 		this.mutex.Lock()
 		this.unions[m.Id] = m
 		this.mutex.Unlock()

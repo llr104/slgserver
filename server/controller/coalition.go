@@ -82,14 +82,14 @@ func (this *coalition) list(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	rspObj.List = make([]proto.Union, len(l))
 	for i, u := range l {
 		rspObj.List[i] = u.ToProto().(proto.Union)
-		main := make([]proto.Member, 0)
+		main := make([]proto.Major, 0)
 		if r, ok := logic.RMgr.Get(u.Chairman); ok {
-			m := proto.Member{Name: r.NickName, RId: r.RId, Title: proto.UnionChairman}
+			m := proto.Major{Name: r.NickName, RId: r.RId, Title: proto.UnionChairman}
 			main = append(main, m)
 		}
 
 		if r, ok := logic.RMgr.Get(u.ViceChairman); ok {
-			m := proto.Member{Name: r.NickName, RId: r.RId, Title: proto.UnionViceChairman}
+			m := proto.Major{Name: r.NickName, RId: r.RId, Title: proto.UnionViceChairman}
 			main = append(main, m)
 		}
 		rspObj.List[i].Major = main
@@ -169,7 +169,7 @@ func (this *coalition) verify(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	if ok && err == nil{
 		if u, ok := logic.UnionMgr.Get(apply.UnionId); ok {
 
-			if u.Chairman != role.RId && u.ViceChairman != u.ViceChairman {
+			if u.Chairman != role.RId && u.ViceChairman != role.RId {
 				rsp.Body.Code = constant.PermissionDenied
 				return
 			}
@@ -187,15 +187,7 @@ func (this *coalition) verify(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 					c, ok := logic.UnionMgr.Get(apply.UnionId)
 					if ok {
 						c.MemberArray = append(c.MemberArray, apply.RId)
-						logic.RAttributeMgr.EnterUnion(apply.RId, apply.UnionId)
-
-						if citys, ok := logic.RCMgr.GetByRId(apply.RId); ok {
-							for _, city := range citys {
-								city.UnionId = apply.UnionId
-								city.SyncExecute()
-							}
-						}
-
+						logic.Union.MemberEnter(apply.RId, apply.UnionId)
 						c.SyncExecute()
 					}
 				}
@@ -232,6 +224,11 @@ func (this *coalition) member(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	for _, rid := range union.MemberArray {
 		if role, ok := logic.RMgr.Get(rid); ok {
 			m := proto.Member{RId: role.RId, Name: role.NickName }
+			if main, ok := logic.RCMgr.GetMainCity(role.RId); ok {
+				m.X = main.X
+				m.Y = main.Y
+			}
+
 			if rid == union.Chairman {
 				m.Title = proto.UnionChairman
 			}else if rid == union.ViceChairman {
@@ -263,7 +260,7 @@ func (this *coalition) applyList(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	if u.Chairman != role.RId && u.ViceChairman != u.ViceChairman {
+	if u.Chairman != role.RId && u.ViceChairman != role.RId {
 		rsp.Body.Code = constant.PermissionDenied
 		return
 	}
@@ -310,7 +307,7 @@ func (this *coalition) exit(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	}
 
 	//盟主、副盟主不能退出
-	if u.Chairman == role.RId || u.ViceChairman == u.ViceChairman {
+	if u.Chairman == role.RId || u.ViceChairman == role.RId {
 		rsp.Body.Code = constant.UnionNotAllowExit
 		return
 	}
@@ -585,14 +582,14 @@ func (this *coalition) info(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		rsp.Body.Code = constant.UnionNotFound
 	}else{
 		rspObj.Info = u.ToProto().(proto.Union)
-		main := make([]proto.Member, 0)
+		main := make([]proto.Major, 0)
 		if r, ok := logic.RMgr.Get(u.Chairman); ok {
-			m := proto.Member{Name: r.NickName, RId: r.RId, Title: proto.UnionChairman}
+			m := proto.Major{Name: r.NickName, RId: r.RId, Title: proto.UnionChairman}
 			main = append(main, m)
 		}
 
 		if r, ok := logic.RMgr.Get(u.ViceChairman); ok {
-			m := proto.Member{Name: r.NickName, RId: r.RId, Title: proto.UnionViceChairman}
+			m := proto.Major{Name: r.NickName, RId: r.RId, Title: proto.UnionViceChairman}
 			main = append(main, m)
 		}
 		rspObj.Info.Major = main
