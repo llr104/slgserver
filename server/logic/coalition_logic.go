@@ -25,6 +25,7 @@ func (this* coalitionLogic) MemberExit(rid int) {
 	if rcs, ok := RCMgr.GetByRId(rid); ok {
 		for _, rc := range rcs {
 			rc.UnionId = 0
+			rc.SyncExecute()
 		}
 	}
 
