@@ -188,6 +188,14 @@ func (this *coalition) verify(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 					if ok {
 						c.MemberArray = append(c.MemberArray, apply.RId)
 						logic.RAttributeMgr.EnterUnion(apply.RId, apply.UnionId)
+
+						if citys, ok := logic.RCMgr.GetByRId(apply.RId); ok {
+							for _, city := range citys {
+								city.UnionId = apply.UnionId
+								city.SyncExecute()
+							}
+						}
+
 						c.SyncExecute()
 					}
 				}
