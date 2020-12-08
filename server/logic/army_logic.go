@@ -100,7 +100,7 @@ func (this *armyLogic) exeArrive(army *model.Army) {
 		AMgr.ArmyBack(army)
 	}else if army.Cmd == model.ArmyCmdDefend {
 		//呆在哪里不动
-		ok := RBMgr.BuildIsRId(army.ToX, army.ToY, army.RId)
+		ok := IsCanDefend(army.ToX, army.ToY, army.RId)
 		if ok {
 			//目前是自己的领地才能驻守
 			army.State = model.ArmyStop

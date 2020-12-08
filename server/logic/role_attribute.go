@@ -55,6 +55,19 @@ func (this* roleAttributeMgr) IsHasUnion(rid int) bool{
 	}
 }
 
+func (this* roleAttributeMgr) UnionId(rid int) int{
+
+	this.mutex.RLock()
+	r, ok := this.attribute[rid]
+	this.mutex.RUnlock()
+
+	if ok {
+		return r.UnionId
+	}else {
+		return  0
+	}
+}
+
 func (this* roleAttributeMgr) EnterUnion(rid, unionId int) {
 	attr, ok := this.Get(rid)
 	if ok {

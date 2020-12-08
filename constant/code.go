@@ -46,6 +46,7 @@ const ContentTooLong = 39		  //内容太长
 const NotBelongUnion = 40		  //不属于该联盟
 const PeopleIsFull = 41		  	  //用户已满
 const HasApply = 42	  	  		  //已经申请过了
+const BuildCanNotDefend = 43      //不能驻守
 
 
 
