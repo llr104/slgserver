@@ -156,3 +156,14 @@ type AbdicateReq struct {
 type AbdicateRsp struct {
 
 }
+
+
+//联盟信息
+type InfoReq struct {
+	Id	int	`json:"id"`	//联盟id
+}
+
+type InfoRsp struct {
+	Id   int   `json:"id"`	//联盟id
+	Info Union `json:"info"`
+}

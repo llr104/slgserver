@@ -40,7 +40,7 @@ func (this *coalition) InitRouter(r *net.Router) {
 	g.AddRouter("kick", this.kick)
 	g.AddRouter("appoint", this.appoint)
 	g.AddRouter("abdicate", this.abdicate)
-
+	g.AddRouter("info", this.info)
 
 }
 
@@ -80,19 +80,15 @@ func (this *coalition) list(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 	l := logic.UnionMgr.List()
 	rspObj.List = make([]proto.Union, len(l))
-	for i, v := range l {
-		rspObj.List[i].Id = v.Id
-		rspObj.List[i].Name = v.Name
-		rspObj.List[i].Notice = v.Notice
-		rspObj.List[i].Cnt = v.Cnt()
-
+	for i, u := range l {
+		rspObj.List[i] = u.ToProto().(proto.Union)
 		main := make([]proto.Member, 0)
-		if r, ok := logic.RMgr.Get(v.Chairman); ok {
+		if r, ok := logic.RMgr.Get(u.Chairman); ok {
 			m := proto.Member{Name: r.NickName, RId: r.RId, Title: proto.UnionChairman}
 			main = append(main, m)
 		}
 
-		if r, ok := logic.RMgr.Get(v.ViceChairman); ok {
+		if r, ok := logic.RMgr.Get(u.ViceChairman); ok {
 			m := proto.Member{Name: r.NickName, RId: r.RId, Title: proto.UnionViceChairman}
 			main = append(main, m)
 		}
@@ -564,4 +560,33 @@ func (this *coalition) abdicate(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		rsp.Body.Code = constant.NotBelongUnion
 	}
 
+}
+
+//联盟信息
+func (this *coalition) info(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+	reqObj := &proto.InfoReq{}
+	rspObj := &proto.InfoRsp{}
+	mapstructure.Decode(req.Body.Msg, reqObj)
+	rsp.Body.Msg = rspObj
+	rspObj.Id = reqObj.Id
+
+	rsp.Body.Code = constant.OK
+
+	u, ok := logic.UnionMgr.Get(reqObj.Id)
+	if ok == false{
+		rsp.Body.Code = constant.UnionNotFound
+	}else{
+		rspObj.Info = u.ToProto().(proto.Union)
+		main := make([]proto.Member, 0)
+		if r, ok := logic.RMgr.Get(u.Chairman); ok {
+			m := proto.Member{Name: r.NickName, RId: r.RId, Title: proto.UnionChairman}
+			main = append(main, m)
+		}
+
+		if r, ok := logic.RMgr.Get(u.ViceChairman); ok {
+			m := proto.Member{Name: r.NickName, RId: r.RId, Title: proto.UnionViceChairman}
+			main = append(main, m)
+		}
+		rspObj.Info.Major = main
+	}
 }

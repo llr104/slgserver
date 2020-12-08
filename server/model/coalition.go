@@ -6,6 +6,7 @@ import (
 	"go.uber.org/zap"
 	"slgserver/db"
 	"slgserver/log"
+	"slgserver/server/proto"
 	"time"
 	"xorm.io/xorm"
 )
@@ -64,6 +65,17 @@ type Coalition struct {
 	Ctime        time.Time `xorm:"ctime"`
 }
 
+
+func (this *Coalition) ToProto() interface{}{
+	p := proto.Union{}
+
+	p.Id = this.Id
+	p.Name = this.Name
+	p.Notice = this.Notice
+	p.Cnt = this.Cnt()
+
+	return p
+}
 
 func (this *Coalition) TableName() string {
 	return "coalition"
