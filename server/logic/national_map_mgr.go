@@ -105,6 +105,27 @@ func (this* NationalMapMgr) IsCanBuild(x, y int) bool {
 	}
 }
 
+func (this* NationalMapMgr) IsCanBuildCity(x, y int) bool {
+	for i := x-2; i <= x+2; i++ {
+		if i < 0 || i > global.MapWith{
+			return false
+		}
+
+		for j := y-2; j <= y+2; j++ {
+			if j < 0 || j > global.MapHeight{
+				return false
+			}
+		}
+
+		if this.IsCanBuild(x, y) == false ||
+			RBMgr.IsEmpty(x, y) == false ||
+			RCMgr.IsEmpty(x, y) == false{
+			return false
+		}
+	}
+	return true
+}
+
 func (this* NationalMapMgr) PositionBuild(x, y int) (model.NationalMap, bool) {
 	posIndex := ToPosition(x, y)
 	this.mutex.RLock()

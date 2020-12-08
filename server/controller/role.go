@@ -172,7 +172,7 @@ func (this*Role) enterServer(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 			for true {
 				x := rand.Intn(global.MapWith)
 				y := rand.Intn(global.MapHeight)
-				if logic.NMMgr.IsCanBuild(x, y) && logic.RBMgr.IsEmpty(x, y) && logic.RCMgr.IsEmpty(x, y){
+				if logic.NMMgr.IsCanBuildCity(x, y){
 					//建立城市
 					c := &model.MapRoleCity{RId: role.RId, X: x, Y: y,
 						IsMain: 1,
