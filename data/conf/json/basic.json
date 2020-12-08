@@ -14,7 +14,7 @@
     "recovery_physical_power": 1,
     "reclamation_time": 30,
     "reclamation_cost": 1,
-    "draw_general_cost": 10,
+    "draw_general_cost": 100,
     "pr_pont": 1000
   },
   "role": {
