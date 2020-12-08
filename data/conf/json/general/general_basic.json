@@ -8,48 +8,98 @@
     },
     {
       "level": 2,
-      "exp": 100,
+      "exp": 1000,
       "soldiers": 200
     },
     {
       "level": 3,
-      "exp": 1000,
+      "exp": 2000,
       "soldiers": 300
     },
     {
       "level": 4,
-      "exp": 2000,
+      "exp": 3000,
       "soldiers": 400
     },
     {
       "level": 5,
-      "exp": 3000,
+      "exp": 4000,
       "soldiers": 500
     },
     {
       "level": 6,
-      "exp": 4000,
+      "exp": 5000,
       "soldiers": 600
     },
     {
       "level": 7,
-      "exp": 5000,
+      "exp": 6000,
       "soldiers": 700
     },
     {
       "level": 8,
-      "exp": 6000,
+      "exp": 7500,
       "soldiers": 800
     },
     {
       "level": 9,
-      "exp": 6000,
+      "exp": 9000,
       "soldiers": 900
     },
     {
       "level": 10,
-      "exp": 7000,
+      "exp": 11000,
       "soldiers": 1000
+    },
+    {
+      "level": 11,
+      "exp": 12500,
+      "soldiers": 1100
+    },
+    {
+      "level": 12,
+      "exp": 15000,
+      "soldiers": 1200
+    },
+    {
+      "level": 13,
+      "exp": 17000,
+      "soldiers": 1300
+    },
+    {
+      "level": 14,
+      "exp": 19000,
+      "soldiers": 1400
+    },
+    {
+      "level": 15,
+      "exp": 23000,
+      "soldiers": 1500
+    },    {
+      "level": 16,
+      "exp": 26000,
+      "soldiers": 1600
+    },
+    {
+      "level": 17,
+      "exp": 29000,
+      "soldiers": 1700
+    },
+    {
+      "level": 18,
+      "exp": 31000,
+      "soldiers": 1800
+    },
+    {
+      "level": 19,
+      "exp": 35000,
+      "soldiers": 1900
+    },
+    {
+      "level": 20,
+      "exp": 50000,
+      "soldiers": 2000
     }
+
   ]
 }
