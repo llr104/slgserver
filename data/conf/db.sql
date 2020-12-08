@@ -199,7 +199,7 @@ CREATE TABLE IF NOT EXISTS `coalition` (
 
 CREATE TABLE IF NOT EXISTS `coalition_apply` (
    `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
-   `coalition_id` int unsigned NOT NULL COMMENT '联盟id',
+   `union_id` int unsigned NOT NULL COMMENT '联盟id',
    `rid` int unsigned NOT NULL COMMENT '申请者的rid',
    `state` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '申请状态，0未处理，1拒绝，2通过',
    `ctime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

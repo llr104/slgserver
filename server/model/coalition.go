@@ -104,11 +104,11 @@ func (this *Coalition) SyncExecute() {
 
 
 type CoalitionApply struct {
-	Id          int       `xorm:"id pk autoincr"`
-	CoalitionId int       `xorm:"coalition_id"`
-	RId         int       `xorm:"rid"`
-	State       int8      `xorm:"state"`
-	Ctime       time.Time `xorm:"ctime"`
+	Id      int       `xorm:"id pk autoincr"`
+	UnionId int       `xorm:"union_id"`
+	RId     int       `xorm:"rid"`
+	State   int8      `xorm:"state"`
+	Ctime   time.Time `xorm:"ctime"`
 }
 
 func (this *CoalitionApply) TableName() string {

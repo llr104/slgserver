@@ -132,7 +132,7 @@ func (this *coalition) join(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	//写入申请列表
 	c := &model.CoalitionApply{
 		RId: role.RId,
-		CoalitionId: reqObj.Id,
+		UnionId: reqObj.Id,
 		Ctime: time.Now(),
 		State: proto.UnionUntreated}
 
@@ -157,11 +157,12 @@ func (this *coalition) verify(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
 
+
 	apply := &model.CoalitionApply{}
 	ok, err := db.MasterDB.Table(model.CoalitionApply{}).Where(
 		"coalition_id=? and state=?", reqObj.Id, proto.UnionUntreated).Get(&apply)
 	if ok && err == nil{
-		if u, ok := logic.UnionMgr.Get(apply.Id); ok {
+		if u, ok := logic.UnionMgr.Get(apply.UnionId); ok {
 
 			if u.Chairman != role.RId && u.ViceChairman != u.ViceChairman {
 				rsp.Body.Code = constant.PermissionDenied
@@ -173,15 +174,16 @@ func (this *coalition) verify(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 				return
 			}
 
-			if ok := logic.RAttributeMgr.IsHasUnion(role.RId); ok {
+			if ok := logic.RAttributeMgr.IsHasUnion(apply.RId); ok {
 				rsp.Body.Code = constant.UnionAlreadyHas
 				apply.State = proto.UnionHas
 			}else{
 				if reqObj.Decide == proto.UnionAdopt{
 					//同意
-					c, ok := logic.UnionMgr.Get(reqObj.Id)
+					c, ok := logic.UnionMgr.Get(apply.UnionId)
 					if ok {
-						c.MemberArray = append(c.MemberArray, role.RId)
+						c.MemberArray = append(c.MemberArray, apply.RId)
+						logic.RAttributeMgr.EnterUnion(apply.RId, apply.UnionId)
 						c.SyncExecute()
 					}
 				}
@@ -316,7 +318,7 @@ func (this *coalition) exit(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 //解散
 func (this *coalition) dismiss(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	reqObj := &proto.DismissReq{}
-	rspObj := &proto.DisposeRsp{}
+	rspObj := &proto.DismissRsp{}
 	mapstructure.Decode(req.Body.Msg, reqObj)
 	rsp.Body.Msg = rspObj
 
@@ -343,6 +345,8 @@ func (this *coalition) dismiss(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
+	logic.UnionMgr.Remove(attribute.UnionId)
+
 	for _, rid := range u.MemberArray {
 		logic.Union.MemberExit(rid)
 	}
@@ -351,6 +355,7 @@ func (this *coalition) dismiss(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	u.MemberArray = []int{}
 	attribute.UnionId = 0
 	u.SyncExecute()
+
 
 }
 
