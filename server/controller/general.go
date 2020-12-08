@@ -258,8 +258,9 @@ func (this*General) conscript(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 			continue
 		}
 		l, e := general.GenBasic.GetLevel(g.Level)
+		add := logic.RFMgr.GetAdditions(army.CityId, facility.TypeSoldierLimit)
 		if e == nil{
-			if l.Soldiers < reqObj.Cnts[i]+army.SoldierArray[i]{
+			if l.Soldiers + add[0] < reqObj.Cnts[i]+army.SoldierArray[i]{
 				rsp.Body.Code = constant.OutArmyLimit
 				return
 			}

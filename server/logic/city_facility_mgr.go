@@ -77,12 +77,12 @@ func (this*facilityMgr) GetFacility(cid int, fType int8) (*model.Facility, bool)
 */
 func (this*facilityMgr) GetAdditions(cid int, additionType... int8 ) []int{
 	cf, ok := this.Get(cid)
+	ret := make([]int, len(additionType))
 	if ok == false{
-		return []int{}
+		return ret
 	}
 
-	ret := make([]int, 0)
-	for _, at := range additionType {
+	for i, at := range additionType {
 		total := 0
 		facilities := cf.Facility()
 		for _, f := range facilities {
@@ -97,7 +97,7 @@ func (this*facilityMgr) GetAdditions(cid int, additionType... int8 ) []int{
 				}
 			}
 		}
-		ret = append(ret, total)
+		ret[i] = total
 	}
 
 	return ret

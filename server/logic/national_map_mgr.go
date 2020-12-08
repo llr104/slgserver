@@ -42,7 +42,7 @@ func Distance(begX, begY, endX, endY int) float64 {
 
 func TravelTime(speed, begX, begY, endX, endY int) int {
 	dis := Distance(begX, begY, endX, endY)
-	t := dis / float64(speed)*1000000
+	t := dis / float64(speed)*100000000
 	return int(t)
 }
 
