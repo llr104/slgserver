@@ -46,7 +46,7 @@ func (this *Basic) GetLevel(l int8) (*gLevel, error){
 	if l <= 0{
 		return nil, errors.New("level error")
 	}
-	if int(l) < len(this.Levels){
+	if int(l) <= len(this.Levels){
 		return &this.Levels[l-1], nil
 	}else{
 		return nil, errors.New("level error")
