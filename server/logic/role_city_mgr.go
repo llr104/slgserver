@@ -140,9 +140,23 @@ func (this*roleCityMgr) ScanBlock(x, y, length int) []*model.MapRoleCity {
 
 func (this*roleCityMgr) GetByRId(rid int) ([]*model.MapRoleCity, bool){
 	this.mutex.RLock()
-	this.mutex.RUnlock()
 	r, ok := this.roleCity[rid]
+	this.mutex.RUnlock()
 	return r, ok
+}
+
+func (this*roleCityMgr) GetMainCity(rid int) (*model.MapRoleCity, bool){
+	citys, ok := this.GetByRId(rid)
+	if ok == false {
+		return nil, false
+	}else{
+		for _, city := range citys {
+			if city.IsMain == 1{
+				return city, true
+			}
+		}
+	}
+	return nil, false
 }
 
 func (this*roleCityMgr) Get(cid int) (*model.MapRoleCity, bool){

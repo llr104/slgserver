@@ -16,14 +16,23 @@ type Member struct {
 	RId   int    `json:"rid"`
 	Name  string `json:"name"`
 	Title int8   `json:"title"`
+	X     int    `json:"x"`
+	Y     int    `json:"y"`
 }
+
+type Major struct {
+	RId   int    `json:"rid"`
+	Name  string `json:"name"`
+	Title int8   `json:"title"`
+}
+
 
 type Union struct {
 	Id     int      `json:"id"`     //联盟id
 	Name   string   `json:"name"`   //联盟名字
 	Cnt    int      `json:"cnt"`    //联盟人数
 	Notice string   `json:"notice"` //公告
-	Major  []Member `json:"major"`  //联盟主要人物，盟主副盟主
+	Major  []Major 	`json:"major"`  //联盟主要人物，盟主副盟主
 }
 
 type ApplyItem struct {

@@ -82,14 +82,14 @@ func (this *coalition) list(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	rspObj.List = make([]proto.Union, len(l))
 	for i, u := range l {
 		rspObj.List[i] = u.ToProto().(proto.Union)
-		main := make([]proto.Member, 0)
+		main := make([]proto.Major, 0)
 		if r, ok := logic.RMgr.Get(u.Chairman); ok {
-			m := proto.Member{Name: r.NickName, RId: r.RId, Title: proto.UnionChairman}
+			m := proto.Major{Name: r.NickName, RId: r.RId, Title: proto.UnionChairman}
 			main = append(main, m)
 		}
 
 		if r, ok := logic.RMgr.Get(u.ViceChairman); ok {
-			m := proto.Member{Name: r.NickName, RId: r.RId, Title: proto.UnionViceChairman}
+			m := proto.Major{Name: r.NickName, RId: r.RId, Title: proto.UnionViceChairman}
 			main = append(main, m)
 		}
 		rspObj.List[i].Major = main
@@ -232,6 +232,11 @@ func (this *coalition) member(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	for _, rid := range union.MemberArray {
 		if role, ok := logic.RMgr.Get(rid); ok {
 			m := proto.Member{RId: role.RId, Name: role.NickName }
+			if main, ok := logic.RCMgr.GetMainCity(role.RId); ok {
+				m.X = main.X
+				m.Y = main.Y
+			}
+
 			if rid == union.Chairman {
 				m.Title = proto.UnionChairman
 			}else if rid == union.ViceChairman {
@@ -585,14 +590,14 @@ func (this *coalition) info(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		rsp.Body.Code = constant.UnionNotFound
 	}else{
 		rspObj.Info = u.ToProto().(proto.Union)
-		main := make([]proto.Member, 0)
+		main := make([]proto.Major, 0)
 		if r, ok := logic.RMgr.Get(u.Chairman); ok {
-			m := proto.Member{Name: r.NickName, RId: r.RId, Title: proto.UnionChairman}
+			m := proto.Major{Name: r.NickName, RId: r.RId, Title: proto.UnionChairman}
 			main = append(main, m)
 		}
 
 		if r, ok := logic.RMgr.Get(u.ViceChairman); ok {
-			m := proto.Member{Name: r.NickName, RId: r.RId, Title: proto.UnionViceChairman}
+			m := proto.Major{Name: r.NickName, RId: r.RId, Title: proto.UnionViceChairman}
 			main = append(main, m)
 		}
 		rspObj.Info.Major = main
