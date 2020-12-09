@@ -140,7 +140,15 @@ func (this*City) upFacility(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 						city.Cost -= int8(oldValues[i])
 					}
 					city.Cost += int8(newValues[i])
+				}else if atype == facility.TypeDurable{
+					if len(oldValues) > i{
+						city.MaxDurable -= oldValues[i]
+						city.CurDurable -= oldValues[i]
+					}
+					city.MaxDurable += newValues[i]
+					city.CurDurable += newValues[i]
 				}
+
 				city.SyncExecute()
 				roleRes.SyncExecute()
 			}
