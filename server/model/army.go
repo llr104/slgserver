@@ -182,19 +182,20 @@ func (this *Army) Position() (int, int){
 	x := 0
 	y := 0
 	if this.Cmd == ArmyCmdBack{
-		diffX := this.ToX - this.FromX
-		diffY := this.ToX - this.FromY
-		x = int(rate*float32(diffX)) + this.FromX
-		y = int(rate*float32(diffY)) + this.FromY
-	}else{
 		diffX := this.FromX - this.ToX
 		diffY := this.FromY - this.ToY
+		x = int(rate*float32(diffX)) + this.ToX
+		y = int(rate*float32(diffY)) + this.ToY
+	}else{
+		diffX := this.ToX - this.FromX
+		diffY := this.ToY - this.FromY
 		x = int(rate*float32(diffX)) + this.FromX
 		y = int(rate*float32(diffY)) + this.FromY
 	}
 
 	x = util.MinInt(util.MaxInt(x, 0), global.MapWith)
 	y = util.MinInt(util.MaxInt(y, 0), global.MapHeight)
+	log.DefaultLog.Info("army Position:", zap.Int("x", x), zap.Int("y", y))
 	return x, y
 }
 
