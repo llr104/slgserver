@@ -51,5 +51,14 @@ func IsCanDefend(x, y, rid int) bool{
 			return b.UnionId == unionId
 		}
 	}
+
+	c, ok := RCMgr.PositionCity(x, y)
+	if ok {
+		if c.RId == rid{
+			return true
+		}else if c.UnionId > 0 {
+			return c.UnionId == unionId
+		}
+	}
 	return false
 }

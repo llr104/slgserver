@@ -370,10 +370,6 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 			return
 		}
 
-		if logic.IsCanArrive(reqObj.X, reqObj.Y, role.RId) == false{
-			rsp.Body.Code = constant.UnReachable
-			return
-		}
 
 		if reqObj.Cmd == model.ArmyCmdDefend {
 			if logic.IsCanDefend(reqObj.X, reqObj.Y, role.RId) == false {
@@ -386,6 +382,11 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 				return
 			}
 		}else if reqObj.Cmd == model.ArmyCmdAttack{
+			if logic.IsCanArrive(reqObj.X, reqObj.Y, role.RId) == false{
+				rsp.Body.Code = constant.UnReachable
+				return
+			}
+
 			if logic.IsCanDefend(reqObj.X, reqObj.Y, role.RId) == true {
 				rsp.Body.Code = constant.BuildCanNotAttack
 				return
@@ -417,10 +418,11 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 		army.Cmd = reqObj.Cmd
 		army.State = model.ArmyRunning
 
-		speed := logic.AMgr.GetSpeed(army)
-		t := logic.TravelTime(speed, army.FromX, army.FromY, army.ToX, army.ToY)
+		//speed := logic.AMgr.GetSpeed(army)
+		//t := logic.TravelTime(speed, army.FromX, army.FromY, army.ToX, army.ToY)
 		army.Start = time.Now()
-		army.End = time.Now().Add(time.Duration(t) * time.Millisecond)
+		//army.End = time.Now().Add(time.Duration(t) * time.Millisecond)
+		army.End = time.Now().Add(10*time.Second)
 
 		logic.AMgr.PushAction(army)
 		rspObj.Army = army.ToProto().(proto.Army)
