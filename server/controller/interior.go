@@ -39,6 +39,7 @@ func (this*Interior) collection(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 	}
 	roleRes.Gold += roleRes.GoldYield
+	roleRes.SyncExecute()
 
 }
 
