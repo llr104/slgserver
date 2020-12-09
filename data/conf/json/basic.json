@@ -56,6 +56,10 @@
         "soilders": 500
       }
     ]
+  },
+  "union": {
+    "des": "联盟的一些配置",
+    "member_limit": 100
   }
 
 }
