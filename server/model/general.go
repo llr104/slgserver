@@ -121,6 +121,15 @@ func (this *General) GetStrategy() int{
 	return 0
 }
 
+//获取阵营
+func (this* General) GetCamp() int8 {
+	cfg, ok := general.General.GMap[this.CfgId]
+	if ok {
+		return cfg.Camp
+	}
+	return 0
+}
+
 /* 推送同步 begin */
 func (this *General) IsCellView() bool{
 	return false

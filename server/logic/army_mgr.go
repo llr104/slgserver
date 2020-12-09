@@ -6,6 +6,7 @@ import (
 	"slgserver/log"
 	"slgserver/server/model"
 	"slgserver/server/static_conf"
+	"slgserver/server/static_conf/facility"
 	"sync"
 	"time"
 )
@@ -303,7 +304,14 @@ func (this*armyMgr) GetSpeed(army* model.Army) int{
 			}
 		}
 	}
-	return speed
+
+	//阵营加成
+	camp := army.GetCamp()
+	campAdds := []int{0}
+	if camp > 0{
+		campAdds = RFMgr.GetAdditions(army.CityId, facility.TypeHanAddition-1+camp)
+	}
+	return speed + campAdds[0]
 }
 
 //能否上阵

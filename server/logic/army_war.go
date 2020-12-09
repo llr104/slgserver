@@ -95,6 +95,19 @@ func (this* armyWar) init() {
 			facility.TypeStrategy)
 	}
 
+	//阵营加成
+	aCampAdds := []int{0}
+	aCamp := this.attack.GetCamp()
+	if aCamp > 0{
+		aCampAdds = RFMgr.GetAdditions(this.defense.CityId, facility.TypeHanAddition-1+aCamp)
+	}
+
+	dCampAdds := []int{0}
+	dCamp := this.attack.GetCamp()
+	if dCamp > 0 {
+		dCampAdds = RFMgr.GetAdditions(this.defense.CityId, facility.TypeHanAddition-1+aCamp)
+	}
+
 	this.attackPos = make([]*armyPosition, 0)
 	this.defensePos = make([]*armyPosition, 0)
 
@@ -105,11 +118,11 @@ func (this* armyWar) init() {
 			pos := &armyPosition{
 				general:  g,
 				soldiers: this.attack.SoldierArray[i],
-				force:    g.GetForce()  + attackAdds[0],
-				defense:  g.GetDefense() + attackAdds[1],
-				speed:    g.GetSpeed() + attackAdds[2],
-				strategy: g.GetStrategy() + attackAdds[3],
-				destroy:  g.GetDestroy(),
+				force:    g.GetForce()  + attackAdds[0] + aCampAdds[0],
+				defense:  g.GetDefense() + attackAdds[1] + aCampAdds[0],
+				speed:    g.GetSpeed() + attackAdds[2] + aCampAdds[0],
+				strategy: g.GetStrategy() + attackAdds[3] + aCampAdds[0],
+				destroy:  g.GetDestroy() + aCampAdds[0],
 				arms:     g.CurArms,
 				position: i,
 			}
@@ -124,11 +137,11 @@ func (this* armyWar) init() {
 			pos := &armyPosition{
 				general:  g,
 				soldiers: this.defense.SoldierArray[i],
-				force:    g.GetForce()  + defenseAdds[0],
-				defense:  g.GetDefense() + defenseAdds[1],
-				speed:    g.GetSpeed() + defenseAdds[2],
-				strategy: g.GetStrategy() + defenseAdds[3],
-				destroy:  g.GetDestroy(),
+				force:    g.GetForce() + defenseAdds[0] + dCampAdds[0],
+				defense:  g.GetDefense() + defenseAdds[1] + dCampAdds[0],
+				speed:    g.GetSpeed() + defenseAdds[2] + dCampAdds[0],
+				strategy: g.GetStrategy() + defenseAdds[3] + dCampAdds[0],
+				destroy:  g.GetDestroy() + dCampAdds[0],
 				arms:     g.CurArms,
 				position: i,
 			}

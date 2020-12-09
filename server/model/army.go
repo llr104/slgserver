@@ -143,6 +143,24 @@ func (this *Army) ToGeneral() {
 	}
 }
 
+//获取军队阵营
+func (this* Army) GetCamp() int8 {
+	var camp int8 = 0
+	for _, g := range this.Gens {
+		if g == nil{
+			return 0
+		}
+		if camp == 0{
+			camp = g.GetCamp()
+		}else {
+			if camp != g.GetCamp(){
+				return 0
+			}
+		}
+	}
+	return camp
+}
+
 
 /* 推送同步 begin */
 func (this *Army) IsCellView() bool{
