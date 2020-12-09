@@ -24,9 +24,6 @@ var GMgr = &generalMgr{
 	genByGId: make(map[int]*model.General),
 }
 
-
-
-
 func (this*generalMgr) updatePhysicalPower() {
 	limit := static_conf.Basic.General.PhysicalPowerLimit
 	recoverCnt := static_conf.Basic.General.RecoveryPhysicalPower
