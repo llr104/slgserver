@@ -30,7 +30,7 @@ func init() {
 }
 
 type armyLogic struct {
-	passby			sync.Mutex
+	passby			sync.RWMutex
 	sys            	*sysArmyLogic
 	giveUpId       	chan int
 	arriveArmys    	chan *model.Army
@@ -58,6 +58,16 @@ func (this *armyLogic) running(){
 						army.CheckSyncCell()
 					}
 				}
+
+				for posId, armys := range this.stopInPosArmys {
+					for _, army := range armys {
+						if _, ok := this.passbyPosArmys[posId]; ok == false {
+							this.passbyPosArmys[posId] = make(map[int]*model.Army)
+						}
+						this.passbyPosArmys[posId][army.Id] = army
+					}
+				}
+
 				this.passby.Unlock()
 			}
 			case army := <-this.updateArmys:{
@@ -152,13 +162,10 @@ func (this *armyLogic) ScanBlock(x, y, length int) []*model.Army {
 		return nil
 	}
 
-	this.passby.Lock()
-	defer this.passby.Unlock()
-
 	maxX := util.MinInt(global.MapWith, x+length-1)
 	maxY := util.MinInt(global.MapHeight, y+length-1)
-
 	out := make([]*model.Army, 0)
+	this.passby.RLock()
 	for i := x; i <= maxX; i++ {
 		for j := y; j <= maxY; j++ {
 			posId := ToPosition(i, j)
@@ -170,6 +177,9 @@ func (this *armyLogic) ScanBlock(x, y, length int) []*model.Army {
 			}
 		}
 	}
+	this.passby.RUnlock()
+
+
 	return out
 }
 
@@ -192,10 +202,12 @@ func (this *armyLogic) deleteArmy(x, y int) {
 
 func (this* armyLogic) addArmy(army *model.Army)  {
 	posId := ToPosition(army.ToX, army.ToY)
+
 	if _, ok := this.stopInPosArmys[posId]; ok == false {
 		this.stopInPosArmys[posId] = make(map[int]*model.Army)
 	}
 	this.stopInPosArmys[posId][army.Id] = army
+
 }
 
 //简单战斗
@@ -215,6 +227,7 @@ func (this* armyLogic) executeBuild(army *model.Army)  {
 
 	posId := ToPosition(army.ToX, army.ToY)
 	posArmys, isRoleEnemy := this.stopInPosArmys[posId]
+
 	var enemys []*model.Army
 	if isRoleEnemy == false {
 		enemys = this.sys.GetArmy(army.ToX, army.ToY)
