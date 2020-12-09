@@ -197,7 +197,8 @@ func (this* armyWar) round() (*warRound, bool) {
 		//计算
 		posDefense, index := this.randArmyPosition(defense)
 		if posDefense == nil{
-			continue
+			isEnd = true
+			goto end
 		}
 
 		hurm := posAttack.soldiers *posAttack.force /1000
@@ -232,7 +233,8 @@ func (this* armyWar) round() (*warRound, bool) {
 		//计算
 		posDefense, index := this.randArmyPosition(attack)
 		if posDefense == nil{
-			continue
+			isEnd = true
+			goto end
 		}
 
 		hurm := posAttack.soldiers *posAttack.force /10000
