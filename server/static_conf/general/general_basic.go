@@ -55,14 +55,13 @@ func (this *Basic) GetLevel(l int8) (*gLevel, error){
 
 func (this* Basic) ExpToLevel(exp int) (int8, int){
 	var level int8 = 0
-	limitExp := 0
-
+	limitExp := this.Levels[len(this.Levels)-1].Exp
 	for _, v := range this.Levels {
 		if exp >= v.Exp && v.Level > level {
 			level = v.Level
-			limitExp = v.Exp
 		}
 	}
+
 	if limitExp < exp {
 		return level, limitExp
 	}else{
