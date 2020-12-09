@@ -54,27 +54,27 @@
     {
       "type": 11,
       "des": "汉阵营加成",
-      "value": "+%n%%"
+      "value": "+%n%"
     },
     {
       "type": 12,
       "des": "群阵营加成",
-      "value": "+%n%%"
+      "value": "+%n%"
     },
     {
       "type": 13,
       "des": "魏阵营加成",
-      "value": "+%n%%"
+      "value": "+%n%"
     },
     {
       "type": 14,
       "des": "蜀阵营加成",
-      "value": "+%n%%"
+      "value": "+%n%"
     },
     {
       "type": 15,
       "des": "吴阵营加成",
-      "value": "+%n%%"
+      "value": "+%n%"
     },
 
     {
