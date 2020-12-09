@@ -99,7 +99,7 @@ func (this* armyWar) init() {
 	aCampAdds := []int{0}
 	aCamp := this.attack.GetCamp()
 	if aCamp > 0{
-		aCampAdds = RFMgr.GetAdditions(this.defense.CityId, facility.TypeHanAddition-1+aCamp)
+		aCampAdds = RFMgr.GetAdditions(this.attack.CityId, facility.TypeHanAddition-1+aCamp)
 	}
 
 	dCampAdds := []int{0}

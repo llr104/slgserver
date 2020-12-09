@@ -13,10 +13,10 @@ const (
 	TypeReserveLimit 	= 9 //预备役上限
 	TypeUnkonw			= 10
 	TypeHanAddition 	= 11
-	TypeWeiAddition 	= 12
-	TypeShuAddition 	= 13
-	TypeWuAddition		= 14
-	TypeQunAddition		= 15
+	TypeQunAddition		= 12
+	TypeWeiAddition 	= 13
+	TypeShuAddition 	= 14
+	TypeWuAddition		= 15
 	TypeDealTaxRate		= 16//交易税率
 	TypeWood			= 17
 	TypeIron			= 18
