@@ -211,32 +211,64 @@ func (this* armyLogic) addArmy(army *model.Army)  {
 }
 
 //简单战斗
-func (this *armyLogic) battle(army *model.Army) {
-	_, ok := RCMgr.PositionCity(army.ToX, army.ToY)
+func (this *armyLogic) battle(attackArmy *model.Army) {
+	city, ok := RCMgr.PositionCity(attackArmy.ToX, attackArmy.ToY)
 	if ok {
-		//打城池
-		AMgr.ArmyBack(army)
-		return
+		//打玩家城池
+		var enemys []*model.Army
+		//驻守队伍被打
+		posId := ToPosition(attackArmy.ToX, attackArmy.ToY)
+		posArmys, ok := this.stopInPosArmys[posId]
+		if ok {
+			for _, army := range posArmys {
+				enemys = append(enemys, army)
+			}
+		}
+
+		//城内空闲的队伍被打
+		if armys, ok := AMgr.GetByCity(city.CityId); ok {
+			for _, enemy := range armys {
+				if enemy.Cmd == model.ArmyCmdIdle{
+					enemys = append(enemys, enemy)
+				}
+			}
+		}
+
+		if len(enemys) == 0 {
+			//没有队伍
+			destory := GMgr.GetDestroy(attackArmy)
+			city.CurDurable = util.MaxInt(0, city.CurDurable - destory)
+			city.SyncExecute()
+		}else{
+			lastWar, warReports := this.trigger(attackArmy, enemys, true)
+			if lastWar.result > 1 {
+				destory := GMgr.GetDestroy(attackArmy)
+				wr := warReports[len(warReports)-1]
+				wr.DestroyDurable = util.MinInt(destory, city.CurDurable)
+				city.CurDurable = util.MaxInt(0, city.CurDurable - destory)
+				if city.CurDurable == 0{
+					//攻占了玩家的城市
+					wr.Occupy = 1
+				}else{
+					wr.Occupy = 0
+				}
+				city.SyncExecute()
+			}
+			for _, wr := range warReports {
+				wr.SyncExecute()
+			}
+		}
+
+	}else{
+		//打建筑
+		this.executeBuild(attackArmy)
 	}
 
-	this.executeBuild(army)
 }
 
-func (this* armyLogic) executeBuild(army *model.Army)  {
-	roleBuid, _ := RBMgr.PositionBuild(army.ToX, army.ToY)
+func (this* armyLogic) trigger(army *model.Army, enemys []*model.Army, isRoleEnemy bool) (*WarResult, []*model.WarReport) {
 
 	posId := ToPosition(army.ToX, army.ToY)
-	posArmys, isRoleEnemy := this.stopInPosArmys[posId]
-
-	var enemys []*model.Army
-	if isRoleEnemy == false {
-		enemys = this.sys.GetArmy(army.ToX, army.ToY)
-	}else{
-		for _, v := range posArmys {
-			enemys = append(enemys, v)
-		}
-	}
-
 	warReports := make([]*model.WarReport, 0)
 	var lastWar *WarResult = nil
 
@@ -328,9 +360,27 @@ func (this* armyLogic) executeBuild(army *model.Army)  {
 			}
 			enemy.SyncExecute()
 		}
-
 	}
 	army.SyncExecute()
+	return lastWar, warReports
+}
+
+func (this* armyLogic) executeBuild(army *model.Army)  {
+	roleBuid, _ := RBMgr.PositionBuild(army.ToX, army.ToY)
+
+	posId := ToPosition(army.ToX, army.ToY)
+	posArmys, isRoleEnemy := this.stopInPosArmys[posId]
+
+	var enemys []*model.Army
+	if isRoleEnemy == false {
+		enemys = this.sys.GetArmy(army.ToX, army.ToY)
+	}else{
+		for _, v := range posArmys {
+			enemys = append(enemys, v)
+		}
+	}
+
+	lastWar, warReports := this.trigger(army, enemys, isRoleEnemy)
 
 	if lastWar.result > 1 {
 		if roleBuid != nil {
@@ -368,7 +418,6 @@ func (this* armyLogic) executeBuild(army *model.Army)  {
 	for _, wr := range warReports {
 		wr.SyncExecute()
 	}
-
 }
 
 func (this* armyLogic) OccupyRoleBuild(rid, x, y int)  {

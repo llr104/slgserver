@@ -193,6 +193,7 @@ func (this* armyWar) round() (*warRound, bool) {
 		if posAttack == nil || posAttack.soldiers == 0{
 			continue
 		}
+
 		//计算
 		posDefense, index := this.randArmyPosition(defense)
 		if posDefense == nil{
@@ -230,12 +231,12 @@ func (this* armyWar) round() (*warRound, bool) {
 
 		//计算
 		posDefense, index := this.randArmyPosition(attack)
-		hurm := posAttack.soldiers *posAttack.force /10000
-		def := posDefense.soldiers *posDefense.defense /10000
-
 		if posDefense == nil{
 			continue
 		}
+
+		hurm := posAttack.soldiers *posAttack.force /10000
+		def := posDefense.soldiers *posDefense.defense /10000
 
 		kill := hurm-def
 		if kill > 0{
@@ -265,7 +266,7 @@ func (this* armyWar) round() (*warRound, bool) {
 func (this* armyWar) randArmyPosition(pos []*armyPosition) (*armyPosition, int){
 	isEmpty := true
 	for _, v := range pos {
-		if v != nil {
+		if v != nil && v.soldiers != 0 {
 			isEmpty = false
 			break
 		}
@@ -274,6 +275,7 @@ func (this* armyWar) randArmyPosition(pos []*armyPosition) (*armyPosition, int){
 	if isEmpty {
 		return nil, -1
 	}
+
 
 	for true {
 		r := rand.Intn(100)
