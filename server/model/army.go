@@ -200,12 +200,7 @@ func (this *Army) Position() (int, int){
 }
 
 func (this *Army) TPosition() (int, int){
-	n := time.Now().Unix() - this.Start.Unix()
-	if n <= 10{
-		return this.ToX, this.ToY
-	}else{
-		return -1, -1
-	}
+	return this.ToX, this.ToY
 }
 
 func (this *Army) ToProto() interface{}{
