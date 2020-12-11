@@ -82,6 +82,10 @@ func (this *MapRoleBuild) Position() (int, int){
 	return this.X, this.Y
 }
 
+func (this *MapRoleBuild) TPosition() (int, int){
+	return -1, -1
+}
+
 func (this *MapRoleBuild) ToProto() interface{}{
 	p := proto.MapRoleBuild{}
 	p.RNick = this.RNick

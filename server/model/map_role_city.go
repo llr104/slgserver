@@ -78,6 +78,10 @@ func (this *MapRoleCity) Position() (int, int){
 	return this.X, this.Y
 }
 
+func (this *MapRoleCity) TPosition() (int, int){
+	return -1, -1
+}
+
 func (this *MapRoleCity) ToProto() interface{}{
 	p := proto.MapRoleCity{}
 	p.X = this.X

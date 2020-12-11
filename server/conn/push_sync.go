@@ -5,6 +5,7 @@ type PushSync interface {
 	BelongToRId() []int		//属于的rid
 	PushMsgName() string	//推送名字
 	Position() (int, int)	//x, y
+	TPosition() (int, int)	//目标x, y
 	ToProto() interface{}	//转成proto
 	Push() 					//推送
 }

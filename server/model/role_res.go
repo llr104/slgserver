@@ -101,6 +101,10 @@ func (this *RoleRes) Position() (int, int){
 	return -1, -1
 }
 
+func (this *RoleRes) TPosition() (int, int){
+	return -1, -1
+}
+
 func (this *RoleRes) Push(){
 	conn.ConnMgr.Push(this)
 }

@@ -143,11 +143,23 @@ func (this *Mgr) Push(pushSync PushSync){
 		}
 	}
 
+	//推送给目标位置
+	tx, ty := pushSync.TPosition()
+	if tx >= 0 && ty >= 0{
+		cellRIds := pos.RPMgr.GetCellRoleIds(tx, ty, 0, 0)
+		for _, rid := range cellRIds {
+			this.PushByRoleId(rid, pushSync.PushMsgName(), proto)
+			cells[rid] = rid
+		}
+	}
+
 	for _, rid := range rids {
 		if _, ok := cells[rid]; ok == false{
 			this.PushByRoleId(rid, pushSync.PushMsgName(), proto)
 		}
 	}
+
+
 }
 
 func (this *Mgr) pushAll(msgName string, data interface{}) {

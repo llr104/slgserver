@@ -147,6 +147,10 @@ func (this *General) Position() (int, int){
 	return -1, -1
 }
 
+func (this *General) TPosition() (int, int){
+	return -1, -1
+}
+
 func (this *General) ToProto() interface{}{
 	p := proto.General{}
 	p.CityId = this.CityId

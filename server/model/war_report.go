@@ -54,6 +54,10 @@ func (this *WarReport) Position() (int, int){
 	return this.X, this.Y
 }
 
+func (this *WarReport) TPosition() (int, int){
+	return -1, -1
+}
+
 func (this *WarReport) ToProto() interface{}{
 	p := proto.WarReport{}
 	p.CTime = int(this.CTime.UnixNano() / 1e6)

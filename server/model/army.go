@@ -199,6 +199,15 @@ func (this *Army) Position() (int, int){
 	return x, y
 }
 
+func (this *Army) TPosition() (int, int){
+	n := time.Now().Unix() - this.Start.Unix()
+	if n <= 10{
+		return this.ToX, this.ToY
+	}else{
+		return -1, -1
+	}
+}
+
 func (this *Army) ToProto() interface{}{
 	p := proto.Army{}
 	p.CityId = this.CityId
