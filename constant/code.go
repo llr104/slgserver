@@ -42,12 +42,13 @@ const UnionNotFound = 35          //联盟不存在
 const PermissionDenied = 36       //权限不足
 const UnionAlreadyHas = 37        //已经有联盟
 const UnionNotAllowExit = 38      //不允许退出
-const ContentTooLong = 39		  //内容太长
-const NotBelongUnion = 40		  //不属于该联盟
-const PeopleIsFull = 41		  	  //用户已满
-const HasApply = 42	  	  		  //已经申请过了
+const ContentTooLong = 39         //内容太长
+const NotBelongUnion = 40         //不属于该联盟
+const PeopleIsFull = 41           //用户已满
+const HasApply = 42               //已经申请过了
 const BuildCanNotDefend = 43      //不能驻守
 const BuildCanNotAttack = 44      //不能占领
+const BuildMBSNotFound = 45       //没有军营
 
 
 

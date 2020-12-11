@@ -72,6 +72,15 @@ func (this*facilityMgr) GetFacility(cid int, fType int8) (*model.Facility, bool)
 	return nil, false
 }
 
+func (this*facilityMgr) GetFacilityLv(cid int, fType int8) int8{
+	f, ok := this.GetFacility(cid, fType)
+	if ok {
+		return f.Level
+	}else{
+		return 0
+	}
+}
+
 /*
 获取城内设施加成
 */

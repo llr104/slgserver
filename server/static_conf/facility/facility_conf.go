@@ -15,7 +15,8 @@ import (
 const (
 	Main 			= 0		//主城
 	JiaoChang		= 13	//校场
-	TongShuaiTing	= 14	//校场
+	TongShuaiTing	= 14	//统帅厅
+	MBS				= 16	//募兵所
 )
 
 var FConf facilityConf

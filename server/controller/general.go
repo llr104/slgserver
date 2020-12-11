@@ -251,6 +251,12 @@ func (this*General) conscript(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
+	lv := logic.RFMgr.GetFacilityLv(army.CityId, facility.MBS)
+	if lv <= 0{
+		rsp.Body.Code = constant.BuildMBSNotFound
+		return
+	}
+
 	//判断是否超过上限
 	for i, g := range army.Gens {
 		if g == nil {
@@ -422,7 +428,7 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 		//t := logic.TravelTime(speed, army.FromX, army.FromY, army.ToX, army.ToY)
 		army.Start = time.Now()
 		//army.End = time.Now().Add(time.Duration(t) * time.Millisecond)
-		army.End = time.Now().Add(10*time.Second)
+		army.End = time.Now().Add(90*time.Second)
 
 		logic.AMgr.PushAction(army)
 		rspObj.Army = army.ToProto().(proto.Army)
