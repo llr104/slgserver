@@ -7,6 +7,7 @@ import (
 	"slgserver/server/global"
 	"slgserver/server/model"
 	"slgserver/server/proto"
+	"slgserver/server/static_conf"
 	"slgserver/server/static_conf/general"
 	"slgserver/util"
 	"sync"
@@ -390,7 +391,12 @@ func (this* armyLogic) executeBuild(army *model.Army)  {
 			roleBuid.CurDurable = util.MaxInt(0, roleBuid.CurDurable - destory)
 			if roleBuid.CurDurable == 0{
 				//攻占了玩家的领地
-				wr.Occupy = 1
+				blimit := static_conf.Basic.Role.BuildLimit
+				if blimit > RBMgr.BuildCnt(army.RId){
+					wr.Occupy = 1
+				}else{
+					wr.Occupy = 0
+				}
 				RBMgr.RemoveFromRole(roleBuid)
 				RBMgr.AddBuild(army.RId, army.ToX, army.ToY)
 				roleBuid.CurDurable = roleBuid.MaxDurable
@@ -401,10 +407,15 @@ func (this* armyLogic) executeBuild(army *model.Army)  {
 
 		}else{
 			//占领系统领地
-			this.OccupySystemBuild(army.RId, army.ToX, army.ToY)
 			wr := warReports[len(warReports)-1]
-			wr.DestroyDurable = 100
-			wr.Occupy = 1
+			blimit := static_conf.Basic.Role.BuildLimit
+			if blimit > RBMgr.BuildCnt(army.RId){
+				this.OccupySystemBuild(army.RId, army.ToX, army.ToY)
+				wr.DestroyDurable = 100
+				wr.Occupy = 1
+			}else{
+				wr.Occupy = 0
+			}
 			this.sys.DelArmy(army.ToX, army.ToY)
 		}
 	}

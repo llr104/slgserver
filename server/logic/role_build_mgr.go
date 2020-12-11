@@ -159,6 +159,15 @@ func (this*roleBuildMgr) GetRoleBuild(rid int) ([]*model.MapRoleBuild, bool) {
 	return ra, ok
 }
 
+func (this*roleBuildMgr) BuildCnt(rid int) int {
+	bs, ok := this.GetRoleBuild(rid)
+	if ok {
+		return len(bs)
+	}else{
+		return 0
+	}
+}
+
 func (this*roleBuildMgr) Scan(x, y int) []*model.MapRoleBuild {
 	if x < 0 || x >= global.MapWith || y < 0 || y >= global.MapHeight {
 		return nil
