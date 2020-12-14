@@ -1,11 +1,14 @@
 package logic
 
 import (
+	"encoding/json"
 	"fmt"
 	"math/rand"
 	"slgserver/server/model"
+	"slgserver/server/proto"
 	"slgserver/server/static_conf/facility"
 	"slgserver/util"
+	"time"
 )
 
 //战斗位置的属性
@@ -288,4 +291,34 @@ func (this* armyWar) randArmyPosition(pos []*armyPosition) (*armyPosition, int){
 	}
 
 	return nil, -1
+}
+
+func NewEmptyWar(attack *model.Army) *model.WarReport {
+	//战报处理
+	pArmy := attack.ToProto().(proto.Army)
+	begArmy, _ := json.Marshal(pArmy)
+
+	//武将战斗前
+	begGeneral := make([][]int, 0)
+	for _, g := range attack.Gens {
+		if g != nil {
+			pg := g.ToProto().(proto.General)
+			begGeneral = append(begGeneral, pg.ToArray())
+		}
+	}
+	begGeneralData, _ := json.Marshal(begGeneral)
+
+	wr := &model.WarReport{X: attack.ToX, Y: attack.ToY, AttackRid: attack.RId,
+		AttackIsRead: false, DefenseIsRead: true, DefenseRid: 0,
+		BegAttackArmy: string(begArmy), BegDefenseArmy: "",
+		EndAttackArmy: string(begArmy), EndDefenseArmy: "",
+		BegAttackGeneral: string(begGeneralData),
+		BegDefenseGeneral: string(begGeneralData),
+		EndAttackGeneral: "",
+		EndDefenseGeneral: "",
+		Rounds: "",
+		Result: 0,
+		CTime: time.Now(),
+	}
+	return wr
 }

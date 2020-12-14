@@ -12,21 +12,21 @@ import (
 
 type WarReport struct {
 	Id                	int    		`xorm:"id pk autoincr"`
-	AttackRid         	int    		`xorm:"attack_rid"`
-	DefenseRid        	int    		`xorm:"defense_rid"`
-	BegAttackArmy     	string 		`xorm:"beg_attack_army"`
-	BegDefenseArmy    	string 		`xorm:"beg_defense_army"`
-	EndAttackArmy     	string 		`xorm:"end_attack_army"`
-	EndDefenseArmy    	string 		`xorm:"end_defense_army"`
-	BegAttackGeneral  	string 		`xorm:"beg_attack_general"`
-	BegDefenseGeneral 	string 		`xorm:"beg_defense_general"`
-	EndAttackGeneral  	string 		`xorm:"end_attack_general"`
-	EndDefenseGeneral 	string    	`xorm:"end_defense_general"`
+	AttackRid         	int    		`xorm:"a_rid"`
+	DefenseRid        	int    		`xorm:"d_rid"`
+	BegAttackArmy     	string 		`xorm:"b_a_army"`
+	BegDefenseArmy    	string 		`xorm:"b_d_army"`
+	EndAttackArmy     	string 		`xorm:"e_a_army"`
+	EndDefenseArmy    	string 		`xorm:"e_d_army"`
+	BegAttackGeneral  	string 		`xorm:"b_a_general"`
+	BegDefenseGeneral 	string 		`xorm:"b_d_general"`
+	EndAttackGeneral  	string 		`xorm:"e_a_general"`
+	EndDefenseGeneral 	string    	`xorm:"e_d_general"`
 	Result				int      	`xorm:"result"`	//0失败，1打平，2胜利
 	Rounds				string		`xorm:"rounds"` //回合
-	AttackIsRead      	bool      	`xorm:"attack_is_read"`
-	DefenseIsRead     	bool      	`xorm:"defense_is_read"`
-	DestroyDurable    	int       	`xorm:"destroy_durable"`
+	AttackIsRead      	bool      	`xorm:"a_is_read"`
+	DefenseIsRead     	bool      	`xorm:"d_is_read"`
+	DestroyDurable    	int       	`xorm:"destroy"`
 	Occupy            	int       	`xorm:"occupy"`
 	X                 	int       	`xorm:"x"`
 	Y                 	int       	`xorm:"y"`

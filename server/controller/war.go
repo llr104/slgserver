@@ -38,7 +38,7 @@ func (this*War) report(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 	//查询最近30条战报吧
 	l := make([]*model.WarReport, 0)
-	err := db.MasterDB.Table(model.WarReport{}).Where("attack_rid=? or defense_rid=?",
+	err := db.MasterDB.Table(model.WarReport{}).Where("a_rid=? or d_rid=?",
 		role.RId, role.RId).OrderBy("ctime").Limit(30, 0).Find(&l)
 
 	if err != nil{
@@ -65,27 +65,39 @@ func (this*War) read(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
 
-	wr := &model.WarReport{}
-	ok, err := db.MasterDB.Table(model.WarReport{}).Where("id=?",
-		reqObj.Id).Get(wr)
+	if reqObj.Id == 0 {
+		_, err := db.MasterDB.Table(model.WarReport{}).Where("a_rid=?", role.RId).Cols("a_is_read").Update("a_is_read", true)
+		if err != nil {
+			log.DefaultLog.Error("db error", zap.Error(err))
+		}
+		_, err = db.MasterDB.Table(model.WarReport{}).Where("d_rid=?", role.RId).Cols("d_is_read").Update("d_is_read", true)
+		if err != nil {
+			log.DefaultLog.Error("db error", zap.Error(err))
+		}
+	}else{
+		wr := &model.WarReport{}
+		ok, err := db.MasterDB.Table(model.WarReport{}).Where("id=?",
+			reqObj.Id).Get(wr)
 
-	if err != nil {
-		log.DefaultLog.Warn("db error", zap.Error(err))
-		rsp.Body.Code = constant.DBError
-		return
-	}
+		if err != nil {
+			log.DefaultLog.Warn("db error", zap.Error(err))
+			rsp.Body.Code = constant.DBError
+			return
+		}
 
-	if ok {
-		if wr.AttackRid == role.RId {
-			wr.AttackIsRead = true
-			db.MasterDB.Table(wr).ID(wr.Id).Cols("attack_is_read").Update(wr)
-			rsp.Body.Code = constant.OK
-		}else if wr.DefenseRid == role.RId {
-			wr.DefenseIsRead = true
-			db.MasterDB.Table(wr).ID(wr.Id).Cols("defense_is_read").Update(wr)
-			rsp.Body.Code = constant.OK
-		}else{
-			rsp.Body.Code = constant.InvalidParam
+		if ok {
+			if wr.AttackRid == role.RId {
+				wr.AttackIsRead = true
+				db.MasterDB.Table(wr).ID(wr.Id).Cols("a_is_read").Update(wr)
+				rsp.Body.Code = constant.OK
+			}else if wr.DefenseRid == role.RId {
+				wr.DefenseIsRead = true
+				db.MasterDB.Table(wr).ID(wr.Id).Cols("d_is_read").Update(wr)
+				rsp.Body.Code = constant.OK
+			}else{
+				rsp.Body.Code = constant.InvalidParam
+			}
 		}
 	}
+
 }

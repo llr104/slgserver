@@ -27,10 +27,10 @@ type armyMgr struct {
 }
 
 var AMgr = &armyMgr{
-	armyById:     make(map[int]*model.Army),
-	armyByCityId: make(map[int][]*model.Army),
-	armyByEndTime: make(map[int64][]*model.Army),
-	armyByRId: make(map[int][]*model.Army),
+	armyById:    	make(map[int]*model.Army),
+	armyByCityId: 	make(map[int][]*model.Army),
+	armyByEndTime: 	make(map[int64][]*model.Army),
+	armyByRId: 		make(map[int][]*model.Army),
 }
 
 func (this*armyMgr) Load() {

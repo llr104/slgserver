@@ -109,6 +109,8 @@ func (this *armyLogic) exeArrive(army *model.Army) {
 			IsCanDefend(army.ToX, army.ToY, army.RId) == false{
 			this.battle(army)
 		}
+		war := NewEmptyWar(army)
+		war.SyncExecute()
 		AMgr.ArmyBack(army)
 	}else if army.Cmd == model.ArmyCmdDefend {
 		//呆在哪里不动
@@ -119,6 +121,8 @@ func (this *armyLogic) exeArrive(army *model.Army) {
 			this.addArmy(army)
 			this.Update(army)
 		}else{
+			war := NewEmptyWar(army)
+			war.SyncExecute()
 			AMgr.ArmyBack(army)
 		}
 
@@ -131,6 +135,8 @@ func (this *armyLogic) exeArrive(army *model.Army) {
 				this.addArmy(army)
 				AMgr.Reclamation(army)
 			}else{
+				war := NewEmptyWar(army)
+				war.SyncExecute()
 				AMgr.ArmyBack(army)
 			}
 
@@ -360,6 +366,8 @@ func (this* armyLogic) trigger(army *model.Army, enemys []*model.Army, isRoleEne
 				AMgr.ArmyBack(enemy)
 			}
 			enemy.SyncExecute()
+		}else{
+			wr.DefenseIsRead = true
 		}
 	}
 	army.SyncExecute()
