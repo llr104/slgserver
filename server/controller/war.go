@@ -66,11 +66,12 @@ func (this*War) read(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	role := r.(*model.Role)
 
 	if reqObj.Id == 0 {
-		_, err := db.MasterDB.Table(model.WarReport{}).Where("a_rid=?", role.RId).Cols("a_is_read").Update("a_is_read", true)
+		m := model.WarReport{AttackIsRead: true, DefenseIsRead: true}
+		_, err := db.MasterDB.Table(model.WarReport{}).Where("a_rid=?", role.RId).Cols("a_is_read").Update(m)
 		if err != nil {
 			log.DefaultLog.Error("db error", zap.Error(err))
 		}
-		_, err = db.MasterDB.Table(model.WarReport{}).Where("d_rid=?", role.RId).Cols("d_is_read").Update("d_is_read", true)
+		_, err = db.MasterDB.Table(model.WarReport{}).Where("d_rid=?", role.RId).Cols("d_is_read").Update(m)
 		if err != nil {
 			log.DefaultLog.Error("db error", zap.Error(err))
 		}

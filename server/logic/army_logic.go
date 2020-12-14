@@ -108,9 +108,10 @@ func (this *armyLogic) exeArrive(army *model.Army) {
 		if IsCanArrive(army.ToX, army.ToY, army.RId) &&
 			IsCanDefend(army.ToX, army.ToY, army.RId) == false{
 			this.battle(army)
+		} else{
+			war := NewEmptyWar(army)
+			war.SyncExecute()
 		}
-		war := NewEmptyWar(army)
-		war.SyncExecute()
 		AMgr.ArmyBack(army)
 	}else if army.Cmd == model.ArmyCmdDefend {
 		//呆在哪里不动
