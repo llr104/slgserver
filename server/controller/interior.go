@@ -68,7 +68,14 @@ func (this*Interior) transform(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	ret := make([]int, len)
 
 	for i := 0 ;i < len; i++{
-		ret[i] = reqObj.To[i] - reqObj.From[i]
+		//ret[i] = reqObj.To[i] - reqObj.From[i]
+		if reqObj.From[i] > 0{
+			ret[i] = -reqObj.From[i]
+		}
+
+		if reqObj.To[i] > 0{
+			ret[i] = reqObj.To[i]
+		}
 	}
 
 
