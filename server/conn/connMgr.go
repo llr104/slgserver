@@ -88,14 +88,24 @@ func (this *Mgr) RemoveConn(conn *net.WSConn){
 	this.um.Lock()
 	uid, err := conn.GetProperty("uid")
 	if err == nil {
-		delete(this.userCache, uid.(int))
+		//只删除自己的conn
+		id := uid.(int)
+		c, ok := this.userCache[id]
+		if ok && c == conn{
+			delete(this.userCache, id)
+		}
 	}
 	this.um.Unlock()
 
 	this.rm.Lock()
 	rid, err := conn.GetProperty("rid")
 	if err == nil {
-		delete(this.roleCache, rid.(int))
+		//只删除自己的conn
+		id := rid.(int)
+		c, ok := this.roleCache[id]
+		if ok && c == conn{
+			delete(this.roleCache, id)
+		}
 	}
 	this.rm.Unlock()
 
