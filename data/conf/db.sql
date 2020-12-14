@@ -209,7 +209,7 @@ CREATE TABLE IF NOT EXISTS `coalition_apply` (
 CREATE TABLE IF NOT EXISTS `role_attribute` (
    `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
    `rid` int unsigned NOT NULL COMMENT 'rid',
-   `parent_id` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '上级rid',
+   `parent_id` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '上级联盟id',
     PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '玩家属性表';
 

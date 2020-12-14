@@ -3,10 +3,14 @@ package logic
 import (
 	"encoding/json"
 	"fmt"
+	"go.uber.org/zap"
 	"math/rand"
+	"slgserver/log"
 	"slgserver/server/model"
 	"slgserver/server/proto"
+	"slgserver/server/static_conf"
 	"slgserver/server/static_conf/facility"
+	"slgserver/server/static_conf/general"
 	"slgserver/util"
 	"time"
 )
@@ -321,4 +325,286 @@ func NewEmptyWar(attack *model.Army) *model.WarReport {
 		CTime: time.Now(),
 	}
 	return wr
+}
+
+//简单战斗
+func newBattle(attackArmy *model.Army) {
+	city, ok := RCMgr.PositionCity(attackArmy.ToX, attackArmy.ToY)
+	if ok {
+		//打玩家城池
+		var enemys []*model.Army
+		//驻守队伍被打
+		posId := ToPosition(attackArmy.ToX, attackArmy.ToY)
+		posArmys, ok := ArmyLogic.stopInPosArmys[posId]
+		if ok {
+			for _, army := range posArmys {
+				enemys = append(enemys, army)
+			}
+		}
+
+		//城内空闲的队伍被打
+		if armys, ok := AMgr.GetByCity(city.CityId); ok {
+			for _, enemy := range armys {
+				if enemy.Cmd == model.ArmyCmdIdle{
+					enemys = append(enemys, enemy)
+				}
+			}
+		}
+
+		if len(enemys) == 0 {
+			//没有队伍
+			destory := GMgr.GetDestroy(attackArmy)
+			city.CurDurable = util.MaxInt(0, city.CurDurable - destory)
+			city.SyncExecute()
+		}else{
+			lastWar, warReports := trigger(attackArmy, enemys, true)
+			if lastWar.result > 1 {
+				destory := GMgr.GetDestroy(attackArmy)
+				wr := warReports[len(warReports)-1]
+				wr.DestroyDurable = util.MinInt(destory, city.CurDurable)
+				city.CurDurable = util.MaxInt(0, city.CurDurable - destory)
+				if city.CurDurable == 0{
+					aAttr, _ := RAttributeMgr.Get(attackArmy.RId)
+					if aAttr.UnionId != 0{
+						//有联盟才能俘虏玩家
+						wr.Occupy = 1
+						dAttr, _ := RAttributeMgr.Get(city.RId)
+						dAttr.ParentId = aAttr.UnionId
+						dAttr.SyncExecute()
+
+					}else {
+						wr.Occupy = 0
+					}
+				}else{
+					wr.Occupy = 0
+				}
+				city.SyncExecute()
+			}
+			for _, wr := range warReports {
+				wr.SyncExecute()
+			}
+		}
+	}else{
+		//打建筑
+		executeBuild(attackArmy)
+	}
+
+}
+
+func trigger(army *model.Army, enemys []*model.Army, isRoleEnemy bool) (*WarResult, []*model.WarReport) {
+
+	posId := ToPosition(army.ToX, army.ToY)
+	warReports := make([]*model.WarReport, 0)
+	var lastWar *WarResult = nil
+
+	for _, enemy := range enemys {
+		//战报处理
+		pArmy := army.ToProto().(proto.Army)
+		pEnemy := enemy.ToProto().(proto.Army)
+
+		begArmy1, _ := json.Marshal(pArmy)
+		begArmy2, _ := json.Marshal(pEnemy)
+
+		//武将战斗前
+		begGeneral1 := make([][]int, 0)
+		for _, g := range army.Gens {
+			if g != nil {
+				pg := g.ToProto().(proto.General)
+				begGeneral1 = append(begGeneral1, pg.ToArray())
+			}
+		}
+		begGeneralData1, _ := json.Marshal(begGeneral1)
+
+		begGeneral2 := make([][]int, 0)
+		for _, g := range enemy.Gens {
+			if g != nil {
+				pg := g.ToProto().(proto.General)
+				begGeneral2 = append(begGeneral2, pg.ToArray())
+			}
+		}
+		begGeneralData2, _ := json.Marshal(begGeneral2)
+
+		lastWar = NewWar(army, enemy)
+
+		//武将战斗后
+		endGeneral1 := make([][]int, 0)
+		for _, g := range army.Gens {
+			if g != nil {
+				pg := g.ToProto().(proto.General)
+				endGeneral1 = append(endGeneral1, pg.ToArray())
+				level, exp := general.GenBasic.ExpToLevel(g.Exp)
+				g.Level = level
+				g.Exp = exp
+				g.SyncExecute()
+			}
+		}
+		endGeneralData1, _ := json.Marshal(endGeneral1)
+
+		endGeneral2 := make([][]int, 0)
+		for _, g := range enemy.Gens {
+			if g != nil {
+				pg := g.ToProto().(proto.General)
+				endGeneral2 = append(endGeneral2, pg.ToArray())
+				level, exp := general.GenBasic.ExpToLevel(g.Exp)
+				g.Level = level
+				g.Exp = exp
+				g.SyncExecute()
+			}
+		}
+		endGeneralData2, _ := json.Marshal(endGeneral2)
+
+		pArmy = army.ToProto().(proto.Army)
+		pEnemy = enemy.ToProto().(proto.Army)
+		endArmy1, _ := json.Marshal(pArmy)
+		endArmy2, _ := json.Marshal(pEnemy)
+
+		rounds, _ := json.Marshal(lastWar.round)
+		wr := &model.WarReport{X: army.ToX, Y: army.ToY, AttackRid: army.RId,
+			AttackIsRead: false, DefenseIsRead: false, DefenseRid: enemy.RId,
+			BegAttackArmy: string(begArmy1), BegDefenseArmy: string(begArmy2),
+			EndAttackArmy: string(endArmy1), EndDefenseArmy: string(endArmy2),
+			BegAttackGeneral: string(begGeneralData1),
+			BegDefenseGeneral: string(begGeneralData2),
+			EndAttackGeneral: string(endGeneralData1),
+			EndDefenseGeneral: string(endGeneralData2),
+			Rounds: string(rounds),
+			Result: lastWar.result,
+			CTime: time.Now(),
+		}
+
+		warReports = append(warReports, wr)
+		enemy.ToSoldier()
+		enemy.ToGeneral()
+
+		if isRoleEnemy {
+			if lastWar.result > 1 {
+				if isRoleEnemy {
+					delete(ArmyLogic.stopInPosArmys, posId)
+				}
+				AMgr.ArmyBack(enemy)
+			}
+			enemy.SyncExecute()
+		}else{
+			wr.DefenseIsRead = true
+		}
+	}
+	army.SyncExecute()
+	return lastWar, warReports
+}
+
+func executeBuild(army *model.Army)  {
+	roleBuid, _ := RBMgr.PositionBuild(army.ToX, army.ToY)
+
+	posId := ToPosition(army.ToX, army.ToY)
+	posArmys, isRoleEnemy := ArmyLogic.stopInPosArmys[posId]
+
+	var enemys []*model.Army
+	if isRoleEnemy == false {
+		enemys = ArmyLogic.sys.GetArmy(army.ToX, army.ToY)
+	}else{
+		for _, v := range posArmys {
+			enemys = append(enemys, v)
+		}
+	}
+
+	lastWar, warReports := trigger(army, enemys, isRoleEnemy)
+
+	if lastWar.result > 1 {
+		if roleBuid != nil {
+			destory := GMgr.GetDestroy(army)
+			wr := warReports[len(warReports)-1]
+			wr.DestroyDurable = util.MinInt(destory, roleBuid.CurDurable)
+			roleBuid.CurDurable = util.MaxInt(0, roleBuid.CurDurable - destory)
+			if roleBuid.CurDurable == 0{
+				//攻占了玩家的领地
+				blimit := static_conf.Basic.Role.BuildLimit
+				if blimit > RBMgr.BuildCnt(army.RId){
+					wr.Occupy = 1
+				}else{
+					wr.Occupy = 0
+				}
+				RBMgr.RemoveFromRole(roleBuid)
+				RBMgr.AddBuild(army.RId, army.ToX, army.ToY)
+				roleBuid.CurDurable = roleBuid.MaxDurable
+				OccupyRoleBuild(army.RId, army.ToX, army.ToY)
+			}else{
+				wr.Occupy = 0
+			}
+
+		}else{
+			//占领系统领地
+			wr := warReports[len(warReports)-1]
+			blimit := static_conf.Basic.Role.BuildLimit
+			if blimit > RBMgr.BuildCnt(army.RId){
+				OccupySystemBuild(army.RId, army.ToX, army.ToY)
+				wr.DestroyDurable = 100
+				wr.Occupy = 1
+			}else{
+				wr.Occupy = 0
+			}
+			ArmyLogic.sys.DelArmy(army.ToX, army.ToY)
+		}
+	}
+
+	//领地发生变化
+	if newRoleBuild, ok := RBMgr.PositionBuild(army.ToX, army.ToY); ok {
+		RoleBuildExtra(newRoleBuild)
+		newRoleBuild.SyncExecute()
+	}
+
+	for _, wr := range warReports {
+		wr.SyncExecute()
+	}
+}
+
+func OccupyRoleBuild(rid, x, y int)  {
+	newId := rid
+
+	if b, ok := RBMgr.PositionBuild(x, y); ok {
+
+		oldId := b.RId
+		log.DefaultLog.Info("battle in role build",
+			zap.Int("oldRId", oldId),
+			zap.Int("newRId", newId))
+
+		//被占领的减产
+		if oldRole, ok := RResMgr.Get(oldId); ok{
+			oldRole.WoodYield -= b.Wood
+			oldRole.GrainYield -= b.Grain
+			oldRole.StoneYield -= b.Stone
+			oldRole.IronYield -= b.Iron
+			oldRole.SyncExecute()
+		}
+		//占领的增加产量
+		if newRole, ok := RResMgr.Get(newId); ok{
+			newRole.WoodYield += b.Wood
+			newRole.GrainYield += b.Grain
+			newRole.StoneYield += b.Stone
+			newRole.IronYield += b.Iron
+			newRole.SyncExecute()
+		}
+		b.RId = rid
+	}
+}
+
+func OccupySystemBuild(rid, x, y int)  {
+	newId := rid
+
+	if _, ok := RBMgr.PositionBuild(x, y); ok {
+		return
+	}
+
+	if NMMgr.IsCanBuild(x, y){
+		rb, ok := RBMgr.AddBuild(rid, x, y)
+		if ok {
+			//占领的增加产量
+			if newRole, ok := RResMgr.Get(newId); ok{
+				newRole.WoodYield += rb.Wood
+				newRole.GrainYield += rb.Grain
+				newRole.StoneYield += rb.Stone
+				newRole.IronYield += rb.Iron
+				newRole.SyncExecute()
+			}
+		}
+	}
 }

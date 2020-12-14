@@ -85,5 +85,4 @@ func (this *RoleAttribute) Push(){
 
 func (this *RoleAttribute) SyncExecute() {
 	dbRAttrMgr.push(this)
-	this.Push()
 }
