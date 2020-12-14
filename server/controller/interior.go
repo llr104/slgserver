@@ -80,22 +80,22 @@ func (this*Interior) transform(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 
 	if roleRes.Wood + ret[0] < 0{
-		rsp.Body.Code = constant.DBError
+		rsp.Body.Code = constant.InvalidParam
 		return
 	}
 
 	if roleRes.Iron + ret[1] < 0{
-		rsp.Body.Code = constant.DBError
+		rsp.Body.Code = constant.InvalidParam
 		return
 	}
 
 	if roleRes.Stone + ret[2] < 0{
-		rsp.Body.Code = constant.DBError
+		rsp.Body.Code = constant.InvalidParam
 		return
 	}
 
 	if roleRes.Grain + ret[3] < 0{
-		rsp.Body.Code = constant.DBError
+		rsp.Body.Code = constant.InvalidParam
 		return
 	}
 

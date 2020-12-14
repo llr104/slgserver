@@ -164,6 +164,12 @@ func (this*Role) enterServer(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 			return
 		}
 
+		//玩家的一些属性
+		if _, ok := logic.RAttributeMgr.TryCreate(role.RId); ok == false{
+			rsp.Body.Code = constant.DBError
+			return
+		}
+
 		//查询是否有城市
 		_, ok = logic.RCMgr.GetByRId(role.RId)
 		if ok == false{

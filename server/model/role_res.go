@@ -11,7 +11,7 @@ import (
 /*******db 操作begin********/
 var dbRResMgr *roleResDBMgr
 func init() {
-	dbRResMgr = &roleResDBMgr{ress: make(chan *RoleRes, 10)}
+	dbRResMgr = &roleResDBMgr{ress: make(chan *RoleRes, 100)}
 	go dbRResMgr.running()
 }
 
