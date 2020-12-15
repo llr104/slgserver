@@ -7,6 +7,15 @@ type coalitionLogic struct {
 
 }
 
+func GetUnionId(rid int) int {
+	attr, ok := mgr.RAttrMgr.Get(rid)
+	if ok {
+		return attr.UnionId
+	}else{
+		return 0
+	}
+}
+
 func (this* coalitionLogic) MemberEnter(rid, unionId int)  {
 	mgr.RAttrMgr.EnterUnion(rid, unionId)
 
@@ -14,22 +23,9 @@ func (this* coalitionLogic) MemberEnter(rid, unionId int)  {
 		ra.UnionId = unionId
 	}
 
-	if rbs, ok := mgr.RBMgr.GetRoleBuild(rid); ok {
-		for _, rb := range rbs {
-			rb.UnionId = unionId
-		}
-	}
-
 	if rcs, ok := mgr.RCMgr.GetByRId(rid); ok {
 		for _, rc := range rcs {
-			rc.UnionId = unionId
 			rc.SyncExecute()
-		}
-	}
-
-	if armys, ok := mgr.AMgr.GetByRId(rid); ok {
-		for _, army := range armys {
-			army.UnionId = unionId
 		}
 	}
 }
@@ -40,22 +36,9 @@ func (this* coalitionLogic) MemberExit(rid int) {
 		ra.UnionId = 0
 	}
 
-	if rbs, ok := mgr.RBMgr.GetRoleBuild(rid); ok {
-		for _, rb := range rbs {
-			rb.UnionId = 0
-		}
-	}
-
 	if rcs, ok := mgr.RCMgr.GetByRId(rid); ok {
 		for _, rc := range rcs {
-			rc.UnionId = 0
 			rc.SyncExecute()
-		}
-	}
-
-	if armys, ok := mgr.AMgr.GetByRId(rid); ok {
-		for _, army := range armys {
-			army.UnionId = 0
 		}
 	}
 

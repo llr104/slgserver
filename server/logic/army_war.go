@@ -551,7 +551,6 @@ func executeBuild(army *model.Army)  {
 
 	//领地发生变化
 	if newRoleBuild, ok := mgr.RBMgr.PositionBuild(army.ToX, army.ToY); ok {
-		mgr.RoleBuildExtra(newRoleBuild)
 		newRoleBuild.SyncExecute()
 	}
 

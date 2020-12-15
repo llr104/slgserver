@@ -7,13 +7,15 @@ import (
 )
 
 func hasRoleBuildNearBy(x, y, rid, unionId int) bool {
+
 	for i := util.MaxInt(x-1, 0); i <= util.MinInt(x+1, global.MapWith); i++ {
 		for j := util.MaxInt(y-1, 0); j <= util.MinInt(y+1, global.MapHeight) ; j++ {
 			if i == x && j == y {
 				continue
 			}
 			if rb, ok := mgr.RBMgr.PositionBuild(i, j); ok {
-				if rb.RId == rid || (unionId != 0 && rb.UnionId == unionId){
+				tUnionId := GetUnionId(rb.RId)
+				if rb.RId == rid || (unionId != 0 && tUnionId == unionId){
 					return true
 				}
 			}
@@ -24,7 +26,7 @@ func hasRoleBuildNearBy(x, y, rid, unionId int) bool {
 
 //是否能到达
 func IsCanArrive(x, y, rid int) bool {
-	unionId := mgr.RAttrMgr.UnionId(rid)
+	unionId := GetUnionId(rid)
 
 	//目标位置是城池
 	if _, ok := mgr.RCMgr.PositionCity(x, y); ok {
@@ -62,7 +64,8 @@ func IsCanArrive(x, y, rid int) bool {
 		for i := x-2; i <= x+2; i++ {
 			for j := y-2; j <= y+2; j++ {
 				if rc, ok := mgr.RCMgr.PositionCity(i, j); ok {
-					if rc.RId == rid || (unionId != 0 && rc.UnionId == unionId) {
+					tUnionId := GetUnionId(rc.RId)
+					if rc.RId == rid || (unionId != 0 && tUnionId == unionId) {
 						return true
 					}
 				}
@@ -74,22 +77,25 @@ func IsCanArrive(x, y, rid int) bool {
 }
 
 func IsCanDefend(x, y, rid int) bool{
-	unionId := mgr.RAttrMgr.UnionId(rid)
+	unionId := GetUnionId(rid)
+
 	b, ok := mgr.RBMgr.PositionBuild(x, y)
 	if ok {
+		tUnionId := GetUnionId(b.RId)
 		if b.RId == rid{
 			return true
-		}else if b.UnionId > 0 {
-			return b.UnionId == unionId
+		}else if tUnionId > 0 {
+			return tUnionId == unionId
 		}
 	}
 
 	c, ok := mgr.RCMgr.PositionCity(x, y)
 	if ok {
+		tUnionId := GetUnionId(c.RId)
 		if c.RId == rid{
 			return true
-		}else if c.UnionId > 0 {
-			return c.UnionId == unionId
+		}else if tUnionId > 0 {
+			return tUnionId == unionId
 		}
 	}
 	return false

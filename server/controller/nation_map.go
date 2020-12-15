@@ -22,8 +22,8 @@ type NationMap struct {
 func (this*NationMap) InitRouter(r *net.Router) {
 	g := r.Group("nationMap").Use(middleware.ElapsedTime(), middleware.Log())
 	g.AddRouter("config", this.config)
-	g.AddRouter("scan", this.scan)
-	g.AddRouter("scanBlock", this.scanBlock)
+	g.AddRouter("scan", this.scan, middleware.CheckRole())
+	g.AddRouter("scanBlock", this.scanBlock, middleware.CheckRole())
 	g.AddRouter("giveUp", this.giveUp, middleware.CheckRole())
 }
 
@@ -70,7 +70,6 @@ func (this*NationMap) scan(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	rb := mgr.RBMgr.Scan(x, y)
 	rspObj.MRBuilds = make([]proto.MapRoleBuild, len(rb))
 	for i, v := range rb {
-		mgr.RoleBuildExtra(v)
 		rspObj.MRBuilds[i] = v.ToProto().(proto.MapRoleBuild)
 	}
 

@@ -11,17 +11,6 @@ import (
 	"sync"
 )
 
-func RoleBuildExtra(rb* model.MapRoleBuild) {
-	vRole, ok := RMgr.Get(rb.RId)
-	if ok {
-		rb.RNick = vRole.NickName
-	}
-
-	ra, ok := RAttrMgr.Get(rb.RId)
-	if ok {
-		rb.UnionId = ra.UnionId
-	}
-}
 
 
 type roleBuildMgr struct {
@@ -56,7 +45,6 @@ func (this*roleBuildMgr) Load() {
 			this.roleRB[v.RId] = make([]*model.MapRoleBuild, 0)
 		}
 		this.roleRB[v.RId] = append(this.roleRB[v.RId], v)
-		RoleBuildExtra(v)
 	}
 
 }
@@ -94,7 +82,6 @@ func (this*roleBuildMgr) AddBuild(rid, x, y int) (*model.MapRoleBuild, bool) {
 	this.mutex.Unlock()
 	if ok {
 		rb.RId = rid
-		RoleBuildExtra(rb)
 		this.mutex.Lock()
 		if _, ok := this.roleRB[rid]; ok == false{
 			this.roleRB[rid] = make([]*model.MapRoleBuild, 0)
@@ -114,7 +101,6 @@ func (this*roleBuildMgr) AddBuild(rid, x, y int) (*model.MapRoleBuild, bool) {
 					MaxDurable: cfg.Durable}
 
 				if _, err := db.MasterDB.Table(model.MapRoleBuild{}).Insert(rb); err == nil{
-					RoleBuildExtra(rb)
 					this.mutex.Lock()
 					this.posRB[posId] = rb
 					this.dbRB[rb.Id] = rb
@@ -147,8 +133,6 @@ func (this*roleBuildMgr) RemoveFromRole(build *model.MapRoleBuild)  {
 	this.mutex.Unlock()
 
 	build.RId = 0
-	build.RNick = ""
-	build.UnionId = 0
 	build.SyncExecute()
 }
 

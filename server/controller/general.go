@@ -211,7 +211,6 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		newG.SyncExecute()
 	}
 
-	mgr.RoleArmyExtra(army)
 	army.FromX = city.X
 	army.FromY = city.Y
 	army.SyncExecute()

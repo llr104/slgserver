@@ -9,12 +9,6 @@ import (
 	"sync"
 )
 
-func RoleArmyExtra(army* model.Army) {
-	ra, ok := RAttrMgr.Get(army.RId)
-	if ok {
-		army.UnionId = ra.UnionId
-	}
-}
 
 type armyMgr struct {
 	mutex        	sync.RWMutex
@@ -34,7 +28,6 @@ func (this*armyMgr) Load() {
 	db.MasterDB.Table(model.Army{}).Find(this.armyById)
 
 	for _, army := range this.armyById {
-		RoleArmyExtra(army)
 		cid := army.CityId
 		c,ok:= this.armyByCityId[cid]
 		if ok {
@@ -56,7 +49,7 @@ func (this*armyMgr) Load() {
 }
 
 func (this*armyMgr) insertOne(army *model.Army)  {
-	RoleArmyExtra(army)
+
 	aid := army.Id
 	cid := army.CityId
 

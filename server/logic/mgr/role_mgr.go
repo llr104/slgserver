@@ -8,6 +8,14 @@ import (
 	"sync"
 )
 
+func RoleNickName(rid int) string {
+	vRole, ok := RMgr.Get(rid)
+	if ok {
+		return vRole.NickName
+	}
+	return ""
+}
+
 type roleMgr struct {
 	mutex  sync.RWMutex
 	roles map[int]*model.Role

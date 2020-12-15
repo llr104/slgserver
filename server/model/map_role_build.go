@@ -44,8 +44,6 @@ func (this *rbDBMgr) push(b *MapRoleBuild)  {
 type MapRoleBuild struct {
 	Id    		int    		`xorm:"id pk autoincr"`
 	RId   		int    		`xorm:"rid"`
-	RNick		string		`xorm:"-"`
-	UnionId		int			`xorm:"-"`	//联盟id
 	Type  		int8   		`xorm:"type"`
 	Level 		int8   		`xorm:"level"`
 	X     		int    		`xorm:"x"`
@@ -93,8 +91,8 @@ func (this *MapRoleBuild) TPosition() (int, int){
 
 func (this *MapRoleBuild) ToProto() interface{}{
 	p := proto.MapRoleBuild{}
-	p.RNick = this.RNick
-	p.UnionId = this.UnionId
+	p.RNick = GetRoleNickName(this.RId)
+	p.UnionId = GetUnionId(this.RId)
 	p.X = this.X
 	p.Y = this.Y
 	p.Type = this.Type

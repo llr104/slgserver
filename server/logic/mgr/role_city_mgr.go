@@ -12,13 +12,6 @@ import (
 	"time"
 )
 
-func RoleCityExtra(rc* model.MapRoleCity) {
-	ra, ok := RAttrMgr.Get(rc.RId)
-	if ok {
-		rc.UnionId = ra.UnionId
-	}
-}
-
 
 type roleCityMgr struct {
 	mutex  sync.RWMutex
@@ -51,8 +44,6 @@ func (this*roleCityMgr) Load() {
 			this.roleCity[v.RId] = make([]*model.MapRoleCity, 0)
 		}
 		this.roleCity[v.RId] = append(this.roleCity[v.RId], v)
-
-		RoleCityExtra(v)
 	}
 
 	go this.running()
@@ -93,7 +84,6 @@ func (this*roleCityMgr) PositionCity(x, y int) (*model.MapRoleCity, bool) {
 }
 
 func (this*roleCityMgr) Add(city *model.MapRoleCity) {
-	RoleCityExtra(city)
 
 	this.mutex.Lock()
 	defer this.mutex.Unlock()
@@ -195,7 +185,6 @@ func (this*roleCityMgr) Get(cid int) (*model.MapRoleCity, bool){
 	}
 
 	if ok {
-		RoleCityExtra(r)
 		this.mutex.Lock()
 		this.dbCity[cid] = r
 		this.mutex.Unlock()

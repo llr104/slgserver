@@ -1,6 +1,9 @@
 package logic
 
-import "slgserver/server/model"
+import (
+	"slgserver/server/logic/mgr"
+	"slgserver/server/model"
+)
 
 
 var Union *coalitionLogic
@@ -9,7 +12,11 @@ var ArmyLogic *armyLogic
 //逻辑相关的初始化放在这里
 func Init() {
 
+	//初始化一些方法
 	model.ArmyIsInView = armyIsInView
+	model.GetUnionId = GetUnionId
+	model.GetRoleNickName = mgr.RoleNickName
+
 	Union = &coalitionLogic{}
 	ArmyLogic = &armyLogic{
 		arriveArmys:	make(chan *model.Army, 100),
