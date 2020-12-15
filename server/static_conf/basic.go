@@ -50,12 +50,15 @@ type role struct {
 	GoldYield     int 		`json:"gold_yield"`
 	DepotCapacity int 		`json:"depot_capacity"`
 	BuildLimit    int 		`json:"build_limit"`
+	RecoveryTime  int		`json:"recovery_time"`
 }
 
 type city struct {
-	Des     string `json:"des"`
-	Cost    int8   `json:"cost"`
-	Durable int    `json:"durable"`
+	Des           string `json:"des"`
+	Cost          int8   `json:"cost"`
+	Durable       int    `json:"durable"`
+	RecoveryTime  int    `json:"recovery_time"`
+	TransformRate int    `json:"transform_rate"`
 }
 
 type npcLevel struct {

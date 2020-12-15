@@ -5,6 +5,7 @@ import (
 	"slgserver/db"
 	"slgserver/log"
 	"slgserver/server/model"
+	"slgserver/server/static_conf"
 	"slgserver/server/static_conf/facility"
 	"slgserver/util"
 	"sync"
@@ -197,9 +198,8 @@ func (this*roleResMgr) CutDown(rid int, b *model.MapRoleBuild) (*model.RoleRes, 
 func (this*roleResMgr) produce() {
 	index := 1
 	for true {
-		//每个10分钟处理一次资源更新
-		time.Sleep(10*time.Second)
-		
+		t := static_conf.Basic.City.RecoveryTime
+		time.Sleep(time.Duration(t) * time.Second)
 		this.mutex.RLock()
 		for _, v := range this.rolesRes {
 			//加判断是因为爆仓了，资源不无故减少

@@ -143,10 +143,8 @@ func (this*City) upFacility(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 				}else if atype == facility.TypeDurable{
 					if len(oldValues) > i{
 						city.MaxDurable -= oldValues[i]
-						city.CurDurable -= oldValues[i]
 					}
 					city.MaxDurable += newValues[i]
-					city.CurDurable += newValues[i]
 				}
 
 				city.SyncExecute()
@@ -212,13 +210,11 @@ func (this*City) upCity(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 	for i, atype := range additions {
 		if atype == facility.TypeDurable{
+			//升级后，耐久上限增加，但是耐久还是需要按时间恢复
 			if len(oldValues) > i{
 				city.MaxDurable -= oldValues[i]
-				city.CurDurable -= oldValues[i]
 			}
-
 			city.MaxDurable += newValues[i]
-			city.CurDurable += newValues[i]
 		}else if atype == facility.TypeCost{
 			if len(oldValues) > i{
 				city.Cost -= int8(oldValues[i])

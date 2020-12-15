@@ -6,8 +6,10 @@ import (
 	"slgserver/log"
 	"slgserver/server/global"
 	"slgserver/server/model"
+	"slgserver/server/static_conf"
 	"slgserver/util"
 	"sync"
+	"time"
 )
 
 func RoleCityExtra(rc* model.MapRoleCity) {
@@ -51,6 +53,23 @@ func (this*roleCityMgr) Load() {
 		this.roleCity[v.RId] = append(this.roleCity[v.RId], v)
 
 		RoleCityExtra(v)
+	}
+
+	go this.running()
+}
+
+func (this*roleCityMgr) running() {
+	for true {
+		t := static_conf.Basic.City.RecoveryTime
+		time.Sleep(time.Duration(t) * time.Second)
+		this.mutex.RLock()
+		for _, city := range this.dbCity {
+			if city.CurDurable < city.MaxDurable{
+				city.DurableChange(100)
+				city.SyncExecute()
+			}
+		}
+		this.mutex.RUnlock()
 	}
 }
 

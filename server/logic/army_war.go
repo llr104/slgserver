@@ -356,7 +356,7 @@ func newBattle(attackArmy *model.Army) {
 		if len(enemys) == 0 {
 			//没有队伍
 			destory := mgr.GMgr.GetDestroy(attackArmy)
-			city.CurDurable = util.MaxInt(0, city.CurDurable - destory)
+			city.DurableChange(-destory)
 			city.SyncExecute()
 		}else{
 			lastWar, warReports := trigger(attackArmy, enemys, true)
@@ -364,7 +364,8 @@ func newBattle(attackArmy *model.Army) {
 				destory := mgr.GMgr.GetDestroy(attackArmy)
 				wr := warReports[len(warReports)-1]
 				wr.DestroyDurable = util.MinInt(destory, city.CurDurable)
-				city.CurDurable = util.MaxInt(0, city.CurDurable - destory)
+				city.DurableChange(-destory)
+
 				if city.CurDurable == 0{
 					aAttr, _ := mgr.RAttrMgr.Get(attackArmy.RId)
 					if aAttr.UnionId != 0{

@@ -6,6 +6,8 @@ import (
 	"slgserver/log"
 	"slgserver/server/conn"
 	"slgserver/server/proto"
+	"slgserver/util"
+	"sync"
 	"time"
 )
 
@@ -43,6 +45,7 @@ func (this* rcDBMgr) push(b *MapRoleCity)  {
 /*******db 操作end********/
 
 type MapRoleCity struct {
+	mutex		sync.Mutex	`xorm:"-"`
 	CityId		int			`xorm:"cityId pk autoincr"`
 	RId			int			`xorm:"rid"`
 	Name		string		`xorm:"name" validate:"min=4,max=20,regexp=^[a-zA-Z0-9_]*$"`
@@ -55,6 +58,18 @@ type MapRoleCity struct {
 	MaxDurable	int			`xorm:"max_durable"`
 	Cost       	int8   		`xorm:"cost"`
 	CreatedAt	time.Time	`xorm:"created_at"`
+}
+
+func (this*MapRoleCity) DurableChange(change int) {
+	this.mutex.Lock()
+	defer this.mutex.Unlock()
+
+	t := this.MaxDurable + change
+	if t < 0{
+		this.CurDurable = 0
+	}else{
+		this.CurDurable = util.MinInt(this.MaxDurable, t)
+	}
 }
 
 func (this *MapRoleCity) TableName() string {
