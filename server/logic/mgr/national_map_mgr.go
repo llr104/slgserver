@@ -1,4 +1,4 @@
-package logic
+package mgr
 
 import (
 	"encoding/json"
@@ -55,7 +55,7 @@ var NMMgr = &NationalMapMgr{
 	conf: make(map[int]model.NationalMap),
 }
 
-func (this* NationalMapMgr) Load() {
+func (this*NationalMapMgr) Load() {
 
 	fileName := config.File.MustValue("logic", "map_data",
 		"./data/conf/map.json")
@@ -89,7 +89,7 @@ func (this* NationalMapMgr) Load() {
 
 }
 
-func (this* NationalMapMgr) IsCanBuild(x, y int) bool {
+func (this*NationalMapMgr) IsCanBuild(x, y int) bool {
 	posIndex := ToPosition(x, y)
 	this.mutex.RLock()
 	defer this.mutex.RUnlock()
@@ -105,7 +105,7 @@ func (this* NationalMapMgr) IsCanBuild(x, y int) bool {
 	}
 }
 
-func (this* NationalMapMgr) IsCanBuildCity(x, y int) bool {
+func (this*NationalMapMgr) IsCanBuildCity(x, y int) bool {
 	for i := x-2; i <= x+2; i++ {
 		if i < 0 || i > global.MapWith{
 			return false
@@ -126,7 +126,7 @@ func (this* NationalMapMgr) IsCanBuildCity(x, y int) bool {
 	return true
 }
 
-func (this* NationalMapMgr) PositionBuild(x, y int) (model.NationalMap, bool) {
+func (this*NationalMapMgr) PositionBuild(x, y int) (model.NationalMap, bool) {
 	posIndex := ToPosition(x, y)
 	this.mutex.RLock()
 	defer this.mutex.RUnlock()
@@ -134,7 +134,7 @@ func (this* NationalMapMgr) PositionBuild(x, y int) (model.NationalMap, bool) {
 	return b, ok
 }
 
-func (this* NationalMapMgr) Scan(x, y int) []model.NationalMap {
+func (this*NationalMapMgr) Scan(x, y int) []model.NationalMap {
 	this.mutex.RLock()
 	defer this.mutex.RUnlock()
 

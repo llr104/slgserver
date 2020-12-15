@@ -4,7 +4,7 @@ import (
 	"github.com/goinggo/mapstructure"
 	"slgserver/constant"
 	"slgserver/net"
-	"slgserver/server/logic"
+	"slgserver/server/logic/mgr"
 	"slgserver/server/middleware"
 	"slgserver/server/model"
 	"slgserver/server/proto"
@@ -37,7 +37,7 @@ func (this*City) facilities(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	rsp.Body.Code = constant.OK
 
 	r, _ := req.Conn.GetProperty("role")
-	city, ok := logic.RCMgr.Get(reqObj.CityId)
+	city, ok := mgr.RCMgr.Get(reqObj.CityId)
 	if ok == false {
 		rsp.Body.Code = constant.CityNotExist
 		return
@@ -49,7 +49,7 @@ func (this*City) facilities(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	f, ok := logic.RFMgr.Get(reqObj.CityId)
+	f, ok := mgr.RFMgr.Get(reqObj.CityId)
 	if ok == false {
 		rsp.Body.Code = constant.CityNotExist
 		return
@@ -75,7 +75,7 @@ func (this*City) upFacility(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	rsp.Body.Code = constant.OK
 
 	r, _ := req.Conn.GetProperty("role")
-	city, ok := logic.RCMgr.Get(reqObj.CityId)
+	city, ok := mgr.RCMgr.Get(reqObj.CityId)
 	if ok == false {
 		rsp.Body.Code = constant.CityNotExist
 		return
@@ -87,13 +87,13 @@ func (this*City) upFacility(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	_, ok = logic.RFMgr.Get(reqObj.CityId)
+	_, ok = mgr.RFMgr.Get(reqObj.CityId)
 	if ok == false {
 		rsp.Body.Code = constant.CityNotExist
 		return
 	}
 
-	out, errCode := logic.RFMgr.UpFacility(role.RId ,reqObj.CityId, int8(reqObj.FType))
+	out, errCode := mgr.RFMgr.UpFacility(role.RId ,reqObj.CityId, int8(reqObj.FType))
 	rsp.Body.Code = errCode
 	if errCode == constant.OK{
 		rspObj.Facility.Level = out.Level
@@ -105,7 +105,7 @@ func (this*City) upFacility(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		newValues := facility.FConf.GetValues(reqObj.FType, out.Level)
 		additions := facility.FConf.GetAdditions(reqObj.FType)
 
-		roleRes, ok:= logic.RResMgr.Get(role.RId)
+		roleRes, ok:= mgr.RResMgr.Get(role.RId)
 		if ok {
 			for i, atype := range additions {
 				if atype == facility.TypeWood{
@@ -154,7 +154,7 @@ func (this*City) upFacility(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 			}
 		}
 
-		if roleRes, ok:= logic.RResMgr.Get(role.RId); ok {
+		if roleRes, ok:= mgr.RResMgr.Get(role.RId); ok {
 			rspObj.RoleRes = roleRes.ToProto().(proto.RoleRes)
 		}
 	}
@@ -169,7 +169,7 @@ func (this*City) upCity(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	rsp.Body.Code = constant.OK
 
 	r, _ := req.Conn.GetProperty("role")
-	city, ok := logic.RCMgr.Get(reqObj.CityId)
+	city, ok := mgr.RCMgr.Get(reqObj.CityId)
 	if ok == false {
 		rsp.Body.Code = constant.CityNotExist
 		return
@@ -181,7 +181,7 @@ func (this*City) upCity(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	_, ok = logic.RFMgr.Get(reqObj.CityId)
+	_, ok = mgr.RFMgr.Get(reqObj.CityId)
 	if ok == false {
 		rsp.Body.Code = constant.CityNotExist
 		return
@@ -199,7 +199,7 @@ func (this*City) upCity(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	ok = logic.RResMgr.TryUseNeed(role.RId, needRes)
+	ok = mgr.RResMgr.TryUseNeed(role.RId, needRes)
 	if ok == false{
 		rsp.Body.Code = constant.UpError
 		return

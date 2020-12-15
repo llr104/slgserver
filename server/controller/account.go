@@ -9,7 +9,7 @@ import (
 	"slgserver/net"
 	"slgserver/server"
 	"slgserver/server/conn"
-	"slgserver/server/logic"
+	"slgserver/server/logic/mgr"
 	"slgserver/server/middleware"
 	"slgserver/server/model"
 	"slgserver/server/proto"
@@ -136,7 +136,7 @@ func (this*Account) reLogin(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 					rsp.Body.Code = constant.OK
 					conn.ConnMgr.UserLogin(req.Conn, reqObj.Session, ll.UId)
 
-					role, ok := logic.RMgr.Get(reqObj.RId)
+					role, ok := mgr.RMgr.Get(reqObj.RId)
 					if ok && ll.UId == role.UId{
 						req.Conn.SetProperty("role", role)
 						conn.ConnMgr.RoleEnter(req.Conn, role.RId)

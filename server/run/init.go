@@ -5,6 +5,7 @@ import (
 	"slgserver/net"
 	"slgserver/server/controller"
 	"slgserver/server/logic"
+	"slgserver/server/logic/mgr"
 	"slgserver/server/static_conf"
 	"slgserver/server/static_conf/facility"
 	"slgserver/server/static_conf/general"
@@ -23,16 +24,17 @@ func Init() {
 	static_conf.MapBuildConf.Load()
 
 	//需要先加载联盟相关的信息
-	logic.UnionMgr.Load()
-	logic.RAttributeMgr.Load()
+	mgr.UnionMgr.Load()
+	mgr.RAttributeMgr.Load()
+	mgr.NMMgr.Load()
+	mgr.RCMgr.Load()
+	mgr.RBMgr.Load()
+	mgr.RFMgr.Load()
+	mgr.RResMgr.Load()
+	mgr.GMgr.Load()
+	mgr.AMgr.Load()
 
-	logic.NMMgr.Load()
-	logic.RCMgr.Load()
-	logic.RBMgr.Load()
-	logic.RFMgr.Load()
-	logic.RResMgr.Load()
-	logic.GMgr.Load()
-	logic.AMgr.Load()
+	logic.ArmyLogic.Init()
 
 }
 

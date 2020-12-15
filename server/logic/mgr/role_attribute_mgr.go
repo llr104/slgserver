@@ -1,4 +1,4 @@
-package logic
+package mgr
 
 import (
 	"go.uber.org/zap"
@@ -17,7 +17,7 @@ var RAttributeMgr = &roleAttributeMgr{
 	attribute: make(map[int]*model.RoleAttribute),
 }
 
-func (this* roleAttributeMgr) Load() {
+func (this*roleAttributeMgr) Load() {
 	//加载
 	t := make(map[int]*model.RoleAttribute)
 	err := db.MasterDB.Find(t)
@@ -49,7 +49,7 @@ func (this* roleAttributeMgr) Load() {
 }
 
 
-func (this* roleAttributeMgr) Get(rid int) (*model.RoleAttribute, bool){
+func (this*roleAttributeMgr) Get(rid int) (*model.RoleAttribute, bool){
 
 	this.mutex.RLock()
 	r, ok := this.attribute[rid]
@@ -62,7 +62,7 @@ func (this* roleAttributeMgr) Get(rid int) (*model.RoleAttribute, bool){
 	}
 }
 
-func (this* roleAttributeMgr) TryCreate(rid int) (*model.RoleAttribute, bool){
+func (this*roleAttributeMgr) TryCreate(rid int) (*model.RoleAttribute, bool){
 	attr, ok := this.Get(rid)
 	if ok {
 		return attr, true
@@ -74,7 +74,7 @@ func (this* roleAttributeMgr) TryCreate(rid int) (*model.RoleAttribute, bool){
 	}
 }
 
-func (this* roleAttributeMgr) create(rid int) *model.RoleAttribute{
+func (this*roleAttributeMgr) create(rid int) *model.RoleAttribute{
 	roleAttr := &model.RoleAttribute{RId: rid, ParentId: 0, UnionId: 0}
 	if _ , err := db.MasterDB.Insert(roleAttr); err != nil {
 		log.DefaultLog.Error("insert RoleAttribute error", zap.Error(err))
@@ -86,7 +86,7 @@ func (this* roleAttributeMgr) create(rid int) *model.RoleAttribute{
 }
 
 
-func (this* roleAttributeMgr) IsHasUnion(rid int) bool{
+func (this*roleAttributeMgr) IsHasUnion(rid int) bool{
 
 	this.mutex.RLock()
 	r, ok := this.attribute[rid]
@@ -99,7 +99,7 @@ func (this* roleAttributeMgr) IsHasUnion(rid int) bool{
 	}
 }
 
-func (this* roleAttributeMgr) UnionId(rid int) int{
+func (this*roleAttributeMgr) UnionId(rid int) int{
 
 	this.mutex.RLock()
 	r, ok := this.attribute[rid]
@@ -112,7 +112,7 @@ func (this* roleAttributeMgr) UnionId(rid int) int{
 	}
 }
 
-func (this* roleAttributeMgr) EnterUnion(rid, unionId int) {
+func (this*roleAttributeMgr) EnterUnion(rid, unionId int) {
 	attr, ok := this.TryCreate(rid)
 	if ok {
 		attr.UnionId = unionId

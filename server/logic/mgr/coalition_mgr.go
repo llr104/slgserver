@@ -1,4 +1,4 @@
-package logic
+package mgr
 
 import (
 	"go.uber.org/zap"
@@ -18,7 +18,7 @@ var UnionMgr = &coalitionMgr{
 	unions: make(map[int]*model.Coalition),
 }
 
-func (this* coalitionMgr) Load() {
+func (this*coalitionMgr) Load() {
 
 	rr := make([]*model.Coalition, 0)
 	err := db.MasterDB.Where("state=?", model.UnionRunning).Find(&rr)
@@ -34,7 +34,7 @@ func (this* coalitionMgr) Load() {
 }
 
 
-func (this* coalitionMgr) Get(id int) (*model.Coalition, bool){
+func (this*coalitionMgr) Get(id int) (*model.Coalition, bool){
 
 	this.mutex.RLock()
 	r, ok := this.unions[id]
@@ -65,14 +65,13 @@ func (this* coalitionMgr) Get(id int) (*model.Coalition, bool){
 	}
 }
 
-func (this* coalitionMgr) Create(name string, rid int) (*model.Coalition, bool){
+func (this*coalitionMgr) Create(name string, rid int) (*model.Coalition, bool){
 	m := &model.Coalition{Name: name, Ctime: time.Now(),
 		CreateId: rid, Chairman: rid, State: model.UnionRunning, MemberArray: []int{rid}}
 
 	_, err := db.MasterDB.Table(new(model.Coalition)).InsertOne(m)
 	if err == nil {
 
-		Union.MemberEnter(rid, m.Id)
 		this.mutex.Lock()
 		this.unions[m.Id] = m
 		this.mutex.Unlock()
@@ -84,7 +83,7 @@ func (this* coalitionMgr) Create(name string, rid int) (*model.Coalition, bool){
 	}
 }
 
-func (this* coalitionMgr) List() []*model.Coalition {
+func (this*coalitionMgr) List() []*model.Coalition {
 	r := make([]*model.Coalition, 0)
 	this.mutex.RLock()
 	for _, coalition := range this.unions {
@@ -94,7 +93,7 @@ func (this* coalitionMgr) List() []*model.Coalition {
 	return r
 }
 
-func (this* coalitionMgr) Remove(unionId int)  {
+func (this*coalitionMgr) Remove(unionId int)  {
 	this.mutex.Lock()
 	delete(this.unions, unionId)
 	this.mutex.Unlock()

@@ -2,7 +2,9 @@ package logic
 
 import (
 	"slgserver/server/global"
+	"slgserver/server/logic/mgr"
 	"slgserver/server/model"
+	"slgserver/server/static_conf"
 	"slgserver/util"
 	"sync"
 	"time"
@@ -13,26 +15,92 @@ var ArmyLogic *armyLogic
 
 func init() {
 	ArmyLogic = &armyLogic{
-		arriveArmys: make(chan *model.Army, 100),
+		arriveArmys:	make(chan *model.Army, 100),
 		giveUpId:       make(chan int, 100),
 		updateArmys:    make(chan *model.Army, 100),
 		outArmys:		make(map[int]*model.Army),
+		armyByEndTime:	make(map[int64][]*model.Army),
 		stopInPosArmys: make(map[int]map[int]*model.Army),
 		passbyPosArmys: make(map[int]map[int]*model.Army),
 		sys:            NewSysArmy()}
 
+	go ArmyLogic.check()
 	go ArmyLogic.running()
 }
 
 type armyLogic struct {
 	passby			sync.RWMutex
+	timeMutex		sync.RWMutex
+
 	sys            	*sysArmyLogic
 	giveUpId       	chan int
 	arriveArmys    	chan *model.Army
 	updateArmys    	chan *model.Army
 	outArmys		map[int]*model.Army
+
+	armyByEndTime	map[int64][]*model.Army 	//key:到达时间
 	stopInPosArmys 	map[int]map[int]*model.Army //玩家停留位置的军队 key:posId,armyId
 	passbyPosArmys 	map[int]map[int]*model.Army //玩家路过位置的军队 key:posId,armyId
+}
+
+func (this *armyLogic) Init(){
+
+	armys := mgr.AMgr.All()
+	for _, army := range armys {
+		//恢复已经执行行动的军队
+		if army.Cmd != model.ArmyCmdIdle {
+			e := army.End.Unix()
+			_, ok := this.armyByEndTime[e]
+			if ok == false{
+				this.armyByEndTime[e] = make([]*model.Army, 0)
+			}
+			this.armyByEndTime[e] = append(this.armyByEndTime[e], army)
+		}
+	}
+
+	curTime := time.Now().Unix()
+	for kT, armys := range this.armyByEndTime {
+		if kT <= curTime {
+			for _, a := range armys {
+				if a.Cmd == model.ArmyCmdAttack {
+					this.Arrive(a)
+				}else if a.Cmd == model.ArmyCmdDefend {
+					this.Arrive(a)
+				}else if a.Cmd == model.ArmyCmdBack {
+					if curTime >= a.End.Unix() {
+						a.ToX = a.FromX
+						a.ToY = a.FromY
+						a.Cmd = model.ArmyCmdIdle
+						a.State = model.ArmyStop
+					}
+				}
+				a.SyncExecute()
+			}
+			delete(this.armyByEndTime, kT)
+		}else{
+			for _, a := range armys {
+				a.State = model.ArmyRunning
+			}
+		}
+	}
+}
+
+func (this*armyLogic) check() {
+	for true {
+		t := time.Now().Unix()
+		time.Sleep(100*time.Millisecond)
+
+		this.timeMutex.Lock()
+		for k, armies := range this.armyByEndTime {
+			if k <= t{
+				for _, army := range armies {
+					this.Arrive(army)
+				}
+				delete(this.armyByEndTime, k)
+			}
+		}
+		this.timeMutex.Unlock()
+	}
 }
 
 func (this *armyLogic) running(){
@@ -45,7 +113,7 @@ func (this *armyLogic) running(){
 				for _, army := range this.outArmys {
 					if army.State == model.ArmyRunning{
 						x, y := army.Position()
-						posId := ToPosition(x, y)
+						posId := mgr.ToPosition(x, y)
 						if _, ok := this.passbyPosArmys[posId]; ok == false {
 							this.passbyPosArmys[posId] = make(map[int]*model.Army)
 						}
@@ -75,7 +143,7 @@ func (this *armyLogic) running(){
 				armys, ok := this.stopInPosArmys[giveUpId]
 				if ok {
 					for _, army := range armys {
-						AMgr.ArmyBack(army)
+						this.ArmyBack(army)
 					}
 					delete(this.stopInPosArmys, giveUpId)
 				}
@@ -106,7 +174,7 @@ func (this *armyLogic) exeArrive(army *model.Army) {
 			war := NewEmptyWar(army)
 			war.SyncExecute()
 		}
-		AMgr.ArmyBack(army)
+		this.ArmyBack(army)
 	}else if army.Cmd == model.ArmyCmdDefend {
 		//呆在哪里不动
 		ok := IsCanDefend(army.ToX, army.ToY, army.RId)
@@ -118,29 +186,29 @@ func (this *armyLogic) exeArrive(army *model.Army) {
 		}else{
 			war := NewEmptyWar(army)
 			war.SyncExecute()
-			AMgr.ArmyBack(army)
+			this.ArmyBack(army)
 		}
 
 	}else if army.Cmd == model.ArmyCmdReclamation {
 		if army.State == model.ArmyRunning {
 
-			ok := RBMgr.BuildIsRId(army.ToX, army.ToY, army.RId)
+			ok := mgr.RBMgr.BuildIsRId(army.ToX, army.ToY, army.RId)
 			if ok  {
 				//目前是自己的领地才能屯田
 				this.addArmy(army)
-				AMgr.Reclamation(army)
+				this.Reclamation(army)
 			}else{
 				war := NewEmptyWar(army)
 				war.SyncExecute()
-				AMgr.ArmyBack(army)
+				this.ArmyBack(army)
 			}
 
 		}else {
-			AMgr.ArmyBack(army)
+			this.ArmyBack(army)
 			//增加场量
-			rr, ok := RResMgr.Get(army.RId)
+			rr, ok := mgr.RResMgr.Get(army.RId)
 			if ok {
-				b, ok1 := RBMgr.PositionBuild(army.ToX, army.ToY)
+				b, ok1 := mgr.RBMgr.PositionBuild(army.ToX, army.ToY)
 				if ok1 {
 					rr.Stone += b.Stone
 					rr.Iron += b.Iron
@@ -170,7 +238,7 @@ func (this *armyLogic) ScanBlock(x, y, length int) []*model.Army {
 	this.passby.RLock()
 	for i := x; i <= maxX; i++ {
 		for j := y; j <= maxY; j++ {
-			posId := ToPosition(i, j)
+			posId := mgr.ToPosition(i, j)
 			armys, ok := this.passbyPosArmys[posId]
 			if ok {
 				for _, army := range armys {
@@ -198,17 +266,86 @@ func (this *armyLogic) GiveUp(posId int) {
 }
 
 func (this *armyLogic) deleteArmy(x, y int) {
-	posId := ToPosition(x, y)
+	posId := mgr.ToPosition(x, y)
 	delete(this.stopInPosArmys, posId)
 }
 
 func (this* armyLogic) addArmy(army *model.Army)  {
-	posId := ToPosition(army.ToX, army.ToY)
+	posId := mgr.ToPosition(army.ToX, army.ToY)
 
 	if _, ok := this.stopInPosArmys[posId]; ok == false {
 		this.stopInPosArmys[posId] = make(map[int]*model.Army)
 	}
 	this.stopInPosArmys[posId][army.Id] = army
+}
+
+
+func (this*armyLogic) addAction(t int64, army *model.Army)  {
+	_, ok := this.armyByEndTime[t]
+	if ok == false {
+		this.armyByEndTime[t] = make([]*model.Army, 0)
+	}
+	this.armyByEndTime[t] = append(this.armyByEndTime[t], army)
+}
+
+//把行动丢进来
+func (this*armyLogic) PushAction(army *model.Army)  {
+	this.timeMutex.Lock()
+	defer this.timeMutex.Unlock()
+
+	if army.Cmd == model.ArmyCmdAttack || army.Cmd == model.ArmyCmdDefend {
+		t := army.End.Unix()
+		this.addAction(t, army)
+
+	}else if army.Cmd == model.ArmyCmdReclamation {
+		if army.State == model.ArmyRunning {
+			t := army.End.Unix()
+			this.addAction(t, army)
+		}else{
+			costTime := static_conf.Basic.General.ReclamationTime
+			t := army.End.Unix()+int64(costTime)
+			this.addAction(t, army)
+		}
+	}else if army.Cmd == model.ArmyCmdBack {
+		cur := time.Now()
+		diff := army.End.Unix()-army.Start.Unix()
+		if cur.Unix() < army.End.Unix(){
+			diff = cur.Unix()-army.Start.Unix()
+		}
+		army.Start = cur
+		army.End = cur.Add(time.Duration(diff) * time.Second)
+		army.Cmd = model.ArmyCmdBack
+		this.addAction(army.End.Unix(), army)
+	}
+
+	this.Update(army)
 
 }
+
+func (this*armyLogic) ArmyBack(army *model.Army)  {
+	army.State = model.ArmyRunning
+	army.Cmd = model.ArmyCmdBack
+
+	this.timeMutex.Lock()
+	t := army.End.Unix()
+	if actions, ok := this.armyByEndTime[t]; ok {
+		for i, v := range actions {
+			if v.Id == army.Id{
+				actions = append(actions[:i], actions[i+1:]...)
+				this.armyByEndTime[t] = actions
+				break
+			}
+		}
+	}
+	this.timeMutex.Unlock()
+	this.PushAction(army)
+}
+
+func (this*armyLogic) Reclamation(army *model.Army)  {
+	army.State = model.ArmyStop
+	army.Cmd = model.ArmyCmdReclamation
+	this.PushAction(army)
+}
+
+
 

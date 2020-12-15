@@ -10,7 +10,7 @@ import (
 	"slgserver/net"
 	"slgserver/server/conn"
 	"slgserver/server/global"
-	"slgserver/server/logic"
+	"slgserver/server/logic/mgr"
 	"slgserver/server/middleware"
 	"slgserver/server/model"
 	"slgserver/server/pos"
@@ -132,7 +132,7 @@ func (this*Role) enterServer(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		conn.ConnMgr.RoleEnter(req.Conn, role.RId)
 
 		var e error = nil
-		roleRes, ok := logic.RResMgr.Get(role.RId)
+		roleRes, ok := mgr.RResMgr.Get(role.RId)
 		if ok == false{
 
 			roleRes = &model.RoleRes{RId: role.RId,
@@ -156,7 +156,7 @@ func (this*Role) enterServer(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		}
 
 		if e == nil {
-			logic.RResMgr.Add(roleRes)
+			mgr.RResMgr.Add(roleRes)
 			rspObj.RoleRes = roleRes.ToProto().(proto.RoleRes)
 			rsp.Body.Code = constant.OK
 		}else{
@@ -165,20 +165,20 @@ func (this*Role) enterServer(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		}
 
 		//玩家的一些属性
-		if _, ok := logic.RAttributeMgr.TryCreate(role.RId); ok == false{
+		if _, ok := mgr.RAttributeMgr.TryCreate(role.RId); ok == false{
 			rsp.Body.Code = constant.DBError
 			return
 		}
 
 		//查询是否有城市
-		_, ok = logic.RCMgr.GetByRId(role.RId)
+		_, ok = mgr.RCMgr.GetByRId(role.RId)
 		if ok == false{
 			citys := make([]*model.MapRoleCity, 0)
 			//随机生成一个城市
 			for true {
 				x := rand.Intn(global.MapWith)
 				y := rand.Intn(global.MapHeight)
-				if logic.NMMgr.IsCanBuildCity(x, y){
+				if mgr.NMMgr.IsCanBuildCity(x, y){
 					//建立城市
 					c := &model.MapRoleCity{RId: role.RId, X: x, Y: y,
 						IsMain: 1,
@@ -197,11 +197,11 @@ func (this*Role) enterServer(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 					}else{
 						citys = append(citys, c)
 						//更新城市缓存
-						logic.RCMgr.Add(c)
+						mgr.RCMgr.Add(c)
 					}
 
 					//生成城市里面的设施
-					logic.RFMgr.GetAndTryCreate(c.CityId, c.RId)
+					mgr.RFMgr.GetAndTryCreate(c.CityId, c.RId)
 					break
 				}
 			}
@@ -224,7 +224,7 @@ func (this*Role) myCity(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	role, _ := r.(*model.Role)
 
 
-	citys,ok := logic.RCMgr.GetByRId(role.RId)
+	citys,ok := mgr.RCMgr.GetByRId(role.RId)
 	if ok {
 		rspObj.Citys = make([]proto.MapRoleCity, len(citys))
 		//赋值发送
@@ -249,7 +249,7 @@ func (this*Role) myRoleRes(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
 
-	roleRes, ok := logic.RResMgr.Get(role.RId)
+	roleRes, ok := mgr.RResMgr.Get(role.RId)
 	if ok == false{
 		rsp.Body.Code = constant.RoleNotExist
 		return
@@ -271,7 +271,7 @@ func (this*Role) myProperty(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	role := r.(*model.Role)
 
 	//城市
-	c, ok := logic.RCMgr.GetByRId(role.RId)
+	c, ok := mgr.RCMgr.GetByRId(role.RId)
 	if ok {
 		rspObj.Citys = make([]proto.MapRoleCity, len(c))
 		for i, v := range c {
@@ -283,7 +283,7 @@ func (this*Role) myProperty(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 
 	//建筑
-	ra, ok := logic.RBMgr.GetRoleBuild(role.RId)
+	ra, ok := mgr.RBMgr.GetRoleBuild(role.RId)
 	if ok {
 		rspObj.MRBuilds = make([]proto.MapRoleBuild, len(ra))
 		for i, v := range ra {
@@ -294,7 +294,7 @@ func (this*Role) myProperty(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	}
 
 	//资源
-	roleRes, ok := logic.RResMgr.Get(role.RId)
+	roleRes, ok := mgr.RResMgr.Get(role.RId)
 	if ok {
 		rspObj.RoleRes = roleRes.ToProto().(proto.RoleRes)
 	}else{
@@ -303,7 +303,7 @@ func (this*Role) myProperty(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	}
 
 	//武将
-	gs, ok := logic.GMgr.GetByRIdTryCreate(role.RId)
+	gs, ok := mgr.GMgr.GetByRIdTryCreate(role.RId)
 	if ok {
 		rspObj.Generals = make([]proto.General, len(gs))
 		for i, v := range gs {
@@ -315,7 +315,7 @@ func (this*Role) myProperty(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	}
 
 	//军队
-	ar, ok := logic.AMgr.GetByRId(role.RId)
+	ar, ok := mgr.AMgr.GetByRId(role.RId)
 	if ok {
 		rspObj.Armys = make([]proto.Army, len(ar))
 		for i, v := range ar {
@@ -338,7 +338,7 @@ func (this*Role) myRoleBuild(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
 
-	ra, ok := logic.RBMgr.GetRoleBuild(role.RId)
+	ra, ok := mgr.RBMgr.GetRoleBuild(role.RId)
 	if ok {
 		rspObj.MRBuilds = make([]proto.MapRoleBuild, len(ra))
 		for i, v := range ra {

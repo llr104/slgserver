@@ -1,4 +1,4 @@
-package logic
+package mgr
 
 import (
 	"encoding/json"

@@ -8,6 +8,7 @@ import (
 	"slgserver/log"
 	"slgserver/net"
 	"slgserver/server/logic"
+	"slgserver/server/logic/mgr"
 	"slgserver/server/middleware"
 	"slgserver/server/model"
 	"slgserver/server/proto"
@@ -55,15 +56,16 @@ func (this *coalition) create(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	role := r.(*model.Role)
 	rspObj.Name = reqObj.Name
 
-	has := logic.RAttributeMgr.IsHasUnion(role.RId)
+	has := mgr.RAttributeMgr.IsHasUnion(role.RId)
 	if has {
 		rsp.Body.Code = constant.UnionAlreadyHas
 		return
 	}
 
-	c, ok := logic.UnionMgr.Create(reqObj.Name, role.RId)
+	c, ok := mgr.UnionMgr.Create(reqObj.Name, role.RId)
 	if ok {
 		rspObj.Id = c.Id
+		logic.Union.MemberEnter(role.RId, c.Id)
 	}else{
 		rsp.Body.Code = constant.UnionCreateError
 	}
@@ -78,17 +80,17 @@ func (this *coalition) list(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 	rsp.Body.Code = constant.OK
 
-	l := logic.UnionMgr.List()
+	l := mgr.UnionMgr.List()
 	rspObj.List = make([]proto.Union, len(l))
 	for i, u := range l {
 		rspObj.List[i] = u.ToProto().(proto.Union)
 		main := make([]proto.Major, 0)
-		if r, ok := logic.RMgr.Get(u.Chairman); ok {
+		if r, ok := mgr.RMgr.Get(u.Chairman); ok {
 			m := proto.Major{Name: r.NickName, RId: r.RId, Title: proto.UnionChairman}
 			main = append(main, m)
 		}
 
-		if r, ok := logic.RMgr.Get(u.ViceChairman); ok {
+		if r, ok := mgr.RMgr.Get(u.ViceChairman); ok {
 			m := proto.Major{Name: r.NickName, RId: r.RId, Title: proto.UnionViceChairman}
 			main = append(main, m)
 		}
@@ -108,13 +110,13 @@ func (this *coalition) join(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
 
-	has := logic.RAttributeMgr.IsHasUnion(role.RId)
+	has := mgr.RAttributeMgr.IsHasUnion(role.RId)
 	if has {
 		rsp.Body.Code = constant.UnionAlreadyHas
 		return
 	}
 
-	u, ok := logic.UnionMgr.Get(reqObj.Id)
+	u, ok := mgr.UnionMgr.Get(reqObj.Id)
 	if ok == false{
 		rsp.Body.Code = constant.UnionNotFound
 		return
@@ -167,7 +169,7 @@ func (this *coalition) verify(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	ok, err := db.MasterDB.Table(model.CoalitionApply{}).Where(
 		"id=? and state=?", reqObj.Id, proto.UnionUntreated).Get(apply)
 	if ok && err == nil{
-		if u, ok := logic.UnionMgr.Get(apply.UnionId); ok {
+		if u, ok := mgr.UnionMgr.Get(apply.UnionId); ok {
 
 			if u.Chairman != role.RId && u.ViceChairman != role.RId {
 				rsp.Body.Code = constant.PermissionDenied
@@ -179,12 +181,12 @@ func (this *coalition) verify(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 				return
 			}
 
-			if ok := logic.RAttributeMgr.IsHasUnion(apply.RId); ok {
+			if ok := mgr.RAttributeMgr.IsHasUnion(apply.RId); ok {
 				rsp.Body.Code = constant.UnionAlreadyHas
 			}else{
 				if reqObj.Decide == proto.UnionAdopt{
 					//同意
-					c, ok := logic.UnionMgr.Get(apply.UnionId)
+					c, ok := mgr.UnionMgr.Get(apply.UnionId)
 					if ok {
 						c.MemberArray = append(c.MemberArray, apply.RId)
 						logic.Union.MemberEnter(apply.RId, apply.UnionId)
@@ -214,7 +216,7 @@ func (this *coalition) member(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	rspObj.Id = reqObj.Id
 	rsp.Body.Code = constant.OK
 
-	union, ok := logic.UnionMgr.Get(reqObj.Id)
+	union, ok := mgr.UnionMgr.Get(reqObj.Id)
 	if ok == false{
 		rsp.Body.Code = constant.UnionNotFound
 		return
@@ -222,9 +224,9 @@ func (this *coalition) member(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 	rspObj.Members = make([]proto.Member, 0)
 	for _, rid := range union.MemberArray {
-		if role, ok := logic.RMgr.Get(rid); ok {
+		if role, ok := mgr.RMgr.Get(rid); ok {
 			m := proto.Member{RId: role.RId, Name: role.NickName }
-			if main, ok := logic.RCMgr.GetMainCity(role.RId); ok {
+			if main, ok := mgr.RCMgr.GetMainCity(role.RId); ok {
 				m.X = main.X
 				m.Y = main.Y
 			}
@@ -254,7 +256,7 @@ func (this *coalition) applyList(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
 
-	u, ok := logic.UnionMgr.Get(reqObj.Id)
+	u, ok := mgr.UnionMgr.Get(reqObj.Id)
 	if ok == false{
 		rsp.Body.Code = constant.UnionNotFound
 		return
@@ -275,7 +277,7 @@ func (this *coalition) applyList(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 	rspObj.Applys = make([]proto.ApplyItem, 0)
 	for _, apply := range applys {
-		if r, ok := logic.RMgr.Get(apply.RId);ok{
+		if r, ok := mgr.RMgr.Get(apply.RId);ok{
 			a := proto.ApplyItem{Id: apply.Id, RId: apply.RId, NickName: r.NickName}
 			rspObj.Applys = append(rspObj.Applys, a)
 		}
@@ -294,13 +296,13 @@ func (this *coalition) exit(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
 
-	if ok := logic.RAttributeMgr.IsHasUnion(role.RId); ok == false {
+	if ok := mgr.RAttributeMgr.IsHasUnion(role.RId); ok == false {
 		rsp.Body.Code = constant.UnionNotFound
 		return
 	}
 
-	attribute, _ := logic.RAttributeMgr.Get(role.RId)
-	u, ok := logic.UnionMgr.Get(attribute.UnionId)
+	attribute, _ := mgr.RAttributeMgr.Get(role.RId)
+	u, ok := mgr.UnionMgr.Get(attribute.UnionId)
 	if ok == false{
 		rsp.Body.Code = constant.UnionNotFound
 		return
@@ -336,13 +338,13 @@ func (this *coalition) dismiss(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
 
-	if ok := logic.RAttributeMgr.IsHasUnion(role.RId); ok == false {
+	if ok := mgr.RAttributeMgr.IsHasUnion(role.RId); ok == false {
 		rsp.Body.Code = constant.UnionNotFound
 		return
 	}
 
-	attribute, _ := logic.RAttributeMgr.Get(role.RId)
-	u, ok := logic.UnionMgr.Get(attribute.UnionId)
+	attribute, _ := mgr.RAttributeMgr.Get(role.RId)
+	u, ok := mgr.UnionMgr.Get(attribute.UnionId)
 	if ok == false{
 		rsp.Body.Code = constant.UnionNotFound
 		return
@@ -354,7 +356,7 @@ func (this *coalition) dismiss(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	logic.UnionMgr.Remove(attribute.UnionId)
+	mgr.UnionMgr.Remove(attribute.UnionId)
 
 	for _, rid := range u.MemberArray {
 		logic.Union.MemberExit(rid)
@@ -376,7 +378,7 @@ func (this *coalition) notice(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	rsp.Body.Msg = rspObj
 	rsp.Body.Code = constant.OK
 
-	u, ok := logic.UnionMgr.Get(reqObj.Id)
+	u, ok := mgr.UnionMgr.Get(reqObj.Id)
 	if ok == false{
 		rsp.Body.Code = constant.UnionNotFound
 		return
@@ -401,13 +403,13 @@ func (this *coalition) modNotice(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	if ok := logic.RAttributeMgr.IsHasUnion(role.RId); ok == false {
+	if ok := mgr.RAttributeMgr.IsHasUnion(role.RId); ok == false {
 		rsp.Body.Code = constant.UnionNotFound
 		return
 	}
 
-	attribute, _ := logic.RAttributeMgr.Get(role.RId)
-	u, ok := logic.UnionMgr.Get(attribute.UnionId)
+	attribute, _ := mgr.RAttributeMgr.Get(role.RId)
+	u, ok := mgr.UnionMgr.Get(attribute.UnionId)
 	if ok == false{
 		rsp.Body.Code = constant.UnionNotFound
 		return
@@ -436,13 +438,13 @@ func (this *coalition) kick(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
 
-	if ok := logic.RAttributeMgr.IsHasUnion(role.RId); ok == false {
+	if ok := mgr.RAttributeMgr.IsHasUnion(role.RId); ok == false {
 		rsp.Body.Code = constant.UnionNotFound
 		return
 	}
 
-	opAr, _ := logic.RAttributeMgr.Get(role.RId)
-	u, ok := logic.UnionMgr.Get(opAr.UnionId)
+	opAr, _ := mgr.RAttributeMgr.Get(role.RId)
+	u, ok := mgr.UnionMgr.Get(opAr.UnionId)
 	if ok == false{
 		rsp.Body.Code = constant.UnionNotFound
 		return
@@ -453,7 +455,7 @@ func (this *coalition) kick(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	target, ok := logic.RAttributeMgr.Get(reqObj.RId)
+	target, ok := mgr.RAttributeMgr.Get(reqObj.RId)
 	if ok {
 		if target.UnionId == u.Id{
 			for i, rid := range u.MemberArray {
@@ -485,13 +487,13 @@ func (this *coalition) appoint(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
 
-	if ok := logic.RAttributeMgr.IsHasUnion(role.RId); ok == false {
+	if ok := mgr.RAttributeMgr.IsHasUnion(role.RId); ok == false {
 		rsp.Body.Code = constant.UnionNotFound
 		return
 	}
 
-	opAr, _ := logic.RAttributeMgr.Get(role.RId)
-	u, ok := logic.UnionMgr.Get(opAr.UnionId)
+	opAr, _ := mgr.RAttributeMgr.Get(role.RId)
+	u, ok := mgr.UnionMgr.Get(opAr.UnionId)
 	if ok == false{
 		rsp.Body.Code = constant.UnionNotFound
 		return
@@ -502,7 +504,7 @@ func (this *coalition) appoint(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	target, ok := logic.RAttributeMgr.Get(reqObj.RId)
+	target, ok := mgr.RAttributeMgr.Get(reqObj.RId)
 	if ok {
 		if target.UnionId == u.Id{
 			if reqObj.Title == proto.UnionViceChairman{
@@ -533,13 +535,13 @@ func (this *coalition) abdicate(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
 
-	if ok := logic.RAttributeMgr.IsHasUnion(role.RId); ok == false {
+	if ok := mgr.RAttributeMgr.IsHasUnion(role.RId); ok == false {
 		rsp.Body.Code = constant.UnionNotFound
 		return
 	}
 
-	opAr, _ := logic.RAttributeMgr.Get(role.RId)
-	u, ok := logic.UnionMgr.Get(opAr.UnionId)
+	opAr, _ := mgr.RAttributeMgr.Get(role.RId)
+	u, ok := mgr.UnionMgr.Get(opAr.UnionId)
 	if ok == false{
 		rsp.Body.Code = constant.UnionNotFound
 		return
@@ -550,7 +552,7 @@ func (this *coalition) abdicate(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	target, ok := logic.RAttributeMgr.Get(reqObj.RId)
+	target, ok := mgr.RAttributeMgr.Get(reqObj.RId)
 	if ok {
 		if target.UnionId == u.Id{
 			if role.RId == u.Chairman{
@@ -577,18 +579,18 @@ func (this *coalition) info(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 	rsp.Body.Code = constant.OK
 
-	u, ok := logic.UnionMgr.Get(reqObj.Id)
+	u, ok := mgr.UnionMgr.Get(reqObj.Id)
 	if ok == false{
 		rsp.Body.Code = constant.UnionNotFound
 	}else{
 		rspObj.Info = u.ToProto().(proto.Union)
 		main := make([]proto.Major, 0)
-		if r, ok := logic.RMgr.Get(u.Chairman); ok {
+		if r, ok := mgr.RMgr.Get(u.Chairman); ok {
 			m := proto.Major{Name: r.NickName, RId: r.RId, Title: proto.UnionChairman}
 			main = append(main, m)
 		}
 
-		if r, ok := logic.RMgr.Get(u.ViceChairman); ok {
+		if r, ok := mgr.RMgr.Get(u.ViceChairman); ok {
 			m := proto.Major{Name: r.NickName, RId: r.RId, Title: proto.UnionViceChairman}
 			main = append(main, m)
 		}

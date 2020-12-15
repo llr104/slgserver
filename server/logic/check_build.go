@@ -1,6 +1,9 @@
 package logic
 
-import "slgserver/server/global"
+import (
+	"slgserver/server/global"
+	"slgserver/server/logic/mgr"
+)
 
 func hasRoleBuildNearBy(x, y, rid, unionId int) bool {
 	for i := x-1; i <= x+1; i++ {
@@ -15,7 +18,7 @@ func hasRoleBuildNearBy(x, y, rid, unionId int) bool {
 				continue
 			}
 
-			if rb, ok := RBMgr.PositionBuild(i, j); ok {
+			if rb, ok := mgr.RBMgr.PositionBuild(i, j); ok {
 				if rb.RId == rid || (unionId != 0 && rb.UnionId == unionId){
 					return true
 				}
@@ -27,10 +30,10 @@ func hasRoleBuildNearBy(x, y, rid, unionId int) bool {
 
 //是否能到达
 func IsCanArrive(x, y, rid int) bool {
-	unionId := RAttributeMgr.UnionId(rid)
+	unionId := mgr.RAttributeMgr.UnionId(rid)
 
 	//目标位置是城池
-	if _, ok := RCMgr.PositionCity(x, y); ok {
+	if _, ok := mgr.RCMgr.PositionCity(x, y); ok {
 		//城的四周是否有地相连
 		//上
 		ok := hasRoleBuildNearBy(x, y+2, rid, unionId)
@@ -64,7 +67,7 @@ func IsCanArrive(x, y, rid int) bool {
 		//再判断是否和城市相连， 因为城池占了9格，所以该格子附近两个格子范围内有城池，则该地方是城池
 		for i := x-2; i <= x+2; i++ {
 			for j := y-2; j <= y+2; j++ {
-				if rc, ok := RCMgr.PositionCity(i, j); ok {
+				if rc, ok := mgr.RCMgr.PositionCity(i, j); ok {
 					if rc.RId == rid || (unionId != 0 && rc.UnionId == unionId) {
 						return true
 					}
@@ -77,8 +80,8 @@ func IsCanArrive(x, y, rid int) bool {
 }
 
 func IsCanDefend(x, y, rid int) bool{
-	unionId := RAttributeMgr.UnionId(rid)
-	b, ok := RBMgr.PositionBuild(x, y)
+	unionId := mgr.RAttributeMgr.UnionId(rid)
+	b, ok := mgr.RBMgr.PositionBuild(x, y)
 	if ok {
 		if b.RId == rid{
 			return true
@@ -87,7 +90,7 @@ func IsCanDefend(x, y, rid int) bool{
 		}
 	}
 
-	c, ok := RCMgr.PositionCity(x, y)
+	c, ok := mgr.RCMgr.PositionCity(x, y)
 	if ok {
 		if c.RId == rid{
 			return true

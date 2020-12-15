@@ -5,6 +5,7 @@ import (
 	"slgserver/constant"
 	"slgserver/net"
 	"slgserver/server/logic"
+	"slgserver/server/logic/mgr"
 	"slgserver/server/middleware"
 	"slgserver/server/model"
 	"slgserver/server/proto"
@@ -65,14 +66,14 @@ func (this*NationMap) scan(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	x := reqObj.X
 	y := reqObj.Y
 
-	rb := logic.RBMgr.Scan(x, y)
+	rb := mgr.RBMgr.Scan(x, y)
 	rspObj.MRBuilds = make([]proto.MapRoleBuild, len(rb))
 	for i, v := range rb {
-		logic.RoleBuildExtra(v)
+		mgr.RoleBuildExtra(v)
 		rspObj.MRBuilds[i] = v.ToProto().(proto.MapRoleBuild)
 	}
 
-	cb := logic.RCMgr.Scan(x, y)
+	cb := mgr.RCMgr.Scan(x, y)
 	rspObj.MCBuilds = make([]proto.MapRoleCity, len(cb))
 	for i, v := range cb {
 		rspObj.MCBuilds[i] = v.ToProto().(proto.MapRoleCity)
@@ -89,13 +90,13 @@ func (this*NationMap) scanBlock(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	x := reqObj.X
 	y := reqObj.Y
 
-	rb := logic.RBMgr.ScanBlock(x, y, reqObj.Length)
+	rb := mgr.RBMgr.ScanBlock(x, y, reqObj.Length)
 	rspObj.MRBuilds = make([]proto.MapRoleBuild, len(rb))
 	for i, v := range rb {
 		rspObj.MRBuilds[i] = v.ToProto().(proto.MapRoleBuild)
 	}
 
-	cb := logic.RCMgr.ScanBlock(x, y, reqObj.Length)
+	cb := mgr.RCMgr.ScanBlock(x, y, reqObj.Length)
 	rspObj.MCBuilds = make([]proto.MapRoleCity, len(cb))
 	for i, v := range cb {
 		rspObj.MCBuilds[i] = v.ToProto().(proto.MapRoleCity)
@@ -125,17 +126,17 @@ func (this*NationMap) giveUp(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
 
-	if logic.RBMgr.BuildIsRId(x, y, role.RId) == false{
+	if mgr.RBMgr.BuildIsRId(x, y, role.RId) == false{
 		rsp.Body.Code = constant.BuildNotMe
 		return
 	}
 
-	rb, _ := logic.RBMgr.PositionBuild(x, y)
-	rr, ok := logic.RResMgr.CutDown(role.RId, rb)
-	logic.RBMgr.RemoveFromRole(rb)
+	rb, _ := mgr.RBMgr.PositionBuild(x, y)
+	rr, ok := mgr.RResMgr.CutDown(role.RId, rb)
+	mgr.RBMgr.RemoveFromRole(rb)
 
 	//移除该地驻守
-	logic.ArmyLogic.GiveUp(logic.ToPosition(reqObj.X, reqObj.Y))
+	logic.ArmyLogic.GiveUp(mgr.ToPosition(reqObj.X, reqObj.Y))
 
 	if ok {
 		rspObj.RoleRes = rr.ToProto().(proto.RoleRes)

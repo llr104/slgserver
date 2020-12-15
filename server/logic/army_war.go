@@ -6,6 +6,7 @@ import (
 	"go.uber.org/zap"
 	"math/rand"
 	"slgserver/log"
+	"slgserver/server/logic/mgr"
 	"slgserver/server/model"
 	"slgserver/server/proto"
 	"slgserver/server/static_conf"
@@ -86,7 +87,7 @@ func (this* armyWar) init() {
 	//城内设施加成
 	attackAdds := []int{0,0,0,0}
 	if this.attack.CityId > 0{
-		attackAdds = RFMgr.GetAdditions(this.attack.CityId,
+		attackAdds = mgr.RFMgr.GetAdditions(this.attack.CityId,
 			facility.TypeForce,
 			facility.TypeDefense,
 			facility.TypeSpeed,
@@ -95,7 +96,7 @@ func (this* armyWar) init() {
 
 	defenseAdds := []int{0,0,0,0}
 	if this.defense.CityId > 0{
-		defenseAdds = RFMgr.GetAdditions(this.defense.CityId,
+		defenseAdds = mgr.RFMgr.GetAdditions(this.defense.CityId,
 			facility.TypeForce,
 			facility.TypeDefense,
 			facility.TypeSpeed,
@@ -106,13 +107,13 @@ func (this* armyWar) init() {
 	aCampAdds := []int{0}
 	aCamp := this.attack.GetCamp()
 	if aCamp > 0{
-		aCampAdds = RFMgr.GetAdditions(this.attack.CityId, facility.TypeHanAddition-1+aCamp)
+		aCampAdds = mgr.RFMgr.GetAdditions(this.attack.CityId, facility.TypeHanAddition-1+aCamp)
 	}
 
 	dCampAdds := []int{0}
 	dCamp := this.attack.GetCamp()
 	if dCamp > 0 {
-		dCampAdds = RFMgr.GetAdditions(this.defense.CityId, facility.TypeHanAddition-1+aCamp)
+		dCampAdds = mgr.RFMgr.GetAdditions(this.defense.CityId, facility.TypeHanAddition-1+aCamp)
 	}
 
 	this.attackPos = make([]*armyPosition, 0)
@@ -329,12 +330,12 @@ func NewEmptyWar(attack *model.Army) *model.WarReport {
 
 //简单战斗
 func newBattle(attackArmy *model.Army) {
-	city, ok := RCMgr.PositionCity(attackArmy.ToX, attackArmy.ToY)
+	city, ok := mgr.RCMgr.PositionCity(attackArmy.ToX, attackArmy.ToY)
 	if ok {
 		//打玩家城池
 		var enemys []*model.Army
 		//驻守队伍被打
-		posId := ToPosition(attackArmy.ToX, attackArmy.ToY)
+		posId := mgr.ToPosition(attackArmy.ToX, attackArmy.ToY)
 		posArmys, ok := ArmyLogic.stopInPosArmys[posId]
 		if ok {
 			for _, army := range posArmys {
@@ -343,7 +344,7 @@ func newBattle(attackArmy *model.Army) {
 		}
 
 		//城内空闲的队伍被打
-		if armys, ok := AMgr.GetByCity(city.CityId); ok {
+		if armys, ok := mgr.AMgr.GetByCity(city.CityId); ok {
 			for _, enemy := range armys {
 				if enemy.Cmd == model.ArmyCmdIdle{
 					enemys = append(enemys, enemy)
@@ -353,22 +354,22 @@ func newBattle(attackArmy *model.Army) {
 
 		if len(enemys) == 0 {
 			//没有队伍
-			destory := GMgr.GetDestroy(attackArmy)
+			destory := mgr.GMgr.GetDestroy(attackArmy)
 			city.CurDurable = util.MaxInt(0, city.CurDurable - destory)
 			city.SyncExecute()
 		}else{
 			lastWar, warReports := trigger(attackArmy, enemys, true)
 			if lastWar.result > 1 {
-				destory := GMgr.GetDestroy(attackArmy)
+				destory := mgr.GMgr.GetDestroy(attackArmy)
 				wr := warReports[len(warReports)-1]
 				wr.DestroyDurable = util.MinInt(destory, city.CurDurable)
 				city.CurDurable = util.MaxInt(0, city.CurDurable - destory)
 				if city.CurDurable == 0{
-					aAttr, _ := RAttributeMgr.Get(attackArmy.RId)
+					aAttr, _ := mgr.RAttributeMgr.Get(attackArmy.RId)
 					if aAttr.UnionId != 0{
 						//有联盟才能俘虏玩家
 						wr.Occupy = 1
-						dAttr, _ := RAttributeMgr.Get(city.RId)
+						dAttr, _ := mgr.RAttributeMgr.Get(city.RId)
 						dAttr.ParentId = aAttr.UnionId
 						dAttr.SyncExecute()
 
@@ -393,7 +394,7 @@ func newBattle(attackArmy *model.Army) {
 
 func trigger(army *model.Army, enemys []*model.Army, isRoleEnemy bool) (*WarResult, []*model.WarReport) {
 
-	posId := ToPosition(army.ToX, army.ToY)
+	posId := mgr.ToPosition(army.ToX, army.ToY)
 	warReports := make([]*model.WarReport, 0)
 	var lastWar *WarResult = nil
 
@@ -481,7 +482,7 @@ func trigger(army *model.Army, enemys []*model.Army, isRoleEnemy bool) (*WarResu
 				if isRoleEnemy {
 					delete(ArmyLogic.stopInPosArmys, posId)
 				}
-				AMgr.ArmyBack(enemy)
+				ArmyLogic.ArmyBack(enemy)
 			}
 			enemy.SyncExecute()
 		}else{
@@ -493,9 +494,9 @@ func trigger(army *model.Army, enemys []*model.Army, isRoleEnemy bool) (*WarResu
 }
 
 func executeBuild(army *model.Army)  {
-	roleBuid, _ := RBMgr.PositionBuild(army.ToX, army.ToY)
+	roleBuid, _ := mgr.RBMgr.PositionBuild(army.ToX, army.ToY)
 
-	posId := ToPosition(army.ToX, army.ToY)
+	posId := mgr.ToPosition(army.ToX, army.ToY)
 	posArmys, isRoleEnemy := ArmyLogic.stopInPosArmys[posId]
 
 	var enemys []*model.Army
@@ -511,20 +512,20 @@ func executeBuild(army *model.Army)  {
 
 	if lastWar.result > 1 {
 		if roleBuid != nil {
-			destory := GMgr.GetDestroy(army)
+			destory := mgr.GMgr.GetDestroy(army)
 			wr := warReports[len(warReports)-1]
 			wr.DestroyDurable = util.MinInt(destory, roleBuid.CurDurable)
 			roleBuid.CurDurable = util.MaxInt(0, roleBuid.CurDurable - destory)
 			if roleBuid.CurDurable == 0{
 				//攻占了玩家的领地
 				blimit := static_conf.Basic.Role.BuildLimit
-				if blimit > RBMgr.BuildCnt(army.RId){
+				if blimit > mgr.RBMgr.BuildCnt(army.RId){
 					wr.Occupy = 1
 				}else{
 					wr.Occupy = 0
 				}
-				RBMgr.RemoveFromRole(roleBuid)
-				RBMgr.AddBuild(army.RId, army.ToX, army.ToY)
+				mgr.RBMgr.RemoveFromRole(roleBuid)
+				mgr.RBMgr.AddBuild(army.RId, army.ToX, army.ToY)
 				roleBuid.CurDurable = roleBuid.MaxDurable
 				OccupyRoleBuild(army.RId, army.ToX, army.ToY)
 			}else{
@@ -535,7 +536,7 @@ func executeBuild(army *model.Army)  {
 			//占领系统领地
 			wr := warReports[len(warReports)-1]
 			blimit := static_conf.Basic.Role.BuildLimit
-			if blimit > RBMgr.BuildCnt(army.RId){
+			if blimit > mgr.RBMgr.BuildCnt(army.RId){
 				OccupySystemBuild(army.RId, army.ToX, army.ToY)
 				wr.DestroyDurable = 100
 				wr.Occupy = 1
@@ -547,8 +548,8 @@ func executeBuild(army *model.Army)  {
 	}
 
 	//领地发生变化
-	if newRoleBuild, ok := RBMgr.PositionBuild(army.ToX, army.ToY); ok {
-		RoleBuildExtra(newRoleBuild)
+	if newRoleBuild, ok := mgr.RBMgr.PositionBuild(army.ToX, army.ToY); ok {
+		mgr.RoleBuildExtra(newRoleBuild)
 		newRoleBuild.SyncExecute()
 	}
 
@@ -560,7 +561,7 @@ func executeBuild(army *model.Army)  {
 func OccupyRoleBuild(rid, x, y int)  {
 	newId := rid
 
-	if b, ok := RBMgr.PositionBuild(x, y); ok {
+	if b, ok := mgr.RBMgr.PositionBuild(x, y); ok {
 
 		oldId := b.RId
 		log.DefaultLog.Info("battle in role build",
@@ -568,7 +569,7 @@ func OccupyRoleBuild(rid, x, y int)  {
 			zap.Int("newRId", newId))
 
 		//被占领的减产
-		if oldRole, ok := RResMgr.Get(oldId); ok{
+		if oldRole, ok := mgr.RResMgr.Get(oldId); ok{
 			oldRole.WoodYield -= b.Wood
 			oldRole.GrainYield -= b.Grain
 			oldRole.StoneYield -= b.Stone
@@ -576,7 +577,7 @@ func OccupyRoleBuild(rid, x, y int)  {
 			oldRole.SyncExecute()
 		}
 		//占领的增加产量
-		if newRole, ok := RResMgr.Get(newId); ok{
+		if newRole, ok := mgr.RResMgr.Get(newId); ok{
 			newRole.WoodYield += b.Wood
 			newRole.GrainYield += b.Grain
 			newRole.StoneYield += b.Stone
@@ -590,15 +591,15 @@ func OccupyRoleBuild(rid, x, y int)  {
 func OccupySystemBuild(rid, x, y int)  {
 	newId := rid
 
-	if _, ok := RBMgr.PositionBuild(x, y); ok {
+	if _, ok := mgr.RBMgr.PositionBuild(x, y); ok {
 		return
 	}
 
-	if NMMgr.IsCanBuild(x, y){
-		rb, ok := RBMgr.AddBuild(rid, x, y)
+	if mgr.NMMgr.IsCanBuild(x, y){
+		rb, ok := mgr.RBMgr.AddBuild(rid, x, y)
 		if ok {
 			//占领的增加产量
-			if newRole, ok := RResMgr.Get(newId); ok{
+			if newRole, ok := mgr.RResMgr.Get(newId); ok{
 				newRole.WoodYield += rb.Wood
 				newRole.GrainYield += rb.Grain
 				newRole.StoneYield += rb.Stone

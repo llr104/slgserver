@@ -1,6 +1,7 @@
 package logic
 
 import (
+	"slgserver/server/logic/mgr"
 	"slgserver/server/model"
 	"slgserver/server/static_conf"
 	"sync"
@@ -19,14 +20,14 @@ type sysArmyLogic struct {
 }
 
 func (this * sysArmyLogic) GetArmy(x, y int) []*model.Army {
-	posId := ToPosition(x, y)
+	posId := mgr.ToPosition(x, y)
 	this.mutex.Lock()
 	a, ok := this.sysArmys[posId]
 	this.mutex.Unlock()
 	if ok {
 		return a
 	}else{
-		out, ok := GMgr.GetNPCGenerals(3)
+		out, ok := mgr.GMgr.GetNPCGenerals(3)
 		gsId := make([]int, 0)
 		gs := make([]*model.General, 3)
 
@@ -36,7 +37,7 @@ func (this * sysArmyLogic) GetArmy(x, y int) []*model.Army {
 
 		armys := make([]*model.Army, 0)
 		if ok {
-			if cfg, ok := NMMgr.PositionBuild(x, y); ok{
+			if cfg, ok := mgr.NMMgr.PositionBuild(x, y); ok{
 				soilder := 100*int(cfg.Level)
 				npc, ok1 := static_conf.Basic.GetNPC(cfg.Level)
 				if ok1 {
@@ -50,7 +51,7 @@ func (this * sysArmyLogic) GetArmy(x, y int) []*model.Army {
 				army.ToSoldier()
 
 				armys = append(armys, army)
-				posId := ToPosition(x, y)
+				posId := mgr.ToPosition(x, y)
 				this.sysArmys[posId] = armys
 
 				return armys
@@ -66,7 +67,7 @@ func (this * sysArmyLogic) GetArmy(x, y int) []*model.Army {
 func (this * sysArmyLogic) DelArmy(x, y int) {
 	this.mutex.Lock()
 	defer this.mutex.Unlock()
-	posId := ToPosition(x, y)
+	posId := mgr.ToPosition(x, y)
 	delete(this.sysArmys, posId)
 }
 

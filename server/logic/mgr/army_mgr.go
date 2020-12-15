@@ -1,14 +1,12 @@
-package logic
+package mgr
 
 import (
 	"go.uber.org/zap"
 	"slgserver/db"
 	"slgserver/log"
 	"slgserver/server/model"
-	"slgserver/server/static_conf"
 	"slgserver/server/static_conf/facility"
 	"sync"
-	"time"
 )
 
 func RoleArmyExtra(army* model.Army) {
@@ -22,14 +20,12 @@ type armyMgr struct {
 	mutex        	sync.RWMutex
 	armyById     	map[int]*model.Army      //key:armyId
 	armyByCityId 	map[int][]*model.Army    //key:cityId
-	armyByEndTime	map[int64][]*model.Army //key:到达时间
 	armyByRId		map[int][]*model.Army   //key:rid
 }
 
 var AMgr = &armyMgr{
 	armyById:    	make(map[int]*model.Army),
 	armyByCityId: 	make(map[int][]*model.Army),
-	armyByEndTime: 	make(map[int64][]*model.Army),
 	armyByRId: 		make(map[int][]*model.Army),
 }
 
@@ -53,47 +49,10 @@ func (this*armyMgr) Load() {
 			this.armyByRId[army.RId] = make([]*model.Army, 0)
 		}
 		this.armyByRId[army.RId] = append(this.armyByRId[army.RId], army)
-
-		//恢复已经执行行动的军队
-		if army.Cmd != model.ArmyCmdIdle {
-			e := army.End.Unix()
-			_, ok := this.armyByEndTime[e]
-			if ok == false{
-				this.armyByEndTime[e] = make([]*model.Army, 0)
-			}
-			this.armyByEndTime[e] = append(this.armyByEndTime[e], army)
-		}
-
 		this.updateGenerals(army)
 	}
 
-	curTime := time.Now().Unix()
-	for kT, armys := range this.armyByEndTime {
-		if kT <= curTime {
-			for _, a := range armys {
-				if a.Cmd == model.ArmyCmdAttack {
-					ArmyLogic.Arrive(a)
-				}else if a.Cmd == model.ArmyCmdDefend {
-					ArmyLogic.Arrive(a)
-				}else if a.Cmd == model.ArmyCmdBack {
-					if curTime >= a.End.Unix() {
-						a.ToX = a.FromX
-						a.ToY = a.FromY
-						a.Cmd = model.ArmyCmdIdle
-						a.State = model.ArmyStop
-					}
-				}
-				a.SyncExecute()
-			}
-			delete(this.armyByEndTime, kT)
-		}else{
-			for _, a := range armys {
-				a.State = model.ArmyRunning
-			}
-		}
-	}
 	this.mutex.Unlock()
-	go this.running()
 }
 
 func (this*armyMgr) insertOne(army *model.Army)  {
@@ -119,91 +78,6 @@ func (this*armyMgr) insertOne(army *model.Army)  {
 func (this*armyMgr) insertMutil(armys []*model.Army)  {
 	for _, v := range armys {
 		this.insertOne(v)
-	}
-}
-
-func (this*armyMgr) addAction(t int64, army *model.Army)  {
-	_, ok := this.armyByEndTime[t]
-	if ok == false {
-		this.armyByEndTime[t] = make([]*model.Army, 0)
-	}
-	this.armyByEndTime[t] = append(this.armyByEndTime[t], army)
-}
-
-//把行动丢进来
-func (this*armyMgr) PushAction(army *model.Army)  {
-	this.mutex.Lock()
-	defer this.mutex.Unlock()
-
-	if army.Cmd == model.ArmyCmdAttack || army.Cmd == model.ArmyCmdDefend {
-		t := army.End.Unix()
-		this.addAction(t, army)
-
-	}else if army.Cmd == model.ArmyCmdReclamation {
-		if army.State == model.ArmyRunning {
-			t := army.End.Unix()
-			this.addAction(t, army)
-		}else{
-			costTime := static_conf.Basic.General.ReclamationTime
-			t := army.End.Unix()+int64(costTime)
-			this.addAction(t, army)
-		}
-	}else if army.Cmd == model.ArmyCmdBack {
-		cur := time.Now()
-		diff := army.End.Unix()-army.Start.Unix()
-		if cur.Unix() < army.End.Unix(){
-			diff = cur.Unix()-army.Start.Unix()
-		}
-		army.Start = cur
-		army.End = cur.Add(time.Duration(diff) * time.Second)
-		army.Cmd = model.ArmyCmdBack
-		this.addAction(army.End.Unix(), army)
-	}
-
-	ArmyLogic.Update(army)
-
-}
-
-func (this*armyMgr) ArmyBack(army *model.Army)  {
-	army.State = model.ArmyRunning
-	army.Cmd = model.ArmyCmdBack
-
-	this.mutex.Lock()
-	t := army.End.Unix()
-	if actions, ok := this.armyByEndTime[t]; ok {
-		for i, v := range actions {
-			if v.Id == army.Id{
-				actions = append(actions[:i], actions[i+1:]...)
-				this.armyByEndTime[t] = actions
-				break
-			}
-		}
-	}
-	this.mutex.Unlock()
-	this.PushAction(army)
-}
-
-func (this*armyMgr) Reclamation(army *model.Army)  {
-	army.State = model.ArmyStop
-	army.Cmd = model.ArmyCmdReclamation
-	this.PushAction(army)
-}
-
-func (this*armyMgr) running() {
-	for true {
-		t := time.Now().Unix()
-		time.Sleep(100*time.Millisecond)
-
-		this.mutex.Lock()
-		for k, armies := range this.armyByEndTime {
-			if k <= t{
-				for _, army := range armies {
-					ArmyLogic.Arrive(army)
-				}
-				delete(this.armyByEndTime, k)
-			}
-		}
-		this.mutex.Unlock()
 	}
 }
 
@@ -347,4 +221,13 @@ func (this*armyMgr) updateGenerals(armys... *model.Army) {
 	}
 }
 
+func (this* armyMgr) All()[]*model.Army {
+	this.mutex.RLock()
+	defer this.mutex.RUnlock()
+	armys := make([]*model.Army, 0)
+	for _, army := range this.armyById {
+		armys = append(armys, army)
+	}
+	return armys
+}
 

@@ -4,7 +4,7 @@ import (
 	"github.com/goinggo/mapstructure"
 	"slgserver/constant"
 	"slgserver/net"
-	"slgserver/server/logic"
+	"slgserver/server/logic/mgr"
 	"slgserver/server/middleware"
 	"slgserver/server/model"
 	"slgserver/server/proto"
@@ -33,7 +33,7 @@ func (this*Interior) collection(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
-	roleRes, ok:= logic.RResMgr.Get(role.RId)
+	roleRes, ok:= mgr.RResMgr.Get(role.RId)
 	if ok == false {
 		rsp.Body.Code = constant.DBError
 		return
@@ -55,7 +55,7 @@ func (this*Interior) transform(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
-	roleRes, ok:= logic.RResMgr.Get(role.RId)
+	roleRes, ok:= mgr.RResMgr.Get(role.RId)
 	if ok == false {
 		rsp.Body.Code = constant.DBError
 		return
