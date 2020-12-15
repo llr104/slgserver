@@ -56,7 +56,7 @@ func (this *coalition) create(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	role := r.(*model.Role)
 	rspObj.Name = reqObj.Name
 
-	has := mgr.RAttributeMgr.IsHasUnion(role.RId)
+	has := mgr.RAttrMgr.IsHasUnion(role.RId)
 	if has {
 		rsp.Body.Code = constant.UnionAlreadyHas
 		return
@@ -110,7 +110,7 @@ func (this *coalition) join(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
 
-	has := mgr.RAttributeMgr.IsHasUnion(role.RId)
+	has := mgr.RAttrMgr.IsHasUnion(role.RId)
 	if has {
 		rsp.Body.Code = constant.UnionAlreadyHas
 		return
@@ -181,7 +181,7 @@ func (this *coalition) verify(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 				return
 			}
 
-			if ok := mgr.RAttributeMgr.IsHasUnion(apply.RId); ok {
+			if ok := mgr.RAttrMgr.IsHasUnion(apply.RId); ok {
 				rsp.Body.Code = constant.UnionAlreadyHas
 			}else{
 				if reqObj.Decide == proto.UnionAdopt{
@@ -296,12 +296,12 @@ func (this *coalition) exit(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
 
-	if ok := mgr.RAttributeMgr.IsHasUnion(role.RId); ok == false {
+	if ok := mgr.RAttrMgr.IsHasUnion(role.RId); ok == false {
 		rsp.Body.Code = constant.UnionNotFound
 		return
 	}
 
-	attribute, _ := mgr.RAttributeMgr.Get(role.RId)
+	attribute, _ := mgr.RAttrMgr.Get(role.RId)
 	u, ok := mgr.UnionMgr.Get(attribute.UnionId)
 	if ok == false{
 		rsp.Body.Code = constant.UnionNotFound
@@ -338,12 +338,12 @@ func (this *coalition) dismiss(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
 
-	if ok := mgr.RAttributeMgr.IsHasUnion(role.RId); ok == false {
+	if ok := mgr.RAttrMgr.IsHasUnion(role.RId); ok == false {
 		rsp.Body.Code = constant.UnionNotFound
 		return
 	}
 
-	attribute, _ := mgr.RAttributeMgr.Get(role.RId)
+	attribute, _ := mgr.RAttrMgr.Get(role.RId)
 	u, ok := mgr.UnionMgr.Get(attribute.UnionId)
 	if ok == false{
 		rsp.Body.Code = constant.UnionNotFound
@@ -403,12 +403,12 @@ func (this *coalition) modNotice(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	if ok := mgr.RAttributeMgr.IsHasUnion(role.RId); ok == false {
+	if ok := mgr.RAttrMgr.IsHasUnion(role.RId); ok == false {
 		rsp.Body.Code = constant.UnionNotFound
 		return
 	}
 
-	attribute, _ := mgr.RAttributeMgr.Get(role.RId)
+	attribute, _ := mgr.RAttrMgr.Get(role.RId)
 	u, ok := mgr.UnionMgr.Get(attribute.UnionId)
 	if ok == false{
 		rsp.Body.Code = constant.UnionNotFound
@@ -438,12 +438,12 @@ func (this *coalition) kick(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
 
-	if ok := mgr.RAttributeMgr.IsHasUnion(role.RId); ok == false {
+	if ok := mgr.RAttrMgr.IsHasUnion(role.RId); ok == false {
 		rsp.Body.Code = constant.UnionNotFound
 		return
 	}
 
-	opAr, _ := mgr.RAttributeMgr.Get(role.RId)
+	opAr, _ := mgr.RAttrMgr.Get(role.RId)
 	u, ok := mgr.UnionMgr.Get(opAr.UnionId)
 	if ok == false{
 		rsp.Body.Code = constant.UnionNotFound
@@ -455,7 +455,7 @@ func (this *coalition) kick(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	target, ok := mgr.RAttributeMgr.Get(reqObj.RId)
+	target, ok := mgr.RAttrMgr.Get(reqObj.RId)
 	if ok {
 		if target.UnionId == u.Id{
 			for i, rid := range u.MemberArray {
@@ -487,12 +487,12 @@ func (this *coalition) appoint(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
 
-	if ok := mgr.RAttributeMgr.IsHasUnion(role.RId); ok == false {
+	if ok := mgr.RAttrMgr.IsHasUnion(role.RId); ok == false {
 		rsp.Body.Code = constant.UnionNotFound
 		return
 	}
 
-	opAr, _ := mgr.RAttributeMgr.Get(role.RId)
+	opAr, _ := mgr.RAttrMgr.Get(role.RId)
 	u, ok := mgr.UnionMgr.Get(opAr.UnionId)
 	if ok == false{
 		rsp.Body.Code = constant.UnionNotFound
@@ -504,7 +504,7 @@ func (this *coalition) appoint(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	target, ok := mgr.RAttributeMgr.Get(reqObj.RId)
+	target, ok := mgr.RAttrMgr.Get(reqObj.RId)
 	if ok {
 		if target.UnionId == u.Id{
 			if reqObj.Title == proto.UnionViceChairman{
@@ -535,12 +535,12 @@ func (this *coalition) abdicate(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
 
-	if ok := mgr.RAttributeMgr.IsHasUnion(role.RId); ok == false {
+	if ok := mgr.RAttrMgr.IsHasUnion(role.RId); ok == false {
 		rsp.Body.Code = constant.UnionNotFound
 		return
 	}
 
-	opAr, _ := mgr.RAttributeMgr.Get(role.RId)
+	opAr, _ := mgr.RAttrMgr.Get(role.RId)
 	u, ok := mgr.UnionMgr.Get(opAr.UnionId)
 	if ok == false{
 		rsp.Body.Code = constant.UnionNotFound
@@ -552,7 +552,7 @@ func (this *coalition) abdicate(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	target, ok := mgr.RAttributeMgr.Get(reqObj.RId)
+	target, ok := mgr.RAttrMgr.Get(reqObj.RId)
 	if ok {
 		if target.UnionId == u.Id{
 			if role.RId == u.Chairman{

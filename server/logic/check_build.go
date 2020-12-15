@@ -3,21 +3,15 @@ package logic
 import (
 	"slgserver/server/global"
 	"slgserver/server/logic/mgr"
+	"slgserver/util"
 )
 
 func hasRoleBuildNearBy(x, y, rid, unionId int) bool {
-	for i := x-1; i <= x+1; i++ {
-		if i < 0 || i >= global.MapWith{
-			continue
-		}
-		for j := y-1; j <=y+1 ; j++ {
-			if j < 0 || j >= global.MapHeight {
-				continue
-			}
+	for i := util.MaxInt(x-1, 0); i <= util.MinInt(x+1, global.MapWith); i++ {
+		for j := util.MaxInt(y-1, 0); j <= util.MinInt(y+1, global.MapHeight) ; j++ {
 			if i == x && j == y {
 				continue
 			}
-
 			if rb, ok := mgr.RBMgr.PositionBuild(i, j); ok {
 				if rb.RId == rid || (unionId != 0 && rb.UnionId == unionId){
 					return true
@@ -30,7 +24,7 @@ func hasRoleBuildNearBy(x, y, rid, unionId int) bool {
 
 //是否能到达
 func IsCanArrive(x, y, rid int) bool {
-	unionId := mgr.RAttributeMgr.UnionId(rid)
+	unionId := mgr.RAttrMgr.UnionId(rid)
 
 	//目标位置是城池
 	if _, ok := mgr.RCMgr.PositionCity(x, y); ok {
@@ -80,7 +74,7 @@ func IsCanArrive(x, y, rid int) bool {
 }
 
 func IsCanDefend(x, y, rid int) bool{
-	unionId := mgr.RAttributeMgr.UnionId(rid)
+	unionId := mgr.RAttrMgr.UnionId(rid)
 	b, ok := mgr.RBMgr.PositionBuild(x, y)
 	if ok {
 		if b.RId == rid{

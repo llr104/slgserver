@@ -13,7 +13,7 @@ type roleAttributeMgr struct {
 	attribute map[int]*model.RoleAttribute
 }
 
-var RAttributeMgr = &roleAttributeMgr{
+var RAttrMgr = &roleAttributeMgr{
 	attribute: make(map[int]*model.RoleAttribute),
 }
 

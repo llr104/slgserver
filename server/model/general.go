@@ -135,6 +135,10 @@ func (this *General) IsCellView() bool{
 	return false
 }
 
+func (this *General) IsCanView(rid, x, y int) bool{
+	return false
+}
+
 func (this *General) BelongToRId() []int{
 	return []int{this.RId}
 }

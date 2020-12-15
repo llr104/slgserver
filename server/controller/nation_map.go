@@ -4,6 +4,7 @@ import (
 	"github.com/goinggo/mapstructure"
 	"slgserver/constant"
 	"slgserver/net"
+	"slgserver/server/global"
 	"slgserver/server/logic"
 	"slgserver/server/logic/mgr"
 	"slgserver/server/middleware"
@@ -87,6 +88,9 @@ func (this*NationMap) scanBlock(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	rsp.Body.Msg = rspObj
 	rsp.Body.Code = constant.OK
 
+	r, _ := req.Conn.GetProperty("role")
+	role := r.(*model.Role)
+
 	x := reqObj.X
 	y := reqObj.Y
 
@@ -102,7 +106,7 @@ func (this*NationMap) scanBlock(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		rspObj.MCBuilds[i] = v.ToProto().(proto.MapRoleCity)
 	}
 
-	armys := logic.ArmyLogic.ScanBlock(x, y, reqObj.Length)
+	armys := logic.ArmyLogic.ScanBlock(role.RId, x, y, reqObj.Length)
 	rspObj.Armys = make([]proto.Army, len(armys))
 	for i, v := range armys {
 		rspObj.Armys[i] = v.ToProto().(proto.Army)
@@ -136,7 +140,7 @@ func (this*NationMap) giveUp(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	mgr.RBMgr.RemoveFromRole(rb)
 
 	//移除该地驻守
-	logic.ArmyLogic.GiveUp(mgr.ToPosition(reqObj.X, reqObj.Y))
+	logic.ArmyLogic.GiveUp(global.ToPosition(reqObj.X, reqObj.Y))
 
 	if ok {
 		rspObj.RoleRes = rr.ToProto().(proto.RoleRes)

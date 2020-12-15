@@ -42,6 +42,10 @@ func (this *WarReport) IsCellView() bool{
 	return false
 }
 
+func (this *WarReport) IsCanView(rid, x, y int) bool{
+	return false
+}
+
 func (this *WarReport) BelongToRId() []int{
 	return []int{this.AttackRid, this.DefenseRid}
 }

@@ -17,7 +17,7 @@ func RoleBuildExtra(rb* model.MapRoleBuild) {
 		rb.RNick = vRole.NickName
 	}
 
-	ra, ok := RAttributeMgr.Get(rb.RId)
+	ra, ok := RAttrMgr.Get(rb.RId)
 	if ok {
 		rb.UnionId = ra.UnionId
 	}
@@ -49,7 +49,7 @@ func (this*roleBuildMgr) Load() {
 
 	//转成posRB 和 roleRB
 	for _, v := range this.dbRB {
-		posId := ToPosition(v.X, v.Y)
+		posId := global.ToPosition(v.X, v.Y)
 		this.posRB[posId] = v
 		_,ok := this.roleRB[v.RId]
 		if ok == false{
@@ -68,7 +68,7 @@ func (this*roleBuildMgr) Load() {
 func (this*roleBuildMgr) IsEmpty(x, y int) bool {
 	this.mutex.RLock()
 	defer this.mutex.RUnlock()
-	posId := ToPosition(x, y)
+	posId := global.ToPosition(x, y)
 	_, ok := this.posRB[posId]
 	return !ok
 }
@@ -76,7 +76,7 @@ func (this*roleBuildMgr) IsEmpty(x, y int) bool {
 func (this*roleBuildMgr) PositionBuild(x, y int) (*model.MapRoleBuild, bool) {
 	this.mutex.RLock()
 	defer this.mutex.RUnlock()
-	posId := ToPosition(x, y)
+	posId := global.ToPosition(x, y)
 	b,ok := this.posRB[posId]
 	if ok && b.RId != 0 {
 		return b, ok
@@ -88,7 +88,7 @@ func (this*roleBuildMgr) PositionBuild(x, y int) (*model.MapRoleBuild, bool) {
 
 func (this*roleBuildMgr) AddBuild(rid, x, y int) (*model.MapRoleBuild, bool) {
 
-	posId := ToPosition(x, y)
+	posId := global.ToPosition(x, y)
 	this.mutex.Lock()
 	rb, ok := this.posRB[posId]
 	this.mutex.Unlock()
@@ -184,7 +184,7 @@ func (this*roleBuildMgr) Scan(x, y int) []*model.MapRoleBuild {
 	rb := make([]*model.MapRoleBuild, 0)
 	for i := minX; i <= maxX; i++ {
 		for j := minY; j <= maxY; j++ {
-			posId := ToPosition(i, j)
+			posId := global.ToPosition(i, j)
 			v, ok := this.posRB[posId]
 			if ok && v.RId != 0 {
 				rb = append(rb, v)
@@ -210,7 +210,7 @@ func (this*roleBuildMgr) ScanBlock(x, y, length int) []*model.MapRoleBuild {
 	rb := make([]*model.MapRoleBuild, 0)
 	for i := x; i <= maxX; i++ {
 		for j := y; j <= maxY; j++ {
-			posId := ToPosition(i, j)
+			posId := global.ToPosition(i, j)
 			v, ok := this.posRB[posId]
 			if ok && v.RId != 0 {
 				rb = append(rb, v)

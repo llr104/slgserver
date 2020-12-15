@@ -25,7 +25,7 @@ func Init() {
 
 	//需要先加载联盟相关的信息
 	mgr.UnionMgr.Load()
-	mgr.RAttributeMgr.Load()
+	mgr.RAttrMgr.Load()
 	mgr.NMMgr.Load()
 	mgr.RCMgr.Load()
 	mgr.RBMgr.Load()

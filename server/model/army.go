@@ -14,6 +14,8 @@ import (
 	"xorm.io/xorm"
 )
 
+var ArmyIsInView func(rid, x, y int) bool
+
 const (
 	ArmyCmdIdle   		= 0	//空闲
 	ArmyCmdAttack 		= 1	//攻击
@@ -33,6 +35,7 @@ func init() {
 	dbArmyMgr = &armyDBMgr{armys: make(chan *Army, 100)}
 	go dbArmyMgr.running()
 }
+
 
 type armyDBMgr struct {
 	armys    chan *Army
@@ -165,6 +168,13 @@ func (this* Army) GetCamp() int8 {
 /* 推送同步 begin */
 func (this *Army) IsCellView() bool{
 	return true
+}
+
+func (this *Army) IsCanView(rid, x, y int) bool{
+	if ArmyIsInView != nil{
+		return ArmyIsInView(rid, x, y)
+	}
+	return false
 }
 
 func (this *Army) BelongToRId() []int{

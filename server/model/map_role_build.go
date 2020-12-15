@@ -70,6 +70,11 @@ func (this *MapRoleBuild) IsCellView() bool{
 	return true
 }
 
+func (this *MapRoleBuild) IsCanView(rid, x, y int) bool{
+	return true
+}
+
+
 func (this *MapRoleBuild) BelongToRId() []int{
 	return []int{this.RId}
 }

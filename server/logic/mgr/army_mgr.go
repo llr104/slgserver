@@ -10,7 +10,7 @@ import (
 )
 
 func RoleArmyExtra(army* model.Army) {
-	ra, ok := RAttributeMgr.Get(army.RId)
+	ra, ok := RAttrMgr.Get(army.RId)
 	if ok {
 		army.UnionId = ra.UnionId
 	}

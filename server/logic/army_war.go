@@ -6,6 +6,7 @@ import (
 	"go.uber.org/zap"
 	"math/rand"
 	"slgserver/log"
+	"slgserver/server/global"
 	"slgserver/server/logic/mgr"
 	"slgserver/server/model"
 	"slgserver/server/proto"
@@ -335,7 +336,7 @@ func newBattle(attackArmy *model.Army) {
 		//打玩家城池
 		var enemys []*model.Army
 		//驻守队伍被打
-		posId := mgr.ToPosition(attackArmy.ToX, attackArmy.ToY)
+		posId := global.ToPosition(attackArmy.ToX, attackArmy.ToY)
 		posArmys, ok := ArmyLogic.stopInPosArmys[posId]
 		if ok {
 			for _, army := range posArmys {
@@ -365,11 +366,11 @@ func newBattle(attackArmy *model.Army) {
 				wr.DestroyDurable = util.MinInt(destory, city.CurDurable)
 				city.CurDurable = util.MaxInt(0, city.CurDurable - destory)
 				if city.CurDurable == 0{
-					aAttr, _ := mgr.RAttributeMgr.Get(attackArmy.RId)
+					aAttr, _ := mgr.RAttrMgr.Get(attackArmy.RId)
 					if aAttr.UnionId != 0{
 						//有联盟才能俘虏玩家
 						wr.Occupy = 1
-						dAttr, _ := mgr.RAttributeMgr.Get(city.RId)
+						dAttr, _ := mgr.RAttrMgr.Get(city.RId)
 						dAttr.ParentId = aAttr.UnionId
 						dAttr.SyncExecute()
 
@@ -394,7 +395,7 @@ func newBattle(attackArmy *model.Army) {
 
 func trigger(army *model.Army, enemys []*model.Army, isRoleEnemy bool) (*WarResult, []*model.WarReport) {
 
-	posId := mgr.ToPosition(army.ToX, army.ToY)
+	posId := global.ToPosition(army.ToX, army.ToY)
 	warReports := make([]*model.WarReport, 0)
 	var lastWar *WarResult = nil
 
@@ -496,7 +497,7 @@ func trigger(army *model.Army, enemys []*model.Army, isRoleEnemy bool) (*WarResu
 func executeBuild(army *model.Army)  {
 	roleBuid, _ := mgr.RBMgr.PositionBuild(army.ToX, army.ToY)
 
-	posId := mgr.ToPosition(army.ToX, army.ToY)
+	posId := global.ToPosition(army.ToX, army.ToY)
 	posArmys, isRoleEnemy := ArmyLogic.stopInPosArmys[posId]
 
 	var enemys []*model.Army

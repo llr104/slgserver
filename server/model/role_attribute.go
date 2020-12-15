@@ -58,6 +58,10 @@ func (this *RoleAttribute) IsCellView() bool{
 	return false
 }
 
+func (this *RoleAttribute) IsCanView(rid, x, y int) bool{
+	return false
+}
+
 func (this *RoleAttribute) BelongToRId() []int{
 	return []int{this.RId}
 }

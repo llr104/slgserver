@@ -9,6 +9,7 @@ var ArmyLogic *armyLogic
 //逻辑相关的初始化放在这里
 func Init() {
 
+	model.ArmyIsInView = armyIsInView
 	Union = &coalitionLogic{}
 	ArmyLogic = &armyLogic{
 		arriveArmys:	make(chan *model.Army, 100),

@@ -429,7 +429,7 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 		//t := logic.TravelTime(speed, army.FromX, army.FromY, army.ToX, army.ToY)
 		army.Start = time.Now()
 		//army.End = time.Now().Add(time.Duration(t) * time.Millisecond)
-		army.End = time.Now().Add(20*time.Second)
+		army.End = time.Now().Add(40*time.Second)
 
 		logic.ArmyLogic.PushAction(army)
 		rspObj.Army = army.ToProto().(proto.Army)

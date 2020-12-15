@@ -11,7 +11,7 @@ import (
 )
 
 func RoleCityExtra(rc* model.MapRoleCity) {
-	ra, ok := RAttributeMgr.Get(rc.RId)
+	ra, ok := RAttrMgr.Get(rc.RId)
 	if ok {
 		rc.UnionId = ra.UnionId
 	}
@@ -42,7 +42,7 @@ func (this*roleCityMgr) Load() {
 
 	//转成posCity、roleCity
 	for _, v := range this.dbCity {
-		posId := ToPosition(v.X, v.Y)
+		posId := global.ToPosition(v.X, v.Y)
 		this.posCity[posId] = v
 		_, ok := this.roleCity[v.RId]
 		if ok == false{
@@ -60,7 +60,7 @@ func (this*roleCityMgr) Load() {
 func (this*roleCityMgr) IsEmpty(x, y int) bool {
 	this.mutex.RLock()
 	defer this.mutex.RUnlock()
-	posId := ToPosition(x, y)
+	posId := global.ToPosition(x, y)
 	_, ok := this.posCity[posId]
 	return !ok
 }
@@ -68,7 +68,7 @@ func (this*roleCityMgr) IsEmpty(x, y int) bool {
 func (this*roleCityMgr) PositionCity(x, y int) (*model.MapRoleCity, bool) {
 	this.mutex.RLock()
 	defer this.mutex.RUnlock()
-	posId := ToPosition(x, y)
+	posId := global.ToPosition(x, y)
 	c,ok := this.posCity[posId]
 	return c, ok
 }
@@ -79,7 +79,7 @@ func (this*roleCityMgr) Add(city *model.MapRoleCity) {
 	this.mutex.Lock()
 	defer this.mutex.Unlock()
 	this.dbCity[city.CityId] = city
-	this.posCity[ToPosition(city.X, city.Y)] = city
+	this.posCity[global.ToPosition(city.X, city.Y)] = city
 
 	_, ok := this.roleCity[city.RId]
 	if ok == false{
@@ -104,7 +104,7 @@ func (this*roleCityMgr) Scan(x, y int) []*model.MapRoleCity {
 	cb := make([]*model.MapRoleCity, 0)
 	for i := minX; i <= maxX; i++ {
 		for j := minY; j <= maxY; j++ {
-			posId := ToPosition(i, j)
+			posId := global.ToPosition(i, j)
 			v, ok := this.posCity[posId]
 			if ok {
 				cb = append(cb, v)
@@ -128,7 +128,7 @@ func (this*roleCityMgr) ScanBlock(x, y, length int) []*model.MapRoleCity {
 	cb := make([]*model.MapRoleCity, 0)
 	for i := x; i <= maxX; i++ {
 		for j := y; j <= maxY; j++ {
-			posId := ToPosition(i, j)
+			posId := global.ToPosition(i, j)
 			v, ok := this.posCity[posId]
 			if ok {
 				cb = append(cb, v)

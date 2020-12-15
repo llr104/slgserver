@@ -95,7 +95,7 @@ func (this *armyLogic) running(){
 				for _, army := range this.outArmys {
 					if army.State == model.ArmyRunning{
 						x, y := army.Position()
-						posId := mgr.ToPosition(x, y)
+						posId := global.ToPosition(x, y)
 						if _, ok := this.passbyPosArmys[posId]; ok == false {
 							this.passbyPosArmys[posId] = make(map[int]*model.Army)
 						}
@@ -208,7 +208,7 @@ func (this *armyLogic) exeArrive(army *model.Army) {
 	}
 }
 
-func (this *armyLogic) ScanBlock(x, y, length int) []*model.Army {
+func (this *armyLogic) ScanBlock(rid, x, y, length int) []*model.Army {
 
 	if x < 0 || x >= global.MapWith || y < 0 || y >= global.MapHeight {
 		return nil
@@ -220,7 +220,12 @@ func (this *armyLogic) ScanBlock(x, y, length int) []*model.Army {
 	this.passby.RLock()
 	for i := x; i <= maxX; i++ {
 		for j := y; j <= maxY; j++ {
-			posId := mgr.ToPosition(i, j)
+			is := armyIsInView(rid, i, j)
+			if is == false{
+				continue
+			}
+
+			posId := global.ToPosition(i, j)
 			armys, ok := this.passbyPosArmys[posId]
 			if ok {
 				for _, army := range armys {
@@ -248,12 +253,12 @@ func (this *armyLogic) GiveUp(posId int) {
 }
 
 func (this *armyLogic) deleteArmy(x, y int) {
-	posId := mgr.ToPosition(x, y)
+	posId := global.ToPosition(x, y)
 	delete(this.stopInPosArmys, posId)
 }
 
 func (this* armyLogic) addArmy(army *model.Army)  {
-	posId := mgr.ToPosition(army.ToX, army.ToY)
+	posId := global.ToPosition(army.ToX, army.ToY)
 
 	if _, ok := this.stopInPosArmys[posId]; ok == false {
 		this.stopInPosArmys[posId] = make(map[int]*model.Army)

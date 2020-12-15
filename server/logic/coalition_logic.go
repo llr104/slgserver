@@ -8,9 +8,9 @@ type coalitionLogic struct {
 }
 
 func (this* coalitionLogic) MemberEnter(rid, unionId int)  {
-	mgr.RAttributeMgr.EnterUnion(rid, unionId)
+	mgr.RAttrMgr.EnterUnion(rid, unionId)
 
-	if ra, ok := mgr.RAttributeMgr.Get(rid); ok {
+	if ra, ok := mgr.RAttrMgr.Get(rid); ok {
 		ra.UnionId = unionId
 	}
 
@@ -36,7 +36,7 @@ func (this* coalitionLogic) MemberEnter(rid, unionId int)  {
 
 func (this* coalitionLogic) MemberExit(rid int) {
 
-	if ra, ok := mgr.RAttributeMgr.Get(rid); ok {
+	if ra, ok := mgr.RAttrMgr.Get(rid); ok {
 		ra.UnionId = 0
 	}
 

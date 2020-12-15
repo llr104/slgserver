@@ -1,6 +1,7 @@
 package logic
 
 import (
+	"slgserver/server/global"
 	"slgserver/server/logic/mgr"
 	"slgserver/server/model"
 	"slgserver/server/static_conf"
@@ -20,7 +21,7 @@ type sysArmyLogic struct {
 }
 
 func (this * sysArmyLogic) GetArmy(x, y int) []*model.Army {
-	posId := mgr.ToPosition(x, y)
+	posId := global.ToPosition(x, y)
 	this.mutex.Lock()
 	a, ok := this.sysArmys[posId]
 	this.mutex.Unlock()
@@ -51,7 +52,7 @@ func (this * sysArmyLogic) GetArmy(x, y int) []*model.Army {
 				army.ToSoldier()
 
 				armys = append(armys, army)
-				posId := mgr.ToPosition(x, y)
+				posId := global.ToPosition(x, y)
 				this.sysArmys[posId] = armys
 
 				return armys
@@ -67,7 +68,7 @@ func (this * sysArmyLogic) GetArmy(x, y int) []*model.Army {
 func (this * sysArmyLogic) DelArmy(x, y int) {
 	this.mutex.Lock()
 	defer this.mutex.Unlock()
-	posId := mgr.ToPosition(x, y)
+	posId := global.ToPosition(x, y)
 	delete(this.sysArmys, posId)
 }
 

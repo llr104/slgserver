@@ -140,16 +140,20 @@ func (this *Mgr) Count() int{
 func (this *Mgr) Push(pushSync PushSync){
 
 	proto := pushSync.ToProto()
-	rids := pushSync.BelongToRId()
+	belongRIds := pushSync.BelongToRId()
 	isCellView := pushSync.IsCellView()
 	x, y := pushSync.Position()
 	cells := make(map[int]int)
 
+	//对象是否能广播
 	if isCellView {
 		cellRIds := pos.RPMgr.GetCellRoleIds(x, y, 5, 4)
 		for _, rid := range cellRIds {
-			this.PushByRoleId(rid, pushSync.PushMsgName(), proto)
-			cells[rid] = rid
+			//是否能出现在视野
+			if can := pushSync.IsCanView(rid, x, y); can{
+				this.PushByRoleId(rid, pushSync.PushMsgName(), proto)
+				cells[rid] = rid
+			}
 		}
 	}
 
@@ -158,12 +162,15 @@ func (this *Mgr) Push(pushSync PushSync){
 	if tx >= 0 && ty >= 0{
 		cellRIds := pos.RPMgr.GetCellRoleIds(tx, ty, 0, 0)
 		for _, rid := range cellRIds {
-			this.PushByRoleId(rid, pushSync.PushMsgName(), proto)
-			cells[rid] = rid
+			if _, ok := cells[rid]; ok == false{
+				this.PushByRoleId(rid, pushSync.PushMsgName(), proto)
+				cells[rid] = rid
+			}
 		}
 	}
 
-	for _, rid := range rids {
+	//推送给自己
+	for _, rid := range belongRIds {
 		if _, ok := cells[rid]; ok == false{
 			this.PushByRoleId(rid, pushSync.PushMsgName(), proto)
 		}

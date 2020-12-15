@@ -30,9 +30,6 @@ type mapData struct {
 	List	[][]int			`json:"list"`
 }
 
-func ToPosition(x, y int) int {
-	return x+global.MapHeight*y
-}
 
 func Distance(begX, begY, endX, endY int) float64 {
 	w := math.Abs(float64(endX - begX))
@@ -90,7 +87,7 @@ func (this*NationalMapMgr) Load() {
 }
 
 func (this*NationalMapMgr) IsCanBuild(x, y int) bool {
-	posIndex := ToPosition(x, y)
+	posIndex := global.ToPosition(x, y)
 	this.mutex.RLock()
 	defer this.mutex.RUnlock()
 	c,ok := this.conf[posIndex]
@@ -127,7 +124,7 @@ func (this*NationalMapMgr) IsCanBuildCity(x, y int) bool {
 }
 
 func (this*NationalMapMgr) PositionBuild(x, y int) (model.NationalMap, bool) {
-	posIndex := ToPosition(x, y)
+	posIndex := global.ToPosition(x, y)
 	this.mutex.RLock()
 	defer this.mutex.RUnlock()
 	b, ok := this.conf[posIndex]
@@ -150,7 +147,7 @@ func (this*NationalMapMgr) Scan(x, y int) []model.NationalMap {
 	index := 0
 	for i := minX; i <= maxX; i++ {
 		for j := minY; j <= maxY; j++ {
-			v, ok := this.conf[ToPosition(i, j)]
+			v, ok := this.conf[global.ToPosition(i, j)]
 			if ok {
 				r[index] = v
 			}

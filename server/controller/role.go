@@ -165,7 +165,7 @@ func (this*Role) enterServer(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		}
 
 		//玩家的一些属性
-		if _, ok := mgr.RAttributeMgr.TryCreate(role.RId); ok == false{
+		if _, ok := mgr.RAttrMgr.TryCreate(role.RId); ok == false{
 			rsp.Body.Code = constant.DBError
 			return
 		}
