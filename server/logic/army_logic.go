@@ -220,14 +220,14 @@ func (this *armyLogic) ScanBlock(rid, x, y, length int) []*model.Army {
 	this.passby.RLock()
 	for i := x; i <= maxX; i++ {
 		for j := y; j <= maxY; j++ {
-			is := armyIsInView(rid, i, j)
-			if is == false{
-				continue
-			}
 
 			posId := global.ToPosition(i, j)
 			armys, ok := this.passbyPosArmys[posId]
 			if ok {
+				is := armyIsInView(rid, i, j)
+				if is == false{
+					continue
+				}
 				for _, army := range armys {
 					out = append(out, army)
 				}
