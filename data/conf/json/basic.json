@@ -32,7 +32,8 @@
     "gold_yield": 100,
     "depot_capacity": 10000,
     "build_limit": 20,
-    "recovery_time": 20
+    "recovery_time": 20,
+    "decree_limit": 20
   },
   "city": {
     "des": "城池的一些配置",

@@ -224,7 +224,9 @@ func (this*roleResMgr) produce() {
 			}
 
 			if index%6 == 0{
-				v.Decree+=1
+				if v.Decree < static_conf.Basic.Role.DecreeLimit{
+					v.Decree+=1
+				}
 			}
 
 			v.SyncExecute()

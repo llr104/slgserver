@@ -50,7 +50,8 @@ type role struct {
 	GoldYield     int 		`json:"gold_yield"`
 	DepotCapacity int 		`json:"depot_capacity"`
 	BuildLimit    int 		`json:"build_limit"`
-	RecoveryTime  int		`json:"recovery_time"`
+	RecoveryTime  int 		`json:"recovery_time"`
+	DecreeLimit   int 		`json:"decree_limit"`
 }
 
 type city struct {

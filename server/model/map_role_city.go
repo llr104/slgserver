@@ -64,7 +64,7 @@ func (this*MapRoleCity) DurableChange(change int) {
 	this.mutex.Lock()
 	defer this.mutex.Unlock()
 
-	t := this.MaxDurable + change
+	t := this.CurDurable + change
 	if t < 0{
 		this.CurDurable = 0
 	}else{
