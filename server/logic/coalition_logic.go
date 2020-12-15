@@ -2,11 +2,6 @@ package logic
 
 import "slgserver/server/logic/mgr"
 
-var Union *coalitionLogic
-
-func init() {
-	Union = &coalitionLogic{}
-}
 
 type coalitionLogic struct {
 

@@ -10,24 +10,6 @@ import (
 	"time"
 )
 
-
-var ArmyLogic *armyLogic
-
-func init() {
-	ArmyLogic = &armyLogic{
-		arriveArmys:	make(chan *model.Army, 100),
-		giveUpId:       make(chan int, 100),
-		updateArmys:    make(chan *model.Army, 100),
-		outArmys:		make(map[int]*model.Army),
-		armyByEndTime:	make(map[int64][]*model.Army),
-		stopInPosArmys: make(map[int]map[int]*model.Army),
-		passbyPosArmys: make(map[int]map[int]*model.Army),
-		sys:            NewSysArmy()}
-
-	go ArmyLogic.check()
-	go ArmyLogic.running()
-}
-
 type armyLogic struct {
 	passby			sync.RWMutex
 	timeMutex		sync.RWMutex
@@ -43,7 +25,7 @@ type armyLogic struct {
 	passbyPosArmys 	map[int]map[int]*model.Army //玩家路过位置的军队 key:posId,armyId
 }
 
-func (this *armyLogic) Init(){
+func (this *armyLogic) init(){
 
 	armys := mgr.AMgr.All()
 	for _, army := range armys {

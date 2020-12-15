@@ -34,8 +34,7 @@ func Init() {
 	mgr.GMgr.Load()
 	mgr.AMgr.Load()
 
-	logic.ArmyLogic.Init()
-
+	logic.Init()
 }
 
 func initRouter() {
