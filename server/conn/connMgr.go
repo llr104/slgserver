@@ -145,9 +145,9 @@ func (this *Mgr) Push(pushSync PushSync){
 	x, y := pushSync.Position()
 	cells := make(map[int]int)
 
-	//对象是否能广播
+	//推送给开始位置
 	if isCellView {
-		cellRIds := pos.RPMgr.GetCellRoleIds(x, y, 5, 4)
+		cellRIds := pos.RPMgr.GetCellRoleIds(x, y, 8, 6)
 		for _, rid := range cellRIds {
 			//是否能出现在视野
 			if can := pushSync.IsCanView(rid, x, y); can{
@@ -160,11 +160,19 @@ func (this *Mgr) Push(pushSync PushSync){
 	//推送给目标位置
 	tx, ty := pushSync.TPosition()
 	if tx >= 0 && ty >= 0{
-		cellRIds := pos.RPMgr.GetCellRoleIds(tx, ty, 0, 0)
+		var cellRIds []int
+		if isCellView {
+			cellRIds = pos.RPMgr.GetCellRoleIds(tx, ty, 8, 6)
+		}else{
+			cellRIds = pos.RPMgr.GetCellRoleIds(tx, ty, 0, 0)
+		}
+
 		for _, rid := range cellRIds {
 			if _, ok := cells[rid]; ok == false{
-				this.PushByRoleId(rid, pushSync.PushMsgName(), proto)
-				cells[rid] = rid
+				if can := pushSync.IsCanView(rid, x, y); can{
+					this.PushByRoleId(rid, pushSync.PushMsgName(), proto)
+					cells[rid] = rid
+				}
 			}
 		}
 	}
