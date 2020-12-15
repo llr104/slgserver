@@ -26,9 +26,9 @@ var RMgr = &roleMgr{
 }
 
 func (this*roleMgr) Get(rid int) (*model.Role, bool){
-	this.mutex.Lock()
+	this.mutex.RLock()
 	r, ok := this.roles[rid]
-	this.mutex.Unlock()
+	this.mutex.RUnlock()
 
 	if ok {
 		return r, true
