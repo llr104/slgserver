@@ -34,10 +34,10 @@ func (this*coalitionMgr) Load() {
 }
 
 
-func (this*coalitionMgr) Get(id int) (*model.Coalition, bool){
+func (this*coalitionMgr) Get(unionId int) (*model.Coalition, bool){
 
 	this.mutex.RLock()
-	r, ok := this.unions[id]
+	r, ok := this.unions[unionId]
 	this.mutex.RUnlock()
 
 	if ok {
@@ -46,17 +46,17 @@ func (this*coalitionMgr) Get(id int) (*model.Coalition, bool){
 
 	m := &model.Coalition{}
 	ok, err := db.MasterDB.Table(new(model.Coalition)).Where(
-		"id=? and state=?", id,  model.UnionRunning).Get(m)
+		"unionId=? and state=?", unionId,  model.UnionRunning).Get(m)
 	if ok {
 
 		this.mutex.Lock()
-		this.unions[id] = m
+		this.unions[unionId] = m
 		this.mutex.Unlock()
 
 		return m, true
 	}else{
 		if err == nil{
-			log.DefaultLog.Warn("coalitionMgr not found", zap.Int("id", id))
+			log.DefaultLog.Warn("coalitionMgr not found", zap.Int("unionId", unionId))
 			return nil, false
 		}else{
 			log.DefaultLog.Warn("db error", zap.Error(err))

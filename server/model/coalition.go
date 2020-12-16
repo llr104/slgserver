@@ -6,6 +6,7 @@ import (
 	"go.uber.org/zap"
 	"slgserver/db"
 	"slgserver/log"
+	"slgserver/server/conn"
 	"slgserver/server/proto"
 	"time"
 	"xorm.io/xorm"
@@ -127,4 +128,45 @@ func (this *CoalitionApply) TableName() string {
 	return "coalition_apply"
 }
 
+/* 推送同步 begin */
+func (this *CoalitionApply) IsCellView() bool{
+	return false
+}
 
+func (this *CoalitionApply) IsCanView(rid, x, y int) bool{
+	return false
+}
+
+func (this *CoalitionApply) BelongToRId() []int{
+	r := GetMainMembers(this.UnionId)
+	return append(r, this.RId)
+}
+
+func (this *CoalitionApply) PushMsgName() string{
+	return "unionApply.push"
+}
+
+func (this *CoalitionApply) Position() (int, int){
+	return -1, -1
+}
+
+func (this *CoalitionApply) TPosition() (int, int){
+	return -1, -1
+}
+
+func (this *CoalitionApply) ToProto() interface{}{
+	p := proto.ApplyItem{}
+	p.RId = this.RId
+	p.Id = this.Id
+	p.NickName = GetRoleNickName(this.RId)
+	return p
+}
+
+func (this *CoalitionApply) Push(){
+	conn.ConnMgr.Push(this)
+}
+/* 推送同步 end */
+
+func (this *CoalitionApply) SyncExecute() {
+	this.Push()
+}

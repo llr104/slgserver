@@ -137,18 +137,21 @@ func (this *coalition) join(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	}
 
 	//写入申请列表
-	c := &model.CoalitionApply{
+	apply := &model.CoalitionApply{
 		RId: role.RId,
 		UnionId: reqObj.Id,
 		Ctime: time.Now(),
 		State: proto.UnionUntreated}
 
-	_, err := db.MasterDB.InsertOne(c)
+	_, err := db.MasterDB.InsertOne(apply)
 	if err != nil{
 		rsp.Body.Code = constant.DBError
 		log.DefaultLog.Warn("db error", zap.Error(err))
 		return
 	}
+
+	//推送主、副盟主
+	apply.SyncExecute()
 }
 
 //审核
@@ -263,7 +266,7 @@ func (this *coalition) applyList(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	}
 
 	if u.Chairman != role.RId && u.ViceChairman != role.RId {
-		rsp.Body.Code = constant.PermissionDenied
+		rspObj.Applys = make([]proto.ApplyItem, 0)
 		return
 	}
 

@@ -25,6 +25,20 @@ func getParentId(rid int) int {
 	}
 }
 
+func getMainMembers(unionId int) []int {
+	u, ok := mgr.UnionMgr.Get(unionId)
+	r := make([]int, 0)
+	if ok {
+		if u.Chairman != 0{
+			r = append(r, u.Chairman)
+		}
+		if u.ViceChairman != 0{
+			r = append(r, u.ViceChairman)
+		}
+	}
+	return r
+}
+
 func (this* coalitionLogic) MemberEnter(rid, unionId int)  {
 	mgr.RAttrMgr.EnterUnion(rid, unionId)
 
