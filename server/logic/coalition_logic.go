@@ -28,10 +28,6 @@ func getParentId(rid int) int {
 func (this* coalitionLogic) MemberEnter(rid, unionId int)  {
 	mgr.RAttrMgr.EnterUnion(rid, unionId)
 
-	if ra, ok := mgr.RAttrMgr.Get(rid); ok {
-		ra.UnionId = unionId
-	}
-
 	if rcs, ok := mgr.RCMgr.GetByRId(rid); ok {
 		for _, rc := range rcs {
 			rc.SyncExecute()

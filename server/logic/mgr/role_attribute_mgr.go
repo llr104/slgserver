@@ -78,10 +78,10 @@ func (this*roleAttributeMgr) create(rid int) *model.RoleAttribute{
 	roleAttr := &model.RoleAttribute{RId: rid, ParentId: 0, UnionId: 0}
 	if _ , err := db.MasterDB.Insert(roleAttr); err != nil {
 		log.DefaultLog.Error("insert RoleAttribute error", zap.Error(err))
-		return roleAttr
+		return nil
 	}else{
 		this.attribute[rid] = roleAttr
-		return nil
+		return roleAttr
 	}
 }
 
@@ -116,6 +116,9 @@ func (this*roleAttributeMgr) EnterUnion(rid, unionId int) {
 	attr, ok := this.TryCreate(rid)
 	if ok {
 		attr.UnionId = unionId
+		if attr.ParentId == unionId{
+			attr.ParentId = 0
+		}
 	}else{
 		log.DefaultLog.Warn("EnterUnion not found roleAttribute", zap.Int("rid", rid))
 	}
