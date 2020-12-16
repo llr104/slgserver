@@ -169,7 +169,7 @@ func (this *Mgr) Push(pushSync PushSync){
 
 		for _, rid := range cellRIds {
 			if _, ok := cells[rid]; ok == false{
-				if can := pushSync.IsCanView(rid, x, y); can{
+				if can := pushSync.IsCanView(rid, tx, ty); can{
 					this.PushByRoleId(rid, pushSync.PushMsgName(), proto)
 					cells[rid] = rid
 				}
