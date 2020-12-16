@@ -14,7 +14,7 @@ func hasRoleBuildNearBy(x, y, rid, unionId int) bool {
 				continue
 			}
 			if rb, ok := mgr.RBMgr.PositionBuild(i, j); ok {
-				tUnionId := GetUnionId(rb.RId)
+				tUnionId := getUnionId(rb.RId)
 				if rb.RId == rid || (unionId != 0 && tUnionId == unionId){
 					return true
 				}
@@ -26,7 +26,8 @@ func hasRoleBuildNearBy(x, y, rid, unionId int) bool {
 
 //是否能到达
 func IsCanArrive(x, y, rid int) bool {
-	unionId := GetUnionId(rid)
+	unionId := getUnionId(rid)
+	parentId := getParentId(rid)
 
 	//目标位置是城池
 	if _, ok := mgr.RCMgr.PositionCity(x, y); ok {
@@ -37,8 +38,18 @@ func IsCanArrive(x, y, rid int) bool {
 			return ok
 		}
 
+		ok = hasRoleBuildNearBy(x, y+2, rid, parentId)
+		if ok {
+			return ok
+		}
+
 		//下
 		ok = hasRoleBuildNearBy(x, y-2, rid, unionId)
+		if ok {
+			return ok
+		}
+
+		ok = hasRoleBuildNearBy(x, y-2, rid, parentId)
 		if ok {
 			return ok
 		}
@@ -49,7 +60,18 @@ func IsCanArrive(x, y, rid int) bool {
 			return ok
 		}
 
+		ok = hasRoleBuildNearBy(x-2, y, rid, parentId)
+		if ok {
+			return ok
+		}
+
+		//右
 		ok = hasRoleBuildNearBy(x+2, y, rid, unionId)
+		if ok {
+			return ok
+		}
+
+		ok = hasRoleBuildNearBy(x+2, y, rid, parentId)
 		if ok {
 			return ok
 		}
@@ -60,12 +82,22 @@ func IsCanArrive(x, y, rid int) bool {
 			return true
 		}
 
+		ok = hasRoleBuildNearBy(x, y, rid, parentId)
+		if ok {
+			return true
+		}
+
 		//再判断是否和城市相连， 因为城池占了9格，所以该格子附近两个格子范围内有城池，则该地方是城池
 		for i := x-2; i <= x+2; i++ {
 			for j := y-2; j <= y+2; j++ {
 				if rc, ok := mgr.RCMgr.PositionCity(i, j); ok {
-					tUnionId := GetUnionId(rc.RId)
+					tUnionId := getUnionId(rc.RId)
 					if rc.RId == rid || (unionId != 0 && tUnionId == unionId) {
+						return true
+					}
+
+					tParentId := getParentId(rc.RId)
+					if tParentId != 0 && tParentId == unionId {
 						return true
 					}
 				}
@@ -77,25 +109,31 @@ func IsCanArrive(x, y, rid int) bool {
 }
 
 func IsCanDefend(x, y, rid int) bool{
-	unionId := GetUnionId(rid)
+	unionId := getUnionId(rid)
 
 	b, ok := mgr.RBMgr.PositionBuild(x, y)
 	if ok {
-		tUnionId := GetUnionId(b.RId)
+		tUnionId := getUnionId(b.RId)
+		tParentId := getParentId(b.RId)
 		if b.RId == rid{
 			return true
 		}else if tUnionId > 0 {
 			return tUnionId == unionId
+		}else if tParentId > 0 {
+			return tParentId == unionId
 		}
 	}
 
 	c, ok := mgr.RCMgr.PositionCity(x, y)
 	if ok {
-		tUnionId := GetUnionId(c.RId)
+		tUnionId := getUnionId(c.RId)
+		tParentId := getParentId(c.RId)
 		if c.RId == rid{
 			return true
 		}else if tUnionId > 0 {
 			return tUnionId == unionId
+		}else if tParentId > 0 {
+			return tParentId == unionId
 		}
 	}
 	return false

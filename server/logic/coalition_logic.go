@@ -7,10 +7,19 @@ type coalitionLogic struct {
 
 }
 
-func GetUnionId(rid int) int {
+func getUnionId(rid int) int {
 	attr, ok := mgr.RAttrMgr.Get(rid)
 	if ok {
 		return attr.UnionId
+	}else{
+		return 0
+	}
+}
+
+func getParentId(rid int) int {
+	attr, ok := mgr.RAttrMgr.Get(rid)
+	if ok {
+		return attr.ParentId
 	}else{
 		return 0
 	}

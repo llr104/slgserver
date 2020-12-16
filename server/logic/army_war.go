@@ -374,7 +374,6 @@ func newBattle(attackArmy *model.Army) {
 						dAttr, _ := mgr.RAttrMgr.Get(city.RId)
 						dAttr.ParentId = aAttr.UnionId
 						dAttr.SyncExecute()
-
 					}else {
 						wr.Occupy = 0
 					}

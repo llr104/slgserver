@@ -83,7 +83,7 @@ type Army struct {
 	ToX      int   `json:"to_x"`
 	ToY      int   `json:"to_y"`
 	Start    int64 `json:"start"`//出征开始时间
-	End      	int64 	`json:"end"`//出征结束时间
+	End      int64 `json:"end"`//出征结束时间
 }
 
 //配置武将

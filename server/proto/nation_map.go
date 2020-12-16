@@ -23,9 +23,10 @@ type ConfigRsp struct {
 
 type MapRoleBuild struct {
 	RId			int			`json:"rid"`
-	RNick		string 		`json:"RNick"` //角色昵称
+	RNick		string 		`json:"RNick"` 		//角色昵称
 	Name		string		`json:"name"`
 	UnionId		int			`json:"union_id"`	//联盟id
+	ParentId	int			`json:"parent_id"`	//上级id
 	X			int    		`json:"x"`
 	Y			int    		`json:"y"`
 	Type		int8		`json:"type"`

@@ -14,8 +14,9 @@ func Init() {
 
 	//初始化一些方法
 	model.ArmyIsInView = armyIsInView
-	model.GetUnionId = GetUnionId
+	model.GetUnionId = getUnionId
 	model.GetRoleNickName = mgr.RoleNickName
+	model.GetParentId = getParentId
 
 	Union = &coalitionLogic{}
 	ArmyLogic = &armyLogic{

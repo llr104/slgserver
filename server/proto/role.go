@@ -61,7 +61,8 @@ type MapRoleCity struct {
 	CityId     int    `json:"cityId"`
 	RId        int    `json:"rid"`
 	Name       string `json:"name"`
-	UnionId    int    `json:"union_id"` //联盟id
+	UnionId    int    `json:"union_id"` 	//联盟id
+	ParentId   int    `json:"parent_id"`	//上级id
 	X          int    `json:"x"`
 	Y          int    `json:"y"`
 	Cost       int8   `json:"cost"`
