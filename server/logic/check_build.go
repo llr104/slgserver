@@ -18,6 +18,11 @@ func hasRoleBuildNearBy(x, y, rid, unionId int) bool {
 				if rb.RId == rid || (unionId != 0 && tUnionId == unionId){
 					return true
 				}
+
+				tParentId := getParentId(rb.RId)
+				if tParentId != 0 && tParentId == unionId{
+					return true
+				}
 			}
 		}
 	}
@@ -27,18 +32,11 @@ func hasRoleBuildNearBy(x, y, rid, unionId int) bool {
 //是否能到达
 func IsCanArrive(x, y, rid int) bool {
 	unionId := getUnionId(rid)
-	parentId := getParentId(rid)
-
 	//目标位置是城池
 	if _, ok := mgr.RCMgr.PositionCity(x, y); ok {
 		//城的四周是否有地相连
 		//上
 		ok := hasRoleBuildNearBy(x, y+2, rid, unionId)
-		if ok {
-			return ok
-		}
-
-		ok = hasRoleBuildNearBy(x, y+2, rid, parentId)
 		if ok {
 			return ok
 		}
@@ -49,21 +47,12 @@ func IsCanArrive(x, y, rid int) bool {
 			return ok
 		}
 
-		ok = hasRoleBuildNearBy(x, y-2, rid, parentId)
-		if ok {
-			return ok
-		}
-
 		//左
 		ok = hasRoleBuildNearBy(x-2, y, rid, unionId)
 		if ok {
 			return ok
 		}
 
-		ok = hasRoleBuildNearBy(x-2, y, rid, parentId)
-		if ok {
-			return ok
-		}
 
 		//右
 		ok = hasRoleBuildNearBy(x+2, y, rid, unionId)
@@ -71,18 +60,9 @@ func IsCanArrive(x, y, rid int) bool {
 			return ok
 		}
 
-		ok = hasRoleBuildNearBy(x+2, y, rid, parentId)
-		if ok {
-			return ok
-		}
 	}else{
 		//普通领地
 		ok := hasRoleBuildNearBy(x, y, rid, unionId)
-		if ok {
-			return true
-		}
-
-		ok = hasRoleBuildNearBy(x, y, rid, parentId)
 		if ok {
 			return true
 		}
