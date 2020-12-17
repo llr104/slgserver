@@ -40,7 +40,7 @@
     "cost": 75,
     "durable": 100,
     "transform_rate": 50,
-    "recovery_time": 20
+    "recovery_time": 600
   },
   "npc": {
     "des": "npc一些配置",

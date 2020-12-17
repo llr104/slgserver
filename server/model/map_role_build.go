@@ -93,6 +93,7 @@ func (this *MapRoleBuild) ToProto() interface{}{
 	p := proto.MapRoleBuild{}
 	p.RNick = GetRoleNickName(this.RId)
 	p.UnionId = GetUnionId(this.RId)
+	p.UnionName = GetUnionName(p.UnionId)
 	p.ParentId = GetParentId(this.RId)
 	p.X = this.X
 	p.Y = this.Y

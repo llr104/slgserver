@@ -329,6 +329,28 @@ func NewEmptyWar(attack *model.Army) *model.WarReport {
 	return wr
 }
 
+func checkCityOccupy(wr *model.WarReport, attackArmy *model.Army, city* model.MapRoleCity){
+	destory := mgr.GMgr.GetDestroy(attackArmy)
+	wr.DestroyDurable = util.MinInt(destory, city.CurDurable)
+	city.DurableChange(-destory)
+
+	if city.CurDurable == 0{
+		aAttr, _ := mgr.RAttrMgr.Get(attackArmy.RId)
+		if aAttr.UnionId != 0{
+			//有联盟才能俘虏玩家
+			wr.Occupy = 1
+			dAttr, _ := mgr.RAttrMgr.Get(city.RId)
+			dAttr.ParentId = aAttr.UnionId
+			dAttr.SyncExecute()
+		}else {
+			wr.Occupy = 0
+		}
+	}else{
+		wr.Occupy = 0
+	}
+	city.SyncExecute()
+}
+
 //简单战斗
 func newBattle(attackArmy *model.Army) {
 	city, ok := mgr.RCMgr.PositionCity(attackArmy.ToX, attackArmy.ToY)
@@ -358,29 +380,17 @@ func newBattle(attackArmy *model.Army) {
 			destory := mgr.GMgr.GetDestroy(attackArmy)
 			city.DurableChange(-destory)
 			city.SyncExecute()
+
+			wr := NewEmptyWar(attackArmy)
+			wr.Result = 2
+			wr.DefenseRid = city.RId
+			checkCityOccupy(wr, attackArmy, city)
+			wr.SyncExecute()
 		}else{
 			lastWar, warReports := trigger(attackArmy, enemys, true)
 			if lastWar.result > 1 {
-				destory := mgr.GMgr.GetDestroy(attackArmy)
 				wr := warReports[len(warReports)-1]
-				wr.DestroyDurable = util.MinInt(destory, city.CurDurable)
-				city.DurableChange(-destory)
-
-				if city.CurDurable == 0{
-					aAttr, _ := mgr.RAttrMgr.Get(attackArmy.RId)
-					if aAttr.UnionId != 0{
-						//有联盟才能俘虏玩家
-						wr.Occupy = 1
-						dAttr, _ := mgr.RAttrMgr.Get(city.RId)
-						dAttr.ParentId = aAttr.UnionId
-						dAttr.SyncExecute()
-					}else {
-						wr.Occupy = 0
-					}
-				}else{
-					wr.Occupy = 0
-				}
-				city.SyncExecute()
+				checkCityOccupy(wr, attackArmy, city)
 			}
 			for _, wr := range warReports {
 				wr.SyncExecute()

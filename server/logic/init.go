@@ -18,6 +18,7 @@ func Init() {
 	model.GetRoleNickName = mgr.RoleNickName
 	model.GetParentId = getParentId
 	model.GetMainMembers = getMainMembers
+	model.GetUnionName = getUnionName
 
 	Union = &coalitionLogic{}
 	ArmyLogic = &armyLogic{

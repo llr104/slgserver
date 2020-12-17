@@ -106,6 +106,7 @@ func (this *MapRoleCity) ToProto() interface{}{
 	p.Y = this.Y
 	p.CityId = this.CityId
 	p.UnionId = GetUnionId(this.RId)
+	p.UnionName = GetUnionName(p.UnionId)
 	p.ParentId = GetParentId(this.RId)
 	p.CurDurable = this.CurDurable
 	p.MaxDurable = this.MaxDurable

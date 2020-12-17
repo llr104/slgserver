@@ -16,6 +16,19 @@ func getUnionId(rid int) int {
 	}
 }
 
+func getUnionName(unionId int) string {
+	if unionId <= 0{
+		return ""
+	}
+
+	u, ok := mgr.UnionMgr.Get(unionId)
+	if ok {
+		return u.Name
+	}else{
+		return ""
+	}
+}
+
 func getParentId(rid int) int {
 	attr, ok := mgr.RAttrMgr.Get(rid)
 	if ok {
