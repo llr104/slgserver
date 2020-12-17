@@ -307,7 +307,6 @@ func (this*General) conscript(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		if rRes, ok := mgr.RResMgr.Get(role.RId); ok {
 			rspObj.RoleRes = rRes.ToProto().(proto.RoleRes)
 		}
-
 		rsp.Body.Code = constant.OK
 	}else{
 		rsp.Body.Code = constant.ResNotEnough
@@ -341,11 +340,10 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 		return
 	}
 
-	if army.Gens[0] == nil{
+	if army.IsCanWar() == false{
 		rsp.Body.Code = constant.ArmyNotMain
 		return
 	}
-
 
 	if reqObj.Cmd == model.ArmyCmdBack {
 		//撤退

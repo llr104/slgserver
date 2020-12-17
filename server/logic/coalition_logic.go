@@ -158,6 +158,11 @@ func (this* coalitionLogic) DelUnionAllChild(unionId int) {
 				attr.ParentId = 0
 				attr.SyncExecute()
 			}
+
+			city, ok := mgr.RCMgr.GetMainCity(child)
+			if ok {
+				city.SyncExecute()
+			}
 		}
 		delete(this.children, unionId)
 	}

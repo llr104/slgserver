@@ -235,8 +235,6 @@ func (this *armyLogic) ScanBlock(rid, x, y, length int) []*model.Army {
 		}
 	}
 	this.passby.RUnlock()
-
-
 	return out
 }
 

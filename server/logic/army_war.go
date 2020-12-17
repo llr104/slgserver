@@ -73,7 +73,7 @@ func NewWar(attack *model.Army, defense *model.Army) *WarResult {
 	result := &WarResult{round: wars}
 	if w.attackPos[0].soldiers == 0{
 		result.result = 0
-	}else if w.defensePos[0].soldiers != 0{
+	}else if w.defensePos[0] != nil && w.defensePos[0].soldiers != 0{
 		result.result = 1
 	}else{
 		result.result = 2
@@ -370,7 +370,7 @@ func newBattle(attackArmy *model.Army) {
 		//城内空闲的队伍被打
 		if armys, ok := mgr.AMgr.GetByCity(city.CityId); ok {
 			for _, enemy := range armys {
-				if enemy.Cmd == model.ArmyCmdIdle{
+				if enemy.Cmd == model.ArmyCmdIdle && enemy.IsCanWar(){
 					enemys = append(enemys, enemy)
 				}
 			}

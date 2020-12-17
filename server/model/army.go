@@ -89,6 +89,10 @@ func (this *Army) TableName() string {
 	return "army"
 }
 
+func (this *Army) IsCanWar() bool{
+	return this.Gens[0] != nil
+}
+
 func (this *Army) AfterSet(name string, cell xorm.Cell){
 	if name == "generals"{
 		this.GeneralArray = []int{0,0,0}
