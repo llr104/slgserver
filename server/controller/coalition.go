@@ -358,19 +358,8 @@ func (this *coalition) dismiss(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		rsp.Body.Code = constant.PermissionDenied
 		return
 	}
-
-	mgr.UnionMgr.Remove(attribute.UnionId)
-
-	for _, rid := range u.MemberArray {
-		logic.Union.MemberExit(rid)
-	}
-
-	u.State = model.UnionDismiss
-	u.MemberArray = []int{}
-	attribute.UnionId = 0
-	u.SyncExecute()
-
-
+	unionId := attribute.UnionId
+	logic.Union.Dismiss(unionId)
 }
 
 //公告

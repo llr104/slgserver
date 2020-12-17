@@ -10,7 +10,7 @@ import (
 
 type roleAttributeMgr struct {
 	mutex  sync.RWMutex
-	attribute map[int]*model.RoleAttribute
+	attribute map[int]*model.RoleAttribute	//key:rid
 }
 
 var RAttrMgr = &roleAttributeMgr{
@@ -112,17 +112,13 @@ func (this*roleAttributeMgr) UnionId(rid int) int{
 	}
 }
 
-func (this*roleAttributeMgr) EnterUnion(rid, unionId int) {
-	attr, ok := this.TryCreate(rid)
-	if ok {
-		attr.UnionId = unionId
-		if attr.ParentId == unionId{
-			attr.ParentId = 0
-		}
-	}else{
-		log.DefaultLog.Warn("EnterUnion not found roleAttribute", zap.Int("rid", rid))
+func (this*roleAttributeMgr) List() []*model.RoleAttribute{
+	this.mutex.RLock()
+	defer this.mutex.RUnlock()
+	ret := make([]*model.RoleAttribute, 0)
+	for _, attribute := range this.attribute {
+		ret = append(ret, attribute)
 	}
+	return ret
 }
-
-
 

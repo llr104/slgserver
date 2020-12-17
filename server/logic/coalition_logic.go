@@ -1,11 +1,12 @@
 package logic
 
-import "slgserver/server/logic/mgr"
-
-
-type coalitionLogic struct {
-
-}
+import (
+	"go.uber.org/zap"
+	"slgserver/log"
+	"slgserver/server/logic/mgr"
+	"slgserver/server/model"
+	"sync"
+)
 
 func getUnionId(rid int) int {
 	attr, ok := mgr.RAttrMgr.Get(rid)
@@ -52,8 +53,41 @@ func getMainMembers(unionId int) []int {
 	return r
 }
 
+
+type coalitionLogic struct {
+	mutex sync.RWMutex
+	children map[int]map[int]int	//key:unionId,key&value:child rid
+}
+
+func NewCoalitionLogic() *coalitionLogic {
+	c := &coalitionLogic{
+		children: make(map[int]map[int]int),
+	}
+	c.init()
+	return c
+}
+
+func (this* coalitionLogic) init()  {
+	//初始化下属玩家
+	attrs := mgr.RAttrMgr.List()
+	for _, attr := range attrs {
+		if attr.ParentId !=0 {
+			this.PutChild(attr.ParentId, attr.RId)
+		}
+	}
+}
+
 func (this* coalitionLogic) MemberEnter(rid, unionId int)  {
-	mgr.RAttrMgr.EnterUnion(rid, unionId)
+
+	attr, ok := mgr.RAttrMgr.TryCreate(rid)
+	if ok {
+		attr.UnionId = unionId
+		if attr.ParentId == unionId{
+			this.DelChild(unionId, attr.RId)
+		}
+	}else{
+		log.DefaultLog.Warn("EnterUnion not found roleAttribute", zap.Int("rid", rid))
+	}
 
 	if rcs, ok := mgr.RCMgr.GetByRId(rid); ok {
 		for _, rc := range rcs {
@@ -73,5 +107,59 @@ func (this* coalitionLogic) MemberExit(rid int) {
 			rc.SyncExecute()
 		}
 	}
+}
 
+//解散
+func (this* coalitionLogic) Dismiss(unionId int) {
+	u, ok := mgr.UnionMgr.Get(unionId)
+	if ok {
+		mgr.UnionMgr.Remove(unionId)
+		for _, rid := range u.MemberArray {
+			this.MemberExit(rid)
+			this.DelUnionAllChild(unionId)
+		}
+		u.State = model.UnionDismiss
+		u.MemberArray = []int{}
+		u.SyncExecute()
+	}
+}
+
+func (this* coalitionLogic) PutChild(unionId, rid int) {
+	this.mutex.Lock()
+	_, ok := this.children[unionId]
+	if ok == false {
+		this.children[unionId] = make(map[int]int)
+	}
+	this.children[unionId][rid] = rid
+	this.mutex.Unlock()
+}
+
+func (this* coalitionLogic) DelChild(unionId, rid int) {
+	this.mutex.Lock()
+	children, ok := this.children[unionId]
+	if ok {
+		attr, ok := mgr.RAttrMgr.Get(rid)
+		if ok {
+			attr.ParentId = 0
+			attr.SyncExecute()
+		}
+		delete(children, rid)
+	}
+	this.mutex.Unlock()
+}
+
+func (this* coalitionLogic) DelUnionAllChild(unionId int) {
+	this.mutex.Lock()
+	children, ok := this.children[unionId]
+	if ok {
+		for _, child := range children {
+			attr, ok := mgr.RAttrMgr.Get(child)
+			if ok {
+				attr.ParentId = 0
+				attr.SyncExecute()
+			}
+		}
+		delete(this.children, unionId)
+	}
+	this.mutex.Unlock()
 }

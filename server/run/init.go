@@ -15,7 +15,6 @@ var MyRouter = &net.Router{}
 
 func Init() {
 	db.TestDB()
-	initRouter()
 
 	facility.FConf.Load()
 	general.GenBasic.Load()
@@ -35,6 +34,9 @@ func Init() {
 	mgr.AMgr.Load()
 
 	logic.Init()
+
+	//全部初始化完才注册路由，防止服务器还没启动就绪收到请求
+	initRouter()
 }
 
 func initRouter() {

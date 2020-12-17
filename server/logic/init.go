@@ -20,7 +20,7 @@ func Init() {
 	model.GetMainMembers = getMainMembers
 	model.GetUnionName = getUnionName
 
-	Union = &coalitionLogic{}
+	Union = NewCoalitionLogic()
 	ArmyLogic = &armyLogic{
 		arriveArmys:	make(chan *model.Army, 100),
 		giveUpId:       make(chan int, 100),

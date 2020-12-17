@@ -341,6 +341,7 @@ func checkCityOccupy(wr *model.WarReport, attackArmy *model.Army, city* model.Ma
 			wr.Occupy = 1
 			dAttr, _ := mgr.RAttrMgr.Get(city.RId)
 			dAttr.ParentId = aAttr.UnionId
+			Union.PutChild(aAttr.UnionId, city.RId)
 			dAttr.SyncExecute()
 		}else {
 			wr.Occupy = 0
@@ -384,6 +385,7 @@ func newBattle(attackArmy *model.Army) {
 			wr := NewEmptyWar(attackArmy)
 			wr.Result = 2
 			wr.DefenseRid = city.RId
+			wr.DefenseIsRead = false
 			checkCityOccupy(wr, attackArmy, city)
 			wr.SyncExecute()
 		}else{
