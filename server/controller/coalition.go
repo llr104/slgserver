@@ -382,7 +382,7 @@ func (this *coalition) notice(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 //修改公告
 func (this *coalition) modNotice(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	reqObj := &proto.ModNoticeReq{}
-	rspObj := &proto.ModNoticeReq{}
+	rspObj := &proto.ModNoticeRsp{}
 	mapstructure.Decode(req.Body.Msg, reqObj)
 	rsp.Body.Msg = rspObj
 
@@ -413,6 +413,7 @@ func (this *coalition) modNotice(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	}
 
 	rspObj.Text = reqObj.Text
+	rspObj.Id = u.Id
 	u.Notice = reqObj.Text
 	u.SyncExecute()
 }

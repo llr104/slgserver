@@ -134,7 +134,8 @@ type ModNoticeReq struct {
 }
 
 type ModNoticeRsp struct {
-
+	Id		int		`json:"id"`	//联盟id
+	Text 	string	`json:"text"`
 }
 
 //踢人
