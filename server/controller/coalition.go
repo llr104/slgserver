@@ -278,6 +278,7 @@ func (this *coalition) applyList(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
+	rspObj.Id = reqObj.Id
 	rspObj.Applys = make([]proto.ApplyItem, 0)
 	for _, apply := range applys {
 		if r, ok := mgr.RMgr.Get(apply.RId);ok{

@@ -86,7 +86,8 @@ type ApplyReq struct {
 }
 
 type ApplyRsp struct {
-	Applys []ApplyItem `json:"applys"`
+	Id	int				`json:"id"`
+	Applys []ApplyItem 	`json:"applys"`
 }
 
 //审核
