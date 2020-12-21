@@ -30,6 +30,12 @@ func (this*Group) Exit(rid int) {
 	delete(this.users, rid)
 }
 
+func (this* Group) GetUser(rid int) *User {
+	this.userMutex.Lock()
+	defer this.userMutex.Unlock()
+	return this.users[rid]
+}
+
 func (this*Group) PutMsg(text string, rid int) *proto.ChatMsg{
 
 	this.userMutex.RLock()
