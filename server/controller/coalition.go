@@ -449,6 +449,11 @@ func (this *coalition) kick(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
+	if role.RId == reqObj.RId {
+		rsp.Body.Code = constant.PermissionDenied
+		return
+	}
+
 	target, ok := mgr.RAttrMgr.Get(reqObj.RId)
 	if ok {
 		if target.UnionId == u.Id{
