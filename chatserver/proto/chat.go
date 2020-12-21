@@ -23,10 +23,6 @@ type ChatReq struct {
 	Msg		string 	`json:"msg"`
 }
 
-type ChatRsp struct {
-	Type	int8	`json:"type"`	//0世界聊天
-	Msg		string 	`json:"msg"`
-}
 
 type ChatMsg struct {
 	RId      int    `json:"rid"`

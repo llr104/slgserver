@@ -8,7 +8,6 @@ import (
 	"slgserver/net"
 	"slgserver/server/conn"
 	"slgserver/server/middleware"
-	"time"
 )
 
 var DefaultChat = Chat{
@@ -48,7 +47,7 @@ func (this*Chat) logout(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	reqObj := &proto.LogoutReq{}
 	rspObj := &proto.LogoutRsp{}
 	rsp.Body.Code = constant.OK
-	rsp.Body.Msg = rsp
+	rsp.Body.Msg = rspObj
 
 	mapstructure.Decode(req.Body.Msg, reqObj)
 	rspObj.RId = reqObj.RId
@@ -59,16 +58,17 @@ func (this*Chat) logout(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 func (this*Chat) chat(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	reqObj := &proto.ChatReq{}
-	rspObj := &proto.ChatRsp{}
+	rspObj := &proto.ChatMsg{}
 	rsp.Body.Code = constant.OK
-	rsp.Body.Msg = rsp
+	rsp.Body.Msg = rspObj
 
 	mapstructure.Decode(req.Body.Msg, reqObj)
-	rspObj.Msg = reqObj.Msg
 
-	if reqObj.Type == 0 {
-		msg := &logic.Msg{Msg: reqObj.Msg, Time: time.Now()}
-		this.worldGroup.PutMsg(msg)
+	rid, err := req.Conn.GetProperty("rid")
+	if err == nil {
+		if reqObj.Type == 0 {
+			rsp.Body.Msg = this.worldGroup.PutMsg(reqObj.Msg, rid.(int))
+		}
 	}
 
 }
@@ -78,7 +78,7 @@ func (this*Chat) history(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	reqObj := &proto.HistoryReq{}
 	rspObj := &proto.HistoryRsp{}
 	rsp.Body.Code = constant.OK
-	rsp.Body.Msg = rsp
+	rsp.Body.Msg = rspObj
 	rspObj.Type = reqObj.Type
 	mapstructure.Decode(req.Body.Msg, reqObj)
 

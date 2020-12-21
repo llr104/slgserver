@@ -4,6 +4,7 @@ import (
 	"slgserver/chatserver/proto"
 	"slgserver/server/conn"
 	"sync"
+	"time"
 )
 
 type Group struct {
@@ -29,7 +30,16 @@ func (this*Group) Exit(rid int) {
 	delete(this.users, rid)
 }
 
-func (this*Group) PutMsg(msg *Msg) {
+func (this*Group) PutMsg(text string, rid int) *proto.ChatMsg{
+
+	this.userMutex.RLock()
+	u, ok := this.users[rid]
+	this.userMutex.RUnlock()
+	if ok == false{
+		return nil
+	}
+
+	msg := &Msg{Msg: text, RId: rid, Time: time.Now(), NickName: u.nickName}
 	this.msgMutex.Lock()
 	size := this.msgs.Size()
 	if size > 100 {
@@ -40,11 +50,12 @@ func (this*Group) PutMsg(msg *Msg) {
 
 	//广播
 	this.userMutex.RLock()
-	c := proto.ChatMsg{RId: msg.RId, NickName: msg.NickName, Time: msg.Time.Unix(), Msg: msg.Msg}
+	c := &proto.ChatMsg{RId: msg.RId, NickName: msg.NickName, Time: msg.Time.Unix(), Msg: msg.Msg, Type: 0}
 	for _, user := range this.users {
-		conn.ConnMgr.PushByRoleId(user.rid, "chat.chat", c)
+		conn.ConnMgr.PushByRoleId(user.rid, "chat.push", c)
 	}
 	this.userMutex.RUnlock()
+	return c
 }
 
 func (this*Group) History() []proto.ChatMsg{
