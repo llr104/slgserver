@@ -1,0 +1,38 @@
+package proto
+
+type LoginReq struct {
+	RId      int    `json:"rid"`
+	NickName string `json:"nickName"`
+}
+
+type LoginRsp struct {
+	RId      int    `json:"rid"`
+	NickName string `json:"nickName"`
+}
+
+type LogoutReq struct {
+	RId      int	`json:"RId"`
+}
+
+type LogoutRsp struct {
+	RId      int	`json:"RId"`
+}
+
+type ChatReq struct {
+	Type	int8	`json:"type"`	//0世界聊天
+	Msg		string 	`json:"msg"`
+}
+
+type ChatRsp struct {
+	Type	int8	`json:"type"`	//0世界聊天
+	Msg		string 	`json:"msg"`
+}
+
+type ChatMsg struct {
+	RId      int    `json:"rid"`
+	NickName string `json:"nickName"`
+	Type	int8	`json:"type"`	//0世界聊天
+	Msg		string 	`json:"msg"`
+	Time	int64	`json:"time"`
+}
+
