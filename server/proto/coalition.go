@@ -151,12 +151,12 @@ type KickRsp struct {
 //任命
 type AppointReq struct {
 	RId		int 	`json:"rid"`
-	Title   int 	`json:"title"` //职位，1副盟主（目前只支持任命副盟主）
+	Title   int 	`json:"title"` //职位，0盟主、1副盟主、2普通成员
 }
 
 type AppointRsp struct {
 	RId		int 	`json:"rid"`
-	Title   int 	`json:"title"` //职位，1副盟主（目前只支持任命副盟主）
+	Title   int 	`json:"title"` //职位，0盟主、1副盟主、2普通成员
 }
 
 //禅让(盟主副盟主)

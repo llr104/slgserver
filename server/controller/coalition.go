@@ -462,6 +462,9 @@ func (this *coalition) kick(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 					u.MemberArray = append(u.MemberArray[:i], u.MemberArray[i+1:]...)
 				}
 			}
+			if u.ViceChairman == reqObj.RId{
+				u.ViceChairman = 0
+			}
 			logic.Union.MemberExit(reqObj.RId)
 			target.UnionId = 0
 			u.SyncExecute()
@@ -510,6 +513,11 @@ func (this *coalition) appoint(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 				u.ViceChairman = reqObj.RId
 				rspObj.Title = reqObj.Title
 				u.SyncExecute()
+			}else if reqObj.Title == proto.UnionCommon{
+				if u.ViceChairman == reqObj.RId{
+					u.ViceChairman = 0
+				}
+				rspObj.Title = reqObj.Title
 			}else{
 				rsp.Body.Code = constant.InvalidParam
 			}
