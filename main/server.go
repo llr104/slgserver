@@ -3,13 +3,10 @@ package main
 import (
 	"fmt"
 	"github.com/gorilla/websocket"
-	"go.uber.org/zap"
 	"net/http"
 	"os"
 	"slgserver/config"
-	"slgserver/log"
-	"slgserver/net"
-	conn2 "slgserver/server/conn"
+	"slgserver/server/conn"
 	"slgserver/server/run"
 )
 
@@ -32,31 +29,10 @@ func getServerAddr() string {
 func main() {
 	fmt.Println(os.Getwd())
 	run.Init()
-	log.DefaultLog.Info("slg server starting")
-	http.HandleFunc("/", wsHandler)
-	http.ListenAndServe(getServerAddr(), nil)
-}
-
-
-
-func wsHandler(resp http.ResponseWriter, req *http.Request) {
 	needSecret := config.File.MustBool("server", "need_secret", false)
-
-	wsSocket, err := wsUpgrader.Upgrade(resp, req, nil)
-	if err != nil {
-		return
-	}
-
-	conn := conn2.ConnMgr.NewConn(wsSocket, needSecret)
-	log.DefaultLog.Info("client connect", zap.String("addr", wsSocket.RemoteAddr().String()))
-
-	conn.SetRouter(run.MyRouter)
-	conn.SetOnClose(func(conn *net.WSConn) {
-		conn2.ConnMgr.RemoveConn(conn)
-		log.DefaultLog.Info("client disconnect", zap.String("addr", wsSocket.RemoteAddr().String()))
-	})
-
-	conn.Running()
-	conn.Handshake()
-
+	s := conn.NewServer(getServerAddr(), needSecret)
+	s.Router(run.MyRouter)
+	s.Start()
 }
+
+
