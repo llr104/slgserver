@@ -46,3 +46,17 @@ func (this*Group) PutMsg(msg *Msg) {
 	}
 	this.userMutex.RUnlock()
 }
+
+func (this*Group) History() []proto.ChatMsg{
+	r := make([]proto.ChatMsg, 0)
+	this.msgMutex.Lock()
+	items := this.msgs.items
+	for _, item := range items {
+		msg := item.(*Msg)
+		c := proto.ChatMsg{RId: msg.RId, NickName: msg.NickName, Time: msg.Time.Unix(), Msg: msg.Msg}
+		r = append(r, c)
+	}
+	this.msgMutex.Unlock()
+
+	return r
+}

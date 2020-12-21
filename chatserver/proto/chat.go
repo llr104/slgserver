@@ -36,3 +36,12 @@ type ChatMsg struct {
 	Time	int64	`json:"time"`
 }
 
+
+type HistoryReq struct {
+	Type	int8	`json:"type"`	//0世界聊天
+}
+
+type HistoryRsp struct {
+	Type	int8		`json:"type"`	//0世界聊天
+	Msgs	[]ChatMsg 	`json:"msgs"`
+}
