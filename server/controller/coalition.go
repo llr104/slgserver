@@ -568,6 +568,9 @@ func (this *coalition) abdicate(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		if target.UnionId == u.Id{
 			if role.RId == u.Chairman{
 				u.Chairman = reqObj.RId
+				if u.ViceChairman == reqObj.RId{
+					u.ViceChairman = 0
+				}
 			}else if role.RId == u.ViceChairman {
 				u.ViceChairman = reqObj.RId
 			}
