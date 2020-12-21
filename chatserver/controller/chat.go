@@ -101,6 +101,13 @@ func (this*Chat) history(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	if reqObj.Type == 0 {
 		r := this.worldGroup.History()
 		rspObj.Msgs = r
+	}else if reqObj.Type == 1 {
+		this.unionMutex.RLock()
+		g, ok := this.unionGroups[reqObj.Id]
+		this.unionMutex.RUnlock()
+		if ok {
+			rspObj.Msgs = g.History()
+		}
 	}
 }
 

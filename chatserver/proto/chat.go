@@ -36,10 +36,11 @@ type ChatMsg struct {
 
 type HistoryReq struct {
 	Type	int8	`json:"type"`	//0世界聊天、1联盟聊天
+	Id		int		`json:"id"`
 }
 
 type HistoryRsp struct {
-	Type	int8	`json:"type"`	//0世界聊天、1联盟聊天
+	Type	int8		`json:"type"`	//0世界聊天、1联盟聊天
 	Msgs	[]ChatMsg 	`json:"msgs"`
 }
 

@@ -9,7 +9,7 @@ import (
 
 type Group struct {
 	userMutex 	sync.RWMutex
-	msgMutex 	sync.Mutex
+	msgMutex 	sync.RWMutex
 	users     	map[int]*User
 	msgs		ItemQueue
 }
@@ -66,14 +66,14 @@ func (this*Group) PutMsg(text string, rid int) *proto.ChatMsg{
 
 func (this*Group) History() []proto.ChatMsg{
 	r := make([]proto.ChatMsg, 0)
-	this.msgMutex.Lock()
+	this.msgMutex.RLock()
 	items := this.msgs.items
 	for _, item := range items {
 		msg := item.(*Msg)
 		c := proto.ChatMsg{RId: msg.RId, NickName: msg.NickName, Time: msg.Time.Unix(), Msg: msg.Msg}
 		r = append(r, c)
 	}
-	this.msgMutex.Unlock()
+	this.msgMutex.RUnlock()
 
 	return r
 }
