@@ -312,8 +312,8 @@ func (this *coalition) exit(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	//盟主、副盟主不能退出
-	if u.Chairman == role.RId || u.ViceChairman == role.RId {
+	//盟主不能退出
+	if u.Chairman == role.RId {
 		rsp.Body.Code = constant.UnionNotAllowExit
 		return
 	}
@@ -322,6 +322,10 @@ func (this *coalition) exit(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		if rid == role.RId{
 			u.MemberArray = append(u.MemberArray[:i], u.MemberArray[i+1:]...)
 		}
+	}
+
+	if u.ViceChairman == role.RId{
+		u.ViceChairman = 0
 	}
 
 	logic.Union.MemberExit(role.RId)
