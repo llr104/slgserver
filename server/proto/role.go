@@ -55,6 +55,7 @@ type EnterServerRsp struct {
 	Role		Role	`json:"role"`
 	RoleRes		RoleRes	`json:"role_res"`
 	Time		int64	`json:"time"`
+	Token		string	`json:"token"`
 }
 
 type MapRoleCity struct {

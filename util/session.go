@@ -1,11 +1,10 @@
-package server
+package util
 
 import (
 	"encoding/base64"
 	"errors"
 	"fmt"
 	"github.com/forgoer/openssl"
-	"slgserver/util"
 	"strconv"
 	"strings"
 	"time"
@@ -16,21 +15,24 @@ const validTime = 30*24*time.Hour
 const key = ("1234567890123456")
 
 type Session struct {
-	MTime 	time.Time
-	Uid   	int
+	MTime time.Time
+	Id    int
 }
 
-func NewSession(uid int, time time.Time) *Session {
-	return &Session{Uid: uid, MTime: time}
+func NewSession(id int, time time.Time) *Session {
+	return &Session{Id: id, MTime: time}
 }
 
 func ParseSession(session string) (*Session, error) {
+	if session == ""{
+		return nil, errors.New("session is empty")
+	}
 	decode, err := base64.StdEncoding.DecodeString(session)
 	if err != nil{
 		return nil, err
 	}
 
-	data, _ := util.AesCBCDecrypt(decode, []byte(key), []byte(key),openssl.ZEROS_PADDING)
+	data, _ := AesCBCDecrypt(decode, []byte(key), []byte(key),openssl.ZEROS_PADDING)
 	arr := strings.Split(string(data), "|")
 	if len(arr) != 2 {
 		return nil, errors.New("session format error")
@@ -46,13 +48,13 @@ func ParseSession(session string) (*Session, error) {
 		return nil, err
 	}
 
-	return &Session{Uid: int, MTime: time}, nil
+	return &Session{Id: int, MTime: time}, nil
 }
 
-func (self * Session) String() string {
+func (self *Session) String() string {
 	timeStr := self.MTime.Format("2006-01-02 15:04:05")
-	str := fmt.Sprintf("%d|%s", self.Uid, timeStr)
-	data, _ := util.AesCBCEncrypt([]byte(str), []byte(key), []byte(key),openssl.ZEROS_PADDING)
+	str := fmt.Sprintf("%d|%s", self.Id, timeStr)
+	data, _ := AesCBCEncrypt([]byte(str), []byte(key), []byte(key),openssl.ZEROS_PADDING)
 	encode := base64.StdEncoding.EncodeToString(data)
 	return encode
 }

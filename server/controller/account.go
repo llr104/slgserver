@@ -7,7 +7,6 @@ import (
 	"slgserver/db"
 	"slgserver/log"
 	"slgserver/net"
-	"slgserver/server"
 	"slgserver/server/conn"
 	"slgserver/server/logic/mgr"
 	"slgserver/server/middleware"
@@ -56,7 +55,7 @@ func (this*Account) login(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 				rsp.Body.Code = constant.PwdIncorrect
 			}else{
 				tt := time.Now()
-				s := server.NewSession(user.UId, tt)
+				s := util.NewSession(user.UId, tt)
 
 				sessStr := s.String()
 
@@ -122,14 +121,14 @@ func (this*Account) reLogin(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	rsp.Body.Msg = rspObj
 	rspObj.Session = reqObj.Session
 
-	sess, err := server.ParseSession(reqObj.Session)
+	sess, err := util.ParseSession(reqObj.Session)
 	if err != nil{
 		rsp.Body.Code = constant.SessionInvalid
 	}else{
 		if sess.IsValid() {
 			//数据库验证一下
 			ll := &model.LoginLast{}
-			db.MasterDB.Table(ll).Where("uid=?", sess.Uid).Get(ll)
+			db.MasterDB.Table(ll).Where("uid=?", sess.Id).Get(ll)
 
 			if ll.Session == reqObj.Session {
 				if ll.Hardware == reqObj.Hardware {

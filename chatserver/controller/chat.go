@@ -8,6 +8,7 @@ import (
 	"slgserver/net"
 	"slgserver/server/conn"
 	"slgserver/server/middleware"
+	"slgserver/util"
 )
 
 var DefaultChat = Chat{
@@ -37,8 +38,17 @@ func (this*Chat) login(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	rspObj.RId = reqObj.RId
 	rspObj.NickName = reqObj.NickName
 
-	conn.ConnMgr.RoleEnter(req.Conn, reqObj.RId)
+	sess, err := util.ParseSession(reqObj.Token)
+	if err != nil{
+		rsp.Body.Code = constant.InvalidParam
+		return
+	}
+	if sess.IsValid() == false || sess.Id != reqObj.RId{
+		rsp.Body.Code = constant.InvalidParam
+		return
+	}
 
+	conn.ConnMgr.RoleEnter(req.Conn, reqObj.RId)
 	this.worldGroup.Enter(logic.NewUser(reqObj.RId, reqObj.NickName))
 }
 

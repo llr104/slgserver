@@ -16,6 +16,7 @@ import (
 	"slgserver/server/pos"
 	"slgserver/server/proto"
 	"slgserver/server/static_conf"
+	"slgserver/util"
 	"time"
 )
 
@@ -206,7 +207,7 @@ func (this*Role) enterServer(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 				}
 			}
 		}
-
+		rspObj.Token = util.NewSession(role.RId, time.Now()).String()
 	}else{
 		rsp.Body.Code = constant.RoleNotExist
 	}
