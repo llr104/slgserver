@@ -2,9 +2,11 @@ package controller
 
 import (
 	"github.com/goinggo/mapstructure"
+	"go.uber.org/zap"
 	"slgserver/chatserver/logic"
 	"slgserver/chatserver/proto"
 	"slgserver/constant"
+	"slgserver/log"
 	"slgserver/net"
 	"slgserver/server/conn"
 	"slgserver/server/middleware"
@@ -15,12 +17,14 @@ import (
 var DefaultChat = Chat{
 	worldGroup: logic.NewGroup(),
 	unionGroups: make(map[int]*logic.Group),
+	ridToUnionGroups: make(map[int]int),
 }
 
 type Chat struct {
 	unionMutex	sync.RWMutex
 	worldGroup *logic.Group				//世界频道
 	unionGroups map[int]*logic.Group	//联盟频道
+	ridToUnionGroups map[int]int		//rid对应的联盟频道
 }
 
 func (this*Chat) InitRouter(r *net.Router) {
@@ -58,7 +62,6 @@ func (this*Chat) login(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	this.worldGroup.Enter(logic.NewUser(reqObj.RId, reqObj.NickName))
 }
 
-
 func (this*Chat) logout(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	reqObj := &proto.LogoutReq{}
 	rspObj := &proto.LogoutRsp{}
@@ -80,10 +83,27 @@ func (this*Chat) chat(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 	mapstructure.Decode(req.Body.Msg, reqObj)
 
-	rid, err := req.Conn.GetProperty("rid")
+	p, err := req.Conn.GetProperty("rid")
+	rid := p.(int)
 	if err == nil {
 		if reqObj.Type == 0 {
-			rsp.Body.Msg = this.worldGroup.PutMsg(reqObj.Msg, rid.(int))
+			//世界聊天
+			rsp.Body.Msg = this.worldGroup.PutMsg(reqObj.Msg, rid, 0)
+		}else if reqObj.Type == 1{
+			//联盟聊天
+			this.unionMutex.RLock()
+			id, ok := this.ridToUnionGroups[rid]
+			if ok {
+				g, ok := this.unionGroups[id]
+				if ok {
+					g.PutMsg(reqObj.Msg, rid, 1)
+				}else{
+					log.DefaultLog.Warn("chat not found rid in unionGroups", zap.Int("rid", rid))
+				}
+			}else{
+				log.DefaultLog.Warn("chat not found rid in ridToUnionGroups", zap.Int("rid", rid))
+			}
+			this.unionMutex.RUnlock()
 		}
 	}
 
@@ -94,9 +114,9 @@ func (this*Chat) history(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	reqObj := &proto.HistoryReq{}
 	rspObj := &proto.HistoryRsp{}
 	rsp.Body.Code = constant.OK
-	rsp.Body.Msg = rspObj
-	rspObj.Type = reqObj.Type
+
 	mapstructure.Decode(req.Body.Msg, reqObj)
+	rspObj.Msgs = []proto.ChatMsg{}
 
 	if reqObj.Type == 0 {
 		r := this.worldGroup.History()
@@ -109,6 +129,8 @@ func (this*Chat) history(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 			rspObj.Msgs = g.History()
 		}
 	}
+	rspObj.Type = reqObj.Type
+	rsp.Body.Msg = rspObj
 }
 
 func (this*Chat) join(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
@@ -118,21 +140,40 @@ func (this*Chat) join(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	rsp.Body.Msg = rspObj
 	rspObj.Type = reqObj.Type
 	mapstructure.Decode(req.Body.Msg, reqObj)
-	rid, _ := req.Conn.GetProperty("rid")
-
+	p, _ := req.Conn.GetProperty("rid")
+	rid := p.(int)
 	if reqObj.Type == 1 {
-		u := this.worldGroup.GetUser(rid.(int))
+		u := this.worldGroup.GetUser(rid)
 		if u == nil {
 			rsp.Body.Code = constant.InvalidParam
 			return
 		}
 
 		this.unionMutex.Lock()
-		_, ok := this.unionGroups[reqObj.Id]
-		if ok == false {
-			this.unionGroups[reqObj.Id] = logic.NewGroup()
+		gId, ok := this.ridToUnionGroups[rid]
+		if ok {
+			if gId != reqObj.Id {
+				//联盟聊天只能有一个，顶掉旧的
+				if g,ok := this.unionGroups[gId]; ok {
+					g.Exit(rid)
+				}
+
+				_, ok = this.unionGroups[reqObj.Id]
+				if ok == false {
+					this.unionGroups[reqObj.Id] = logic.NewGroup()
+				}
+				this.ridToUnionGroups[rid] = reqObj.Id
+				this.unionGroups[reqObj.Id].Enter(u)
+			}
+		}else{
+			//新加入
+			_, ok = this.unionGroups[reqObj.Id]
+			if ok == false {
+				this.unionGroups[reqObj.Id] = logic.NewGroup()
+			}
+			this.ridToUnionGroups[rid] = reqObj.Id
+			this.unionGroups[reqObj.Id].Enter(u)
 		}
-		this.unionGroups[reqObj.Id].Enter(u)
 		this.unionMutex.Unlock()
 	}
 }
@@ -144,15 +185,19 @@ func (this*Chat) exit(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	rsp.Body.Msg = rspObj
 	rspObj.Type = reqObj.Type
 	mapstructure.Decode(req.Body.Msg, reqObj)
-	rid, _ := req.Conn.GetProperty("rid")
+	p, _ := req.Conn.GetProperty("rid")
+	rid := p.(int)
 
 	if reqObj.Type == 1 {
-
-		this.unionMutex.RLock()
-		_, ok := this.unionGroups[reqObj.Id]
+		this.unionMutex.Lock()
+		id, ok := this.ridToUnionGroups[rid]
 		if ok {
-			this.unionGroups[reqObj.Id].Exit(rid.(int))
+			g, ok := this.unionGroups[id]
+			if ok {
+				g.Exit(rid)
+			}
 		}
-		this.unionMutex.RUnlock()
+		delete(this.ridToUnionGroups, rid)
+		this.unionMutex.Unlock()
 	}
 }

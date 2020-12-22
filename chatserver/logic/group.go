@@ -36,7 +36,7 @@ func (this* Group) GetUser(rid int) *User {
 	return this.users[rid]
 }
 
-func (this*Group) PutMsg(text string, rid int) *proto.ChatMsg{
+func (this*Group) PutMsg(text string, rid int, t int8) *proto.ChatMsg{
 
 	this.userMutex.RLock()
 	u, ok := this.users[rid]
@@ -56,7 +56,7 @@ func (this*Group) PutMsg(text string, rid int) *proto.ChatMsg{
 
 	//广播
 	this.userMutex.RLock()
-	c := &proto.ChatMsg{RId: msg.RId, NickName: msg.NickName, Time: msg.Time.Unix(), Msg: msg.Msg, Type: 0}
+	c := &proto.ChatMsg{RId: msg.RId, NickName: msg.NickName, Time: msg.Time.Unix(), Msg: msg.Msg, Type: t}
 	for _, user := range this.users {
 		conn.ConnMgr.PushByRoleId(user.rid, "chat.push", c)
 	}
