@@ -1,6 +1,7 @@
 package model
 
 import (
+	"fmt"
 	"go.uber.org/zap"
 	"slgserver/db"
 	"slgserver/log"
@@ -59,7 +60,7 @@ type MapRoleBuild struct {
 }
 
 func (this *MapRoleBuild) TableName() string {
-	return "map_role_build"
+	return "tb_map_role_build" + fmt.Sprintf("_%d", ServerId)
 }
 
 

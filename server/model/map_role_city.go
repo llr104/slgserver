@@ -1,6 +1,7 @@
 package model
 
 import (
+	"fmt"
 	"go.uber.org/zap"
 	"slgserver/db"
 	"slgserver/log"
@@ -72,7 +73,7 @@ func (this*MapRoleCity) DurableChange(change int) {
 }
 
 func (this *MapRoleCity) TableName() string {
-	return "map_role_city"
+	return "tb_map_role_city" + fmt.Sprintf("_%d", ServerId)
 }
 
 /* 推送同步 begin */

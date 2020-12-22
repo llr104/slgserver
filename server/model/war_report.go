@@ -1,6 +1,7 @@
 package model
 
 import (
+	"fmt"
 	"go.uber.org/zap"
 	"slgserver/db"
 	"slgserver/log"
@@ -34,7 +35,7 @@ type WarReport struct {
 }
 
 func (this *WarReport) TableName() string {
-	return "war_report"
+	return "tb_war_report" + fmt.Sprintf("_%d", ServerId)
 }
 
 /* 推送同步 begin */

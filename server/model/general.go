@@ -1,6 +1,7 @@
 package model
 
 import (
+	"fmt"
 	"go.uber.org/zap"
 	"slgserver/db"
 	"slgserver/log"
@@ -78,7 +79,7 @@ type General struct {
 }
 
 func (this *General) TableName() string {
-	return "general"
+	return "tb_general" + fmt.Sprintf("_%d", ServerId)
 }
 
 func (this *General) GetDestroy() int{

@@ -79,7 +79,7 @@ func (this *Coalition) ToProto() interface{}{
 }
 
 func (this *Coalition) TableName() string {
-	return "coalition"
+	return "tb_coalition" + fmt.Sprintf("_%d", ServerId)
 }
 
 func (this *Coalition) AfterSet(name string, cell xorm.Cell){
@@ -125,7 +125,7 @@ type CoalitionApply struct {
 }
 
 func (this *CoalitionApply) TableName() string {
-	return "coalition_apply"
+	return "tb_coalition_apply" + fmt.Sprintf("_%d", ServerId)
 }
 
 /* 推送同步 begin */

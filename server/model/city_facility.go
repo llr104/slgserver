@@ -2,6 +2,7 @@ package model
 
 import (
 	"encoding/json"
+	"fmt"
 	"go.uber.org/zap"
 	"slgserver/db"
 	"slgserver/log"
@@ -55,7 +56,7 @@ type CityFacility struct {
 }
 
 func (this *CityFacility) TableName() string {
-	return "city_facility"
+	return "tb_city_facility" + fmt.Sprintf("_%d", ServerId)
 }
 
 

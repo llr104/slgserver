@@ -1,6 +1,7 @@
 package model
 
 import (
+	"fmt"
 	"go.uber.org/zap"
 	"slgserver/db"
 	"slgserver/log"
@@ -63,7 +64,7 @@ type RoleRes struct {
 }
 
 func (this *RoleRes) TableName() string {
-	return "role_res"
+	return "tb_role_res" + fmt.Sprintf("_%d", ServerId)
 }
 
 

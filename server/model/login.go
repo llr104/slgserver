@@ -19,7 +19,7 @@ type LoginHistory struct {
 }
 
 func (this *LoginHistory) TableName() string {
-	return "login_history"
+	return "tb_login_history"
 }
 
 
@@ -35,5 +35,5 @@ type LoginLast struct {
 }
 
 func (this *LoginLast) TableName() string {
-	return "login_last"
+	return "tb_login_last"
 }

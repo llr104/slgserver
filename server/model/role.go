@@ -1,6 +1,7 @@
 package model
 
 import (
+	"fmt"
 	"slgserver/server/proto"
 	"time"
 )
@@ -20,7 +21,7 @@ type Role struct {
 }
 
 func (this *Role) TableName() string {
-	return "role"
+	return "tb_role" + fmt.Sprintf("_%d", ServerId)
 }
 
 func (this *Role) ToProto() interface{}{

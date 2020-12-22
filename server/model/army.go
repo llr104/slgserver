@@ -86,7 +86,7 @@ type Army struct {
 }
 
 func (this *Army) TableName() string {
-	return "army"
+	return "tb_army" + fmt.Sprintf("_%d", ServerId)
 }
 
 func (this *Army) IsCanWar() bool{

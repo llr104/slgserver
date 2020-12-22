@@ -1,5 +1,5 @@
 
-CREATE TABLE IF NOT EXISTS `user_info` (
+CREATE TABLE IF NOT EXISTS `tb_user_info` (
   `uid` int unsigned NOT NULL AUTO_INCREMENT,
   `username` varchar(20) NOT NULL COMMENT '用户名',
   `passcode` char(12) NOT NULL DEFAULT '' COMMENT '加密随机数',
@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS `user_info` (
   UNIQUE KEY (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '用户信息表';
 
-CREATE TABLE IF NOT EXISTS `login_history` (
+CREATE TABLE IF NOT EXISTS `tb_login_history` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `uid` int unsigned NOT NULL DEFAULT 0 COMMENT '用户UID',
   `state` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '登录状态，0登录，1登出',
@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS `login_history` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '用户登录表';
 
-CREATE TABLE IF NOT EXISTS `login_last` (
+CREATE TABLE IF NOT EXISTS `tb_login_last` (
    `id` int unsigned NOT NULL AUTO_INCREMENT,
    `uid` int unsigned NOT NULL DEFAULT 0 COMMENT '用户UID',
    `login_time` timestamp COMMENT '登录时间',
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `login_last` (
    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '最后一次用户登录表';
 
-CREATE TABLE IF NOT EXISTS `role` (
+CREATE TABLE IF NOT EXISTS `tb_role_1` (
    `rid` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'roleId',
    `uid` int unsigned NOT NULL COMMENT '用户UID',
    `sid` int unsigned NOT NULL COMMENT 'serverId',
@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `role` (
    PRIMARY KEY (`rid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '玩家表';
 
-CREATE TABLE IF NOT EXISTS `map_role_city` (
+CREATE TABLE IF NOT EXISTS `tb_map_role_city_1` (
    `cityId` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'cityId',
    `rid` int unsigned NOT NULL COMMENT 'roleId',
    `x` int unsigned NOT NULL COMMENT 'x坐标',
@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS `map_role_city` (
 
 
 
-CREATE TABLE IF NOT EXISTS `map_role_build` (
+CREATE TABLE IF NOT EXISTS `tb_map_role_build_1` (
    `id` int unsigned NOT NULL AUTO_INCREMENT,
    `rid` int unsigned NOT NULL,
    `type` int unsigned NOT NULL COMMENT '建筑类型',
@@ -86,7 +86,7 @@ CREATE TABLE IF NOT EXISTS `map_role_build` (
    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '角色建筑';
 
-CREATE TABLE IF NOT EXISTS `city_facility` (
+CREATE TABLE IF NOT EXISTS `tb_city_facility_1` (
    `id` int unsigned NOT NULL AUTO_INCREMENT,
    `cityId` int unsigned NOT NULL COMMENT '城市id',
    `rid` int unsigned NOT NULL,
@@ -95,9 +95,9 @@ CREATE TABLE IF NOT EXISTS `city_facility` (
    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '城池设施';
 
-CREATE TABLE IF NOT EXISTS `role_res` (
+CREATE TABLE IF NOT EXISTS `tb_role_res_1` (
    `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
-   `rid` int unsigned NOT NULL COMMENT "rid",
+   `rid` int unsigned NOT NULL COMMENT 'rid',
    `wood` int unsigned NOT NULL COMMENT '木',
    `iron` int unsigned NOT NULL COMMENT '铁',
    `stone` int unsigned NOT NULL COMMENT '石头',
@@ -115,10 +115,10 @@ CREATE TABLE IF NOT EXISTS `role_res` (
    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '角色资源表';
 
-CREATE TABLE IF NOT EXISTS `general` (
+CREATE TABLE IF NOT EXISTS `tb_general_1` (
    `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
-   `rid` int unsigned NOT NULL COMMENT "rid",
-   `cfgId` int unsigned NOT NULL COMMENT "配置id",
+   `rid` int unsigned NOT NULL COMMENT 'rid',
+   `cfgId` int unsigned NOT NULL COMMENT '配置id',
    `physical_power` int unsigned NOT NULL COMMENT '体力',
    `exp` int unsigned NOT NULL COMMENT '经验',
    `order` tinyint NOT NULL COMMENT '第几队',
@@ -141,13 +141,13 @@ CREATE TABLE IF NOT EXISTS `general` (
    PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '将领表';
 
-CREATE TABLE IF NOT EXISTS `army` (
+CREATE TABLE IF NOT EXISTS `tb_army_1` (
    `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
-   `rid` int unsigned NOT NULL COMMENT "rid",
+   `rid` int unsigned NOT NULL COMMENT 'rid',
    `cityId` int unsigned NOT NULL COMMENT '城市id',
    `order` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '第几队 1-5队',
-   `generals` varchar(256) NOT NULL DEFAULT '[0, 0, 0]' COMMENT "将领",
-   `soldiers` varchar(256) NOT NULL DEFAULT '[0, 0, 0]' COMMENT "士兵",
+   `generals` varchar(256) NOT NULL DEFAULT '[0, 0, 0]' COMMENT '将领',
+   `soldiers` varchar(256) NOT NULL DEFAULT '[0, 0, 0]' COMMENT '士兵',
    `cmd` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '命令  0:空闲 1:攻击 2：驻军 3:返回',
    `from_x` int unsigned NOT NULL COMMENT '来自x坐标',
    `from_y` int unsigned NOT NULL COMMENT '来自y坐标',
@@ -159,10 +159,10 @@ CREATE TABLE IF NOT EXISTS `army` (
    PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '军队表';
 
-CREATE TABLE IF NOT EXISTS `war_report` (
+CREATE TABLE IF NOT EXISTS `tb_war_report_1` (
    `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
-   `a_rid` int unsigned NOT NULL COMMENT "攻击方id",
-   `d_rid` int unsigned NOT NULL DEFAULT 0 COMMENT "防守方id,0为系统npc",
+   `a_rid` int unsigned NOT NULL COMMENT '攻击方id',
+   `d_rid` int unsigned NOT NULL DEFAULT 0 COMMENT '防守方id,0为系统npc',
    `b_a_army` varchar(512) NOT NULL COMMENT '开始攻击方军队',
    `b_d_army` varchar(512) NOT NULL COMMENT '开始防守方军队',
    `e_a_army` varchar(512) NOT NULL COMMENT '开始攻击方军队',
@@ -183,7 +183,7 @@ CREATE TABLE IF NOT EXISTS `war_report` (
    PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '战报表';
 
-CREATE TABLE IF NOT EXISTS `coalition` (
+CREATE TABLE IF NOT EXISTS `tb_coalition_1` (
    `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
    `name` varchar(20) NOT NULL COMMENT '联盟名字',
    `members` varchar(2048) NOT NULL COMMENT '成员',
@@ -197,7 +197,7 @@ CREATE TABLE IF NOT EXISTS `coalition` (
    UNIQUE KEY (`name`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '联盟';
 
-CREATE TABLE IF NOT EXISTS `coalition_apply` (
+CREATE TABLE IF NOT EXISTS `tb_coalition_apply_1` (
    `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
    `union_id` int unsigned NOT NULL COMMENT '联盟id',
    `rid` int unsigned NOT NULL COMMENT '申请者的rid',
@@ -206,7 +206,7 @@ CREATE TABLE IF NOT EXISTS `coalition_apply` (
     PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '联盟申请表';
 
-CREATE TABLE IF NOT EXISTS `role_attribute` (
+CREATE TABLE IF NOT EXISTS `tb_role_attribute_1` (
    `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
    `rid` int unsigned NOT NULL COMMENT 'rid',
    `parent_id` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '上级联盟id',

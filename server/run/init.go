@@ -1,11 +1,13 @@
 package run
 
 import (
+	"slgserver/config"
 	"slgserver/db"
 	"slgserver/net"
 	"slgserver/server/controller"
 	"slgserver/server/logic"
 	"slgserver/server/logic/mgr"
+	"slgserver/server/model"
 	"slgserver/server/static_conf"
 	"slgserver/server/static_conf/facility"
 	"slgserver/server/static_conf/general"
@@ -21,6 +23,9 @@ func Init() {
 	general.General.Load()
 	static_conf.Basic.Load()
 	static_conf.MapBuildConf.Load()
+
+	serverId := config.File.MustInt("logic", "server_id", 1)
+	model.ServerId = serverId
 
 	//需要先加载联盟相关的信息
 	mgr.UnionMgr.Load()
