@@ -83,28 +83,26 @@ func (this*Chat) chat(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 	mapstructure.Decode(req.Body.Msg, reqObj)
 
-	p, err := req.Conn.GetProperty("rid")
+	p, _ := req.Conn.GetProperty("rid")
 	rid := p.(int)
-	if err == nil {
-		if reqObj.Type == 0 {
-			//世界聊天
-			rsp.Body.Msg = this.worldGroup.PutMsg(reqObj.Msg, rid, 0)
-		}else if reqObj.Type == 1{
-			//联盟聊天
-			this.unionMutex.RLock()
-			id, ok := this.ridToUnionGroups[rid]
+	if reqObj.Type == 0 {
+		//世界聊天
+		rsp.Body.Msg = this.worldGroup.PutMsg(reqObj.Msg, rid, 0)
+	}else if reqObj.Type == 1{
+		//联盟聊天
+		this.unionMutex.RLock()
+		id, ok := this.ridToUnionGroups[rid]
+		if ok {
+			g, ok := this.unionGroups[id]
 			if ok {
-				g, ok := this.unionGroups[id]
-				if ok {
-					g.PutMsg(reqObj.Msg, rid, 1)
-				}else{
-					log.DefaultLog.Warn("chat not found rid in unionGroups", zap.Int("rid", rid))
-				}
+				g.PutMsg(reqObj.Msg, rid, 1)
 			}else{
-				log.DefaultLog.Warn("chat not found rid in ridToUnionGroups", zap.Int("rid", rid))
+				log.DefaultLog.Warn("chat not found rid in unionGroups", zap.Int("rid", rid))
 			}
-			this.unionMutex.RUnlock()
+		}else{
+			log.DefaultLog.Warn("chat not found rid in ridToUnionGroups", zap.Int("rid", rid))
 		}
+		this.unionMutex.RUnlock()
 	}
 
 }
@@ -117,16 +115,21 @@ func (this*Chat) history(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 	mapstructure.Decode(req.Body.Msg, reqObj)
 	rspObj.Msgs = []proto.ChatMsg{}
+	p, _ := req.Conn.GetProperty("rid")
+	rid := p.(int)
 
 	if reqObj.Type == 0 {
 		r := this.worldGroup.History()
 		rspObj.Msgs = r
 	}else if reqObj.Type == 1 {
 		this.unionMutex.RLock()
-		g, ok := this.unionGroups[reqObj.Id]
-		this.unionMutex.RUnlock()
+		id, ok := this.ridToUnionGroups[rid]
 		if ok {
-			rspObj.Msgs = g.History()
+			g, ok := this.unionGroups[id]
+			this.unionMutex.RUnlock()
+			if ok {
+				rspObj.Msgs = g.History()
+			}
 		}
 	}
 	rspObj.Type = reqObj.Type
