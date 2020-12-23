@@ -16,7 +16,6 @@ import (
 // 客户端连接
 type ClientConn struct {
 	wsSocket   	*websocket.Conn // 底层websocket
-	mutex      	sync.Mutex     	// 避免重复关闭管道
 	isClosed   	bool
 	Seq			int64
 	onClose    	func(conn*ClientConn)
@@ -189,13 +188,11 @@ func (this *ClientConn) write(msg interface{}) error{
 
 func (this *ClientConn) Close() {
 	this.wsSocket.Close()
-	this.mutex.Lock()
-	defer this.mutex.Unlock()
 	if !this.isClosed {
+		this.isClosed = true
 		if this.onClose != nil{
 			this.onClose(this)
 		}
-		this.isClosed = true
 	}
 }
 

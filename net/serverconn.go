@@ -19,7 +19,6 @@ import (
 type ServerConn struct {
 	wsSocket   	*websocket.Conn // 底层websocket
 	outChan    	chan *WsMsgRsp  // 写队列
-	mutex      	sync.Mutex     	// 避免重复关闭管道
 	isClosed   	bool
 	needSecret 	bool
 	Seq			int64
@@ -179,15 +178,12 @@ func (this *ServerConn) write(msg interface{}) error{
 
 func (this *ServerConn) Close() {
 	this.wsSocket.Close()
-	this.mutex.Lock()
-	defer this.mutex.Unlock()
 	if !this.isClosed {
+		this.isClosed = true
 		if this.onClose != nil{
 			this.onClose(this)
 		}
-		this.isClosed = true
 	}
-
 }
 
 //设置链接属性
