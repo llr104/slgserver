@@ -6,7 +6,7 @@ import (
 	"log"
 	"slgserver/config"
 	"slgserver/db"
-	"slgserver/http/controller"
+	"slgserver/server/httpserver/controller"
 )
 
 func main() {

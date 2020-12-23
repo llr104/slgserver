@@ -38,7 +38,6 @@ CREATE TABLE IF NOT EXISTS `tb_login_last` (
 CREATE TABLE IF NOT EXISTS `tb_role_1` (
    `rid` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'roleId',
    `uid` int unsigned NOT NULL COMMENT '用户UID',
-   `sid` int unsigned NOT NULL COMMENT 'serverId',
    `headId` int unsigned NOT NULL DEFAULT 0 COMMENT '头像Id',
    `sex` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '性别，0:女 1男',
    `nick_name` varchar(100) COMMENT 'nick_name',
@@ -47,7 +46,7 @@ CREATE TABLE IF NOT EXISTS `tb_role_1` (
    `logout_time` timestamp COMMENT '登出时间',
    `profile` varchar(500) COMMENT '个人简介',
    `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-   UNIQUE KEY (`sid`,`uid`),
+   UNIQUE KEY (`uid`),
    PRIMARY KEY (`rid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '玩家表';
 

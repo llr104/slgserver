@@ -1,5 +1,7 @@
 package constant
 
+const ProxyConnectError = -4 	  //代理连接失败
+const ProxyNotInConnect = -3 	  //代理错误
 const UserNotInConnect = -2 	  //链接没有找到用户
 const RoleNotInConnect = -1 	  //链接没有找到角色
 const OK = 0

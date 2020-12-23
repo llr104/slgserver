@@ -27,7 +27,13 @@ func (this* Group) Use(middleware ...MiddlewareFunc) *Group{
 }
 
 func (this*Group) applyMiddleware(name string) HandlerFunc {
+
 	h, ok := this.hMap[name]
+	if ok == false{
+		//通配符
+		h, ok = this.hMap["*"]
+	}
+
 	if ok {
 		for i := len(this.middleware) - 1; i >= 0; i-- {
 			h = this.middleware[i](h)
@@ -78,6 +84,8 @@ func (this*Router) Run(req *WsMsgReq, rsp *WsMsgRsp) {
 
 	for _, g := range this.groups {
 		if g.prefix == prefix{
+			g.exec(msgName, req, rsp)
+		}else if g.prefix == "*" {
 			g.exec(msgName, req, rsp)
 		}
 	}

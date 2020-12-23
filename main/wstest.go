@@ -6,12 +6,12 @@ import (
 	"github.com/goinggo/mapstructure"
 	"github.com/gorilla/websocket"
 	"slgserver/net"
-	"slgserver/server/proto"
+	proto2 "slgserver/server/loginserver/proto"
 	"slgserver/util"
 	"time"
 )
 
-var origin = "http://127.0.0.1:8002/"
+var origin = "httpserver://127.0.0.1:8002/"
 var secretKey = []byte("")
 var session = ""
 
@@ -59,7 +59,7 @@ func do(conn *websocket.Conn)  {
 				if err := util.Unmarshal(data, msg); err == nil {
 					fmt.Printf("received: %s, code:%d, %v\n", msg.Name, msg.Code, msg.Msg)
 					if msg.Name == "login" {
-						lr := &proto.LoginRsp{}
+						lr := &proto2.LoginRsp{}
 						mapstructure.Decode(msg.Msg, lr)
 						session = lr.Session
 					}
@@ -74,18 +74,18 @@ func do(conn *websocket.Conn)  {
 }
 
 func login(conn *websocket.Conn)  {
-	l := &proto.LoginReq{Ip: "127.0.0.1", Username: "test", Password: "123456"}
+	l := &proto2.LoginReq{Ip: "127.0.0.1", Username: "test", Password: "123456"}
 	send(conn, "login", l)
 }
 
 func reLogin(conn *websocket.Conn, session string)  {
-	l := &proto.ReLoginReq{Session: session}
+	l := &proto2.ReLoginReq{Session: session}
 	fmt.Println(session)
 	send(conn, "reLogin", l)
 }
 
 func logout(conn *websocket.Conn)  {
-	l := &proto.LogoutReq{UId: 5}
+	l := &proto2.LogoutReq{UId: 5}
 	send(conn, "logout", l)
 }
 
