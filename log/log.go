@@ -5,21 +5,25 @@ import (
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
 	"os"
+	"path"
 	"slgserver/config"
+	"strings"
 )
 
 var DefaultLog *zap.Logger
 
 func init() {
 
-	file := config.File.MustValue("log", "file_name", "../log/run.log")
+	fileDir := config.File.MustValue("log", "file_dir", "../log/")
 	maxSize := config.File.MustInt("log", "max_size", 128)
 	maxBackups := config.File.MustInt("log", "max_backups", 30)
 	maxAge := config.File.MustInt("log", "max_age", 7)
 	compress := config.File.MustBool("log", "compress", true)
 
+	sa := strings.Split(os.Args[0], ".")
+	fileName :=  sa[0]+".log"
 	hook := lumberjack.Logger{
-		Filename:   file,       // 日志文件路径
+		Filename:   path.Join(fileDir, fileName),       // 日志文件路径
 		MaxSize:    maxSize,    // 每个日志文件保存的最大尺寸 单位：M
 		MaxBackups: maxBackups, // 日志文件最多保存多少个备份
 		MaxAge:     maxAge,     // 文件最多保存多少天
