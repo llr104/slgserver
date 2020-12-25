@@ -9,7 +9,6 @@ import (
 	"slgserver/log"
 	"slgserver/middleware"
 	"slgserver/net"
-	"slgserver/server/slgserver/conn"
 	"slgserver/server/slgserver/global"
 	"slgserver/server/slgserver/logic/mgr"
 	"slgserver/server/slgserver/model"
@@ -128,7 +127,7 @@ func (this*Role) enterServer(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		rsp.Body.Code = constant.OK
 		rspObj.Role = role.ToProto().(proto.Role)
 		req.Conn.SetProperty("role", role)
-		conn.ConnMgr.RoleEnter(req.Conn, role.RId)
+		net.ConnMgr.RoleEnter(req.Conn, role.RId)
 
 		var e error = nil
 		roleRes, ok := mgr.RResMgr.Get(role.RId)

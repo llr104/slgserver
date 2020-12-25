@@ -6,7 +6,7 @@ import (
 	"go.uber.org/zap"
 	"slgserver/db"
 	"slgserver/log"
-	"slgserver/server/slgserver/conn"
+	"slgserver/net"
 	"slgserver/server/slgserver/proto"
 	"time"
 	"xorm.io/xorm"
@@ -163,7 +163,7 @@ func (this *CoalitionApply) ToProto() interface{}{
 }
 
 func (this *CoalitionApply) Push(){
-	conn.ConnMgr.Push(this)
+	net.ConnMgr.Push(this)
 }
 /* 推送同步 end */
 

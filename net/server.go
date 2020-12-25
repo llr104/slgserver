@@ -1,11 +1,10 @@
-package conn
+package net
 
 import (
 	"github.com/gorilla/websocket"
 	"go.uber.org/zap"
 	"net/http"
 	"slgserver/log"
-	"slgserver/net"
 )
 
 // http升级websocket协议的配置
@@ -19,9 +18,9 @@ var wsUpgrader = websocket.Upgrader{
 
 type server struct {
 	addr		string
-	router		*net.Router
-	onConnClose func(conn*net.ServerConn)
+	router		*Router
 	needSecret 	bool
+	beforeClose func (WSConn)
 }
 
 func NewServer(addr string, needSecret bool) *server {
@@ -32,13 +31,10 @@ func NewServer(addr string, needSecret bool) *server {
 	return &s
 }
 
-func (this*server) Router(router *net.Router) {
+func (this*server) Router(router *Router) {
 	this.router = router
 }
 
-func (this*server) ConnOnClose(f func(conn*net.ServerConn)) {
-	this.onConnClose = f
-}
 
 func (this*server) Start()  {
 	log.DefaultLog.Info("slgserver starting")
@@ -46,6 +42,9 @@ func (this*server) Start()  {
 	http.ListenAndServe(this.addr, nil)
 }
 
+func (this*server) SetOnBeforeClose(hookFunc func (WSConn))  {
+	this.beforeClose = hookFunc
+}
 
 func (this*server) wsHandler(resp http.ResponseWriter, req *http.Request) {
 
@@ -58,7 +57,8 @@ func (this*server) wsHandler(resp http.ResponseWriter, req *http.Request) {
 	log.DefaultLog.Info("client connect", zap.String("addr", wsSocket.RemoteAddr().String()))
 
 	conn.SetRouter(this.router)
-	conn.SetOnClose(this.onConnClose)
+	conn.SetOnClose(ConnMgr.RemoveConn)
+	conn.SetOnBeforeClose(this.beforeClose)
 	conn.Start()
 	conn.Handshake()
 

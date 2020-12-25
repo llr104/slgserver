@@ -23,7 +23,8 @@ type ServerConn struct {
 	needSecret 	bool
 	Seq			int64
 	router     	*Router
-	onClose    	func(conn*ServerConn)
+	beforeClose func(conn WSConn)
+	onClose    	func(conn WSConn)
 	//链接属性
 	property 	map[string]interface{}
 	//保护链接属性修改的锁
@@ -180,6 +181,11 @@ func (this *ServerConn) Close() {
 	this.wsSocket.Close()
 	if !this.isClosed {
 		this.isClosed = true
+
+		if this.beforeClose != nil{
+			this.beforeClose(this)
+		}
+
 		if this.onClose != nil{
 			this.onClose(this)
 		}
@@ -210,8 +216,12 @@ func (this *ServerConn) SetRouter(router *Router)  {
 	this.router = router
 }
 
-func (this *ServerConn) SetOnClose(hookFunc func (*ServerConn))  {
+func (this *ServerConn) SetOnClose(hookFunc func (WSConn))  {
 	this.onClose = hookFunc
+}
+
+func (this *ServerConn) SetOnBeforeClose(hookFunc func (WSConn))  {
+	this.beforeClose = hookFunc
 }
 
 //移除链接属性

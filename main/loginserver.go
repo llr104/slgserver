@@ -6,7 +6,6 @@ import (
 	"slgserver/config"
 	"slgserver/net"
 	"slgserver/server/loginserver"
-	"slgserver/server/slgserver/conn"
 )
 
 func getLoginServerAddr() string {
@@ -19,10 +18,7 @@ func main() {
 	fmt.Println(os.Getwd())
 	loginserver.Init()
 	needSecret := config.File.MustBool("loginserver", "need_secret", false)
-	s := conn.NewServer(getLoginServerAddr(), needSecret)
+	s := net.NewServer(getLoginServerAddr(), needSecret)
 	s.Router(loginserver.MyRouter)
-	s.ConnOnClose(func(sconn *net.ServerConn) {
-		conn.ConnMgr.RemoveConn(sconn)
-	})
 	s.Start()
 }

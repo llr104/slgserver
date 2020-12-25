@@ -5,7 +5,7 @@ import (
 	"go.uber.org/zap"
 	"slgserver/db"
 	"slgserver/log"
-	"slgserver/server/slgserver/conn"
+	"slgserver/net"
 	"slgserver/server/slgserver/proto"
 	"time"
 )
@@ -89,7 +89,7 @@ func (this *WarReport) ToProto() interface{}{
 }
 
 func (this *WarReport) Push(){
-	conn.ConnMgr.Push(this)
+	net.ConnMgr.Push(this)
 }
 /* 推送同步 end */
 

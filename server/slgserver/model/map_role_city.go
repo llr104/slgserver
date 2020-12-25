@@ -5,7 +5,7 @@ import (
 	"go.uber.org/zap"
 	"slgserver/db"
 	"slgserver/log"
-	"slgserver/server/slgserver/conn"
+	"slgserver/net"
 	"slgserver/server/slgserver/proto"
 	"slgserver/util"
 	"sync"
@@ -120,7 +120,7 @@ func (this *MapRoleCity) ToProto() interface{}{
 }
 
 func (this *MapRoleCity) Push(){
-	conn.ConnMgr.Push(this)
+	net.ConnMgr.Push(this)
 }
 /* 推送同步 end */
 

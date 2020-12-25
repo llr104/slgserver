@@ -1,8 +1,6 @@
 package controller
 
 import (
-	"errors"
-	"github.com/gorilla/websocket"
 	"go.uber.org/zap"
 	"slgserver/constant"
 	"slgserver/log"
@@ -10,16 +8,15 @@ import (
 	"slgserver/net"
 	"strings"
 	"sync"
-	"time"
 )
 
-var DefaultHandle = Handle{
-	proxys: make(map[string]map[int64]*proxyClient),
+var GHandle = Handle{
+	proxys: make(map[string]map[int64]*net.ProxyClient),
 }
 
 type Handle struct {
 	proxyMutex sync.Mutex
-	proxys     map[string]map[int64]*proxyClient
+	proxys     map[string]map[int64]*net.ProxyClient
 }
 
 func isAccount(msgName string) bool {
@@ -48,38 +45,6 @@ func isChat(msgName string) bool {
 	}
 }
 
-type proxyClient struct {
-	proxy	string
-	conn	*net.ClientConn
-}
-
-func (this*proxyClient) connect() error {
-	var dialer = websocket.Dialer{
-		Subprotocols:     []string{"p1", "p2"},
-		ReadBufferSize:   1024,
-		WriteBufferSize:  1024,
-		HandshakeTimeout: 30 * time.Second,
-	}
-	ws, _, err := dialer.Dial(this.proxy, nil)
-	if err == nil{
-		this.conn = net.NewClientConn(ws)
-		this.conn.Start()
-	}
-	return err
-}
-
-func (this*proxyClient) send(msgName string, msg interface{}) (*net.RspBody, error){
-	if this.conn != nil {
-		return this.conn.Send(msgName, msg), nil
-	}
-	return nil, errors.New("conn not found")
-}
-
-func newProxyClient(proxy string) *proxyClient {
-	return & proxyClient{
-		proxy: proxy,
-	}
-}
 
 
 func (this*Handle) InitRouter(r *net.Router) {
@@ -113,7 +78,7 @@ func (this*Handle) onClose (conn *net.ClientConn) {
 	}
 }
 
-func (this*Handle) OnServerConnClose (conn *net.ServerConn){
+func (this*Handle) OnServerConnClose (conn net.WSConn){
 	c, err := conn.GetProperty("cid")
 	if err == nil{
 		cid := c.(int64)
@@ -121,7 +86,7 @@ func (this*Handle) OnServerConnClose (conn *net.ServerConn){
 		for _, m := range this.proxys {
 			proxy, ok := m[cid]
 			if ok {
-				proxy.conn.Close()
+				proxy.Close()
 			}
 			delete(m, cid)
 		}
@@ -152,25 +117,25 @@ func (this*Handle) all(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	this.proxyMutex.Lock()
 	_, ok := this.proxys[proxyStr]
 	if ok == false {
-		this.proxys[proxyStr] = make(map[int64]*proxyClient)
+		this.proxys[proxyStr] = make(map[int64]*net.ProxyClient)
 	}
 
 	var err error
-	var proxy *proxyClient
+	var proxy *net.ProxyClient
 	d, _ := req.Conn.GetProperty("cid")
 	cid := d.(int64)
 	proxy, ok = this.proxys[proxyStr][cid]
 	if ok == false {
-		proxy = newProxyClient(proxyStr)
+		proxy = net.NewProxyClient(proxyStr)
 		this.proxys[proxyStr][cid] = proxy
 		//发起链接
-		err = proxy.connect()
+		err = proxy.Connect()
 		if err == nil{
-			proxy.conn.SetProperty("cid", cid)
-			proxy.conn.SetProperty("proxy", proxyStr)
-			proxy.conn.SetProperty("gateConn", req.Conn)
-			proxy.conn.SetOnPush(this.onPush)
-			proxy.conn.SetOnClose(this.onClose)
+			proxy.SetProperty("cid", cid)
+			proxy.SetProperty("proxy", proxyStr)
+			proxy.SetProperty("gateConn", req.Conn)
+			proxy.SetOnPush(this.onPush)
+			proxy.SetOnClose(this.onClose)
 		}
 	}
 	this.proxyMutex.Unlock()
@@ -183,7 +148,7 @@ func (this*Handle) all(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	rsp.Body.Seq = req.Body.Seq
 	rsp.Body.Name = req.Body.Name
 
-	r, err := proxy.send(req.Body.Name, req.Body.Msg)
+	r, err := proxy.Send(req.Body.Name, req.Body.Msg)
 	if err == nil{
 		rsp.Body.Code = r.Code
 		rsp.Body.Msg = r.Msg

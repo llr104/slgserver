@@ -1,10 +1,10 @@
-package conn
+package net
 
 import (
 	"github.com/gorilla/websocket"
 	"go.uber.org/zap"
 	"slgserver/log"
-	"slgserver/net"
+	"slgserver/server/slgserver/conn"
 	"slgserver/server/slgserver/pos"
 	"sync"
 )
@@ -16,36 +16,36 @@ type Mgr struct {
 	um        sync.RWMutex
 	rm        sync.RWMutex
 
-	connCache map[int64]net.WSConn
-	userCache map[int]net.WSConn
-	roleCache map[int]net.WSConn
+	connCache map[int64]WSConn
+	userCache map[int]WSConn
+	roleCache map[int]WSConn
 }
 
-func (this *Mgr) NewConn(wsSocket *websocket.Conn, needSecret bool) *net.ServerConn {
+func (this *Mgr) NewConn(wsSocket *websocket.Conn, needSecret bool) *ServerConn {
 	this.cm.Lock()
 	defer this.cm.Unlock()
 
 	cid++
 	if this.connCache == nil {
-		this.connCache = make(map[int64]net.WSConn)
+		this.connCache = make(map[int64]WSConn)
 	}
 
 	if this.userCache == nil {
-		this.userCache = make(map[int]net.WSConn)
+		this.userCache = make(map[int]WSConn)
 	}
 
 	if this.roleCache == nil {
-		this.roleCache = make(map[int]net.WSConn)
+		this.roleCache = make(map[int]WSConn)
 	}
 
-	c := net.NewServerConn(wsSocket, needSecret)
+	c := NewServerConn(wsSocket, needSecret)
 	c.SetProperty("cid", cid)
 	this.connCache[cid] = c
 
 	return c
 }
 
-func (this *Mgr) UserLogin(conn net.WSConn, session string, uid int) {
+func (this *Mgr) UserLogin(conn WSConn, session string, uid int) {
 	this.um.Lock()
 	defer this.um.Unlock()
 
@@ -66,25 +66,11 @@ func (this *Mgr) UserLogin(conn net.WSConn, session string, uid int) {
 	conn.SetProperty("uid", uid)
 }
 
-func (this *Mgr) UserLogout(conn net.WSConn) {
-	this.RemoveConn(conn)
+func (this *Mgr) UserLogout(conn WSConn) {
+	this.removeUser(conn)
 }
 
-func (this *Mgr) RoleEnter(conn net.WSConn, rid int) {
-	this.rm.Lock()
-	defer this.rm.Unlock()
-	conn.SetProperty("rid", rid)
-	this.roleCache[rid] = conn
-}
-
-func (this *Mgr) RemoveConn(conn net.WSConn){
-	this.cm.Lock()
-	cid, err := conn.GetProperty("cid")
-	if err == nil {
-		delete(this.connCache, cid.(int64))
-	}
-	this.cm.Unlock()
-
+func (this* Mgr) removeUser(conn WSConn) {
 	this.um.Lock()
 	uid, err := conn.GetProperty("uid")
 	if err == nil {
@@ -115,6 +101,25 @@ func (this *Mgr) RemoveConn(conn net.WSConn){
 	conn.RemoveProperty("rid")
 }
 
+func (this *Mgr) RoleEnter(conn WSConn, rid int) {
+	this.rm.Lock()
+	defer this.rm.Unlock()
+	conn.SetProperty("rid", rid)
+	this.roleCache[rid] = conn
+}
+
+func (this *Mgr) RemoveConn(conn WSConn){
+	this.cm.Lock()
+	cid, err := conn.GetProperty("cid")
+	if err == nil {
+		delete(this.connCache, cid.(int64))
+		conn.RemoveProperty("cid")
+	}
+	this.cm.Unlock()
+
+	this.removeUser(conn)
+}
+
 func (this *Mgr) PushByRoleId(rid int, msgName string, data interface{}) bool {
 	if rid <= 0	{
 		return false
@@ -137,7 +142,7 @@ func (this *Mgr) Count() int{
 	return len(this.connCache)
 }
 
-func (this *Mgr) Push(pushSync PushSync){
+func (this *Mgr) Push(pushSync conn.PushSync){
 
 	proto := pushSync.ToProto()
 	belongRIds := pushSync.BelongToRId()

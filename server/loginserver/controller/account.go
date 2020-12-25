@@ -10,7 +10,6 @@ import (
 	"slgserver/net"
 	"slgserver/server/loginserver/model"
 	"slgserver/server/loginserver/proto"
-	"slgserver/server/slgserver/conn"
 	"slgserver/server/slgserver/logic/mgr"
 	"slgserver/util"
 	"time"
@@ -99,7 +98,7 @@ func (this*Account) login(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 				rsp.Body.Code = constant.OK
 
-				conn.ConnMgr.UserLogin(req.Conn, sessStr, ll.UId)
+				net.ConnMgr.UserLogin(req.Conn, sessStr, ll.UId)
 			}
 		}else{
 			//数据库出错
@@ -134,12 +133,12 @@ func (this*Account) reLogin(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 			if ll.Session == reqObj.Session {
 				if ll.Hardware == reqObj.Hardware {
 					rsp.Body.Code = constant.OK
-					conn.ConnMgr.UserLogin(req.Conn, reqObj.Session, ll.UId)
+					net.ConnMgr.UserLogin(req.Conn, reqObj.Session, ll.UId)
 
 					role, ok := mgr.RMgr.Get(reqObj.RId)
 					if ok && ll.UId == role.UId{
 						req.Conn.SetProperty("role", role)
-						conn.ConnMgr.RoleEnter(req.Conn, role.RId)
+						net.ConnMgr.RoleEnter(req.Conn, role.RId)
 					}
 
 				}else{
@@ -182,7 +181,7 @@ func (this*Account) logout(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		db.MasterDB.Insert(ll)
 	}
 
-	conn.ConnMgr.UserLogout(req.Conn)
+	net.ConnMgr.UserLogout(req.Conn)
 
 }
 

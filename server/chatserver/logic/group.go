@@ -1,8 +1,8 @@
 package logic
 
 import (
+	"slgserver/net"
 	"slgserver/server/chatserver/proto"
-	"slgserver/server/slgserver/conn"
 	"sync"
 	"time"
 )
@@ -58,7 +58,7 @@ func (this*Group) PutMsg(text string, rid int, t int8) *proto.ChatMsg {
 	this.userMutex.RLock()
 	c := &proto.ChatMsg{RId: msg.RId, NickName: msg.NickName, Time: msg.Time.Unix(), Msg: msg.Msg, Type: t}
 	for _, user := range this.users {
-		conn.ConnMgr.PushByRoleId(user.rid, "chat.push", c)
+		net.ConnMgr.PushByRoleId(user.rid, "chat.push", c)
 	}
 	this.userMutex.RUnlock()
 	return c

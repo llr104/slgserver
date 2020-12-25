@@ -13,7 +13,7 @@ func Init() {
 }
 
 func initRouter() {
-	controller.DefaultHandle.InitRouter(MyRouter)
+	controller.GHandle.InitRouter(MyRouter)
 }
 
 

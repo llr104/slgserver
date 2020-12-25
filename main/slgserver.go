@@ -5,7 +5,6 @@ import (
 	"os"
 	"slgserver/config"
 	"slgserver/net"
-	"slgserver/server/slgserver/conn"
 	"slgserver/server/slgserver/run"
 )
 
@@ -20,11 +19,8 @@ func main() {
 	fmt.Println(os.Getwd())
 	run.Init()
 	needSecret := config.File.MustBool("slgserver", "need_secret", false)
-	s := conn.NewServer(getServerAddr(), needSecret)
+	s := net.NewServer(getServerAddr(), needSecret)
 	s.Router(run.MyRouter)
-	s.ConnOnClose(func(sconn *net.ServerConn) {
-		conn.ConnMgr.RemoveConn(sconn)
-	})
 	s.Start()
 }
 

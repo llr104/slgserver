@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"os"
 	"slgserver/config"
+	"slgserver/net"
 	"slgserver/server/gateserver"
 	"slgserver/server/gateserver/controller"
-	"slgserver/server/slgserver/conn"
 )
 
 func getGateServerAddr() string {
@@ -19,8 +19,8 @@ func main() {
 	fmt.Println(os.Getwd())
 	gateserver.Init()
 	needSecret := config.File.MustBool("gateserver", "need_secret", false)
-	s := conn.NewServer(getGateServerAddr(), needSecret)
+	s := net.NewServer(getGateServerAddr(), needSecret)
 	s.Router(gateserver.MyRouter)
-	s.ConnOnClose(controller.DefaultHandle.OnServerConnClose)
+	s.SetOnBeforeClose(controller.GHandle.OnServerConnClose)
 	s.Start()
 }

@@ -9,7 +9,6 @@ import (
 	"slgserver/net"
 	"slgserver/server/chatserver/logic"
 	"slgserver/server/chatserver/proto"
-	"slgserver/server/slgserver/conn"
 	"slgserver/util"
 	"sync"
 )
@@ -58,7 +57,7 @@ func (this*Chat) login(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	conn.ConnMgr.RoleEnter(req.Conn, reqObj.RId)
+	net.ConnMgr.RoleEnter(req.Conn, reqObj.RId)
 	this.worldGroup.Enter(logic.NewUser(reqObj.RId, reqObj.NickName))
 }
 
@@ -71,7 +70,7 @@ func (this*Chat) logout(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	mapstructure.Decode(req.Body.Msg, reqObj)
 	rspObj.RId = reqObj.RId
 
-	conn.ConnMgr.UserLogout(req.Conn)
+	net.ConnMgr.UserLogout(req.Conn)
 	this.worldGroup.Exit(reqObj.RId)
 }
 
