@@ -10,7 +10,6 @@ import (
 	"slgserver/net"
 	"slgserver/server/loginserver/model"
 	"slgserver/server/loginserver/proto"
-	"slgserver/server/slgserver/logic/mgr"
 	"slgserver/util"
 	"time"
 )
@@ -134,13 +133,6 @@ func (this*Account) reLogin(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 				if ll.Hardware == reqObj.Hardware {
 					rsp.Body.Code = constant.OK
 					net.ConnMgr.UserLogin(req.Conn, reqObj.Session, ll.UId)
-
-					role, ok := mgr.RMgr.Get(reqObj.RId)
-					if ok && ll.UId == role.UId{
-						req.Conn.SetProperty("role", role)
-						net.ConnMgr.RoleEnter(req.Conn, role.RId)
-					}
-
 				}else{
 					rsp.Body.Code = constant.HardwareIncorrect
 				}

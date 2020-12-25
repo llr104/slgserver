@@ -46,12 +46,10 @@ type RoleListRsp struct {
 }
 
 type EnterServerReq struct {
-	SId			int		`json:"sid"`
 	Session		string	`json:"session"`
 }
 
 type EnterServerRsp struct {
-	SId     int     `json:"sid"`
 	Role    Role    `json:"role"`
 	RoleRes RoleRes `json:"role_res"`
 	Time    int64   `json:"time"`

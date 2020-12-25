@@ -1,12 +1,15 @@
 package controller
 
 import (
+	"github.com/goinggo/mapstructure"
 	"go.uber.org/zap"
 	"slgserver/config"
 	"slgserver/constant"
 	"slgserver/log"
 	"slgserver/middleware"
 	"slgserver/net"
+	chat_proto "slgserver/server/chatserver/proto"
+	"slgserver/server/slgserver/proto"
 	"strings"
 	"sync"
 )
@@ -72,7 +75,7 @@ func (this*Handle) onPush(conn *net.ClientConn, body *net.RspBody) {
 	gateConn.Push(body.Name, body.Msg)
 }
 
-func (this*Handle) onClose (conn *net.ClientConn) {
+func (this*Handle) onProxyClose(conn *net.ClientConn) {
 	p, err := conn.GetProperty("proxy")
 	if err == nil {
 		proxyStr := p.(string)
@@ -91,25 +94,49 @@ func (this*Handle) onClose (conn *net.ClientConn) {
 
 func (this*Handle) OnServerConnClose (conn net.WSConn){
 	c, err := conn.GetProperty("cid")
+	arr := make([]*net.ProxyClient, 0)
+
 	if err == nil{
 		cid := c.(int64)
 		this.proxyMutex.Lock()
 		for _, m := range this.proxys {
 			proxy, ok := m[cid]
 			if ok {
-				proxy.Close()
+				arr = append(arr, proxy)
 			}
 			delete(m, cid)
 		}
 		this.proxyMutex.Unlock()
 	}
+
+	for _, client := range arr {
+		client.Close()
+	}
+
 }
 
 func (this*Handle) all(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
-	log.DefaultLog.Info("gateserver handle all",
+	log.DefaultLog.Info("gateserver handle all begin",
 		zap.String("proxyStr", req.Body.Proxy),
 		zap.String("msgName", req.Body.Name))
+	this.deal(req, rsp)
 
+	if req.Body.Name == "role.enterServer" && rsp.Body.Code == constant.OK  {
+		//登录聊天服
+		rspObj := &proto.EnterServerRsp{}
+		mapstructure.Decode(rsp.Body.Msg, rspObj)
+		r := &chat_proto.LoginReq{RId: rspObj.Role.RId, NickName: rspObj.Role.NickName, Token: rspObj.Token}
+		reqBody := &net.ReqBody{Seq: 0, Name: "chat.login", Msg: r, Proxy: ""}
+		rspBody := &net.RspBody{Seq: 0, Name: "chat.login", Msg: r, Code: 0}
+		this.deal(&net.WsMsgReq{Body: reqBody, Conn:req.Conn}, &net.WsMsgRsp{Body: rspBody})
+	}
+
+	log.DefaultLog.Info("gateserver handle all end",
+		zap.String("proxyStr", req.Body.Proxy),
+		zap.String("msgName", req.Body.Name))
+}
+
+func (this*Handle) deal(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	//协议转发
 	proxyStr := req.Body.Proxy
 	if isAccount(req.Body.Name){
@@ -136,22 +163,30 @@ func (this*Handle) all(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	d, _ := req.Conn.GetProperty("cid")
 	cid := d.(int64)
 	proxy, ok = this.proxys[proxyStr][cid]
+	this.proxyMutex.Unlock()
+
 	if ok == false {
 		proxy = net.NewProxyClient(proxyStr)
+
+		this.proxyMutex.Lock()
 		this.proxys[proxyStr][cid] = proxy
-		//发起链接
+		this.proxyMutex.Unlock()
+
+		//发起链接,这里是阻塞的，所以不要上锁
 		err = proxy.Connect()
 		if err == nil{
 			proxy.SetProperty("cid", cid)
 			proxy.SetProperty("proxy", proxyStr)
 			proxy.SetProperty("gateConn", req.Conn)
 			proxy.SetOnPush(this.onPush)
-			proxy.SetOnClose(this.onClose)
+			proxy.SetOnClose(this.onProxyClose)
 		}
 	}
-	this.proxyMutex.Unlock()
 
-	if err != nil{
+	if err != nil {
+		this.proxyMutex.Lock()
+		delete(this.proxys[proxyStr], cid)
+		this.proxyMutex.Unlock()
 		rsp.Body.Code = constant.ProxyConnectError
 		return
 	}
@@ -168,5 +203,4 @@ func (this*Handle) all(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		rsp.Body.Msg = nil
 	}
 }
-
 

@@ -21,7 +21,9 @@ func (this*ProxyClient) Connect() error {
 	ws, _, err := dialer.Dial(this.proxy, nil)
 	if err == nil{
 		this.conn = NewClientConn(ws)
-		this.conn.Start()
+		if this.conn.Start() == false{
+			return errors.New("handshake fail")
+		}
 	}
 	return err
 }
@@ -57,7 +59,6 @@ func (this *ProxyClient) Close() {
 		this.conn.Close()
 	}
 }
-
 
 func NewProxyClient(proxy string) *ProxyClient {
 	return & ProxyClient{

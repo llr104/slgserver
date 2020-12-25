@@ -106,27 +106,25 @@ func (this *ServerConn) wsReadLoop() {
 			}
 		}
 
-		go func() {
-			if err := util.Unmarshal(data, body); err == nil {
-				req := &WsMsgReq{Conn: this, Body: body}
-				rsp := &WsMsgRsp{Body: &RspBody{Name: body.Name, Seq: req.Body.Seq}}
+		if err := util.Unmarshal(data, body); err == nil {
+			req := &WsMsgReq{Conn: this, Body: body}
+			rsp := &WsMsgRsp{Body: &RspBody{Name: body.Name, Seq: req.Body.Seq}}
 
-				if req.Body.Name == HeartbeatMsg {
-					h := &Heartbeat{}
-					mapstructure.Decode(body.Msg, h)
-					h.STime = time.Now().UnixNano()/1e6
-					rsp.Body.Msg = h
-				}else{
-					if this.router != nil {
-						this.router.Run(req, rsp)
-					}
-				}
-				this.outChan <- rsp
+			if req.Body.Name == HeartbeatMsg {
+				h := &Heartbeat{}
+				mapstructure.Decode(body.Msg, h)
+				h.STime = time.Now().UnixNano()/1e6
+				rsp.Body.Msg = h
 			}else{
-				log.DefaultLog.Error("wsReadLoop Unmarshal error", zap.Error(err))
-				this.Handshake()
+				if this.router != nil {
+					this.router.Run(req, rsp)
+				}
 			}
-		}()
+			this.outChan <- rsp
+		}else{
+			log.DefaultLog.Error("wsReadLoop Unmarshal error", zap.Error(err))
+			this.Handshake()
+		}
 	}
 
 	this.Close()

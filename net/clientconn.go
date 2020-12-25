@@ -1,6 +1,7 @@
 package net
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"github.com/forgoer/openssl"
@@ -11,38 +12,61 @@ import (
 	"slgserver/log"
 	"slgserver/util"
 	"sync"
+	"time"
 )
 
 // 客户端连接
 type ClientConn struct {
-	wsSocket   	*websocket.Conn // 底层websocket
-	isClosed   	bool
-	Seq			int64
-	onClose    	func(conn*ClientConn)
-	onPush    	func(conn*ClientConn, body*RspBody)
+	wsSocket   		*websocket.Conn // 底层websocket
+	isClosed   		bool
+	Seq				int64
+	onClose    		func(conn*ClientConn)
+	onPush    		func(conn*ClientConn, body*RspBody)
 	//链接属性
-	property 	map[string]interface{}
+	property 		map[string]interface{}
 	//保护链接属性修改的锁
-	propertyLock sync.RWMutex
-	syncCtxs	map[int64]*syncCtx
-	syncLock	sync.RWMutex
+	propertyLock  	sync.RWMutex
+	syncCtxs      	map[int64]*syncCtx
+	syncLock      	sync.RWMutex
+	handshakeChan 	chan bool
+	handshake		bool
 }
 
 func NewClientConn(wsSocket *websocket.Conn) *ClientConn {
 	conn := &ClientConn{
-		wsSocket: wsSocket,
-		isClosed:false,
-		property:make(map[string]interface{}),
-		Seq: 0,
-		syncCtxs:make(map[int64]*syncCtx),
+		wsSocket:      wsSocket,
+		isClosed:      false,
+		property:      make(map[string]interface{}),
+		Seq:           0,
+		syncCtxs:      make(map[int64]*syncCtx),
+		handshakeChan: make(chan bool),
 	}
 
 	return conn
 }
 
-//开启异步
-func (this *ClientConn) Start() {
+func (this *ClientConn) waitHandshake() bool{
+	if this.handshake == false{
+		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+		defer cancel()
+		select {
+			case _ = <-this.handshakeChan:{
+				log.DefaultLog.Info("recv handshakeChan")
+				return true
+			}
+			case <-ctx.Done():{
+				log.DefaultLog.Info("recv handshakeChan timeout")
+				return false
+			}
+		}
+	}
+	return true
+}
+
+func (this *ClientConn)	Start() bool{
+	this.handshake = false
 	go this.wsReadLoop()
+	return this.waitHandshake()
 }
 
 func (this *ClientConn) Addr() string  {
@@ -117,45 +141,43 @@ func (this *ClientConn) wsReadLoop() {
 			}
 		}
 
-		go func() {
-			if err := util.Unmarshal(data, body); err == nil {
-
-				if body.Seq == 0 {
-					if body.Name == HandshakeMsg{
-
-						h := Handshake{}
-						mapstructure.Decode(body.Msg, &h)
-						log.DefaultLog.Info("client 收到握手协议", zap.String("data", string(data)))
-						if h.Key != ""{
-							this.SetProperty("secretKey", h.Key)
-						}else{
-							this.RemoveProperty("secretKey")
-						}
+		if err := util.Unmarshal(data, body); err == nil {
+			if body.Seq == 0 {
+				if body.Name == HandshakeMsg{
+					h := Handshake{}
+					mapstructure.Decode(body.Msg, &h)
+					log.DefaultLog.Info("client 收到握手协议", zap.String("data", string(data)))
+					if h.Key != ""{
+						this.SetProperty("secretKey", h.Key)
 					}else{
-						//推送，需要推送到指定的代理连接
-						if this.onPush != nil{
-							this.onPush(this, body)
-						}else{
-							log.DefaultLog.Warn("clientconn not deal push")
-						}
+						this.RemoveProperty("secretKey")
 					}
+					this.handshake = true
+					this.handshakeChan <- true
 				}else{
-					this.syncLock.RLock()
-					s, ok := this.syncCtxs[body.Seq]
-					this.syncLock.RUnlock()
-					if ok {
-						s.outChan <- body
+					//推送，需要推送到指定的代理连接
+					if this.onPush != nil{
+						this.onPush(this, body)
 					}else{
-						log.DefaultLog.Warn("seq not found sync",
-							zap.Int64("seq", body.Seq),
-							zap.String("msgName", body.Name))
+						log.DefaultLog.Warn("clientconn not deal push")
 					}
 				}
-
 			}else{
-				log.DefaultLog.Error("wsReadLoop Unmarshal error", zap.Error(err))
+				this.syncLock.RLock()
+				s, ok := this.syncCtxs[body.Seq]
+				this.syncLock.RUnlock()
+				if ok {
+					s.outChan <- body
+				}else{
+					log.DefaultLog.Warn("seq not found sync",
+						zap.Int64("seq", body.Seq),
+						zap.String("msgName", body.Name))
+				}
 			}
-		}()
+
+		}else{
+			log.DefaultLog.Error("wsReadLoop Unmarshal error", zap.Error(err))
+		}
 	}
 
 	this.Close()

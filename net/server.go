@@ -37,7 +37,7 @@ func (this*server) Router(router *Router) {
 
 
 func (this*server) Start()  {
-	log.DefaultLog.Info("slgserver starting")
+	log.DefaultLog.Info("server starting")
 	http.HandleFunc("/", this.wsHandler)
 	http.ListenAndServe(this.addr, nil)
 }

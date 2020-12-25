@@ -56,8 +56,8 @@ func (this*Chat) login(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		rsp.Body.Code = constant.InvalidParam
 		return
 	}
-
 	net.ConnMgr.RoleEnter(req.Conn, reqObj.RId)
+
 	this.worldGroup.Enter(logic.NewUser(reqObj.RId, reqObj.NickName))
 }
 
@@ -125,11 +125,11 @@ func (this*Chat) history(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		id, ok := this.ridToUnionGroups[rid]
 		if ok {
 			g, ok := this.unionGroups[id]
-			this.unionMutex.RUnlock()
 			if ok {
 				rspObj.Msgs = g.History()
 			}
 		}
+		this.unionMutex.RUnlock()
 	}
 	rspObj.Type = reqObj.Type
 	rsp.Body.Msg = rspObj
