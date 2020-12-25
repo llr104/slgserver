@@ -2,6 +2,7 @@ package controller
 
 import (
 	"go.uber.org/zap"
+	"slgserver/config"
 	"slgserver/constant"
 	"slgserver/log"
 	"slgserver/middleware"
@@ -17,6 +18,9 @@ var GHandle = Handle{
 type Handle struct {
 	proxyMutex sync.Mutex
 	proxys     map[string]map[int64]*net.ProxyClient
+	slgProxy   string
+	chatProxy  string
+	loginProxy string
 }
 
 func isAccount(msgName string) bool {
@@ -48,8 +52,15 @@ func isChat(msgName string) bool {
 
 
 func (this*Handle) InitRouter(r *net.Router) {
+	this.init()
 	g := r.Group("*").Use(middleware.ElapsedTime(), middleware.Log())
 	g.AddRouter("*", this.all)
+}
+
+func (this*Handle) init() {
+	this.slgProxy = config.File.MustValue("gateserver", "slg_proxy", "ws://127.0.0.1:8001")
+	this.chatProxy = config.File.MustValue("gateserver", "chat_proxy", "ws://127.0.0.1:8002")
+	this.loginProxy = config.File.MustValue("gateserver", "login_proxy", "ws://127.0.0.1:8003")
 }
 
 func (this*Handle) onPush(conn *net.ClientConn, body *net.RspBody) {
@@ -99,14 +110,14 @@ func (this*Handle) all(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		zap.String("proxyStr", req.Body.Proxy),
 		zap.String("msgName", req.Body.Name))
 
+	//协议转发
 	proxyStr := req.Body.Proxy
 	if isAccount(req.Body.Name){
-		//转发到登录服务
-		proxyStr = "ws://127.0.0.1:8003"
+		proxyStr = this.loginProxy
 	}else if isChat(req.Body.Name){
-		proxyStr = "ws://127.0.0.1:8002"
+		proxyStr = this.chatProxy
 	} else{
-		proxyStr = "ws://127.0.0.1:8001"
+		proxyStr = this.slgProxy
 	}
 
 	if proxyStr == ""{

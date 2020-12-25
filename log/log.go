@@ -6,6 +6,7 @@ import (
 	"gopkg.in/natefinch/lumberjack.v2"
 	"os"
 	"path"
+	"path/filepath"
 	"slgserver/config"
 	"strings"
 )
@@ -20,7 +21,7 @@ func init() {
 	maxAge := config.File.MustInt("log", "max_age", 7)
 	compress := config.File.MustBool("log", "compress", true)
 
-	sa := strings.Split(os.Args[0], ".")
+	sa := strings.Split(filepath.Base(os.Args[0]), ".")
 	fileName :=  sa[0]+".log"
 	hook := lumberjack.Logger{
 		Filename:   path.Join(fileDir, fileName),       // 日志文件路径
