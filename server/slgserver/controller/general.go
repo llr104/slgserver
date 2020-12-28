@@ -391,6 +391,12 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 				return
 			}
 
+			//免战
+			if logic.IsWarFree(reqObj.X, reqObj.Y){
+				rsp.Body.Code = constant.BuildWarFree
+				return
+			}
+
 			if logic.IsCanDefend(reqObj.X, reqObj.Y, role.RId) == true {
 				rsp.Body.Code = constant.BuildCanNotAttack
 				return

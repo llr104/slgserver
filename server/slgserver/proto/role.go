@@ -57,19 +57,20 @@ type EnterServerRsp struct {
 }
 
 type MapRoleCity struct {
-	CityId     int    `json:"cityId"`
-	RId        int    `json:"rid"`
-	Name       string `json:"name"`
-	UnionId    int    `json:"union_id"` 	//联盟id
-	UnionName  string `json:"union_name"`	//联盟名字
-	ParentId   int    `json:"parent_id"`	//上级id
-	X          int    `json:"x"`
-	Y          int    `json:"y"`
-	Cost       int8   `json:"cost"`
-	IsMain     bool   `json:"is_main"`
-	Level      int8   `json:"level"`
-	CurDurable int    `json:"cur_durable"`
-	MaxDurable int    `json:"max_durable"`
+	CityId     	int    	`json:"cityId"`
+	RId        	int    	`json:"rid"`
+	Name       	string 	`json:"name"`
+	UnionId    	int    	`json:"union_id"` 	//联盟id
+	UnionName  	string 	`json:"union_name"`	//联盟名字
+	ParentId   	int    	`json:"parent_id"`	//上级id
+	X          	int    	`json:"x"`
+	Y          	int    	`json:"y"`
+	Cost       	int8   	`json:"cost"`
+	IsMain     	bool   	`json:"is_main"`
+	Level      	int8   	`json:"level"`
+	CurDurable 	int    	`json:"cur_durable"`
+	MaxDurable 	int    	`json:"max_durable"`
+	OccupyTime	int64 	`json:"occupy_time"`
 }
 
 type MyCityReq struct {

@@ -3,7 +3,9 @@ package logic
 import (
 	"slgserver/server/slgserver/global"
 	"slgserver/server/slgserver/logic/mgr"
+	"slgserver/server/slgserver/static_conf"
 	"slgserver/util"
+	"time"
 )
 
 func hasRoleBuildNearBy(x, y, rid, unionId int) bool {
@@ -114,6 +116,25 @@ func IsCanDefend(x, y, rid int) bool{
 			return tUnionId == unionId
 		}else if tParentId > 0 {
 			return tParentId == unionId
+		}
+	}
+	return false
+}
+
+//是否是免战
+func IsWarFree(x, y int) bool{
+	curTime := time.Now().Unix()
+	b, ok := mgr.RBMgr.PositionBuild(x, y)
+	if ok {
+		if curTime - b.OccupyTime.Unix() < static_conf.Basic.Build.WarFree{
+			return true
+		}
+	}
+
+	c, ok := mgr.RCMgr.PositionCity(x, y)
+	if ok {
+		if curTime - c.OccupyTime.Unix() < static_conf.Basic.Build.WarFree{
+			return true
 		}
 	}
 	return false

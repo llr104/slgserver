@@ -62,6 +62,11 @@ type city struct {
 	TransformRate int    `json:"transform_rate"`
 }
 
+type build struct {
+	Des     string `json:"des"`
+	WarFree int64  `json:"war_free"`	//免战时间，单位秒
+}
+
 type npcLevel struct {
 	Soilders int `json:"soilders"`
 }
@@ -83,6 +88,7 @@ type basic struct {
 	City      city      `json:"city"`
 	Npc       npc       `json:"npc"`
 	Union     union     `json:"union"`
+	Build     build     `json:"build"`
 }
 
 func (this *basic) Load()  {

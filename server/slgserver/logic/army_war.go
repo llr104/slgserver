@@ -343,6 +343,7 @@ func checkCityOccupy(wr *model.WarReport, attackArmy *model.Army, city*model.Map
 			dAttr.ParentId = aAttr.UnionId
 			Union.PutChild(aAttr.UnionId, city.RId)
 			dAttr.SyncExecute()
+			city.OccupyTime = time.Now()
 		}else {
 			wr.Occupy = 0
 		}
@@ -534,13 +535,12 @@ func executeBuild(army *model.Army)  {
 				blimit := static_conf.Basic.Role.BuildLimit
 				if blimit > mgr.RBMgr.BuildCnt(army.RId){
 					wr.Occupy = 1
+					mgr.RBMgr.RemoveFromRole(roleBuid)
+					mgr.RBMgr.AddBuild(army.RId, army.ToX, army.ToY)
+					OccupyRoleBuild(army.RId, army.ToX, army.ToY)
 				}else{
 					wr.Occupy = 0
 				}
-				mgr.RBMgr.RemoveFromRole(roleBuid)
-				mgr.RBMgr.AddBuild(army.RId, army.ToX, army.ToY)
-				roleBuid.CurDurable = roleBuid.MaxDurable
-				OccupyRoleBuild(army.RId, army.ToX, army.ToY)
 			}else{
 				wr.Occupy = 0
 			}
@@ -574,6 +574,9 @@ func OccupyRoleBuild(rid, x, y int)  {
 	newId := rid
 
 	if b, ok := mgr.RBMgr.PositionBuild(x, y); ok {
+
+		b.CurDurable = b.MaxDurable
+		b.OccupyTime = time.Now()
 
 		oldId := b.RId
 		log.DefaultLog.Info("battle in role build",
@@ -610,6 +613,7 @@ func OccupySystemBuild(rid, x, y int)  {
 	if mgr.NMMgr.IsCanBuild(x, y){
 		rb, ok := mgr.RBMgr.AddBuild(rid, x, y)
 		if ok {
+			rb.OccupyTime = time.Now()
 			//占领的增加产量
 			if newRole, ok := mgr.RResMgr.Get(newId); ok{
 				newRole.WoodYield += rb.Wood

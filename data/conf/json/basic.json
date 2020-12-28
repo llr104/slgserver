@@ -42,6 +42,10 @@
     "transform_rate": 50,
     "recovery_time": 600
   },
+  "build": {
+    "des": "建筑的一些配置",
+    "war_free": 60
+  },
   "npc": {
     "des": "npc一些配置",
     "levels": [

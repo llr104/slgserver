@@ -150,6 +150,7 @@ func (this *armyLogic) exeUpdate(army *model.Army) {
 func (this *armyLogic) exeArrive(army *model.Army) {
 	if army.Cmd == model.ArmyCmdAttack {
 		if IsCanArrive(army.ToX, army.ToY, army.RId) &&
+			IsWarFree(army.ToX, army.ToY) == false &&
 			IsCanDefend(army.ToX, army.ToY, army.RId) == false{
 			newBattle(army)
 		} else{
