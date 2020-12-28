@@ -27,7 +27,7 @@ func (this *rbDBMgr) running()  {
 		case b := <- this.builds:
 			if b.Id >0 {
 				_, err := db.MasterDB.Table(b).ID(b.Id).Cols("rid",
-					"cur_durable", "max_durable").Update(b)
+					"cur_durable", "max_durable", "occupy_time").Update(b)
 				if err != nil{
 					log.DefaultLog.Warn("db error", zap.Error(err))
 				}

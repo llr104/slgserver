@@ -31,36 +31,38 @@ func hasRoleBuildNearBy(x, y, rid, unionId int) bool {
 	return false
 }
 
+func hasRoleBuildNearByCity(x, y, rid, unionId int) bool {
+
+	for i := util.MaxInt(x-2, 0); i <= util.MinInt(x+2, global.MapWith); i++ {
+		for j := util.MaxInt(y-2, 0); j <= util.MinInt(y+2, global.MapHeight) ; j++ {
+			if i == x && j == y {
+				continue
+			}
+			if rb, ok := mgr.RBMgr.PositionBuild(i, j); ok {
+				tUnionId := getUnionId(rb.RId)
+				if rb.RId == rid || (unionId != 0 && tUnionId == unionId){
+					return true
+				}
+
+				tParentId := getParentId(rb.RId)
+				if tParentId != 0 && tParentId == unionId{
+					return true
+				}
+			}
+		}
+	}
+	return false
+}
+
+
 //是否能到达
 func IsCanArrive(x, y, rid int) bool {
 	unionId := getUnionId(rid)
 	//目标位置是城池
 	if _, ok := mgr.RCMgr.PositionCity(x, y); ok {
 		//城的四周是否有地相连
-		//上
-		ok := hasRoleBuildNearBy(x, y+2, rid, unionId)
-		if ok {
-			return ok
-		}
-
-		//下
-		ok = hasRoleBuildNearBy(x, y-2, rid, unionId)
-		if ok {
-			return ok
-		}
-
-		//左
-		ok = hasRoleBuildNearBy(x-2, y, rid, unionId)
-		if ok {
-			return ok
-		}
-
-
-		//右
-		ok = hasRoleBuildNearBy(x+2, y, rid, unionId)
-		if ok {
-			return ok
-		}
+		ok := hasRoleBuildNearByCity(x, y, rid, unionId)
+		return ok
 
 	}else{
 		//普通领地
@@ -132,7 +134,8 @@ func IsWarFree(x, y int) bool{
 	}
 
 	c, ok := mgr.RCMgr.PositionCity(x, y)
-	if ok {
+	if ok && getParentId(c.RId) > 0 {
+
 		if curTime - c.OccupyTime.Unix() < static_conf.Basic.Build.WarFree{
 			return true
 		}
