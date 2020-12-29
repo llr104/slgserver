@@ -12,7 +12,6 @@ import (
 )
 
 
-
 type roleBuildMgr struct {
 	mutex sync.RWMutex
 	dbRB  map[int]*model.MapRoleBuild    //key:dbId
@@ -212,4 +211,18 @@ func (this*roleBuildMgr) BuildIsRId(x, y, rid int) bool {
 	}else{
 		return false
 	}
+}
+
+func (this*roleBuildMgr) GetYield(rid int)model.Yield{
+	builds, ok := this.GetRoleBuild(rid)
+	var y model.Yield
+	if ok {
+		for _, b := range builds {
+			y.Iron += b.Iron
+			y.Wood += b.Wood
+			y.Grain += b.Grain
+			y.Stone += b.Grain
+		}
+	}
+	return y
 }

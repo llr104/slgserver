@@ -9,15 +9,18 @@ import (
 	"slgserver/server/slgserver/model"
 	"slgserver/server/slgserver/static_conf/facility"
 	"sync"
+	"time"
 )
 
 var RFMgr = facilityMgr{
 	facilities: make(map[int]*model.CityFacility),
+	facilitiesByRId: make(map[int][]*model.CityFacility),
 }
 
 type facilityMgr struct {
 	mutex sync.RWMutex
 	facilities map[int]*model.CityFacility
+	facilitiesByRId map[int][]*model.CityFacility	//key:rid
 }
 
 func (this*facilityMgr) Load() {
@@ -30,6 +33,21 @@ func (this*facilityMgr) Load() {
 		log.DefaultLog.Error("facilityMgr load city_facility table error")
 	}
 
+	for _, cityFacility := range this.facilities {
+		rid := cityFacility.RId
+		_, ok := this.facilitiesByRId[rid]
+		if ok == false {
+			this.facilitiesByRId[rid] = make([]*model.CityFacility, 0)
+		}
+		this.facilitiesByRId[rid] = append(this.facilitiesByRId[rid], cityFacility)
+	}
+
+}
+func (this*facilityMgr) GetByRId(rid int) ([]*model.CityFacility, bool){
+	this.mutex.RLock()
+	r, ok := this.facilitiesByRId[rid]
+	this.mutex.RUnlock()
+	return r, ok
 }
 
 func (this*facilityMgr) Get(cid int) (*model.CityFacility, bool){
@@ -160,7 +178,15 @@ func (this*facilityMgr) UpFacility(rid, cid int, fType int8) (*model.Facility, i
 		for _, fac := range facilities {
 			if fac.Type == fType {
 				maxLevel := facility.FConf.MaxLevel(fType)
-				if fac.Level >= maxLevel{
+				if fac.UpTime > 0 {
+					//正在升级中了
+					log.DefaultLog.Warn("UpFacility error because already in up",
+						zap.Int("curLevel", int(fac.Level)),
+						zap.Int("maxLevel", int(maxLevel)),
+						zap.Int("cityId", cid),
+						zap.Int("type", int(fType)))
+					return nil, constant.UpError
+				}else if fac.Level >= maxLevel {
 					log.DefaultLog.Warn("UpFacility error",
 						zap.Int("curLevel", int(fac.Level)),
 						zap.Int("maxLevel", int(maxLevel)),
@@ -177,7 +203,8 @@ func (this*facilityMgr) UpFacility(rid, cid int, fType int8) (*model.Facility, i
 						return nil, constant.UpError
 					}
 					if RResMgr.TryUseNeed(rid, need) {
-						fac.Level += 1
+						//costTime := facility.FConf.CostTime(fType, fac.Level+1)
+						fac.UpTime = time.Now().Unix()
 						out = fac
 						if t, err := json.Marshal(facilities); err == nil{
 							f.Facilities = string(t)
@@ -203,5 +230,99 @@ func (this*facilityMgr) UpFacility(rid, cid int, fType int8) (*model.Facility, i
 		return nil, constant.UpError
 	}
 }
+
+
+func (this*facilityMgr) GetYield(rid int)model.Yield{
+	cfs, ok := this.GetByRId(rid)
+	var y model.Yield
+	if ok {
+		for _, cf := range cfs {
+			for _, f := range cf.Facility() {
+				if f.GetLevel() > 0{
+					values := facility.FConf.GetValues(f.Type, f.GetLevel())
+					additions := facility.FConf.GetAdditions(f.Type)
+					for i, aType := range additions {
+						if aType == facility.TypeWood {
+							y.Wood += values[i]
+						}else if aType == facility.TypeGrain {
+							y.Grain += values[i]
+						}else if aType == facility.TypeIron {
+							y.Iron += values[i]
+						}else if aType == facility.TypeStone {
+							y.Stone += values[i]
+						}else if aType == facility.TypeTax {
+							y.Gold += values[i]
+						}
+					}
+				}
+			}
+		}
+	}
+	return y
+}
+
+func (this*facilityMgr) GetDepotCapacity(rid int)int{
+	cfs, ok := this.GetByRId(rid)
+	limit := 0
+	if ok {
+		for _, cf := range cfs {
+			for _, f := range cf.Facility() {
+				if f.GetLevel() > 0{
+					values := facility.FConf.GetValues(f.Type, f.GetLevel())
+					additions := facility.FConf.GetAdditions(f.Type)
+					for i, aType := range additions {
+						if aType == facility.TypeWarehouseLimit {
+							limit += values[i]
+						}
+					}
+				}
+			}
+		}
+	}
+	return limit
+}
+
+func (this*facilityMgr) GetCost(cid int) int8{
+	cf, ok := this.Get(cid)
+	limit := 0
+	if ok {
+		for _, f := range cf.Facility() {
+			if f.GetLevel() > 0{
+				values := facility.FConf.GetValues(f.Type, f.GetLevel())
+				additions := facility.FConf.GetAdditions(f.Type)
+				for i, aType := range additions {
+					if aType == facility.TypeCost {
+						limit += values[i]
+					}
+				}
+			}
+		}
+	}
+	return int8(limit)
+}
+
+func (this*facilityMgr) GetMaxDurable(cid int) int{
+	cf, ok := this.Get(cid)
+	limit := 0
+	if ok {
+		for _, f := range cf.Facility() {
+			if f.GetLevel() > 0{
+				values := facility.FConf.GetValues(f.Type, f.GetLevel())
+				additions := facility.FConf.GetAdditions(f.Type)
+				for i, aType := range additions {
+					if aType == facility.TypeDurable {
+						limit += values[i]
+					}
+				}
+			}
+		}
+	}
+	return limit
+}
+
+func (this*facilityMgr) GetCityLV(cid int) int8{
+	return this.GetFacilityLv(cid, facility.Main)
+}
+
 
 

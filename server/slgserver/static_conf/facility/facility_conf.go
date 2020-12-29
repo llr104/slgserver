@@ -92,6 +92,24 @@ func (this *facilityConf) Need(fType int8, level int8) (*NeedRes, bool) {
 	}
 }
 
+//升级需要的时间
+func (this *facilityConf) CostTime(fType int8, level int8) int {
+	if level <= 0{
+		return 0
+	}
+
+	f, ok := this.facilitys[fType]
+	if ok {
+		if int8(len(f.Levels)) >= level {
+			return f.Levels[level-1].Time
+		}else{
+			return 0
+		}
+	}else{
+		return 0
+	}
+}
+
 func (this *facilityConf) GetValues(fType int8, level int8) []int {
 	if level <= 0{
 		return []int{}

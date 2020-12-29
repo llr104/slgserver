@@ -188,7 +188,7 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 			cost += general.General.Cost(g.CfgId)
 		}
 
-		if city.Cost < cost{
+		if mgr.GetCityCost(city.CityId) < cost{
 			rsp.Body.Code = constant.CostNotEnough
 			return
 		}

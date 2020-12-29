@@ -39,7 +39,7 @@ func (this*Interior) collection(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 
 	}
-	roleRes.Gold += roleRes.GoldYield
+	roleRes.Gold += mgr.GetYield(roleRes.RId).Gold
 	roleRes.SyncExecute()
 
 }

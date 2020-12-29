@@ -582,29 +582,11 @@ func OccupyRoleBuild(rid, x, y int)  {
 		log.DefaultLog.Info("battle in role build",
 			zap.Int("oldRId", oldId),
 			zap.Int("newRId", newId))
-
-		//被占领的减产
-		if oldRole, ok := mgr.RResMgr.Get(oldId); ok{
-			oldRole.WoodYield -= b.Wood
-			oldRole.GrainYield -= b.Grain
-			oldRole.StoneYield -= b.Stone
-			oldRole.IronYield -= b.Iron
-			oldRole.SyncExecute()
-		}
-		//占领的增加产量
-		if newRole, ok := mgr.RResMgr.Get(newId); ok{
-			newRole.WoodYield += b.Wood
-			newRole.GrainYield += b.Grain
-			newRole.StoneYield += b.Stone
-			newRole.IronYield += b.Iron
-			newRole.SyncExecute()
-		}
 		b.RId = rid
 	}
 }
 
 func OccupySystemBuild(rid, x, y int)  {
-	newId := rid
 
 	if _, ok := mgr.RBMgr.PositionBuild(x, y); ok {
 		return
@@ -614,14 +596,6 @@ func OccupySystemBuild(rid, x, y int)  {
 		rb, ok := mgr.RBMgr.AddBuild(rid, x, y)
 		if ok {
 			rb.OccupyTime = time.Now()
-			//占领的增加产量
-			if newRole, ok := mgr.RResMgr.Get(newId); ok{
-				newRole.WoodYield += rb.Wood
-				newRole.GrainYield += rb.Grain
-				newRole.StoneYield += rb.Stone
-				newRole.IronYield += rb.Iron
-				newRole.SyncExecute()
-			}
 		}
 	}
 }

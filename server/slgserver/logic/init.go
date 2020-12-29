@@ -19,6 +19,11 @@ func Init() {
 	model.GetParentId = getParentId
 	model.GetMainMembers = getMainMembers
 	model.GetUnionName = getUnionName
+	model.GetYield = mgr.GetYield
+	model.GetDepotCapacity = mgr.GetDepotCapacity
+	model.GetCityCost = mgr.GetCityCost
+	model.GetMaxDurable = mgr.GetMaxDurable
+	model.GetCityLv = mgr.GetCityLV
 
 	Union = NewCoalitionLogic()
 	ArmyLogic = &armyLogic{

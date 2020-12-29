@@ -9,6 +9,14 @@ import (
 	"slgserver/server/slgserver/proto"
 )
 
+type Yield struct {
+	Wood  int
+	Iron  int
+	Stone int
+	Grain int
+	Gold  int
+}
+
 /*******db 操作begin********/
 var dbRResMgr *roleResDBMgr
 func init() {
@@ -27,9 +35,7 @@ func (this *roleResDBMgr) running()  {
 			if res.Id >0 {
 				_, err := db.MasterDB.Table(res).ID(res.Id).Cols(
 					"wood", "iron", "stone",
-					"grain", "gold", "decree", "wood_yield",
-					"iron_yield", "stone_yield", "gold_yield",
-					"gold_yield", "depot_capacity").Update(res)
+					"grain", "gold", "decree").Update(res)
 				if err != nil{
 					log.DefaultLog.Warn("db error", zap.Error(err))
 				}
@@ -55,12 +61,6 @@ type RoleRes struct {
 	Grain     		int    		`xorm:"grain"`
 	Gold      		int    		`xorm:"gold"`
 	Decree    		int    		`xorm:"decree"`	//令牌
-	WoodYield 		int    		`xorm:"wood_yield"`
-	IronYield 		int    		`xorm:"iron_yield"`
-	StoneYield		int			`xorm:"stone_yield"`
-	GrainYield		int			`xorm:"grain_yield"`
-	GoldYield		int			`xorm:"gold_yield"`
-	DepotCapacity	int			`xorm:"depot_capacity"`	//仓库容量
 }
 
 func (this *RoleRes) TableName() string {
@@ -93,12 +93,14 @@ func (this *RoleRes) ToProto() interface{}{
 	p.Iron = this.Iron
 	p.Wood = this.Wood
 	p.Decree = this.Decree
-	p.GoldYield = this.GoldYield
-	p.GrainYield = this.GrainYield
-	p.StoneYield = this.StoneYield
-	p.IronYield = this.IronYield
-	p.WoodYield = this.WoodYield
-	p.DepotCapacity = this.DepotCapacity
+
+	y := GetYield(this.RId)
+	p.GoldYield = y.Gold
+	p.GrainYield = y.Grain
+	p.StoneYield = y.Stone
+	p.IronYield = y.Iron
+	p.WoodYield = y.Wood
+	p.DepotCapacity = GetDepotCapacity(this.RId)
 	return p
 }
 

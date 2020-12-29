@@ -21,6 +21,26 @@ var RResMgr = &roleResMgr{
 	rolesRes: make(map[int]*model.RoleRes),
 }
 
+//获取产量
+func GetYield(rid int) model.Yield {
+	by := RBMgr.GetYield(rid)
+	cy := RFMgr.GetYield(rid)
+	var y model.Yield
+
+	y.Gold = by.Gold + cy.Gold + static_conf.Basic.Role.GoldYield
+	y.Stone = by.Stone + cy.Stone + static_conf.Basic.Role.StoneYield
+	y.Iron = by.Iron + cy.Iron + static_conf.Basic.Role.IronYield
+	y.Grain = by.Grain + cy.Grain + static_conf.Basic.Role.GrainYield
+	y.Wood = by.Wood + cy.Wood +  static_conf.Basic.Role.WoodYield
+
+	return y
+}
+
+//获取仓库容量
+func GetDepotCapacity(rid int) int {
+	return RFMgr.GetDepotCapacity(rid) + static_conf.Basic.Role.DepotCapacity
+}
+
 func (this*roleResMgr) Load() {
 
 	rr := make([]*model.RoleRes, 0)
@@ -181,20 +201,6 @@ func (this*roleResMgr) TryUseGold(rid int, gold int) bool{
 	}
 }
 
-
-
-func (this*roleResMgr) CutDown(rid int, b *model.MapRoleBuild) (*model.RoleRes, bool)  {
-	rr, ok := this.Get(rid)
-	if ok {
-		rr.GrainYield = util.MaxInt(rr.GrainYield-b.Grain, 0)
-		rr.IronYield = util.MaxInt(rr.IronYield-b.Iron, 0)
-		rr.StoneYield = util.MaxInt(rr.StoneYield-b.Stone, 0)
-		rr.WoodYield = util.MaxInt(rr.WoodYield-b.Wood, 0)
-		rr.SyncExecute()
-		return rr, true
-	}
-	return nil, false
-}
 func (this*roleResMgr) produce() {
 	index := 1
 	for true {
@@ -203,24 +209,26 @@ func (this*roleResMgr) produce() {
 		this.mutex.RLock()
 		for _, v := range this.rolesRes {
 			//加判断是因为爆仓了，资源不无故减少
-			if v.Wood < v.DepotCapacity{
-				v.Wood += util.MinInt(v.WoodYield/6, v.DepotCapacity)
+			capacity := GetDepotCapacity(v.RId)
+			yield := GetYield(v.RId)
+			if v.Wood < capacity{
+				v.Wood += util.MinInt(yield.Wood/6, capacity)
 			}
 
-			if v.Iron < v.DepotCapacity{
-				v.Iron += util.MinInt(v.IronYield/6, v.DepotCapacity)
+			if v.Iron < capacity{
+				v.Iron += util.MinInt(yield.Iron/6, capacity)
 			}
 
-			if v.Stone < v.DepotCapacity{
-				v.Stone += util.MinInt(v.StoneYield/6, v.DepotCapacity)
+			if v.Stone < capacity{
+				v.Stone += util.MinInt(yield.Stone/6, capacity)
 			}
 
-			if v.Grain < v.DepotCapacity{
-				v.Grain += util.MinInt(v.GrainYield/6, v.DepotCapacity)
+			if v.Grain < capacity{
+				v.Grain += util.MinInt(yield.Grain/6, capacity)
 			}
 
-			if v.Gold < v.DepotCapacity{
-				v.Grain += util.MinInt(v.GoldYield/6, v.DepotCapacity)
+			if v.Gold < capacity{
+				v.Grain += util.MinInt(yield.Grain/6, capacity)
 			}
 
 			if index%6 == 0{
@@ -228,12 +236,10 @@ func (this*roleResMgr) produce() {
 					v.Decree+=1
 				}
 			}
-
 			v.SyncExecute()
 		}
 		index++
 		this.mutex.RUnlock()
-		
 	}
 }
 

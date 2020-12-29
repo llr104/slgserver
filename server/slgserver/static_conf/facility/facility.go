@@ -39,6 +39,7 @@ type fLevel struct {
 	Level  int     `json:"level"`
 	Values []int   `json:"values"`
 	Need   NeedRes `json:"need"`
+	Time   int     `json:"time"`	//升级需要的时间
 }
 
 func NewFacility(jsonName string) *facility {

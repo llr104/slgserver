@@ -26,6 +26,18 @@ var RCMgr = &roleCityMgr{
 	roleCity: make(map[int][]*model.MapRoleCity),
 }
 
+func GetCityCost(cid int) int8 {
+	return RFMgr.GetCost(cid) + static_conf.Basic.City.Cost
+}
+
+func GetMaxDurable(cid int) int {
+	return RFMgr.GetMaxDurable(cid) + static_conf.Basic.City.Durable
+}
+
+func GetCityLV(cid int) int8  {
+	return RFMgr.GetCityLV(cid)
+}
+
 func (this*roleCityMgr) Load() {
 	this.mutex.Lock()
 	defer this.mutex.Unlock()
@@ -55,7 +67,7 @@ func (this*roleCityMgr) running() {
 		time.Sleep(time.Duration(t) * time.Second)
 		this.mutex.RLock()
 		for _, city := range this.dbCity {
-			if city.CurDurable < city.MaxDurable{
+			if city.CurDurable < GetMaxDurable(city.CityId){
 				city.DurableChange(100)
 				city.SyncExecute()
 			}

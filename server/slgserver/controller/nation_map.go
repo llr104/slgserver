@@ -135,8 +135,8 @@ func (this*NationMap) giveUp(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	}
 
 	rb, _ := mgr.RBMgr.PositionBuild(x, y)
-	rr, ok := mgr.RResMgr.CutDown(role.RId, rb)
 	mgr.RBMgr.RemoveFromRole(rb)
+	rr, ok := mgr.RResMgr.Get(role.RId)
 
 	//移除该地驻守
 	logic.ArmyLogic.GiveUp(global.ToPosition(reqObj.X, reqObj.Y))

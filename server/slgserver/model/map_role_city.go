@@ -28,8 +28,7 @@ func (this*rcDBMgr) running()  {
 		select {
 		case b := <- this.builds:
 			if b.CityId >0 {
-				_, err := db.MasterDB.Table(b).ID(b.CityId).Cols("level",
-					"cur_durable", "max_durable", "cost", "occupy_time").Update(b)
+				_, err := db.MasterDB.Table(b).ID(b.CityId).Cols("cur_durable", "occupy_time").Update(b)
 				if err != nil{
 					log.DefaultLog.Warn("db error", zap.Error(err))
 				}
@@ -53,10 +52,7 @@ type MapRoleCity struct {
 	X			int			`xorm:"x"`
 	Y			int			`xorm:"y"`
 	IsMain		int8		`xorm:"is_main"`
-	Level		int8		`xorm:"level"`
 	CurDurable	int			`xorm:"cur_durable"`
-	MaxDurable	int			`xorm:"max_durable"`
-	Cost       	int8   		`xorm:"cost"`
 	CreatedAt	time.Time	`xorm:"created_at"`
 	OccupyTime	time.Time 	`xorm:"occupy_time"`
 }
@@ -69,8 +65,12 @@ func (this*MapRoleCity) DurableChange(change int) {
 	if t < 0{
 		this.CurDurable = 0
 	}else{
-		this.CurDurable = util.MinInt(this.MaxDurable, t)
+		this.CurDurable = util.MinInt(GetMaxDurable(this.CityId), t)
 	}
+}
+
+func (this *MapRoleCity) Level() int8 {
+	return GetCityLv(this.CityId)
 }
 
 func (this *MapRoleCity) TableName() string {
@@ -111,12 +111,12 @@ func (this *MapRoleCity) ToProto() interface{}{
 	p.UnionName = GetUnionName(p.UnionId)
 	p.ParentId = GetParentId(this.RId)
 	p.CurDurable = this.CurDurable
-	p.MaxDurable = this.MaxDurable
-	p.Level = this.Level
+	p.MaxDurable = GetMaxDurable(this.CityId)
+	p.Level = this.Level()
 	p.RId = this.RId
 	p.Name = this.Name
 	p.IsMain = this.IsMain == 1
-	p.Cost = this.Cost
+	p.Cost = GetCityCost(this.CityId)
 	p.OccupyTime = this.OccupyTime.UnixNano()/1e6
 	return p
 }

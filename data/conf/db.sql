@@ -57,8 +57,6 @@ CREATE TABLE IF NOT EXISTS `tb_map_role_city_1` (
    `y` int unsigned NOT NULL COMMENT 'y坐标',
    `name` varchar(100) NOT NULL DEFAULT '城池' COMMENT '城池名称',
    `is_main` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否是主城',
-   `level` tinyint unsigned NOT NULL DEFAULT 1 COMMENT 'level',
-   `max_durable` int unsigned NOT NULL COMMENT '最大耐久',
    `cur_durable` int unsigned NOT NULL COMMENT '当前耐久',
    `cost` tinyint unsigned NOT NULL COMMENT 'cost',
    `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -105,12 +103,6 @@ CREATE TABLE IF NOT EXISTS `tb_role_res_1` (
    `grain` int unsigned NOT NULL COMMENT '粮食',
    `gold` int unsigned NOT NULL COMMENT '金币',
    `decree` int unsigned NOT NULL COMMENT '令牌',
-   `depot_capacity` int unsigned NOT NULL COMMENT '仓库容量',
-   `wood_yield` int unsigned NOT NULL COMMENT '木产量',
-   `iron_yield` int unsigned NOT NULL COMMENT '铁产量',
-   `stone_yield` int unsigned NOT NULL COMMENT '石头产量',
-   `grain_yield` int unsigned NOT NULL COMMENT '粮食产量',
-   `gold_yield` int unsigned NOT NULL COMMENT '金币产量',
 
    UNIQUE KEY (`rid`),
    PRIMARY KEY (`id`)

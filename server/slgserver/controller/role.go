@@ -139,14 +139,7 @@ func (this*Role) enterServer(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 				Stone:         static_conf.Basic.Role.Stone,
 				Grain:         static_conf.Basic.Role.Grain,
 				Gold:          static_conf.Basic.Role.Gold,
-				Decree:        static_conf.Basic.Role.Decree,
-				WoodYield:     static_conf.Basic.Role.WoodYield,
-				IronYield:     static_conf.Basic.Role.IronYield,
-				StoneYield:    static_conf.Basic.Role.StoneYield,
-				GrainYield:    static_conf.Basic.Role.GrainYield,
-				GoldYield:     static_conf.Basic.Role.GoldYield,
-				DepotCapacity: static_conf.Basic.Role.DepotCapacity}
-
+				Decree:        static_conf.Basic.Role.Decree}
 			_ ,e = db.MasterDB.Insert(roleRes)
 			if e != nil {
 				log.DefaultLog.Error("insert rres error", zap.Error(e))
@@ -181,11 +174,8 @@ func (this*Role) enterServer(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 					c := &model.MapRoleCity{RId: role.RId, X: x, Y: y,
 						IsMain:     1,
 						CurDurable: static_conf.Basic.City.Durable,
-						MaxDurable: static_conf.Basic.City.Durable,
-						Level:      1,
 						Name:       role.NickName,
 						CreatedAt:  time.Now(),
-						Cost:       static_conf.Basic.City.Cost,
 					}
 
 					//插入
