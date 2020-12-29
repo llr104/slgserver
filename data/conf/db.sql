@@ -58,7 +58,6 @@ CREATE TABLE IF NOT EXISTS `tb_map_role_city_1` (
    `name` varchar(100) NOT NULL DEFAULT '城池' COMMENT '城池名称',
    `is_main` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否是主城',
    `cur_durable` int unsigned NOT NULL COMMENT '当前耐久',
-   `cost` tinyint unsigned NOT NULL COMMENT 'cost',
    `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
    `occupy_time` timestamp DEFAULT '2013-03-15 14:38:09' COMMENT '占领时间',
    PRIMARY KEY (`cityId`)
@@ -103,7 +102,6 @@ CREATE TABLE IF NOT EXISTS `tb_role_res_1` (
    `grain` int unsigned NOT NULL COMMENT '粮食',
    `gold` int unsigned NOT NULL COMMENT '金币',
    `decree` int unsigned NOT NULL COMMENT '令牌',
-
    UNIQUE KEY (`rid`),
    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '角色资源表';

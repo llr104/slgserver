@@ -93,7 +93,7 @@ func (this*City) upFacility(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	out, errCode := mgr.RFMgr.UpFacility(role.RId ,reqObj.CityId, int8(reqObj.FType))
+	out, errCode := mgr.RFMgr.UpFacility(role.RId ,reqObj.CityId, reqObj.FType)
 	rsp.Body.Code = errCode
 	if errCode == constant.OK{
 		rspObj.Facility.Level = out.GetLevel()

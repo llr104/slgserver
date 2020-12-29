@@ -63,6 +63,11 @@ func (this* Facility) GetLevel() int8  {
 	return this.Level
 }
 
+func (this* Facility) CanLV() bool  {
+	this.GetLevel()
+	return this.UpTime == 0
+}
+
 type CityFacility struct {
 	Id         int    `xorm:"id pk autoincr"`
 	RId        int    `xorm:"rid"`

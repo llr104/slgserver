@@ -163,9 +163,10 @@ func (this*facilityMgr) GetAndTryCreate(cid, rid int) (*model.CityFacility, bool
 }
 
 func (this*facilityMgr) UpFacility(rid, cid int, fType int8) (*model.Facility, int){
-	this.mutex.Lock()
-	defer this.mutex.Unlock()
+	this.mutex.RLock()
 	f, ok := this.facilities[cid]
+	this.mutex.RUnlock()
+
 	if ok == false{
 		log.DefaultLog.Warn("UpFacility cityId not found",
 			zap.Int("cityId", cid),
@@ -178,7 +179,7 @@ func (this*facilityMgr) UpFacility(rid, cid int, fType int8) (*model.Facility, i
 		for _, fac := range facilities {
 			if fac.Type == fType {
 				maxLevel := facility.FConf.MaxLevel(fType)
-				if fac.UpTime > 0 {
+				if  fac.CanLV() == false {
 					//正在升级中了
 					log.DefaultLog.Warn("UpFacility error because already in up",
 						zap.Int("curLevel", int(fac.Level)),
