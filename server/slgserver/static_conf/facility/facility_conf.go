@@ -101,7 +101,7 @@ func (this *facilityConf) CostTime(fType int8, level int8) int {
 	f, ok := this.facilitys[fType]
 	if ok {
 		if int8(len(f.Levels)) >= level {
-			return f.Levels[level-1].Time
+			return f.Levels[level-1].Time - 2 //比客户端快2s，保证客户端倒计时完一定是升级成功了
 		}else{
 			return 0
 		}
