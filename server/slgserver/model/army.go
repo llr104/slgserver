@@ -21,6 +21,7 @@ const (
 	ArmyCmdDefend 		= 2	//驻守
 	ArmyCmdReclamation 	= 3	//屯垦
 	ArmyCmdBack   		= 4 //撤退
+	ArmyCmdConscript  	= 5 //征兵
 )
 
 const (
@@ -45,8 +46,10 @@ func (this*armyDBMgr) running()  {
 		select {
 		case army := <- this.armys:
 			if army.Id >0 {
-				_, err := db.MasterDB.Table(army).ID(army.Id).Cols("soldiers",
-					"generals", "cmd", "from_x", "from_y", "to_x", "to_y", "start", "end").Update(army)
+				_, err := db.MasterDB.Table(army).ID(army.Id).Cols(
+					"soldiers", "generals", "conscript_times",
+					"conscript_cnts", "cmd", "from_x", "from_y", "to_x",
+					"to_y", "start", "end").Update(army)
 				if err != nil{
 					log.DefaultLog.Warn("db error", zap.Error(err))
 				}
@@ -64,25 +67,29 @@ func (this*armyDBMgr) push(army *Army)  {
 
 //军队
 type Army struct {
-	Id           int        `xorm:"id pk autoincr"`
-	RId          int        `xorm:"rid"`
-	CityId       int        `xorm:"cityId"`
-	Order        int8       `xorm:"order"`
-	Generals     string     `xorm:"generals"`
-	Soldiers     string     `xorm:"soldiers"`
-	GeneralArray []int      `json:"-" xorm:"-"`
-	SoldierArray []int      `json:"-" xorm:"-"`
-	Gens         []*General `json:"-" xorm:"-"`
-	Cmd          int8       `xorm:"cmd"` //执行命令0:空闲 1:攻击 2：驻军 3:返回
-	State        int8       `xorm:"-"` //状态:0:running,1:stop
-	FromX        int        `xorm:"from_x"`
-	FromY        int        `xorm:"from_y"`
-	ToX          int        `xorm:"to_x"`
-	ToY          int        `xorm:"to_y"`
-	Start        time.Time  `json:"-"xorm:"start"`
-	End          time.Time  `json:"-"xorm:"end"`
-	CellX        int        `json:"-" xorm:"-"`
-	CellY        int        `json:"-" xorm:"-"`
+	Id             		int    		`xorm:"id pk autoincr"`
+	RId            		int    		`xorm:"rid"`
+	CityId         		int    		`xorm:"cityId"`
+	Order          		int8   		`xorm:"order"`
+	Generals       		string 		`xorm:"generals"`
+	Soldiers       		string 		`xorm:"soldiers"`
+	ConscriptTimes 		string 		`xorm:"conscript_times"`	//征兵结束时间，json数组
+	ConscriptCnts  		string 		`xorm:"conscript_cnts"`		//征兵数量，json数组
+	Cmd                	int8       	`xorm:"cmd"`
+	FromX              	int        	`xorm:"from_x"`
+	FromY              	int        	`xorm:"from_y"`
+	ToX                	int        	`xorm:"to_x"`
+	ToY                	int        	`xorm:"to_y"`
+	Start              	time.Time  	`json:"-"xorm:"start"`
+	End                	time.Time  	`json:"-"xorm:"end"`
+	State              	int8       	`xorm:"-"` 				//状态:0:running,1:stop
+	GeneralArray       	[]int      	`json:"-" xorm:"-"`
+	SoldierArray       	[]int      	`json:"-" xorm:"-"`
+	ConscriptTimeArray 	[]int64    	`json:"-" xorm:"-"`
+	ConscriptCntArray  	[]int      	`json:"-" xorm:"-"`
+	Gens               	[]*General 	`json:"-" xorm:"-"`
+	CellX              	int        	`json:"-" xorm:"-"`
+	CellY              	int        	`json:"-" xorm:"-"`
 }
 
 func (this *Army) TableName() string {
@@ -112,25 +119,47 @@ func (this *Army) AfterSet(name string, cell xorm.Cell){
 				fmt.Println(this.SoldierArray)
 			}
 		}
+	}else if name == "conscript_times"{
+		this.ConscriptTimeArray = []int64{0,0,0}
+		if cell != nil{
+			ss, ok := (*cell).([]uint8)
+			if ok {
+				json.Unmarshal(ss, &this.ConscriptTimeArray)
+				fmt.Println(this.ConscriptTimeArray)
+			}
+		}
+	}else if name == "conscript_cnts"{
+		this.ConscriptCntArray = []int{0,0,0}
+		if cell != nil{
+			ss, ok := (*cell).([]uint8)
+			if ok {
+				json.Unmarshal(ss, &this.ConscriptCntArray)
+				fmt.Println(this.ConscriptCntArray)
+			}
+		}
 	}
 }
 
-func (this *Army) BeforeInsert() {
-
+func (this *Army) beforeModify()  {
 	data, _ := json.Marshal(this.GeneralArray)
 	this.Generals = string(data)
 
 	data, _ = json.Marshal(this.SoldierArray)
 	this.Soldiers = string(data)
+
+	data, _ = json.Marshal(this.ConscriptTimeArray)
+	this.ConscriptTimes = string(data)
+
+	data, _ = json.Marshal(this.ConscriptCntArray)
+	this.ConscriptCnts = string(data)
+}
+
+func (this *Army) BeforeInsert() {
+	this.beforeModify()
 }
 
 func (this *Army) BeforeUpdate() {
-
-	data, _ := json.Marshal(this.GeneralArray)
-	this.Generals = string(data)
-
-	data, _ = json.Marshal(this.SoldierArray)
-	this.Soldiers = string(data)
+	this.beforeModify()
 }
 
 
@@ -166,6 +195,49 @@ func (this*Army) GetCamp() int8 {
 	return camp
 }
 
+//检测征兵
+func (this*Army) CheckConscript(){
+	if this.Cmd == ArmyCmdConscript{
+		curTime := time.Now().Unix()
+		finish := true
+		for i, endTime := range this.ConscriptTimeArray {
+			if endTime > 0{
+				if endTime <= curTime{
+					this.SoldierArray[i] += this.ConscriptCntArray[i]
+					this.ConscriptCntArray[i] = 0
+					this.ConscriptTimeArray[i] = 0
+				}else{
+					finish = false
+				}
+			}
+		}
+
+		if finish {
+			this.Cmd = ArmyCmdIdle
+		}
+	}
+}
+
+//队伍指定的位置是否能变化（上下阵）
+func (this*Army) PositionCanModify(position int8) bool {
+	if position>=3 || position <0{
+		return false
+	}
+
+	if this.Cmd != ArmyCmdIdle && this.Cmd != ArmyCmdConscript {
+		return false
+	}
+	this.CheckConscript()
+
+	endTime := this.ConscriptTimeArray[position]
+	return endTime == 0
+}
+
+
+func (this*Army) IsIdle() bool {
+	this.CheckConscript()
+	return this.Cmd == ArmyCmdIdle
+}
 
 /* 推送同步 begin */
 func (this *Army) IsCellView() bool{
@@ -223,6 +295,8 @@ func (this *Army) ToProto() interface{}{
 	p.Order = this.Order
 	p.Generals = this.GeneralArray
 	p.Soldiers = this.SoldierArray
+	p.ConTimes = this.ConscriptTimeArray
+	p.ConCnts = this.ConscriptCntArray
 	p.Cmd = this.Cmd
 	p.State = this.State
 	p.FromX = this.FromX

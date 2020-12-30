@@ -139,6 +139,8 @@ CREATE TABLE IF NOT EXISTS `tb_army_1` (
    `order` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '第几队 1-5队',
    `generals` varchar(256) NOT NULL DEFAULT '[0, 0, 0]' COMMENT '将领',
    `soldiers` varchar(256) NOT NULL DEFAULT '[0, 0, 0]' COMMENT '士兵',
+   `conscript_times` varchar(256) NOT NULL DEFAULT '[0, 0, 0]' COMMENT '征兵结束时间',
+   `conscript_cnts` varchar(256) NOT NULL DEFAULT '[0, 0, 0]' COMMENT '征兵数量',
    `cmd` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '命令  0:空闲 1:攻击 2：驻军 3:返回',
    `from_x` int unsigned NOT NULL COMMENT '来自x坐标',
    `from_y` int unsigned NOT NULL COMMENT '来自y坐标',

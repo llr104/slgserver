@@ -142,8 +142,12 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	if army.Cmd != model.ArmyCmdIdle {
-		rsp.Body.Code = constant.ArmyBusy
+	if army.PositionCanModify(reqObj.Order) == false{
+		if army.Cmd == model.ArmyCmdConscript{
+			rsp.Body.Code = constant.GeneralBusy
+		}else{
+			rsp.Body.Code = constant.ArmyBusy
+		}
 		return
 	}
 
@@ -246,9 +250,18 @@ func (this*General) conscript(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	if army.Cmd != model.ArmyCmdIdle {
-		rsp.Body.Code = constant.ArmyBusy
-		return
+	//判断该位置是否能征兵
+	for pos, cnt := range reqObj.Cnts {
+		if cnt > 0{
+			if army.Gens[pos] == nil{
+				rsp.Body.Code = constant.InvalidParam
+				return
+			}
+			if army.PositionCanModify(int8(pos)) == false{
+				rsp.Body.Code = constant.GeneralBusy
+				return
+			}
+		}
 	}
 
 	lv := mgr.RFMgr.GetFacilityLv(army.CityId, facility.MBS)
@@ -260,9 +273,9 @@ func (this*General) conscript(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	//判断是否超过上限
 	for i, g := range army.Gens {
 		if g == nil {
-			reqObj.Cnts[i] = 0
 			continue
 		}
+
 		l, e := general.GenBasic.GetLevel(g.Level)
 		add := mgr.RFMgr.GetAdditions(army.CityId, facility.TypeSoldierLimit)
 		if e == nil{
@@ -294,8 +307,12 @@ func (this*General) conscript(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		Stone: needStone}
 
 	if ok := mgr.RResMgr.TryUseNeed(army.RId, &nr); ok {
+		curTime := time.Now().Unix()
 		for i, _ := range army.SoldierArray {
-			army.SoldierArray[i] += reqObj.Cnts[i]
+			if reqObj.Cnts[i] > 0{
+				army.ConscriptCntArray[i] = reqObj.Cnts[i]
+				army.ConscriptTimeArray[i] = int64(reqObj.Cnts[i]*conscript.CostTime) + curTime
+			}
 		}
 
 		army.SyncExecute()
@@ -356,7 +373,7 @@ func (this*General) assignArmy(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 		}
 	}else{
 
-		if army.Cmd != model.ArmyCmdIdle {
+		if army.IsIdle() {
 			rsp.Body.Code = constant.ArmyBusy
 			return
 		}

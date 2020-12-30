@@ -5,7 +5,8 @@
     "cost_iron":10,
     "cost_stone":0,
     "cost_grain":10,
-    "cost_gold":1
+    "cost_gold":1,
+    "cost_time":1
   },
   "general": {
     "des": "武将的一些配置",
