@@ -120,7 +120,7 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 	//校场每升一级一个队伍
 	jc, ok := mgr.RFMgr.GetFacility(city.CityId, facility.JiaoChang)
-	if ok == false || jc.Level < reqObj.Order {
+	if ok == false || jc.GetLevel() < reqObj.Order {
 		rsp.Body.Code = constant.ArmyNotEnough
 		return
 	}
@@ -174,7 +174,7 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 		//判断是否能配前锋
 		tst, ok := mgr.RFMgr.GetFacility(city.CityId, facility.TongShuaiTing)
-		if reqObj.Position == 2 && ( ok == false || tst.Level < reqObj.Order) {
+		if reqObj.Position == 2 && ( ok == false || tst.GetLevel() < reqObj.Order) {
 			rsp.Body.Code = constant.TongShuaiNotEnough
 			return
 		}

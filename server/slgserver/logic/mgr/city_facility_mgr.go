@@ -93,7 +93,7 @@ func (this*facilityMgr) GetFacility(cid int, fType int8) (*model.Facility, bool)
 func (this*facilityMgr) GetFacilityLv(cid int, fType int8) int8{
 	f, ok := this.GetFacility(cid, fType)
 	if ok {
-		return f.Level
+		return f.GetLevel()
 	}else{
 		return 0
 	}
@@ -113,9 +113,9 @@ func (this*facilityMgr) GetAdditions(cid int, additionType... int8 ) []int{
 		total := 0
 		facilities := cf.Facility()
 		for _, f := range facilities {
-			if f.Level > 0{
+			if f.GetLevel() > 0{
 				adds := facility.FConf.GetAdditions(f.Type)
-				values := facility.FConf.GetValues(f.Type, f.Level)
+				values := facility.FConf.GetValues(f.Type, f.GetLevel())
 
 				for i, add := range adds {
 					if add == at {
@@ -142,7 +142,7 @@ func (this*facilityMgr) GetAndTryCreate(cid, rid int) (*model.CityFacility, bool
 			fs := make([]model.Facility, len(facility.FConf.List))
 
 			for i, v := range facility.FConf.List {
-				f := model.Facility{Type: v.Type, Level: 0, Name: v.Name}
+				f := model.Facility{Type: v.Type, PrivateLevel: 0, Name: v.Name}
 				fs[i] = f
 			}
 
@@ -182,29 +182,29 @@ func (this*facilityMgr) UpFacility(rid, cid int, fType int8) (*model.Facility, i
 				if  fac.CanLV() == false {
 					//正在升级中了
 					log.DefaultLog.Warn("UpFacility error because already in up",
-						zap.Int("curLevel", int(fac.Level)),
+						zap.Int("curLevel", int(fac.GetLevel())),
 						zap.Int("maxLevel", int(maxLevel)),
 						zap.Int("cityId", cid),
 						zap.Int("type", int(fType)))
 					return nil, constant.UpError
-				}else if fac.Level >= maxLevel {
+				}else if fac.GetLevel() >= maxLevel {
 					log.DefaultLog.Warn("UpFacility error",
-						zap.Int("curLevel", int(fac.Level)),
+						zap.Int("curLevel", int(fac.GetLevel())),
 						zap.Int("maxLevel", int(maxLevel)),
 						zap.Int("cityId", cid),
 						zap.Int("type", int(fType)))
 					return nil, constant.UpError
 				}else{
-					need, ok := facility.FConf.Need(fType, fac.Level+1)
+					need, ok := facility.FConf.Need(fType, fac.GetLevel()+1)
 					if ok == false {
 						log.DefaultLog.Warn("UpFacility Need config error",
-							zap.Int("curLevel", int(fac.Level)),
+							zap.Int("curLevel", int(fac.GetLevel())),
 							zap.Int("cityId", cid),
 							zap.Int("type", int(fType)))
 						return nil, constant.UpError
 					}
 					if RResMgr.TryUseNeed(rid, need) {
-						//costTime := facility.FConf.CostTime(fType, fac.Level+1)
+						//costTime := facility.FConf.CostTime(fType, fac.PrivateLevel+1)
 						fac.UpTime = time.Now().Unix()
 						out = fac
 						if t, err := json.Marshal(facilities); err == nil{
@@ -216,7 +216,7 @@ func (this*facilityMgr) UpFacility(rid, cid int, fType int8) (*model.Facility, i
 						}
 					}else{
 						log.DefaultLog.Warn("UpFacility Need Res Not Enough",
-							zap.Int("curLevel", int(fac.Level)),
+							zap.Int("curLevel", int(fac.GetLevel())),
 							zap.Int("cityId", cid),
 							zap.Int("type", int(fType)))
 						return nil, constant.ResNotEnough

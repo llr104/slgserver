@@ -44,23 +44,23 @@ func (this*cfDBMgr) push(c *CityFacility)  {
 
 
 type Facility struct {
-	Name   string 	`json:"name"`
-	Level  int8   	`json:"level"`
-	Type   int8   	`json:"type"`
-	UpTime int64	`json:"up_time"`	//升级的时间戳，0表示该等级已经升级完成了
+	Name         string `json:"name"`
+	PrivateLevel int8   `json:"level"` 		//等级，外部读的时候不能直接读，要用GetLevel
+	Type         int8   `json:"type"`
+	UpTime       int64  `json:"up_time"`	//升级的时间戳，0表示该等级已经升级完成了
 }
 
+//升级这里做成被动触发产生，不做定时
 func (this* Facility) GetLevel() int8  {
-	//升级这里做成被动触发产生，不做定时
 	if this.UpTime > 0{
 		cur := time.Now().Unix()
-		cost := facility.FConf.CostTime(this.Type, this.Level+1)
+		cost := facility.FConf.CostTime(this.Type, this.PrivateLevel+1)
 		if cur >= this.UpTime + int64(cost){
-			this.Level+=1
+			this.PrivateLevel +=1
 			this.UpTime = 0
 		}
 	}
-	return this.Level
+	return this.PrivateLevel
 }
 
 func (this* Facility) CanLV() bool  {
