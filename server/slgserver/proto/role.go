@@ -65,7 +65,6 @@ type MapRoleCity struct {
 	ParentId   	int    	`json:"parent_id"`	//上级id
 	X          	int    	`json:"x"`
 	Y          	int    	`json:"y"`
-	Cost       	int8   	`json:"cost"`
 	IsMain     	bool   	`json:"is_main"`
 	Level      	int8   	`json:"level"`
 	CurDurable 	int    	`json:"cur_durable"`

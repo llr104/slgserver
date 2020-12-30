@@ -110,13 +110,12 @@ func (this *MapRoleCity) ToProto() interface{}{
 	p.UnionId = GetUnionId(this.RId)
 	p.UnionName = GetUnionName(p.UnionId)
 	p.ParentId = GetParentId(this.RId)
+	p.MaxDurable = GetMaxDurable(this.RId)
 	p.CurDurable = this.CurDurable
-	p.MaxDurable = GetMaxDurable(this.CityId)
 	p.Level = this.Level()
 	p.RId = this.RId
 	p.Name = this.Name
 	p.IsMain = this.IsMain == 1
-	p.Cost = GetCityCost(this.CityId)
 	p.OccupyTime = this.OccupyTime.UnixNano()/1e6
 	return p
 }
