@@ -149,7 +149,6 @@ func (this*Army) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	}
 
 
-
 	//下阵
 	if reqObj.Position == -1{
 		for pos, g := range army.Gens {
@@ -192,7 +191,7 @@ func (this*Army) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 			return
 		}
 
-		if mgr.AMgr.IsCanDispose(role.RId, newG.CfgId) == false{
+		if mgr.AMgr.IsRepeat(role.RId, newG.CfgId) == false{
 			rsp.Body.Code = constant.GeneralRepeat
 			return
 		}
@@ -379,8 +378,12 @@ func (this*Army) assign(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 		return
 	}
 
-	if army.IsCanWar() == false{
-		rsp.Body.Code = constant.ArmyNotMain
+	if army.IsCanOutWar() == false{
+		if army.Cmd == model.ArmyCmdConscript{
+			rsp.Body.Code = constant.ArmyConscript
+		}else{
+			rsp.Body.Code = constant.ArmyNotMain
+		}
 		return
 	}
 

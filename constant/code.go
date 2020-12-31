@@ -52,6 +52,7 @@ const BuildCanNotDefend = 43      //不能驻守
 const BuildCanNotAttack = 44      //不能占领
 const BuildMBSNotFound = 45       //没有军营
 const BuildWarFree = 46     	  //免战中
+const ArmyConscript  = 47         //征兵中
 
 
 

@@ -371,7 +371,7 @@ func newBattle(attackArmy *model.Army) {
 		//城内空闲的队伍被打
 		if armys, ok := mgr.AMgr.GetByCity(city.CityId); ok {
 			for _, enemy := range armys {
-				if enemy.Cmd == model.ArmyCmdIdle && enemy.IsCanWar(){
+				if enemy.IsCanOutWar(){
 					enemys = append(enemys, enemy)
 				}
 			}

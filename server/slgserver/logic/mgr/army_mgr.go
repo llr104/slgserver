@@ -28,6 +28,8 @@ func (this*armyMgr) Load() {
 	db.MasterDB.Table(model.Army{}).Find(this.armyById)
 
 	for _, army := range this.armyById {
+		//处理征兵
+		army.CheckConscript()
 		cid := army.CityId
 		c,ok:= this.armyByCityId[cid]
 		if ok {
@@ -80,6 +82,7 @@ func (this*armyMgr) Get(aid int) (*model.Army, bool){
 	a, ok := this.armyById[aid]
 	this.mutex.RUnlock()
 	if ok {
+		a.CheckConscript()
 		return a, true
 	}else{
 		army := &model.Army{}
@@ -104,10 +107,13 @@ func (this*armyMgr) Get(aid int) (*model.Army, bool){
 
 func (this*armyMgr) GetByCity(cid int) ([]*model.Army, bool){
 	this.mutex.RLock()
-	a,ok := this.armyByCityId[cid]
+	as, ok := this.armyByCityId[cid]
 	this.mutex.RUnlock()
 	if ok {
-		return a, true
+		for _, a := range as {
+			a.CheckConscript()
+		}
+		return as, true
 	}else{
 		m := make([]*model.Army, 0)
 		err := db.MasterDB.Table(model.Army{}).Where("cityId=?", cid).Find(&m)
@@ -139,9 +145,15 @@ func (this*armyMgr) GetByCityOrder(cid int, order int8) (*model.Army, bool){
 
 func (this*armyMgr) GetByRId(rid int) ([]*model.Army, bool){
 	this.mutex.RLock()
-	a,ok := this.armyByRId[rid]
+	as, ok := this.armyByRId[rid]
 	this.mutex.RUnlock()
-	return a, ok
+
+	if ok {
+		for _, a := range as {
+			a.CheckConscript()
+		}
+	}
+	return as, ok
 }
 
 func (this*armyMgr) GetOrCreate(rid int, cid int, order int8) (*model.Army, error){
@@ -204,8 +216,8 @@ func (this*armyMgr) GetSpeed(army*model.Army) int{
 	return speed + campAdds[0]
 }
 
-//能否上阵
-func (this*armyMgr) IsCanDispose(rid int, cfgId int) bool{
+//能否已经重复上阵了
+func (this*armyMgr) IsRepeat(rid int, cfgId int) bool{
 	armys, ok := this.GetByRId(rid)
 	if ok == false{
 		return true

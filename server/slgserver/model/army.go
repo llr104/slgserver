@@ -96,8 +96,9 @@ func (this *Army) TableName() string {
 	return "tb_army" + fmt.Sprintf("_%d", ServerId)
 }
 
-func (this *Army) IsCanWar() bool{
-	return this.Gens[0] != nil
+//是否能出战
+func (this *Army) IsCanOutWar() bool{
+	return this.Gens[0] != nil && this.Cmd == ArmyCmdIdle
 }
 
 func (this *Army) AfterSet(name string, cell xorm.Cell){
@@ -195,7 +196,7 @@ func (this*Army) GetCamp() int8 {
 	return camp
 }
 
-//检测征兵
+//检测征兵是否完成，服务器不做定时任务，用到的时候再检测
 func (this*Army) CheckConscript(){
 	if this.Cmd == ArmyCmdConscript{
 		curTime := time.Now().Unix()
@@ -224,18 +225,18 @@ func (this*Army) PositionCanModify(position int) bool {
 		return false
 	}
 
-	if this.Cmd != ArmyCmdIdle && this.Cmd != ArmyCmdConscript {
+	if this.Cmd == ArmyCmdIdle {
+		return true
+	}else if this.Cmd != ArmyCmdConscript {
+		endTime := this.ConscriptTimeArray[position]
+		return endTime == 0
+	}else{
 		return false
 	}
-	this.CheckConscript()
-
-	endTime := this.ConscriptTimeArray[position]
-	return endTime == 0
 }
 
 
 func (this*Army) IsIdle() bool {
-	this.CheckConscript()
 	return this.Cmd == ArmyCmdIdle
 }
 
@@ -288,7 +289,6 @@ func (this *Army) TPosition() (int, int){
 }
 
 func (this *Army) ToProto() interface{}{
-	this.CheckConscript()
 
 	p := proto.Army{}
 	p.CityId = this.CityId
