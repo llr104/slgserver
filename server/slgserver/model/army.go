@@ -227,7 +227,7 @@ func (this*Army) PositionCanModify(position int) bool {
 
 	if this.Cmd == ArmyCmdIdle {
 		return true
-	}else if this.Cmd != ArmyCmdConscript {
+	}else if this.Cmd == ArmyCmdConscript {
 		endTime := this.ConscriptTimeArray[position]
 		return endTime == 0
 	}else{
