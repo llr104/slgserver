@@ -69,6 +69,15 @@ type ArmyListRsp struct {
 }
 
 
+type ArmyOneReq struct {
+	CityId	int  	`json:"cityId"`
+	Order	int8	`json:"order"`
+}
+
+type ArmyOneRsp struct {
+	Army	Army `json:"army"`
+}
+
 type Army struct {
 	Id       int     `json:"id"`
 	CityId   int     `json:"cityId"`

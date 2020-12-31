@@ -123,6 +123,20 @@ func (this*armyMgr) GetByCity(cid int) ([]*model.Army, bool){
 	}
 }
 
+func (this*armyMgr) GetByCityOrder(cid int, order int8) (*model.Army, bool){
+	rs, ok := this.GetByCity(cid)
+	if ok {
+		for _, r := range rs {
+			if r.Order == order{
+				return r, true
+			}
+		}
+	}else{
+		return nil, false
+	}
+	return nil, false
+}
+
 func (this*armyMgr) GetByRId(rid int) ([]*model.Army, bool){
 	this.mutex.RLock()
 	a,ok := this.armyByRId[rid]
