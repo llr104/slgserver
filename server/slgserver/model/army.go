@@ -219,7 +219,7 @@ func (this*Army) CheckConscript(){
 }
 
 //队伍指定的位置是否能变化（上下阵）
-func (this*Army) PositionCanModify(position int8) bool {
+func (this*Army) PositionCanModify(position int) bool {
 	if position>=3 || position <0{
 		return false
 	}
@@ -288,6 +288,8 @@ func (this *Army) TPosition() (int, int){
 }
 
 func (this *Army) ToProto() interface{}{
+	this.CheckConscript()
+
 	p := proto.Army{}
 	p.CityId = this.CityId
 	p.Id = this.Id

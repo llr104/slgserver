@@ -142,22 +142,26 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	if army.PositionCanModify(reqObj.Order) == false{
-		if army.Cmd == model.ArmyCmdConscript{
-			rsp.Body.Code = constant.GeneralBusy
-		}else{
-			rsp.Body.Code = constant.ArmyBusy
-		}
-		return
-	}
+
 
 	//下阵
 	if reqObj.Position == -1{
-		for i, g := range army.Gens {
+		for pos, g := range army.Gens {
 			if g != nil && g.Id == newG.Id{
-				army.GeneralArray[i] = 0
-				army.SoldierArray[i] = 0
-				army.Gens[i] = nil
+
+				//征兵中不能下阵
+				if army.PositionCanModify(pos) == false{
+					if army.Cmd == model.ArmyCmdConscript{
+						rsp.Body.Code = constant.GeneralBusy
+					}else{
+						rsp.Body.Code = constant.ArmyBusy
+					}
+					return
+				}
+
+				army.GeneralArray[pos] = 0
+				army.SoldierArray[pos] = 0
+				army.Gens[pos] = nil
 				army.SyncExecute()
 				break
 			}
@@ -166,6 +170,17 @@ func (this*General) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		newG.CityId = 0
 		newG.SyncExecute()
 	}else{
+
+		//征兵中不能下阵
+		if army.PositionCanModify(reqObj.Position) == false{
+			if army.Cmd == model.ArmyCmdConscript{
+				rsp.Body.Code = constant.GeneralBusy
+			}else{
+				rsp.Body.Code = constant.ArmyBusy
+			}
+			return
+		}
+
 		if newG.CityId != 0{
 			rsp.Body.Code = constant.GeneralBusy
 			return
@@ -257,7 +272,7 @@ func (this*General) conscript(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 				rsp.Body.Code = constant.InvalidParam
 				return
 			}
-			if army.PositionCanModify(int8(pos)) == false{
+			if army.PositionCanModify(pos) == false{
 				rsp.Body.Code = constant.GeneralBusy
 				return
 			}
@@ -315,6 +330,7 @@ func (this*General) conscript(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 			}
 		}
 
+		army.Cmd = model.ArmyCmdConscript
 		army.SyncExecute()
 
 		//队伍
