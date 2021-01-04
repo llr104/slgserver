@@ -196,6 +196,17 @@ func (this *CoalitionLog) TableName() string {
 	return "tb_coalition_log" + fmt.Sprintf("_%d", ServerId)
 }
 
+func (this *CoalitionLog) ToProto() interface{}{
+	p := proto.UnionLog{}
+	p.OPRId = this.OPRId
+	p.TargetId = this.TargetId
+	p.Des = this.Des
+	p.State = this.State
+	p.Ctime = this.Ctime.UnixNano()/1e6
+	return p
+}
+
+
 func NewCreate(opNickName string, unionId int, opRId int)  {
 	ulog := &CoalitionLog{
 		UnionId: unionId,

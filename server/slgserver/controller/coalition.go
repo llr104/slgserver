@@ -42,6 +42,7 @@ func (this *coalition) InitRouter(r *net.Router) {
 	g.AddRouter("appoint", this.appoint)
 	g.AddRouter("abdicate", this.abdicate)
 	g.AddRouter("info", this.info)
+	g.AddRouter("log", this.log)
 
 }
 
@@ -652,5 +653,38 @@ func (this *coalition) info(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 			main = append(main, m)
 		}
 		rspObj.Info.Major = main
+	}
+}
+
+//联盟日志
+func (this *coalition) log(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+	reqObj := &proto.LogReq{}
+	rspObj := &proto.LogRsp{}
+	mapstructure.Decode(req.Body.Msg, reqObj)
+	rsp.Body.Msg = rspObj
+	rspObj.Logs = make([]proto.UnionLog, 0)
+
+	rsp.Body.Code = constant.OK
+
+	r, _ := req.Conn.GetProperty("role")
+	role := r.(*model.Role)
+
+	opAr, _ := mgr.RAttrMgr.Get(role.RId)
+	u, ok := mgr.UnionMgr.Get(opAr.UnionId)
+	if ok == false{
+		rsp.Body.Code = constant.UnionNotFound
+		return
+	}
+
+	//开始查询日志
+	logs := make([]*model.CoalitionLog, 0)
+	err := db.MasterDB.Table(model.CoalitionLog{}).Where(
+		"union_id=?", u.Id).Find(&logs)
+	if err != nil{
+		log.DefaultLog.Warn("db error", zap.Error(err))
+	}
+
+	for _, cLog := range logs {
+		rspObj.Logs = append(rspObj.Logs, cLog.ToProto().(proto.UnionLog))
 	}
 }

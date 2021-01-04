@@ -178,3 +178,18 @@ type InfoRsp struct {
 	Id   int   `json:"id"`	//联盟id
 	Info Union `json:"info"`
 }
+
+type UnionLog struct {
+	OPRId   	int     `json:"op_rid"`
+	TargetId   	int     `json:"target_id"`
+	State   	int8    `json:"state"`
+	Des			string	`json:"des"`
+	Ctime   	int64 	`json:"ctime"`
+}
+
+type LogReq struct {
+}
+
+type LogRsp struct {
+	Logs []UnionLog `json:"logs"`
+}
