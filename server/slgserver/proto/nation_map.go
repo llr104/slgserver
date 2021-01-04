@@ -36,7 +36,7 @@ type MapRoleBuild struct {
 	MaxDurable 	int    	`json:"max_durable"`
 	Defender   	int    	`json:"defender"`
 	OccupyTime	int64 	`json:"occupy_time"`
-	GiveUpTime	int64 	`json:"giveUp_time"`
+	GiveUpTime	int64 	`json:"giveUp_time"`	//领地到了这个时间会被放弃
 }
 
 

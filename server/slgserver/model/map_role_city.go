@@ -7,6 +7,7 @@ import (
 	"slgserver/log"
 	"slgserver/net"
 	"slgserver/server/slgserver/proto"
+	"slgserver/server/slgserver/static_conf"
 	"slgserver/util"
 	"sync"
 	"time"
@@ -55,6 +56,15 @@ type MapRoleCity struct {
 	CurDurable	int			`xorm:"cur_durable"`
 	CreatedAt	time.Time	`xorm:"created_at"`
 	OccupyTime	time.Time 	`xorm:"occupy_time"`
+}
+
+func (this* MapRoleCity) IsWarFree() bool  {
+	curTime := time.Now().Unix()
+	if curTime - this.OccupyTime.Unix() < static_conf.Basic.Build.WarFree{
+		return true
+	}else{
+		return false
+	}
 }
 
 func (this*MapRoleCity) DurableChange(change int) {

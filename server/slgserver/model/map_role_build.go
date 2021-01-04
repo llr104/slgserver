@@ -7,6 +7,7 @@ import (
 	"slgserver/log"
 	"slgserver/net"
 	"slgserver/server/slgserver/proto"
+	"slgserver/server/slgserver/static_conf"
 	"time"
 )
 
@@ -66,7 +67,14 @@ func (this *MapRoleBuild) TableName() string {
 	return "tb_map_role_build" + fmt.Sprintf("_%d", ServerId)
 }
 
-
+func (this* MapRoleBuild) IsWarFree() bool  {
+	curTime := time.Now().Unix()
+	if curTime - this.OccupyTime.Unix() < static_conf.Basic.Build.WarFree{
+		return true
+	}else{
+		return false
+	}
+}
 
 /* 推送同步 begin */
 func (this *MapRoleBuild) IsCellView() bool{

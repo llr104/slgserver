@@ -133,5 +133,6 @@ func (this*NationMap) giveUp(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
+
 	rsp.Body.Code = mgr.RBMgr.GiveUp(x, y)
 }

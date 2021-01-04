@@ -46,7 +46,7 @@
   "build": {
     "des": "建筑的一些配置",
     "war_free": 200,
-    "giveUp_time": 200
+    "giveUp_time": 30
   },
   "npc": {
     "des": "npc一些配置",

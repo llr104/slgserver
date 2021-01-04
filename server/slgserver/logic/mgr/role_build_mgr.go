@@ -28,6 +28,7 @@ var RBMgr = &roleBuildMgr{
 	dbRB: make(map[int]*model.MapRoleBuild),
 	posRB: make(map[int]*model.MapRoleBuild),
 	roleRB: make(map[int][]*model.MapRoleBuild),
+	giveUpRB: make(map[int64][]*model.MapRoleBuild),
 }
 
 func (this*roleBuildMgr) Load() {
@@ -81,6 +82,7 @@ func (this*roleBuildMgr) CheckGiveUp() []int {
 				ret = append(ret, global.ToPosition(g.X, g.Y))
 			}
 		}
+		delete(this.giveUpRB, i)
 	}
 	this.giveUpMutex.Unlock()
 	return ret
@@ -270,11 +272,16 @@ func (this* roleBuildMgr) GiveUp(x, y int) int {
 		return constant.CannotGiveUp
 	}
 
+	if b.IsWarFree() {
+		return constant.BuildWarFree
+	}
+
 	if b.GiveUpTime > 0{
 		return constant.BuildGiveUpAlready
 	}
 
-	b.GiveUpTime = time.Now().Unix()
+	b.GiveUpTime = time.Now().Unix() + static_conf.Basic.Build.GiveUpTime
+	b.SyncExecute()
 
 	this.giveUpMutex.Lock()
 	_, ok = this.giveUpRB[b.GiveUpTime]
