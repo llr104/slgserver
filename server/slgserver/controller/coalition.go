@@ -679,7 +679,7 @@ func (this *coalition) log(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	//开始查询日志
 	logs := make([]*model.CoalitionLog, 0)
 	err := db.MasterDB.Table(model.CoalitionLog{}).Where(
-		"union_id=?", u.Id).Find(&logs)
+		"union_id=?", u.Id).Desc("ctime").Find(&logs)
 	if err != nil{
 		log.DefaultLog.Warn("db error", zap.Error(err))
 	}
