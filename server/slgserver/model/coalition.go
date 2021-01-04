@@ -170,3 +170,147 @@ func (this *CoalitionApply) Push(){
 func (this *CoalitionApply) SyncExecute() {
 	this.Push()
 }
+
+const (
+	UnionOpCreate		= 0 //创建
+	UnionOpDismiss		= 1 //解散
+	UnionOpJoin			= 2 //加入
+	UnionOpExit			= 3 //退出
+	UnionOpKick			= 4 //踢出
+	UnionOpAppoint		= 5 //任命
+	UnionOpAbdicate		= 6 //禅让
+	UnionOpModNotice	= 7 //修改公告
+)
+
+type CoalitionLog struct {
+	Id      	int       	`xorm:"id pk autoincr"`
+	UnionId 	int       	`xorm:"union_id"`
+	OPRId   	int       	`xorm:"op_rid"`
+	TargetId   	int       	`xorm:"target_id"`
+	State   	int8      	`xorm:"state"`
+	Des			string		`xorm:"des"`
+	Ctime   	time.Time 	`xorm:"ctime"`
+}
+
+func (this *CoalitionLog) TableName() string {
+	return "tb_coalition_log" + fmt.Sprintf("_%d", ServerId)
+}
+
+func NewCreate(opNickName string, unionId int, opRId int)  {
+	ulog := &CoalitionLog{
+		UnionId: unionId,
+		OPRId: opRId,
+		TargetId: 0,
+		State: UnionOpCreate,
+		Des: opNickName + " 创建了联盟",
+		Ctime: time.Now(),
+	}
+
+	db.MasterDB.InsertOne(ulog)
+}
+
+func NewDismiss(opNickName string, unionId int, opRId int) {
+	ulog := &CoalitionLog{
+		UnionId: unionId,
+		OPRId: opRId,
+		TargetId: 0,
+		State: UnionOpDismiss,
+		Des: opNickName + " 解散了联盟",
+		Ctime: time.Now(),
+	}
+	db.MasterDB.InsertOne(ulog)
+}
+
+func NewJoin(targetNickName string, unionId int, opRId int, targetId int) {
+	ulog := &CoalitionLog{
+		UnionId: unionId,
+		OPRId: opRId,
+		TargetId: targetId,
+		State: UnionOpJoin,
+		Des: targetNickName + " 加入了联盟",
+		Ctime: time.Now(),
+	}
+	db.MasterDB.InsertOne(ulog)
+}
+
+func NewExit(opNickName string, unionId int, opRId int) {
+	ulog := &CoalitionLog{
+		UnionId: unionId,
+		OPRId: opRId,
+		TargetId: opRId,
+		State: UnionOpExit,
+		Des: opNickName + " 退出了联盟",
+		Ctime: time.Now(),
+	}
+	db.MasterDB.InsertOne(ulog)
+}
+
+func NewKick(opNickName string, targetNickName string, unionId int, opRId int, targetId int) {
+	ulog := &CoalitionLog{
+		UnionId: unionId,
+		OPRId: opRId,
+		TargetId: targetId,
+		State: UnionOpKick,
+		Des: opNickName + " 将 " + targetNickName + " 踢出了联盟",
+		Ctime: time.Now(),
+	}
+	db.MasterDB.InsertOne(ulog)
+}
+
+func NewAppoint(opNickName string, targetNickName string,
+	unionId int, opRId int, targetId int, memberType int) {
+
+	title := ""
+	if memberType == proto.UnionChairman{
+		title = "盟主"
+	}else if memberType == proto.UnionViceChairman{
+		title = "副盟主"
+	}else{
+		title = "普通成员"
+	}
+
+	ulog := &CoalitionLog{
+		UnionId: unionId,
+		OPRId: opRId,
+		TargetId: targetId,
+		State: UnionOpAppoint,
+		Des: opNickName + " 将 " + targetNickName + " 任命为 " + title,
+		Ctime: time.Now(),
+	}
+	db.MasterDB.InsertOne(ulog)
+}
+
+func NewAbdicate(opNickName string, targetNickName string,
+	unionId int, opRId int, targetId int, memberType int) {
+
+	title := ""
+	if memberType == proto.UnionChairman{
+		title = "盟主"
+	}else if memberType == proto.UnionViceChairman{
+		title = "副盟主"
+	}else{
+		title = "普通成员"
+	}
+
+	ulog := &CoalitionLog{
+		UnionId: unionId,
+		OPRId: opRId,
+		TargetId: targetId,
+		State: UnionOpAbdicate,
+		Des: opNickName + " 将 " + title + " 禅让给 "  + targetNickName,
+		Ctime: time.Now(),
+	}
+	db.MasterDB.InsertOne(ulog)
+}
+
+func NewModNotice(opNickName string, unionId int, opRId int) {
+	ulog := &CoalitionLog{
+		UnionId: unionId,
+		OPRId: opRId,
+		TargetId: 0,
+		State: UnionOpModNotice,
+		Des: opNickName + " 修改了公告",
+		Ctime: time.Now(),
+	}
+	db.MasterDB.InsertOne(ulog)
+}

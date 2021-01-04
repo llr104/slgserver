@@ -207,6 +207,16 @@ CREATE TABLE IF NOT EXISTS `tb_role_attribute_1` (
     PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '玩家属性表';
 
+CREATE TABLE IF NOT EXISTS `tb_coalition_log_1` (
+    `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+    `union_id` int unsigned NOT NULL COMMENT '联盟id',
+    `op_rid` int unsigned NOT NULL COMMENT '操作者id',
+    `target_id` int unsigned COMMENT '被操作的对象',
+    `des` varchar(256) NOT NULL COMMENT '描述',
+    `state` tinyint unsigned NOT NULL COMMENT '0:创建,1:解散,2:加入,3:退出,4:踢出,5:任命,6:禅让,7:修改公告',
+    `ctime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '发生时间',
+    PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '联盟日志表';
 
 
 

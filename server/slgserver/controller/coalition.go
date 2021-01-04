@@ -66,6 +66,7 @@ func (this *coalition) create(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	if ok {
 		rspObj.Id = c.Id
 		logic.Union.MemberEnter(role.RId, c.Id)
+		model.NewCreate(role.NickName, c.Id, role.RId)
 	}else{
 		rsp.Body.Code = constant.UnionCreateError
 	}
@@ -172,6 +173,12 @@ func (this *coalition) verify(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	ok, err := db.MasterDB.Table(model.CoalitionApply{}).Where(
 		"id=? and state=?", reqObj.Id, proto.UnionUntreated).Get(apply)
 	if ok && err == nil{
+		targetRole, ok := mgr.RMgr.Get(apply.RId)
+		if ok == false{
+			rsp.Body.Code = constant.RoleNotExist
+			return
+		}
+
 		if u, ok := mgr.UnionMgr.Get(apply.UnionId); ok {
 
 			if u.Chairman != role.RId && u.ViceChairman != role.RId {
@@ -194,6 +201,7 @@ func (this *coalition) verify(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 						c.MemberArray = append(c.MemberArray, apply.RId)
 						logic.Union.MemberEnter(apply.RId, apply.UnionId)
 						c.SyncExecute()
+						model.NewJoin(targetRole.NickName, apply.UnionId, role.RId, apply.RId)
 					}
 				}
 			}
@@ -330,6 +338,7 @@ func (this *coalition) exit(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 	logic.Union.MemberExit(role.RId)
 	u.SyncExecute()
+	model.NewExit(role.NickName, u.Id, role.RId)
 
 }
 
@@ -365,6 +374,8 @@ func (this *coalition) dismiss(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	}
 	unionId := attribute.UnionId
 	logic.Union.Dismiss(unionId)
+
+	model.NewDismiss(role.NickName, unionId, role.RId)
 }
 
 //公告
@@ -421,6 +432,8 @@ func (this *coalition) modNotice(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	rspObj.Id = u.Id
 	u.Notice = reqObj.Text
 	u.SyncExecute()
+
+	model.NewModNotice(role.NickName, u.Id, role.RId)
 }
 
 //踢人
@@ -458,6 +471,12 @@ func (this *coalition) kick(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
+	targetRole, ok := mgr.RMgr.Get(reqObj.RId)
+	if ok == false {
+		rsp.Body.Code = constant.RoleNotExist
+		return
+	}
+
 	target, ok := mgr.RAttrMgr.Get(reqObj.RId)
 	if ok {
 		if target.UnionId == u.Id{
@@ -472,6 +491,8 @@ func (this *coalition) kick(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 			logic.Union.MemberExit(reqObj.RId)
 			target.UnionId = 0
 			u.SyncExecute()
+
+			model.NewKick(role.NickName, targetRole.NickName, u.Id, role.RId, target.RId)
 		}else{
 			rsp.Body.Code = constant.NotBelongUnion
 		}
@@ -510,6 +531,12 @@ func (this *coalition) appoint(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
+	targetRole, ok := mgr.RMgr.Get(reqObj.RId)
+	if ok == false {
+		rsp.Body.Code = constant.RoleNotExist
+		return
+	}
+
 	target, ok := mgr.RAttrMgr.Get(reqObj.RId)
 	if ok {
 		if target.UnionId == u.Id{
@@ -517,11 +544,13 @@ func (this *coalition) appoint(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 				u.ViceChairman = reqObj.RId
 				rspObj.Title = reqObj.Title
 				u.SyncExecute()
+				model.NewAppoint(role.NickName, targetRole.NickName, u.Id, role.RId, targetRole.RId, reqObj.Title)
 			}else if reqObj.Title == proto.UnionCommon {
 				if u.ViceChairman == reqObj.RId{
 					u.ViceChairman = 0
 				}
 				rspObj.Title = reqObj.Title
+				model.NewAppoint(role.NickName, targetRole.NickName, u.Id, role.RId, targetRole.RId, reqObj.Title)
 			}else{
 				rsp.Body.Code = constant.InvalidParam
 			}
@@ -558,6 +587,12 @@ func (this *coalition) abdicate(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
+	targetRole, ok := mgr.RMgr.Get(reqObj.RId)
+	if ok == false {
+		rsp.Body.Code = constant.RoleNotExist
+		return
+	}
+
 	if u.Chairman != role.RId && u.ViceChairman != role.RId {
 		rsp.Body.Code = constant.PermissionDenied
 		return
@@ -571,8 +606,16 @@ func (this *coalition) abdicate(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 				if u.ViceChairman == reqObj.RId{
 					u.ViceChairman = 0
 				}
+				u.SyncExecute()
+
+				model.NewAbdicate(role.NickName, targetRole.NickName, u.Id,
+					role.RId, targetRole.RId, proto.UnionChairman)
 			}else if role.RId == u.ViceChairman {
 				u.ViceChairman = reqObj.RId
+				u.SyncExecute()
+
+				model.NewAbdicate(role.NickName, targetRole.NickName, u.Id,
+					role.RId, targetRole.RId, proto.UnionViceChairman)
 			}
 		}else{
 			rsp.Body.Code = constant.NotBelongUnion
