@@ -27,7 +27,7 @@ func (this *rbDBMgr) running()  {
 		case b := <- this.builds:
 			if b.Id >0 {
 				_, err := db.MasterDB.Table(b).ID(b.Id).Cols("rid",
-					"cur_durable", "max_durable", "occupy_time").Update(b)
+					"cur_durable", "max_durable", "occupy_time", "giveUp_time").Update(b)
 				if err != nil{
 					log.DefaultLog.Warn("db error", zap.Error(err))
 				}
@@ -58,12 +58,14 @@ type MapRoleBuild struct {
 	CurDurable 	int       	`xorm:"cur_durable"`
 	MaxDurable 	int       	`xorm:"max_durable"`
 	Defender   	int       	`xorm:"defender"`
-	OccupyTime	time.Time 	`xorm:"occupy_time"`
+	OccupyTime 	time.Time 	`xorm:"occupy_time"`
+	GiveUpTime 	int64 		`xorm:"giveUp_time"`
 }
 
 func (this *MapRoleBuild) TableName() string {
 	return "tb_map_role_build" + fmt.Sprintf("_%d", ServerId)
 }
+
 
 
 /* 推送同步 begin */
@@ -93,6 +95,7 @@ func (this *MapRoleBuild) TPosition() (int, int){
 }
 
 func (this *MapRoleBuild) ToProto() interface{}{
+
 	p := proto.MapRoleBuild{}
 	p.RNick = GetRoleNickName(this.RId)
 	p.UnionId = GetUnionId(this.RId)
@@ -108,6 +111,8 @@ func (this *MapRoleBuild) ToProto() interface{}{
 	p.Name = this.Name
 	p.Defender = this.Defender
 	p.OccupyTime = this.OccupyTime.UnixNano()/1e6
+	p.GiveUpTime = this.GiveUpTime
+
 	return p
 }
 

@@ -12,8 +12,8 @@ import (
 
 type armyMgr struct {
 	mutex        	sync.RWMutex
-	armyById     	map[int]*model.Army    //key:armyId
-	armyByCityId 	map[int][]*model.Army  //key:cityId
+	armyById     	map[int]*model.Army   //key:armyId
+	armyByCityId 	map[int][]*model.Army //key:cityId
 	armyByRId		map[int][]*model.Army //key:rid
 }
 
@@ -24,7 +24,7 @@ var AMgr = &armyMgr{
 }
 
 func (this*armyMgr) Load() {
-	this.mutex.Lock()
+
 	db.MasterDB.Table(model.Army{}).Find(this.armyById)
 
 	for _, army := range this.armyById {
@@ -47,7 +47,6 @@ func (this*armyMgr) Load() {
 		this.updateGenerals(army)
 	}
 
-	this.mutex.Unlock()
 }
 
 func (this*armyMgr) insertOne(army *model.Army)  {

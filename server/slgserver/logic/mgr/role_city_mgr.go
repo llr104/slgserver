@@ -39,8 +39,6 @@ func GetCityLV(cid int) int8  {
 }
 
 func (this*roleCityMgr) Load() {
-	this.mutex.Lock()
-	defer this.mutex.Unlock()
 
 	err := db.MasterDB.Find(this.dbCity)
 	if err != nil {

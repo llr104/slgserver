@@ -81,6 +81,7 @@ CREATE TABLE IF NOT EXISTS `tb_map_role_build_1` (
    `cur_durable` int unsigned NOT NULL COMMENT '当前耐久',
    `defender` int unsigned NOT NULL COMMENT '守军强度',
    `occupy_time` timestamp DEFAULT '2013-03-15 14:38:09' COMMENT '占领时间',
+   `giveUp_time` int unsigned DEFAULT '0' COMMENT '放弃时间',
    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '角色建筑';
 

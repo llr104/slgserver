@@ -2,6 +2,7 @@ package mgr
 
 import (
 	"go.uber.org/zap"
+	"slgserver/constant"
 	"slgserver/db"
 	"slgserver/log"
 	"slgserver/server/slgserver/global"
@@ -9,14 +10,17 @@ import (
 	"slgserver/server/slgserver/static_conf"
 	"slgserver/util"
 	"sync"
+	"time"
 )
 
 
 type roleBuildMgr struct {
-	mutex sync.RWMutex
-	dbRB  map[int]*model.MapRoleBuild    //key:dbId
-	posRB map[int]*model.MapRoleBuild    //key:posId
-	roleRB map[int][]*model.MapRoleBuild //key:roleId
+	baseMutex 	sync.RWMutex
+	giveUpMutex sync.RWMutex
+	dbRB  		map[int]*model.MapRoleBuild    	//key:dbId
+	posRB 		map[int]*model.MapRoleBuild    	//key:posId
+	roleRB 		map[int][]*model.MapRoleBuild 	//key:roleId
+	giveUpRB 	map[int64][]*model.MapRoleBuild //key:time
 }
 
 
@@ -27,16 +31,31 @@ var RBMgr = &roleBuildMgr{
 }
 
 func (this*roleBuildMgr) Load() {
-	this.mutex.Lock()
-	defer this.mutex.Unlock()
 
 	err := db.MasterDB.Find(this.dbRB)
 	if err != nil {
 		log.DefaultLog.Error("roleBuildMgr load role_build table error", zap.Error(err))
 	}
 
+	curTime := time.Now().Unix()
+
 	//转成posRB 和 roleRB
 	for _, v := range this.dbRB {
+		//过滤掉到了放弃时间的领地
+		if v.GiveUpTime != 0 && v.GiveUpTime <= curTime{
+			this.RemoveFromRole(v)
+			continue
+		}
+
+		//恢复正在放弃的土地
+		if v.GiveUpTime != 0 {
+			_, ok := this.giveUpRB[v.GiveUpTime]
+			if ok == false{
+				this.giveUpRB[v.GiveUpTime] = make([]*model.MapRoleBuild, 0)
+			}
+			this.giveUpRB[v.GiveUpTime] = append(this.giveUpRB[v.GiveUpTime], v)
+		}
+
 		posId := global.ToPosition(v.X, v.Y)
 		this.posRB[posId] = v
 		_,ok := this.roleRB[v.RId]
@@ -48,21 +67,39 @@ func (this*roleBuildMgr) Load() {
 
 }
 
+//检测正在放弃的土地是否到期了
+func (this*roleBuildMgr) CheckGiveUp() []int {
+	var ret []int
+
+	curTime := time.Now().Unix()
+	this.giveUpMutex.Lock()
+	for i := curTime-10; i <= curTime ; i++ {
+		gs, ok := this.giveUpRB[i]
+		if ok {
+			for _, g := range gs {
+				this.RemoveFromRole(g)
+				ret = append(ret, global.ToPosition(g.X, g.Y))
+			}
+		}
+	}
+	this.giveUpMutex.Unlock()
+	return ret
+}
 
 /*
 该位置是否被角色占领
 */
 func (this*roleBuildMgr) IsEmpty(x, y int) bool {
-	this.mutex.RLock()
-	defer this.mutex.RUnlock()
+	this.baseMutex.RLock()
+	defer this.baseMutex.RUnlock()
 	posId := global.ToPosition(x, y)
 	_, ok := this.posRB[posId]
 	return !ok
 }
 
 func (this*roleBuildMgr) PositionBuild(x, y int) (*model.MapRoleBuild, bool) {
-	this.mutex.RLock()
-	defer this.mutex.RUnlock()
+	this.baseMutex.RLock()
+	defer this.baseMutex.RUnlock()
 	posId := global.ToPosition(x, y)
 	b,ok := this.posRB[posId]
 	if ok && b.RId != 0 {
@@ -76,17 +113,17 @@ func (this*roleBuildMgr) PositionBuild(x, y int) (*model.MapRoleBuild, bool) {
 func (this*roleBuildMgr) AddBuild(rid, x, y int) (*model.MapRoleBuild, bool) {
 
 	posId := global.ToPosition(x, y)
-	this.mutex.Lock()
+	this.baseMutex.Lock()
 	rb, ok := this.posRB[posId]
-	this.mutex.Unlock()
+	this.baseMutex.Unlock()
 	if ok {
 		rb.RId = rid
-		this.mutex.Lock()
+		this.baseMutex.Lock()
 		if _, ok := this.roleRB[rid]; ok == false{
 			this.roleRB[rid] = make([]*model.MapRoleBuild, 0)
 		}
 		this.roleRB[rid] = append(this.roleRB[rid], rb)
-		this.mutex.Unlock()
+		this.baseMutex.Unlock()
 		return rb, true
 
 	}else{
@@ -100,14 +137,14 @@ func (this*roleBuildMgr) AddBuild(rid, x, y int) (*model.MapRoleBuild, bool) {
 					MaxDurable: cfg.Durable}
 
 				if _, err := db.MasterDB.Table(model.MapRoleBuild{}).Insert(rb); err == nil{
-					this.mutex.Lock()
+					this.baseMutex.Lock()
 					this.posRB[posId] = rb
 					this.dbRB[rb.Id] = rb
 					if _, ok := this.roleRB[rid]; ok == false{
 						this.roleRB[rid] = make([]*model.MapRoleBuild, 0)
 					}
 					this.roleRB[rid] = append(this.roleRB[rid], rb)
-					this.mutex.Unlock()
+					this.baseMutex.Unlock()
 					return rb, true
 				}else{
 					log.DefaultLog.Warn("db error", zap.Error(err))
@@ -119,7 +156,7 @@ func (this*roleBuildMgr) AddBuild(rid, x, y int) (*model.MapRoleBuild, bool) {
 }
 
 func (this*roleBuildMgr) RemoveFromRole(build *model.MapRoleBuild)  {
-	this.mutex.Lock()
+	this.baseMutex.Lock()
 	rb,ok := this.roleRB[build.RId]
 	if ok {
 		for i, v := range rb {
@@ -129,15 +166,15 @@ func (this*roleBuildMgr) RemoveFromRole(build *model.MapRoleBuild)  {
 			}
 		}
 	}
-	this.mutex.Unlock()
-
+	this.baseMutex.Unlock()
+	build.GiveUpTime = 0
 	build.RId = 0
 	build.SyncExecute()
 }
 
 func (this*roleBuildMgr) GetRoleBuild(rid int) ([]*model.MapRoleBuild, bool) {
-	this.mutex.RLock()
-	defer this.mutex.RUnlock()
+	this.baseMutex.RLock()
+	defer this.baseMutex.RUnlock()
 	ra, ok := this.roleRB[rid]
 	return ra, ok
 }
@@ -156,8 +193,8 @@ func (this*roleBuildMgr) Scan(x, y int) []*model.MapRoleBuild {
 		return nil
 	}
 
-	this.mutex.RLock()
-	defer this.mutex.RUnlock()
+	this.baseMutex.RLock()
+	defer this.baseMutex.RUnlock()
 
 	minX := util.MaxInt(0, x-ScanWith)
 	maxX := util.MinInt(global.MapWith, x+ScanWith)
@@ -184,8 +221,8 @@ func (this*roleBuildMgr) ScanBlock(x, y, length int) []*model.MapRoleBuild {
 	}
 
 
-	this.mutex.RLock()
-	defer this.mutex.RUnlock()
+	this.baseMutex.RLock()
+	defer this.baseMutex.RUnlock()
 
 	maxX := util.MinInt(global.MapWith, x+length-1)
 	maxY := util.MinInt(global.MapHeight, y+length-1)
@@ -225,4 +262,27 @@ func (this*roleBuildMgr) GetYield(rid int)model.Yield{
 		}
 	}
 	return y
+}
+
+func (this* roleBuildMgr) GiveUp(x, y int) int {
+	b, ok := this.PositionBuild(x, y)
+	if ok == false{
+		return constant.CannotGiveUp
+	}
+
+	if b.GiveUpTime > 0{
+		return constant.BuildGiveUpAlready
+	}
+
+	b.GiveUpTime = time.Now().Unix()
+
+	this.giveUpMutex.Lock()
+	_, ok = this.giveUpRB[b.GiveUpTime]
+	if ok == false {
+		this.giveUpRB[b.GiveUpTime] = make([]*model.MapRoleBuild, 0)
+	}
+	this.giveUpRB[b.GiveUpTime] = append(this.giveUpRB[b.GiveUpTime], b)
+	this.giveUpMutex.Unlock()
+
+	return constant.OK
 }

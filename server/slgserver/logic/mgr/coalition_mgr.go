@@ -26,11 +26,9 @@ func (this*coalitionMgr) Load() {
 		log.DefaultLog.Error("coalitionMgr load union table error")
 	}
 
-	this.mutex.Lock()
 	for _, v := range rr {
 		this.unions[v.Id] = v
 	}
-	this.mutex.Unlock()
 }
 
 

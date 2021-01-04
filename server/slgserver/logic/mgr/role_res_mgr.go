@@ -49,12 +49,10 @@ func (this*roleResMgr) Load() {
 		log.DefaultLog.Error("roleResMgr load role_res table error")
 	}
 
-	
-	this.mutex.Lock()
 	for _, v := range rr {
 		this.rolesRes[v.RId] = v
 	}
-	this.mutex.Unlock()
+
 	go this.produce()
 
 }

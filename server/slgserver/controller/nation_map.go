@@ -5,7 +5,6 @@ import (
 	"slgserver/constant"
 	"slgserver/middleware"
 	"slgserver/net"
-	"slgserver/server/slgserver/global"
 	"slgserver/server/slgserver/logic"
 	"slgserver/server/slgserver/logic/mgr"
 	"slgserver/server/slgserver/model"
@@ -134,18 +133,5 @@ func (this*NationMap) giveUp(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	rb, _ := mgr.RBMgr.PositionBuild(x, y)
-	mgr.RBMgr.RemoveFromRole(rb)
-	rr, ok := mgr.RResMgr.Get(role.RId)
-
-	//移除该地驻守
-	logic.ArmyLogic.GiveUp(global.ToPosition(reqObj.X, reqObj.Y))
-
-	if ok {
-		rspObj.RoleRes = rr.ToProto().(proto.RoleRes)
-		rsp.Body.Code = constant.OK
-	}else{
-		rsp.Body.Code = constant.DBError
-	}
-
+	rsp.Body.Code = mgr.RBMgr.GiveUp(x, y)
 }

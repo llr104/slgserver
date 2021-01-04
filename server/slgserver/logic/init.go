@@ -3,15 +3,14 @@ package logic
 import (
 	"slgserver/server/slgserver/logic/mgr"
 	"slgserver/server/slgserver/model"
+	"time"
 )
 
 
 var Union *coalitionLogic
 var ArmyLogic *armyLogic
 
-//逻辑相关的初始化放在这里
-func Init() {
-
+func BeforeInit()  {
 	//初始化一些方法
 	model.ArmyIsInView = armyIsInView
 	model.GetUnionId = getUnionId
@@ -24,6 +23,10 @@ func Init() {
 	model.GetCityCost = mgr.GetCityCost
 	model.GetMaxDurable = mgr.GetMaxDurable
 	model.GetCityLv = mgr.GetCityLV
+}
+
+//逻辑相关的初始化放在这里
+func Init() {
 
 	Union = NewCoalitionLogic()
 	ArmyLogic = &armyLogic{
@@ -40,4 +43,16 @@ func Init() {
 	go ArmyLogic.check()
 	go ArmyLogic.running()
 
+}
+
+func AfterInit() {
+	go func() {
+		for true {
+			time.Sleep(1*time.Second)
+			rets := mgr.RBMgr.CheckGiveUp()
+			for _, ret := range rets {
+				ArmyLogic.GiveUp(ret)
+			}
+		}
+	}()
 }

@@ -27,6 +27,8 @@ func Init() {
 	serverId := config.File.MustInt("logic", "server_id", 1)
 	model.ServerId = serverId
 
+	logic.BeforeInit()
+
 	//需要先加载联盟相关的信息
 	mgr.UnionMgr.Load()
 	mgr.RAttrMgr.Load()
@@ -37,8 +39,8 @@ func Init() {
 	mgr.RResMgr.Load()
 	mgr.GMgr.Load()
 	mgr.AMgr.Load()
-
 	logic.Init()
+	logic.AfterInit()
 
 	//全部初始化完才注册路由，防止服务器还没启动就绪收到请求
 	initRouter()

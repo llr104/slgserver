@@ -74,9 +74,6 @@ func (this*NationalMapMgr) Load() {
 	global.MapWith = m.Width
 	global.MapHeight = m.Height
 
-	this.mutex.Lock()
-	defer this.mutex.Unlock()
-
 	for i, v := range m.List {
 		t := int8(v[0])
 		l := int8(v[1])

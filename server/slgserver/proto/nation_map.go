@@ -36,6 +36,7 @@ type MapRoleBuild struct {
 	MaxDurable 	int    	`json:"max_durable"`
 	Defender   	int    	`json:"defender"`
 	OccupyTime	int64 	`json:"occupy_time"`
+	GiveUpTime	int64 	`json:"giveUp_time"`
 }
 
 
@@ -64,5 +65,4 @@ type GiveUpReq struct {
 type GiveUpRsp struct {
 	X       int     `json:"x"`
 	Y       int     `json:"y"`
-	RoleRes RoleRes `json:"role_res"`
 }

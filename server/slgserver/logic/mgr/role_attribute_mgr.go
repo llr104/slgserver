@@ -26,7 +26,6 @@ func (this*roleAttributeMgr) Load() {
 	}
 
 	//获取联盟id
-	this.mutex.Lock()
 	for _, v:= range t {
 		this.attribute[v.RId] = v
 	}
@@ -45,7 +44,6 @@ func (this*roleAttributeMgr) Load() {
 			}
 		}
 	}
-	this.mutex.Unlock()
 }
 
 

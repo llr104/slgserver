@@ -25,9 +25,6 @@ type facilityMgr struct {
 
 func (this*facilityMgr) Load() {
 
-	this.mutex.Lock()
-	defer this.mutex.Unlock()
-
 	err := db.MasterDB.Find(this.facilities)
 	if err != nil {
 		log.DefaultLog.Error("facilityMgr load city_facility table error")
