@@ -24,6 +24,7 @@ func (this*NationMap) InitRouter(r *net.Router) {
 	g.AddRouter("scan", this.scan, middleware.CheckRole())
 	g.AddRouter("scanBlock", this.scanBlock, middleware.CheckRole())
 	g.AddRouter("giveUp", this.giveUp, middleware.CheckRole())
+	g.AddRouter("build", this.build, middleware.CheckRole())
 }
 
 /*
@@ -133,6 +134,54 @@ func (this*NationMap) giveUp(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-
 	rsp.Body.Code = mgr.RBMgr.GiveUp(x, y)
+}
+
+//建造
+func (this*NationMap) build(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+	reqObj := &proto.BuildReq{}
+	rspObj := &proto.BuildRsp{}
+	mapstructure.Decode(req.Body.Msg, reqObj)
+	rsp.Body.Msg = rspObj
+	rsp.Body.Code = constant.OK
+
+	x := reqObj.X
+	y := reqObj.Y
+
+	rspObj.X = x
+	rspObj.Y = y
+
+	r, _ := req.Conn.GetProperty("role")
+	role := r.(*model.Role)
+
+	if mgr.RBMgr.BuildIsRId(x, y, role.RId) == false{
+		rsp.Body.Code = constant.BuildNotMe
+		return
+	}
+
+	b, ok := mgr.RBMgr.PositionBuild(x, y)
+	if ok == false {
+		rsp.Body.Code = constant.BuildNotMe
+		return
+	}
+
+	if b.IsResBuild() || b.IsInGiveUp(){
+		rsp.Body.Code = constant.CanNotBuildNew
+		return
+	}
+
+	cfg, ok := static_conf.MapBCConf.BuildConfig(reqObj.Type, 1)
+	if ok == false{
+		rsp.Body.Code = constant.InvalidParam
+		return
+	}
+
+	code := mgr.RResMgr.TryUseNeed(role.RId, cfg.Need)
+	if code != constant.OK {
+		rsp.Body.Code = code
+		return
+	}
+	b.Build(*cfg)
+	b.SyncExecute()
+
 }

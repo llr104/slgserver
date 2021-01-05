@@ -326,7 +326,7 @@ func (this*Army) conscript(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		Gold: needGold, Iron: needIron, Decree: 0,
 		Stone: needStone}
 
-	if ok := mgr.RResMgr.TryUseNeed(army.RId, &nr); ok {
+	if code := mgr.RResMgr.TryUseNeed(army.RId, nr); code == constant.OK {
 		curTime := time.Now().Unix()
 		for i, _ := range army.SoldierArray {
 			if reqObj.Cnts[i] > 0{

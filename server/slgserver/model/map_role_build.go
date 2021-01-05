@@ -8,6 +8,7 @@ import (
 	"slgserver/net"
 	"slgserver/server/slgserver/proto"
 	"slgserver/server/slgserver/static_conf"
+	"slgserver/util"
 	"time"
 )
 
@@ -60,11 +61,16 @@ type MapRoleBuild struct {
 	MaxDurable 	int       	`xorm:"max_durable"`
 	Defender   	int       	`xorm:"defender"`
 	OccupyTime 	time.Time 	`xorm:"occupy_time"`
+	EndTime 	time.Time 	`xorm:"end_time"`	//建造完的时间
 	GiveUpTime 	int64 		`xorm:"giveUp_time"`
 }
 
 func (this *MapRoleBuild) TableName() string {
 	return "tb_map_role_build" + fmt.Sprintf("_%d", ServerId)
+}
+
+func (this* MapRoleBuild) IsInGiveUp() bool {
+	return this.GiveUpTime != 0
 }
 
 func (this* MapRoleBuild) IsWarFree() bool  {
@@ -74,6 +80,25 @@ func (this* MapRoleBuild) IsWarFree() bool  {
 	}else{
 		return false
 	}
+}
+
+func (this* MapRoleBuild) IsResBuild() bool  {
+	return this.Grain > 0 || this.Stone > 0 || this.Iron > 0 || this.Wood > 0
+}
+
+func (this* MapRoleBuild) Build(cfg static_conf.BCLevelCfg) {
+	this.Type = cfg.Type
+	this.Level = 1
+	this.Name = cfg.Name
+	this.MaxDurable = cfg.Durable
+	this.CurDurable = util.MinInt(this.MaxDurable, this.CurDurable)
+	this.GiveUpTime = 0
+	this.Defender = cfg.Defender
+	this.Wood = 0
+	this.Iron = 0
+	this.Stone = 0
+	this.Grain = 0
+	this.EndTime = time.Now().Add(time.Duration(cfg.Time) * time.Second)
 }
 
 /* 推送同步 begin */
@@ -114,12 +139,19 @@ func (this *MapRoleBuild) ToProto() interface{}{
 	p.Type = this.Type
 	p.CurDurable = this.CurDurable
 	p.MaxDurable = this.MaxDurable
-	p.Level = this.Level
+
 	p.RId = this.RId
 	p.Name = this.Name
 	p.Defender = this.Defender
 	p.OccupyTime = this.OccupyTime.UnixNano()/1e6
-	p.GiveUpTime = this.GiveUpTime
+	p.GiveUpTime = this.GiveUpTime*1000
+	p.EndTime = this.EndTime.Unix()/1e6
+
+	if time.Now().Before(this.EndTime) {
+		p.Level = this.Level-1
+	}else{
+		p.Level = this.Level
+	}
 
 	return p
 }

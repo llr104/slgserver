@@ -23,6 +23,7 @@ func Init() {
 	general.General.Load()
 	static_conf.Basic.Load()
 	static_conf.MapBuildConf.Load()
+	static_conf.MapBCConf.Load()
 
 	serverId := config.File.MustInt("logic", "server_id", 1)
 	model.ServerId = serverId

@@ -46,7 +46,7 @@ func (this *mapBuildConf) Load()  {
 	}
 
 	json.Unmarshal(jdata, this)
-	fmt.Println(this)
+
 
 	this.cfgMap = make(map[int8][]cfg)
 	for _, v := range this.Cfg {
@@ -55,6 +55,8 @@ func (this *mapBuildConf) Load()  {
 		}
 		this.cfgMap[v.Type] = append(this.cfgMap[v.Type], v)
 	}
+
+	fmt.Println(this)
 }
 
 func (this*mapBuildConf) BuildConfig(cfgType int8, level int8) (*cfg, bool) {

@@ -2,6 +2,7 @@ package mgr
 
 import (
 	"go.uber.org/zap"
+	"slgserver/constant"
 	"slgserver/db"
 	"slgserver/log"
 	"slgserver/server/slgserver/model"
@@ -95,7 +96,7 @@ func (this*roleResMgr) Add(res *model.RoleRes) (){
 	this.mutex.Unlock()
 }
 
-func (this*roleResMgr) TryUseNeed(rid int, need*facility.NeedRes) bool{
+func (this*roleResMgr) TryUseNeed(rid int, need facility.NeedRes) int{
 	
 	this.mutex.RLock()
 	rr, ok := this.rolesRes[rid]
@@ -113,12 +114,16 @@ func (this*roleResMgr) TryUseNeed(rid int, need*facility.NeedRes) bool{
 			rr.Gold -= need.Gold
 
 			rr.SyncExecute()
-			return true
+			return constant.OK
 		}else{
-			return false
+			if need.Decree > rr.Decree{
+				return constant.DecreeNotEnough
+			}else{
+				return constant.ResNotEnough
+			}
 		}
 	}else {
-		return false
+		return constant.RoleNotExist
 	}
 }
 
@@ -198,6 +203,7 @@ func (this*roleResMgr) TryUseGold(rid int, gold int) bool{
 		return false
 	}
 }
+
 
 func (this*roleResMgr) produce() {
 	index := 1

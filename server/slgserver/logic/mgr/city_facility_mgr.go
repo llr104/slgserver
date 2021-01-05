@@ -200,8 +200,9 @@ func (this*facilityMgr) UpFacility(rid, cid int, fType int8) (*model.Facility, i
 							zap.Int("type", int(fType)))
 						return nil, constant.UpError
 					}
-					if RResMgr.TryUseNeed(rid, need) {
-						//costTime := facility.FConf.CostTime(fType, fac.PrivateLevel+1)
+
+					code := RResMgr.TryUseNeed(rid, *need)
+					if code == constant.OK {
 						fac.UpTime = time.Now().Unix()
 						out = fac
 						if t, err := json.Marshal(facilities); err == nil{
@@ -216,7 +217,7 @@ func (this*facilityMgr) UpFacility(rid, cid int, fType int8) (*model.Facility, i
 							zap.Int("curLevel", int(fac.GetLevel())),
 							zap.Int("cityId", cid),
 							zap.Int("type", int(fType)))
-						return nil, constant.ResNotEnough
+						return nil, code
 					}
 				}
 			}

@@ -36,6 +36,7 @@ type MapRoleBuild struct {
 	MaxDurable 	int    	`json:"max_durable"`
 	Defender   	int    	`json:"defender"`
 	OccupyTime	int64 	`json:"occupy_time"`
+	EndTime 	int64 	`json:"end_time"`		//建造完的时间
 	GiveUpTime	int64 	`json:"giveUp_time"`	//领地到了这个时间会被放弃
 }
 
@@ -65,4 +66,16 @@ type GiveUpReq struct {
 type GiveUpRsp struct {
 	X       int     `json:"x"`
 	Y       int     `json:"y"`
+}
+
+type BuildReq struct {
+	X 		int    	`json:"x"`
+	Y 		int    	`json:"y"`
+	Type	int8	`json:"type"`
+}
+
+type BuildRsp struct {
+	X       int     `json:"x"`
+	Y       int     `json:"y"`
+	Type	int8	`json:"type"`
 }

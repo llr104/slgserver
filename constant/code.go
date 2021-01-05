@@ -54,6 +54,7 @@ const BuildMBSNotFound = 45       //没有军营
 const BuildWarFree = 46     	  //免战中
 const ArmyConscript  = 47         //征兵中
 const BuildGiveUpAlready = 48     //领地已经在放弃了
+const CanNotBuildNew = 49		  //不能再新建建筑在领地上
 
 
 

@@ -1,7 +1,7 @@
 {
   "title": "地图资源配置",
   "cfg":[
-   {"type": 51,
+    {"type": 51,
     "name": "城区",
     "level": 1,
     "grain": 0,
