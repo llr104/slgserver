@@ -69,6 +69,15 @@ func (this *MapRoleBuild) TableName() string {
 	return "tb_map_role_build" + fmt.Sprintf("_%d", ServerId)
 }
 
+func (this* MapRoleBuild) LoadCfg() {
+	if cfg, _ := static_conf.MapBuildConf.BuildConfig(this.Type, this.Level); cfg != nil {
+		this.Wood = cfg.Wood
+		this.Iron = cfg.Iron
+		this.Stone = cfg.Stone
+		this.Grain = cfg.Grain
+	}
+}
+
 func (this* MapRoleBuild) IsInGiveUp() bool {
 	return this.GiveUpTime != 0
 }

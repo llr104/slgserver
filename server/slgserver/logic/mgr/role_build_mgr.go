@@ -42,6 +42,8 @@ func (this*roleBuildMgr) Load() {
 
 	//转成posRB 和 roleRB
 	for _, v := range this.dbRB {
+		v.LoadCfg()
+
 		//过滤掉到了放弃时间的领地
 		if v.GiveUpTime != 0 && v.GiveUpTime <= curTime{
 			this.RemoveFromRole(v)
@@ -132,11 +134,13 @@ func (this*roleBuildMgr) AddBuild(rid, x, y int) (*model.MapRoleBuild, bool) {
 
 		if b, ok := NMMgr.PositionBuild(x, y); ok {
 			if cfg, _ := static_conf.MapBuildConf.BuildConfig(b.Type, b.Level); cfg != nil {
-				rb := &model.MapRoleBuild{RId: rid, X: x, Y: y,
-					Type: b.Type, Level: b.Level, Name: cfg.Name,
-					Wood: cfg.Wood, Iron: cfg.Iron, Stone: cfg.Stone,
-					Grain: cfg.Grain, CurDurable: cfg.Durable,
-					MaxDurable: cfg.Durable}
+				rb := &model.MapRoleBuild{
+					RId: rid, X: x, Y: y,
+					Type: b.Type, Level: b.Level,
+					Name: cfg.Name, CurDurable: cfg.Durable,
+					MaxDurable: cfg.Durable,
+				}
+				rb.LoadCfg()
 
 				if _, err := db.MasterDB.Table(model.MapRoleBuild{}).Insert(rb); err == nil{
 					this.baseMutex.Lock()

@@ -165,7 +165,7 @@ func (this*NationMap) build(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	if b.IsResBuild() || b.IsInGiveUp(){
+	if b.IsResBuild() == false || b.IsInGiveUp(){
 		rsp.Body.Code = constant.CanNotBuildNew
 		return
 	}
