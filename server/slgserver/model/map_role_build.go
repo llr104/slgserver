@@ -53,10 +53,10 @@ type MapRoleBuild struct {
 	X          	int       	`xorm:"x"`
 	Y          	int       	`xorm:"y"`
 	Name       	string    	`xorm:"name"`
-	Wood       	int       	`xorm:"Wood"`
-	Iron       	int       	`xorm:"iron"`
-	Stone      	int       	`xorm:"stone"`
-	Grain      	int       	`xorm:"grain"`
+	Wood       	int       	`xorm:"-"`
+	Iron       	int       	`xorm:"-"`
+	Stone      	int       	`xorm:"-"`
+	Grain      	int       	`xorm:"-"`
 	CurDurable 	int       	`xorm:"cur_durable"`
 	MaxDurable 	int       	`xorm:"max_durable"`
 	Defender   	int       	`xorm:"defender"`
