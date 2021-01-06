@@ -22,6 +22,7 @@ const (
 	ArmyCmdReclamation 	= 3	//屯垦
 	ArmyCmdBack   		= 4 //撤退
 	ArmyCmdConscript  	= 5 //征兵
+	ArmyCmdTransfer  	= 6 //调动
 )
 
 const (

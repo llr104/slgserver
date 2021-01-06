@@ -12,6 +12,10 @@ import (
 	"time"
 )
 
+const (
+	MapBuildFortress = 50
+)
+
 /*******db 操作begin********/
 var dbRBMgr *rbDBMgr
 func init() {
@@ -28,8 +32,10 @@ func (this *rbDBMgr) running()  {
 		select {
 		case b := <- this.builds:
 			if b.Id >0 {
-				_, err := db.MasterDB.Table(b).ID(b.Id).Cols("rid",
-					"cur_durable", "max_durable", "occupy_time", "giveUp_time").Update(b)
+				_, err := db.MasterDB.Table(b).ID(b.Id).Cols(
+					"rid", "name", "type", "level",
+					"cur_durable", "max_durable", "occupy_time",
+					"giveUp_time", "end_time").Update(b)
 				if err != nil{
 					log.DefaultLog.Warn("db error", zap.Error(err))
 				}
@@ -78,6 +84,25 @@ func (this* MapRoleBuild) LoadCfg() {
 	}
 }
 
+
+func (this* MapRoleBuild) Reset() {
+	ok, t, level := MapResTypeLevel(this.X, this.Y)
+	if ok {
+		if cfg, _ := static_conf.MapBuildConf.BuildConfig(t, level); cfg != nil {
+			this.Name = cfg.Name
+			this.Level = cfg.Level
+			this.Type = cfg.Type
+			this.Wood = cfg.Wood
+			this.Iron = cfg.Iron
+			this.Stone = cfg.Stone
+			this.Grain = cfg.Grain
+		}
+	}
+
+	this.GiveUpTime = 0
+	this.RId = 0
+}
+
 func (this* MapRoleBuild) IsInGiveUp() bool {
 	return this.GiveUpTime != 0
 }
@@ -95,9 +120,14 @@ func (this* MapRoleBuild) IsResBuild() bool  {
 	return this.Grain > 0 || this.Stone > 0 || this.Iron > 0 || this.Wood > 0
 }
 
+//是否是要塞
+func (this* MapRoleBuild) IsFortress() bool  {
+	return this.Type == MapBuildFortress
+}
+
 func (this* MapRoleBuild) Build(cfg static_conf.BCLevelCfg) {
 	this.Type = cfg.Type
-	this.Level = 1
+	this.Level = 0
 	this.Name = cfg.Name
 	this.MaxDurable = cfg.Durable
 	this.CurDurable = util.MinInt(this.MaxDurable, this.CurDurable)
@@ -156,12 +186,15 @@ func (this *MapRoleBuild) ToProto() interface{}{
 	p.GiveUpTime = this.GiveUpTime*1000
 	p.EndTime = this.EndTime.Unix()/1e6
 
-	if time.Now().Before(this.EndTime) {
-		p.Level = this.Level-1
-	}else{
-		p.Level = this.Level
+	if this.EndTime.IsZero() == false{
+		if this.IsFortress(){
+			if time.Now().Before(this.EndTime) == false{
+				this.Level += 1
+				this.EndTime = time.Time{}
+			}
+		}
 	}
-
+	p.Level = this.Level
 	return p
 }
 

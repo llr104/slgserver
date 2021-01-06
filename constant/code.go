@@ -51,10 +51,12 @@ const HasApply = 42               //已经申请过了
 const BuildCanNotDefend = 43      //不能驻守
 const BuildCanNotAttack = 44      //不能占领
 const BuildMBSNotFound = 45       //没有军营
-const BuildWarFree = 46     	  //免战中
+const BuildWarFree = 46           //免战中
 const ArmyConscript  = 47         //征兵中
 const BuildGiveUpAlready = 48     //领地已经在放弃了
-const CanNotBuildNew = 49		  //不能再新建建筑在领地上
+const CanNotBuildNew = 49         //不能再新建建筑在领地上
+const CanNotTransfer = 49         //不能调兵
+const HoldIsFull = 50             //坑位已满
 
 
 

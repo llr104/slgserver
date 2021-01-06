@@ -173,8 +173,7 @@ func (this*roleBuildMgr) RemoveFromRole(build *model.MapRoleBuild)  {
 		}
 	}
 	this.baseMutex.Unlock()
-	build.GiveUpTime = 0
-	build.RId = 0
+	build.Reset()
 	build.SyncExecute()
 }
 

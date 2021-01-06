@@ -88,3 +88,11 @@ func (this*mapBuildCustomConf) BuildConfig(cfgType int8, level int8) (*BCLevelCf
 	return nil, false
 }
 
+//可容纳队伍数量
+func (this*mapBuildCustomConf) GetHoldArmyCnt(cfgType int8, level int8) int {
+	cfg, ok := this.BuildConfig(cfgType, level)
+	if ok == false {
+		return 0
+	}
+	return cfg.Result.ArmyCnt
+}

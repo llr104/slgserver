@@ -11,4 +11,6 @@ var GetDepotCapacity func(rid int) int
 var GetCityCost func(cid int) int8
 var GetMaxDurable func(cid int) int
 var GetCityLv func(cid int) int8
+var MapResTypeLevel func(x, y int) (bool, int8, int8)
+
 var ServerId = 0

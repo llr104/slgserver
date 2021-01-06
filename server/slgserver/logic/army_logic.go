@@ -205,7 +205,23 @@ func (this *armyLogic) exeArrive(army *model.Army) {
 	}else if army.Cmd == model.ArmyCmdBack {
 		army.State = model.ArmyStop
 		army.Cmd = model.ArmyCmdIdle
+		army.ToX = army.FromX
+		army.ToY = army.FromY
+
 		this.Update(army)
+	}else if army.Cmd == model.ArmyCmdTransfer {
+		//调动到位置了
+		if army.State == model.ArmyRunning{
+			army.State = model.ArmyStop
+			army.Cmd = model.ArmyCmdIdle
+			x := army.ToX
+			y := army.ToY
+			army.FromX = x
+			army.FromY = y
+			army.ToX = x
+			army.ToY = y
+			this.Update(army)
+		}
 	}
 }
 
@@ -279,7 +295,9 @@ func (this*armyLogic) PushAction(army *model.Army)  {
 	this.timeMutex.Lock()
 	defer this.timeMutex.Unlock()
 
-	if army.Cmd == model.ArmyCmdAttack || army.Cmd == model.ArmyCmdDefend {
+	if  army.Cmd == model.ArmyCmdAttack ||
+		army.Cmd == model.ArmyCmdDefend ||
+		army.Cmd == model.ArmyCmdTransfer{
 		t := army.End.Unix()
 		this.addAction(t, army)
 
@@ -293,13 +311,32 @@ func (this*armyLogic) PushAction(army *model.Army)  {
 			this.addAction(t, army)
 		}
 	}else if army.Cmd == model.ArmyCmdBack {
-		cur := time.Now()
-		diff := army.End.Unix()-army.Start.Unix()
-		if cur.Unix() < army.End.Unix(){
-			diff = cur.Unix()-army.Start.Unix()
+
+		if army.FromX == army.ToX && army.FromY == army.ToY {
+			//处理调动到其他地方待命的情况，会归属的城池
+			city, ok := mgr.RCMgr.Get(army.CityId)
+			if ok {
+				army.FromX = city.X
+				army.FromY = city.Y
+
+				//计算回去的时间
+				//speed := mgr.AMgr.GetSpeed(army)
+				//t := mgr.TravelTime(speed, army.FromX, army.FromY, army.ToX, army.ToY)
+				army.Start = time.Now()
+				//army.End = time.Now().Add(time.Duration(t) * time.Millisecond)
+				army.End = time.Now().Add(40*time.Second)
+			}
+
+		}else{
+			cur := time.Now()
+			diff := army.End.Unix()-army.Start.Unix()
+			if cur.Unix() < army.End.Unix(){
+				diff = cur.Unix()-army.Start.Unix()
+			}
+			army.Start = cur
+			army.End = cur.Add(time.Duration(diff) * time.Second)
+
 		}
-		army.Start = cur
-		army.End = cur.Add(time.Duration(diff) * time.Second)
 		army.Cmd = model.ArmyCmdBack
 		this.addAction(army.End.Unix(), army)
 	}

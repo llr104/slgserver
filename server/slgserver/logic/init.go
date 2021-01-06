@@ -23,6 +23,7 @@ func BeforeInit()  {
 	model.GetCityCost = mgr.GetCityCost
 	model.GetMaxDurable = mgr.GetMaxDurable
 	model.GetCityLv = mgr.GetCityLV
+	model.MapResTypeLevel = mgr.NMMgr.MapResTypeLevel
 }
 
 //逻辑相关的初始化放在这里

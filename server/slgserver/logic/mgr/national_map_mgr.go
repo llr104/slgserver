@@ -19,6 +19,7 @@ const ScanWith = 3
 const ScanHeight = 3
 
 
+
 type NMArray struct {
 	arr []model.NationalMap
 }
@@ -118,6 +119,14 @@ func (this*NationalMapMgr) IsCanBuildCity(x, y int) bool {
 		}
 	}
 	return true
+}
+
+func (this*NationalMapMgr) MapResTypeLevel(x, y int) (bool, int8, int8) {
+	n, ok := this.PositionBuild(x, y)
+	if ok {
+		return true, n.Type, n.Level
+	}
+	return false, 0, 0
 }
 
 func (this*NationalMapMgr) PositionBuild(x, y int) (model.NationalMap, bool) {
