@@ -11,18 +11,20 @@ import (
 )
 
 type armyLogic struct {
-	passby			sync.RWMutex
-	timeMutex		sync.RWMutex
-
 	sys            	*sysArmyLogic
+	passBy  		sync.RWMutex
+	stop    		sync.RWMutex
+	out     		sync.RWMutex
+	endTime 		sync.RWMutex
+
 	giveUpId       	chan int
 	arriveArmys    	chan *model.Army
 	updateArmys    	chan *model.Army
-	outArmys		map[int]*model.Army
 
-	armyByEndTime	map[int64][]*model.Army      //key:到达时间
+	outArmys       	map[int]*model.Army         //城外的军队
+	endTimeArmys   	map[int64][]*model.Army     //key:到达时间
 	stopInPosArmys 	map[int]map[int]*model.Army //玩家停留位置的军队 key:posId,armyId
-	passbyPosArmys 	map[int]map[int]*model.Army //玩家路过位置的军队 key:posId,armyId
+	passByPosArmys 	map[int]map[int]*model.Army //玩家路过位置的军队 key:posId,armyId
 }
 
 func (this *armyLogic) init(){
@@ -32,16 +34,16 @@ func (this *armyLogic) init(){
 		//恢复已经执行行动的军队
 		if army.Cmd != model.ArmyCmdIdle {
 			e := army.End.Unix()
-			_, ok := this.armyByEndTime[e]
+			_, ok := this.endTimeArmys[e]
 			if ok == false{
-				this.armyByEndTime[e] = make([]*model.Army, 0)
+				this.endTimeArmys[e] = make([]*model.Army, 0)
 			}
-			this.armyByEndTime[e] = append(this.armyByEndTime[e], army)
+			this.endTimeArmys[e] = append(this.endTimeArmys[e], army)
 		}
 	}
 
 	curTime := time.Now().Unix()
-	for kT, armys := range this.armyByEndTime {
+	for kT, armys := range this.endTimeArmys {
 		if kT <= curTime {
 			for _, a := range armys {
 				if a.Cmd == model.ArmyCmdAttack {
@@ -58,7 +60,7 @@ func (this *armyLogic) init(){
 				}
 				a.SyncExecute()
 			}
-			delete(this.armyByEndTime, kT)
+			delete(this.endTimeArmys, kT)
 		}else{
 			for _, a := range armys {
 				a.State = model.ArmyRunning
@@ -72,16 +74,16 @@ func (this*armyLogic) check() {
 		t := time.Now().Unix()
 		time.Sleep(100*time.Millisecond)
 
-		this.timeMutex.Lock()
-		for k, armies := range this.armyByEndTime {
+		this.endTime.Lock()
+		for k, armies := range this.endTimeArmys {
 			if k <= t{
 				for _, army := range armies {
 					this.Arrive(army)
 				}
-				delete(this.armyByEndTime, k)
+				delete(this.endTimeArmys, k)
 			}
 		}
-		this.timeMutex.Unlock()
+		this.endTime.Unlock()
 	}
 }
 
@@ -90,30 +92,7 @@ func (this *armyLogic) running(){
 	for {
 		select {
 			case <-passbyTimer.C:{
-				this.passby.Lock()
-				this.passbyPosArmys = make(map[int]map[int]*model.Army)
-				for _, army := range this.outArmys {
-					if army.State == model.ArmyRunning {
-						x, y := army.Position()
-						posId := global.ToPosition(x, y)
-						if _, ok := this.passbyPosArmys[posId]; ok == false {
-							this.passbyPosArmys[posId] = make(map[int]*model.Army)
-						}
-						this.passbyPosArmys[posId][army.Id] = army
-						army.CheckSyncCell()
-					}
-				}
-
-				for posId, armys := range this.stopInPosArmys {
-					for _, army := range armys {
-						if _, ok := this.passbyPosArmys[posId]; ok == false {
-							this.passbyPosArmys[posId] = make(map[int]*model.Army)
-						}
-						this.passbyPosArmys[posId][army.Id] = army
-					}
-				}
-
-				this.passby.Unlock()
+				this.updatePassBy()
 			}
 			case army := <-this.updateArmys:{
 				this.exeUpdate(army)
@@ -122,29 +101,67 @@ func (this *armyLogic) running(){
 				this.exeArrive(army)
 			}
 			case giveUpId := <- this.giveUpId:{
+				this.stop.RLock()
 				armys, ok := this.stopInPosArmys[giveUpId]
+				this.stop.RUnlock()
+
 				if ok {
 					for _, army := range armys {
 						this.ArmyBack(army)
 					}
-					delete(this.stopInPosArmys, giveUpId)
+					this.deleteStopArmy(giveUpId)
 				}
 			}
 		}
 	}
 }
 
+func (this* armyLogic) updatePassBy() {
+
+	temp := make(map[int]map[int]*model.Army)
+	this.out.RLock()
+	for _, army := range this.outArmys {
+		if army.State == model.ArmyRunning {
+			x, y := army.Position()
+			posId := global.ToPosition(x, y)
+			if _, ok := temp[posId]; ok == false {
+				temp[posId] = make(map[int]*model.Army)
+			}
+			temp[posId][army.Id] = army
+			army.CheckSyncCell()
+		}
+	}
+	this.out.RUnlock()
+
+	this.stop.RLock()
+	for posId, armys := range this.stopInPosArmys {
+		for _, army := range armys {
+			if _, ok := temp[posId]; ok == false {
+				temp[posId] = make(map[int]*model.Army)
+			}
+			temp[posId][army.Id] = army
+		}
+	}
+	this.stop.RUnlock()
+
+	this.passBy.Lock()
+	this.passByPosArmys = temp
+	this.passBy.Unlock()
+}
+
 func (this *armyLogic) exeUpdate(army *model.Army) {
 	army.SyncExecute()
 	if army.Cmd == model.ArmyCmdBack {
-		this.deleteStopArmy(army.ToX, army.ToY)
+		this.deleteStopArmy(global.ToPosition(army.ToX, army.ToY))
 	}
 
+	this.out.Lock()
 	if army.Cmd != model.ArmyCmdIdle {
 		this.outArmys[army.Id] = army
 	}else{
 		delete(this.outArmys, army.RId)
 	}
+	this.out.Unlock()
 }
 
 func (this *armyLogic) exeArrive(army *model.Army) {
@@ -246,12 +263,13 @@ func (this *armyLogic) ScanBlock(rid, x, y, length int) []*model.Army {
 	maxX := util.MinInt(global.MapWith, x+length-1)
 	maxY := util.MinInt(global.MapHeight, y+length-1)
 	out := make([]*model.Army, 0)
-	this.passby.RLock()
+
+	this.passBy.RLock()
 	for i := x; i <= maxX; i++ {
 		for j := y; j <= maxY; j++ {
 
 			posId := global.ToPosition(i, j)
-			armys, ok := this.passbyPosArmys[posId]
+			armys, ok := this.passByPosArmys[posId]
 			if ok {
 				is := armyIsInView(rid, i, j)
 				if is == false{
@@ -263,7 +281,7 @@ func (this *armyLogic) ScanBlock(rid, x, y, length int) []*model.Army {
 			}
 		}
 	}
-	this.passby.RUnlock()
+	this.passBy.RUnlock()
 	return out
 }
 
@@ -279,33 +297,49 @@ func (this *armyLogic) GiveUp(posId int) {
 	this.giveUpId <- posId
 }
 
-func (this *armyLogic) deleteStopArmy(x, y int) {
-	posId := global.ToPosition(x, y)
+func (this* armyLogic) GetStopArmys(posId int)[]*model.Army {
+	ret := make([]*model.Army, 0)
+	this.stop.RLock()
+	armys, ok := this.stopInPosArmys[posId]
+	if ok {
+		for _, army := range armys {
+			ret = append(ret, army)
+		}
+	}
+	this.stop.RUnlock()
+	return ret
+}
+
+func (this *armyLogic) deleteStopArmy(posId int) {
+	this.stop.Lock()
 	delete(this.stopInPosArmys, posId)
+	this.stop.Unlock()
 }
 
 func (this*armyLogic) addStopArmy(army *model.Army)  {
 	posId := global.ToPosition(army.ToX, army.ToY)
 
+	this.stop.Lock()
 	if _, ok := this.stopInPosArmys[posId]; ok == false {
 		this.stopInPosArmys[posId] = make(map[int]*model.Army)
 	}
 	this.stopInPosArmys[posId][army.Id] = army
+	this.stop.Unlock()
 }
 
 
 func (this*armyLogic) addAction(t int64, army *model.Army)  {
-	_, ok := this.armyByEndTime[t]
+	this.endTime.Lock()
+	defer this.endTime.Unlock()
+	_, ok := this.endTimeArmys[t]
 	if ok == false {
-		this.armyByEndTime[t] = make([]*model.Army, 0)
+		this.endTimeArmys[t] = make([]*model.Army, 0)
 	}
-	this.armyByEndTime[t] = append(this.armyByEndTime[t], army)
+	this.endTimeArmys[t] = append(this.endTimeArmys[t], army)
 }
 
 //把行动丢进来
 func (this*armyLogic) PushAction(army *model.Army)  {
-	this.timeMutex.Lock()
-	defer this.timeMutex.Unlock()
 
 	if  army.Cmd == model.ArmyCmdAttack ||
 		army.Cmd == model.ArmyCmdDefend ||
@@ -361,18 +395,18 @@ func (this*armyLogic) ArmyBack(army *model.Army)  {
 	army.State = model.ArmyRunning
 	army.Cmd = model.ArmyCmdBack
 
-	this.timeMutex.Lock()
+	this.endTime.Lock()
 	t := army.End.Unix()
-	if actions, ok := this.armyByEndTime[t]; ok {
+	if actions, ok := this.endTimeArmys[t]; ok {
 		for i, v := range actions {
 			if v.Id == army.Id{
 				actions = append(actions[:i], actions[i+1:]...)
-				this.armyByEndTime[t] = actions
+				this.endTimeArmys[t] = actions
 				break
 			}
 		}
 	}
-	this.timeMutex.Unlock()
+	this.endTime.Unlock()
 	this.PushAction(army)
 }
 
@@ -380,6 +414,26 @@ func (this*armyLogic) Reclamation(army *model.Army)  {
 	army.State = model.ArmyStop
 	army.Cmd = model.ArmyCmdReclamation
 	this.PushAction(army)
+}
+
+func (this*armyLogic) GetTransferArmyCnt(x, y int) int{
+	posId := global.ToPosition(x, y)
+	this.stop.RLock()
+	defer this.stop.RUnlock()
+	armys, ok := this.stopInPosArmys[posId]
+	cnt := 0
+	if ok {
+		for _, army := range armys {
+			if army.FromX == x && army.FromY == y{
+				cnt+=1
+			}else if army.ToX == x && army.ToY == y{
+				if army.Cmd == model.ArmyCmdTransfer{
+					cnt+=1
+				}
+			}
+		}
+	}
+	return cnt
 }
 
 

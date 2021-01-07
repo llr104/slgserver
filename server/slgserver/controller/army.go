@@ -537,6 +537,10 @@ func (this*Army) __transfer__(reqObj *proto.AssignArmyReq, army* model.Army, rol
 		return code
 	}
 
+	if army.FromX == reqObj.X && army.FromY == reqObj.Y{
+		return constant.CanNotTransfer
+	}
+
 	if mgr.RBMgr.BuildIsRId(reqObj.X, reqObj.Y, role.RId) == false {
 		return constant.BuildNotMe
 	}
@@ -551,9 +555,8 @@ func (this*Army) __transfer__(reqObj *proto.AssignArmyReq, army* model.Army, rol
 	}
 
 
-	//暂时没有考虑已经有队伍在该位置待命的情况
 	cnt := static_conf.MapBCConf.GetHoldArmyCnt(b.Type, b.Level)
-	if cnt > 0 {
+	if cnt > logic.ArmyLogic.GetTransferArmyCnt(b.X, b.Y) {
 		return this.__after__(reqObj, army)
 	}else{
 		return constant.HoldIsFull

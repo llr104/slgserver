@@ -35,9 +35,9 @@ func Init() {
 		giveUpId:       make(chan int, 100),
 		updateArmys:    make(chan *model.Army, 100),
 		outArmys:       make(map[int]*model.Army),
-		armyByEndTime:  make(map[int64][]*model.Army),
+		endTimeArmys:   make(map[int64][]*model.Army),
 		stopInPosArmys: make(map[int]map[int]*model.Army),
-		passbyPosArmys: make(map[int]map[int]*model.Army),
+		passByPosArmys: make(map[int]map[int]*model.Army),
 		sys:            NewSysArmy()}
 
 	ArmyLogic.init()

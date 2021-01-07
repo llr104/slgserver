@@ -185,3 +185,4 @@ func (this*NationMap) build(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	b.SyncExecute()
 
 }
+

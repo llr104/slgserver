@@ -357,16 +357,10 @@ func checkCityOccupy(wr *model.WarReport, attackArmy *model.Army, city*model.Map
 func newBattle(attackArmy *model.Army) {
 	city, ok := mgr.RCMgr.PositionCity(attackArmy.ToX, attackArmy.ToY)
 	if ok {
-		//打玩家城池
-		var enemys []*model.Army
+
 		//驻守队伍被打
 		posId := global.ToPosition(attackArmy.ToX, attackArmy.ToY)
-		posArmys, ok := ArmyLogic.stopInPosArmys[posId]
-		if ok {
-			for _, army := range posArmys {
-				enemys = append(enemys, army)
-			}
-		}
+		enemys := ArmyLogic.GetStopArmys(posId)
 
 		//城内空闲的队伍被打
 		if armys, ok := mgr.AMgr.GetByCity(city.CityId); ok {
@@ -494,7 +488,7 @@ func trigger(army *model.Army, enemys []*model.Army, isRoleEnemy bool) (*WarResu
 		if isRoleEnemy {
 			if lastWar.result > 1 {
 				if isRoleEnemy {
-					delete(ArmyLogic.stopInPosArmys, posId)
+					ArmyLogic.deleteStopArmy(posId)
 				}
 				ArmyLogic.ArmyBack(enemy)
 			}
@@ -508,13 +502,13 @@ func trigger(army *model.Army, enemys []*model.Army, isRoleEnemy bool) (*WarResu
 }
 
 func executeBuild(army *model.Army)  {
-	roleBuid, _ := mgr.RBMgr.PositionBuild(army.ToX, army.ToY)
+	roleBuild, _ := mgr.RBMgr.PositionBuild(army.ToX, army.ToY)
 
 	posId := global.ToPosition(army.ToX, army.ToY)
-	posArmys, isRoleEnemy := ArmyLogic.stopInPosArmys[posId]
-
+	posArmys := ArmyLogic.GetStopArmys(posId)
+	isRoleEnemy := len(posArmys) == 0
 	var enemys []*model.Army
-	if isRoleEnemy == false {
+	if isRoleEnemy {
 		enemys = ArmyLogic.sys.GetArmy(army.ToX, army.ToY)
 	}else{
 		for _, v := range posArmys {
@@ -525,17 +519,17 @@ func executeBuild(army *model.Army)  {
 	lastWar, warReports := trigger(army, enemys, isRoleEnemy)
 
 	if lastWar.result > 1 {
-		if roleBuid != nil {
+		if roleBuild != nil {
 			destory := mgr.GMgr.GetDestroy(army)
 			wr := warReports[len(warReports)-1]
-			wr.DestroyDurable = util.MinInt(destory, roleBuid.CurDurable)
-			roleBuid.CurDurable = util.MaxInt(0, roleBuid.CurDurable - destory)
-			if roleBuid.CurDurable == 0{
+			wr.DestroyDurable = util.MinInt(destory, roleBuild.CurDurable)
+			roleBuild.CurDurable = util.MaxInt(0, roleBuild.CurDurable - destory)
+			if roleBuild.CurDurable == 0{
 				//攻占了玩家的领地
-				blimit := static_conf.Basic.Role.BuildLimit
-				if blimit > mgr.RBMgr.BuildCnt(army.RId){
+				bLimit := static_conf.Basic.Role.BuildLimit
+				if bLimit > mgr.RBMgr.BuildCnt(army.RId){
 					wr.Occupy = 1
-					mgr.RBMgr.RemoveFromRole(roleBuid)
+					mgr.RBMgr.RemoveFromRole(roleBuild)
 					mgr.RBMgr.AddBuild(army.RId, army.ToX, army.ToY)
 					OccupyRoleBuild(army.RId, army.ToX, army.ToY)
 				}else{

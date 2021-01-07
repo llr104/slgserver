@@ -184,7 +184,7 @@ func (this *MapRoleBuild) ToProto() interface{}{
 	p.Defender = this.Defender
 	p.OccupyTime = this.OccupyTime.UnixNano()/1e6
 	p.GiveUpTime = this.GiveUpTime*1000
-	p.EndTime = this.EndTime.Unix()/1e6
+	p.EndTime = this.EndTime.UnixNano()/1e6
 
 	if this.EndTime.IsZero() == false{
 		if this.IsFortress(){
