@@ -506,9 +506,9 @@ func executeBuild(army *model.Army)  {
 
 	posId := global.ToPosition(army.ToX, army.ToY)
 	posArmys := ArmyLogic.GetStopArmys(posId)
-	isRoleEnemy := len(posArmys) == 0
+	isRoleEnemy := len(posArmys) != 0
 	var enemys []*model.Army
-	if isRoleEnemy {
+	if isRoleEnemy == false {
 		enemys = ArmyLogic.sys.GetArmy(army.ToX, army.ToY)
 	}else{
 		for _, v := range posArmys {
