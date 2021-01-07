@@ -169,6 +169,8 @@ func (this*armyMgr) GetOrCreate(rid int, cid int, order int8) (*model.Army, erro
 		}
 	}
 
+
+
 	//需要创建
 	army := &model.Army{RId: rid,
 		Order: order,
@@ -181,6 +183,14 @@ func (this*armyMgr) GetOrCreate(rid int, cid int, order int8) (*model.Army, erro
 		ConscriptTimes: `[0,0,0]`,
 		ConscriptCntArray: []int{0,0,0},
 		ConscriptTimeArray: []int64{0,0,0},
+	}
+
+	city, ok := RCMgr.Get(cid)
+	if ok {
+		army.FromX = city.X
+		army.FromY = city.Y
+		army.ToX = city.X
+		army.ToY = city.Y
 	}
 
 	_, err := db.MasterDB.Insert(army)

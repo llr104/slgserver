@@ -148,6 +148,10 @@ func (this*Army) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
+	if army.FromX != city.X || army.FromY != city.Y {
+		rsp.Body.Code = constant.ArmyIsOutside
+		return
+	}
 
 	//下阵
 	if reqObj.Position == -1{
@@ -461,6 +465,14 @@ func (this*Army) __back__(army* model.Army) int{
 		army.Cmd == model.ArmyCmdDefend ||
 		army.Cmd == model.ArmyCmdReclamation {
 		logic.ArmyLogic.ArmyBack(army)
+	}else if army.IsIdle(){
+		city, ok := mgr.RCMgr.Get(army.CityId)
+		if ok {
+			if city.X != army.FromX || city.Y != army.FromY{
+				logic.ArmyLogic.ArmyBack(army)
+			}
+		}
+
 	}
 	return constant.OK
 }
