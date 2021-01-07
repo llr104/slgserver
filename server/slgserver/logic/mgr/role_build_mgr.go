@@ -113,6 +113,21 @@ func (this*roleBuildMgr) PositionBuild(x, y int) (*model.MapRoleBuild, bool) {
 	}
 }
 
+func (this*roleBuildMgr) FortressCnt(rid int)int{
+	bs, ok := this.GetRoleBuild(rid)
+	cnt := 0
+	if ok == false {
+		return 0
+	}else{
+		for _, b := range bs {
+			if b.IsFortress(){
+				cnt +=1
+			}
+		}
+	}
+	return cnt
+}
+
 
 func (this*roleBuildMgr) AddBuild(rid, x, y int) (*model.MapRoleBuild, bool) {
 

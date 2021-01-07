@@ -170,6 +170,12 @@ func (this*NationMap) build(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
+	cnt := mgr.RBMgr.FortressCnt(role.RId)
+	if cnt >= static_conf.Basic.Build.FortressLimit{
+		rsp.Body.Code = constant.CanNotBuildNew
+		return
+	}
+
 	cfg, ok := static_conf.MapBCConf.BuildConfig(reqObj.Type, 1)
 	if ok == false{
 		rsp.Body.Code = constant.InvalidParam

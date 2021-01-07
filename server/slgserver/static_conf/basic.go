@@ -64,9 +64,10 @@ type city struct {
 }
 
 type build struct {
-	Des         string 	`json:"des"`
-	WarFree     int64  	`json:"war_free"`		//免战时间，单位秒
-	GiveUpTime 	int64  	`json:"giveUp_time"`	//建筑放弃时间
+	Des           string `json:"des"`
+	WarFree       int64  `json:"war_free"`       //免战时间，单位秒
+	GiveUpTime    int64  `json:"giveUp_time"`    //建筑放弃时间
+	FortressLimit int    `json:"fortress_limit"` //要塞上限
 }
 
 type npcLevel struct {
