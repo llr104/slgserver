@@ -137,7 +137,7 @@ func (this *armyLogic) running(){
 func (this *armyLogic) exeUpdate(army *model.Army) {
 	army.SyncExecute()
 	if army.Cmd == model.ArmyCmdBack {
-		this.deleteArmy(army.ToX, army.ToY)
+		this.deleteStopArmy(army.ToX, army.ToY)
 	}
 
 	if army.Cmd != model.ArmyCmdIdle {
@@ -164,7 +164,7 @@ func (this *armyLogic) exeArrive(army *model.Army) {
 		if ok {
 			//目前是自己的领地才能驻守
 			army.State = model.ArmyStop
-			this.addArmy(army)
+			this.addStopArmy(army)
 			this.Update(army)
 		}else{
 			war := NewEmptyWar(army)
@@ -178,7 +178,7 @@ func (this *armyLogic) exeArrive(army *model.Army) {
 			ok := mgr.RBMgr.BuildIsRId(army.ToX, army.ToY, army.RId)
 			if ok  {
 				//目前是自己的领地才能屯田
-				this.addArmy(army)
+				this.addStopArmy(army)
 				this.Reclamation(army)
 			}else{
 				war := NewEmptyWar(army)
@@ -212,15 +212,27 @@ func (this *armyLogic) exeArrive(army *model.Army) {
 	}else if army.Cmd == model.ArmyCmdTransfer {
 		//调动到位置了
 		if army.State == model.ArmyRunning{
-			army.State = model.ArmyStop
-			army.Cmd = model.ArmyCmdIdle
-			x := army.ToX
-			y := army.ToY
-			army.FromX = x
-			army.FromY = y
-			army.ToX = x
-			army.ToY = y
-			this.Update(army)
+
+			ok := mgr.RBMgr.BuildIsRId(army.ToX, army.ToY, army.RId)
+			if ok == false{
+				this.ArmyBack(army)
+			}else{
+				b, _ := mgr.RBMgr.PositionBuild(army.ToX, army.ToY)
+				if b.IsFortress(){
+					army.State = model.ArmyStop
+					army.Cmd = model.ArmyCmdIdle
+					x := army.ToX
+					y := army.ToY
+					army.FromX = x
+					army.FromY = y
+					army.ToX = x
+					army.ToY = y
+					this.addStopArmy(army)
+					this.Update(army)
+				}else{
+					this.ArmyBack(army)
+				}
+			}
 		}
 	}
 }
@@ -267,12 +279,12 @@ func (this *armyLogic) GiveUp(posId int) {
 	this.giveUpId <- posId
 }
 
-func (this *armyLogic) deleteArmy(x, y int) {
+func (this *armyLogic) deleteStopArmy(x, y int) {
 	posId := global.ToPosition(x, y)
 	delete(this.stopInPosArmys, posId)
 }
 
-func (this*armyLogic) addArmy(army *model.Army)  {
+func (this*armyLogic) addStopArmy(army *model.Army)  {
 	posId := global.ToPosition(army.ToX, army.ToY)
 
 	if _, ok := this.stopInPosArmys[posId]; ok == false {
