@@ -416,25 +416,7 @@ func (this*armyLogic) Reclamation(army *model.Army)  {
 	this.PushAction(army)
 }
 
-func (this*armyLogic) GetTransferArmyCnt(x, y int) int{
-	posId := global.ToPosition(x, y)
-	this.stop.RLock()
-	defer this.stop.RUnlock()
-	armys, ok := this.stopInPosArmys[posId]
-	cnt := 0
-	if ok {
-		for _, army := range armys {
-			if army.FromX == x && army.FromY == y{
-				cnt+=1
-			}else if army.ToX == x && army.ToY == y{
-				if army.Cmd == model.ArmyCmdTransfer{
-					cnt+=1
-				}
-			}
-		}
-	}
-	return cnt
-}
+
 
 
 

@@ -32,6 +32,7 @@ type MapRoleBuild struct {
 	Y          	int    	`json:"y"`
 	Type       	int8   	`json:"type"`
 	Level      	int8   	`json:"level"`
+	OPLevel     int8   	`json:"op_level"`
 	CurDurable 	int    	`json:"cur_durable"`
 	MaxDurable 	int    	`json:"max_durable"`
 	Defender   	int    	`json:"defender"`
@@ -80,3 +81,24 @@ type BuildRsp struct {
 	Type	int8	`json:"type"`
 }
 
+type UpBuildReq struct {
+	X 		int    	`json:"x"`
+	Y 		int    	`json:"y"`
+}
+
+type UpBuildRsp struct {
+	X       int     		`json:"x"`
+	Y       int     		`json:"y"`
+	Build	MapRoleBuild	`json:"build"`
+}
+
+type DelBuildReq struct {
+	X 		int    	`json:"x"`
+	Y 		int    	`json:"y"`
+}
+
+type DelBuildRsp struct {
+	X       int     		`json:"x"`
+	Y       int     		`json:"y"`
+	Build	MapRoleBuild	`json:"build"`
+}

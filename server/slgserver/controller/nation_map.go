@@ -25,6 +25,9 @@ func (this*NationMap) InitRouter(r *net.Router) {
 	g.AddRouter("scanBlock", this.scanBlock, middleware.CheckRole())
 	g.AddRouter("giveUp", this.giveUp, middleware.CheckRole())
 	g.AddRouter("build", this.build, middleware.CheckRole())
+	g.AddRouter("upBuild", this.upBuild, middleware.CheckRole())
+	g.AddRouter("delBuild", this.delBuild, middleware.CheckRole())
+
 }
 
 /*
@@ -187,8 +190,106 @@ func (this*NationMap) build(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		rsp.Body.Code = code
 		return
 	}
-	b.Build(*cfg)
+	b.BuildOrUp(*cfg)
 	b.SyncExecute()
 
 }
 
+
+func (this*NationMap) upBuild(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+	reqObj := &proto.UpBuildReq{}
+	rspObj := &proto.UpBuildRsp{}
+	mapstructure.Decode(req.Body.Msg, reqObj)
+	rsp.Body.Msg = rspObj
+	rsp.Body.Code = constant.OK
+
+	x := reqObj.X
+	y := reqObj.Y
+
+	rspObj.X = x
+	rspObj.Y = y
+
+	r, _ := req.Conn.GetProperty("role")
+	role := r.(*model.Role)
+
+	if mgr.RBMgr.BuildIsRId(x, y, role.RId) == false{
+		rsp.Body.Code = constant.BuildNotMe
+		return
+	}
+
+	b, ok := mgr.RBMgr.PositionBuild(x, y)
+	if ok == false {
+		rsp.Body.Code = constant.BuildNotMe
+		return
+	}
+
+	if b.IsResBuild() || b.IsInGiveUp() {
+		rsp.Body.Code = constant.CanNotUpBuild
+		return
+	}
+
+
+	cfg, ok := static_conf.MapBCConf.BuildConfig(b.Type, b.Level+1)
+	if ok == false{
+		rsp.Body.Code = constant.InvalidParam
+		return
+	}
+
+	code := mgr.RResMgr.TryUseNeed(role.RId, cfg.Need)
+	if code != constant.OK {
+		rsp.Body.Code = code
+		return
+	}
+	b.BuildOrUp(*cfg)
+	b.SyncExecute()
+	rspObj.Build = b.ToProto().(proto.MapRoleBuild)
+}
+
+func (this*NationMap) delBuild(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+	reqObj := &proto.UpBuildReq{}
+	rspObj := &proto.UpBuildRsp{}
+	mapstructure.Decode(req.Body.Msg, reqObj)
+	rsp.Body.Msg = rspObj
+	rsp.Body.Code = constant.OK
+
+	x := reqObj.X
+	y := reqObj.Y
+
+	rspObj.X = x
+	rspObj.Y = y
+
+	r, _ := req.Conn.GetProperty("role")
+	role := r.(*model.Role)
+
+	if mgr.RBMgr.BuildIsRId(x, y, role.RId) == false{
+		rsp.Body.Code = constant.BuildNotMe
+		return
+	}
+
+	b, ok := mgr.RBMgr.PositionBuild(x, y)
+	if ok == false {
+		rsp.Body.Code = constant.BuildNotMe
+		return
+	}
+
+	if b.IsResBuild() || b.IsInGiveUp() {
+		rsp.Body.Code = constant.CanNotUpBuild
+		return
+	}
+
+
+	cfg, ok := static_conf.MapBCConf.BuildConfig(b.Type, b.Level)
+	if ok == false{
+		rsp.Body.Code = constant.InvalidParam
+		return
+	}
+
+	code := mgr.RResMgr.TryUseNeed(role.RId, cfg.Need)
+	if code != constant.OK {
+		rsp.Body.Code = code
+		return
+	}
+	b.DelBuild(*cfg)
+	b.SyncExecute()
+	rspObj.Build = b.ToProto().(proto.MapRoleBuild)
+}

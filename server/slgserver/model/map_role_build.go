@@ -33,7 +33,7 @@ func (this *rbDBMgr) running()  {
 		case b := <- this.builds:
 			if b.Id >0 {
 				_, err := db.MasterDB.Table(b).ID(b.Id).Cols(
-					"rid", "name", "type", "level",
+					"rid", "name", "type", "level", "op_level",
 					"cur_durable", "max_durable", "occupy_time",
 					"giveUp_time", "end_time").Update(b)
 				if err != nil{
@@ -56,6 +56,7 @@ type MapRoleBuild struct {
 	RId   		int    		`xorm:"rid"`
 	Type  		int8   		`xorm:"type"`
 	Level		int8   		`xorm:"level"`
+	OPLevel		int8		`xorm:"op_level"`	//操作level
 	X          	int       	`xorm:"x"`
 	Y          	int       	`xorm:"y"`
 	Name       	string    	`xorm:"name"`
@@ -67,7 +68,7 @@ type MapRoleBuild struct {
 	MaxDurable 	int       	`xorm:"max_durable"`
 	Defender   	int       	`xorm:"defender"`
 	OccupyTime 	time.Time 	`xorm:"occupy_time"`
-	EndTime 	time.Time 	`xorm:"end_time"`	//建造完的时间
+	EndTime 	time.Time 	`xorm:"end_time"`	//建造或升级完的时间
 	GiveUpTime 	int64 		`xorm:"giveUp_time"`
 }
 
@@ -75,12 +76,16 @@ func (this *MapRoleBuild) TableName() string {
 	return "tb_map_role_build" + fmt.Sprintf("_%d", ServerId)
 }
 
-func (this* MapRoleBuild) LoadCfg() {
+func (this* MapRoleBuild) Init() {
 	if cfg, _ := static_conf.MapBuildConf.BuildConfig(this.Type, this.Level); cfg != nil {
+		this.Name = cfg.Name
+		this.Level = cfg.Level
+		this.Type = cfg.Type
 		this.Wood = cfg.Wood
 		this.Iron = cfg.Iron
 		this.Stone = cfg.Stone
 		this.Grain = cfg.Grain
+		this.MaxDurable = cfg.Durable
 	}
 }
 
@@ -96,11 +101,24 @@ func (this* MapRoleBuild) Reset() {
 			this.Iron = cfg.Iron
 			this.Stone = cfg.Stone
 			this.Grain = cfg.Grain
+			this.MaxDurable = cfg.Durable
 		}
 	}
 
 	this.GiveUpTime = 0
 	this.RId = 0
+	this.EndTime = time.Time{}
+	this.OPLevel = this.Level
+	this.CurDurable = this.MaxDurable
+}
+
+func (this* MapRoleBuild) ConvertToRes() {
+	this.Init()
+
+	this.GiveUpTime = 0
+	this.EndTime = time.Time{}
+	this.OPLevel = this.Level
+	this.CurDurable = util.MinInt(this.MaxDurable, this.CurDurable)
 }
 
 func (this* MapRoleBuild) IsInGiveUp() bool {
@@ -125,18 +143,22 @@ func (this* MapRoleBuild) IsFortress() bool  {
 	return this.Type == MapBuildFortress
 }
 
-func (this* MapRoleBuild) Build(cfg static_conf.BCLevelCfg) {
+func (this* MapRoleBuild) BuildOrUp(cfg static_conf.BCLevelCfg) {
 	this.Type = cfg.Type
-	this.Level = 0
+	this.Level = cfg.Level -1
 	this.Name = cfg.Name
-	this.MaxDurable = cfg.Durable
-	this.CurDurable = util.MinInt(this.MaxDurable, this.CurDurable)
+	this.OPLevel = cfg.Level
 	this.GiveUpTime = 0
-	this.Defender = cfg.Defender
+
 	this.Wood = 0
 	this.Iron = 0
 	this.Stone = 0
 	this.Grain = 0
+	this.EndTime = time.Now().Add(time.Duration(cfg.Time) * time.Second)
+}
+
+func (this* MapRoleBuild) DelBuild(cfg static_conf.BCLevelCfg) {
+	this.OPLevel = 0
 	this.EndTime = time.Now().Add(time.Duration(cfg.Time) * time.Second)
 }
 
@@ -176,12 +198,9 @@ func (this *MapRoleBuild) ToProto() interface{}{
 	p.X = this.X
 	p.Y = this.Y
 	p.Type = this.Type
-	p.CurDurable = this.CurDurable
-	p.MaxDurable = this.MaxDurable
-
 	p.RId = this.RId
 	p.Name = this.Name
-	p.Defender = this.Defender
+
 	p.OccupyTime = this.OccupyTime.UnixNano()/1e6
 	p.GiveUpTime = this.GiveUpTime*1000
 	p.EndTime = this.EndTime.UnixNano()/1e6
@@ -189,12 +208,28 @@ func (this *MapRoleBuild) ToProto() interface{}{
 	if this.EndTime.IsZero() == false{
 		if this.IsFortress(){
 			if time.Now().Before(this.EndTime) == false{
-				this.Level += 1
-				this.EndTime = time.Time{}
+
+				if this.OPLevel == 0{
+					this.ConvertToRes()
+				}else{
+					this.Level = this.OPLevel
+					this.EndTime = time.Time{}
+					cfg, ok := static_conf.MapBCConf.BuildConfig(this.Type, this.Level)
+					if ok {
+						this.MaxDurable = cfg.Durable
+						this.CurDurable = util.MinInt(this.MaxDurable, this.CurDurable)
+						this.Defender = cfg.Defender
+					}
+				}
 			}
 		}
 	}
+
+	p.CurDurable = this.CurDurable
+	p.MaxDurable = this.MaxDurable
+	p.Defender = this.Defender
 	p.Level = this.Level
+	p.OPLevel = this.OPLevel
 	return p
 }
 

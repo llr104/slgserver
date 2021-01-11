@@ -47,7 +47,7 @@
     "des": "建筑的一些配置",
     "war_free": 20,
     "giveUp_time": 30,
-    "fortress_limit": 5
+    "fortress_limit": 10
   },
   "npc": {
     "des": "npc一些配置",

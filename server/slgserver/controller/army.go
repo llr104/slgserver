@@ -556,7 +556,7 @@ func (this*Army) __transfer__(reqObj *proto.AssignArmyReq, army* model.Army, rol
 
 
 	cnt := static_conf.MapBCConf.GetHoldArmyCnt(b.Type, b.Level)
-	if cnt > logic.ArmyLogic.GetTransferArmyCnt(b.X, b.Y) {
+	if cnt > mgr.AMgr.BelongPosArmyCnt(b.RId, b.X, b.Y) {
 		return this.__after__(reqObj, army)
 	}else{
 		return constant.HoldIsFull

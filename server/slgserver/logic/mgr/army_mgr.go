@@ -155,6 +155,23 @@ func (this*armyMgr) GetByRId(rid int) ([]*model.Army, bool){
 	return as, ok
 }
 
+//归属于该位置的军队数量
+func (this*armyMgr) BelongPosArmyCnt(rid int, x, y int) int{
+	cnt := 0
+	armys, ok := this.GetByRId(rid)
+	if ok {
+		for _, army := range armys {
+			if army.FromX == x && army.FromY == y{
+				cnt += 1
+			}else if army.Cmd == model.ArmyCmdTransfer && army.ToX == x && army.ToY == y {
+				cnt += 1
+			}
+		}
+	}
+
+	return cnt
+}
+
 func (this*armyMgr) GetOrCreate(rid int, cid int, order int8) (*model.Army, error){
 
 	this.mutex.RLock()
