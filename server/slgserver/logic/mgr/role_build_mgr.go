@@ -133,6 +133,7 @@ func (this*roleBuildMgr) CheckDestroy() []int {
 
 	for _, build := range builds {
 		build.ConvertToRes()
+		build.SyncExecute()
 	}
 	return ret
 }
