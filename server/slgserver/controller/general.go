@@ -63,7 +63,7 @@ func (this*General) drawGenerals(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
 
-	cost := static_conf.Basic.General.DrawGeneralCost * reqObj.DrawTimes;
+	cost := static_conf.Basic.General.DrawGeneralCost * reqObj.DrawTimes
 	ok := mgr.RResMgr.GoldIsEnough(role.RId,cost)
 	if ok == false{
 		rsp.Body.Code = constant.GoldNotEnough
