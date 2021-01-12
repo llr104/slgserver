@@ -52,7 +52,7 @@ func AfterInit() {
 			time.Sleep(1*time.Second)
 			buildIds := mgr.RBMgr.CheckGiveUp()
 			for _, buildId := range buildIds {
-				ArmyLogic.Interrupt(buildId)
+				ArmyLogic.GiveUp(buildId)
 			}
 
 			buildIds = mgr.RBMgr.CheckDestroy()

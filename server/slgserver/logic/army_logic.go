@@ -17,9 +17,10 @@ type armyLogic struct {
 	out     		sync.RWMutex
 	endTime 		sync.RWMutex
 
-	interruptId chan int
-	arriveArmys chan *model.Army
-	updateArmys chan *model.Army
+	interruptId 	chan int
+	giveUpId		chan int
+	arriveArmys 	chan *model.Army
+	updateArmys 	chan *model.Army
 
 	outArmys       	map[int]*model.Army         //城外的军队
 	endTimeArmys   	map[int64][]*model.Army     //key:到达时间
@@ -100,16 +101,36 @@ func (this *armyLogic) running(){
 			case army := <-this.arriveArmys:{
 				this.exeArrive(army)
 			}
-			case interruptId := <- this.interruptId:{
+			case giveId := <- this.giveUpId:{
+				//在该位置驻守、调动的都需要返回
 				this.stop.RLock()
-				armys, ok := this.stopInPosArmys[interruptId]
+				armys, ok := this.stopInPosArmys[giveId]
 				this.stop.RUnlock()
 
 				if ok {
 					for _, army := range armys {
 						this.ArmyBack(army)
 					}
-					this.deleteStopArmy(interruptId)
+					this.deleteStopArmy(giveId)
+				}
+			}
+			case interruptId := <- this.interruptId:{
+				//只有调动到该位置的军队需要返回
+				var targets []*model.Army
+				this.stop.Lock()
+				armys, ok := this.stopInPosArmys[interruptId]
+				if ok {
+					for key, army := range armys {
+						if army.FromX == army.ToX && army.FromY == army.ToY{
+							targets = append(targets, army)
+							delete(armys, key)
+						}
+					}
+				}
+				this.stop.Unlock()
+
+				for _, target := range targets {
+					this.ArmyBack(target)
 				}
 			}
 		}
@@ -295,6 +316,10 @@ func (this *armyLogic) Update(army *model.Army) {
 
 func (this *armyLogic) Interrupt(posId int) {
 	this.interruptId <- posId
+}
+
+func (this *armyLogic) GiveUp(posId int) {
+	this.giveUpId <- posId
 }
 
 func (this* armyLogic) GetStopArmys(posId int)[]*model.Army {

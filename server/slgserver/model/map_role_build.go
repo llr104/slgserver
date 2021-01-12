@@ -109,16 +109,13 @@ func (this* MapRoleBuild) Reset() {
 	this.RId = 0
 	this.EndTime = time.Time{}
 	this.OPLevel = this.Level
-	this.CurDurable = this.MaxDurable
+	this.CurDurable = util.MinInt(this.MaxDurable, this.CurDurable)
 }
 
 func (this* MapRoleBuild) ConvertToRes() {
-	this.Init()
-
-	this.GiveUpTime = 0
-	this.EndTime = time.Time{}
-	this.OPLevel = this.Level
-	this.CurDurable = util.MinInt(this.MaxDurable, this.CurDurable)
+	rid := this.RId
+	this.Reset()
+	this.RId = rid
 }
 
 func (this* MapRoleBuild) IsInGiveUp() bool {

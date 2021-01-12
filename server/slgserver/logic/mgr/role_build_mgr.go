@@ -132,7 +132,7 @@ func (this*roleBuildMgr) CheckDestroy() []int {
 	this.destroyMutex.Unlock()
 
 	for _, build := range builds {
-		this.RemoveFromRole(build)
+		build.ConvertToRes()
 	}
 	return ret
 }
