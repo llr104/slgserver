@@ -17,9 +17,9 @@ type armyLogic struct {
 	out     		sync.RWMutex
 	endTime 		sync.RWMutex
 
-	giveUpId       	chan int
-	arriveArmys    	chan *model.Army
-	updateArmys    	chan *model.Army
+	interruptId chan int
+	arriveArmys chan *model.Army
+	updateArmys chan *model.Army
 
 	outArmys       	map[int]*model.Army         //城外的军队
 	endTimeArmys   	map[int64][]*model.Army     //key:到达时间
@@ -100,16 +100,16 @@ func (this *armyLogic) running(){
 			case army := <-this.arriveArmys:{
 				this.exeArrive(army)
 			}
-			case giveUpId := <- this.giveUpId:{
+			case interruptId := <- this.interruptId:{
 				this.stop.RLock()
-				armys, ok := this.stopInPosArmys[giveUpId]
+				armys, ok := this.stopInPosArmys[interruptId]
 				this.stop.RUnlock()
 
 				if ok {
 					for _, army := range armys {
 						this.ArmyBack(army)
 					}
-					this.deleteStopArmy(giveUpId)
+					this.deleteStopArmy(interruptId)
 				}
 			}
 		}
@@ -293,8 +293,8 @@ func (this *armyLogic) Update(army *model.Army) {
 	this.updateArmys <- army
 }
 
-func (this *armyLogic) GiveUp(posId int) {
-	this.giveUpId <- posId
+func (this *armyLogic) Interrupt(posId int) {
+	this.interruptId <- posId
 }
 
 func (this* armyLogic) GetStopArmys(posId int)[]*model.Army {
@@ -392,6 +392,8 @@ func (this*armyLogic) PushAction(army *model.Army)  {
 }
 
 func (this*armyLogic) ArmyBack(army *model.Army)  {
+	army.ClearConscript()
+
 	army.State = model.ArmyRunning
 	army.Cmd = model.ArmyCmdBack
 

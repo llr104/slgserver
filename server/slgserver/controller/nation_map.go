@@ -190,6 +190,7 @@ func (this*NationMap) build(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		rsp.Body.Code = code
 		return
 	}
+
 	b.BuildOrUp(*cfg)
 	b.SyncExecute()
 
@@ -266,30 +267,9 @@ func (this*NationMap) delBuild(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
+	rsp.Body.Code = mgr.RBMgr.Destroy(x, y)
 	b, ok := mgr.RBMgr.PositionBuild(x, y)
-	if ok == false {
-		rsp.Body.Code = constant.BuildNotMe
-		return
+	if ok {
+		rspObj.Build = b.ToProto().(proto.MapRoleBuild)
 	}
-
-	if b.IsResBuild() || b.IsInGiveUp() {
-		rsp.Body.Code = constant.CanNotUpBuild
-		return
-	}
-
-
-	cfg, ok := static_conf.MapBCConf.BuildConfig(b.Type, b.Level)
-	if ok == false{
-		rsp.Body.Code = constant.InvalidParam
-		return
-	}
-
-	code := mgr.RResMgr.TryUseNeed(role.RId, cfg.Need)
-	if code != constant.OK {
-		rsp.Body.Code = code
-		return
-	}
-	b.DelBuild(*cfg)
-	b.SyncExecute()
-	rspObj.Build = b.ToProto().(proto.MapRoleBuild)
 }

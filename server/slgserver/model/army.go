@@ -102,6 +102,7 @@ func (this *Army) IsCanOutWar() bool{
 	return this.Gens[0] != nil && this.Cmd == ArmyCmdIdle
 }
 
+
 func (this *Army) AfterSet(name string, cell xorm.Cell){
 	if name == "generals"{
 		this.GeneralArray = []int{0,0,0}
@@ -236,6 +237,15 @@ func (this*Army) PositionCanModify(position int) bool {
 	}
 }
 
+func (this*Army) ClearConscript()  {
+	if this.Cmd == ArmyCmdConscript{
+		for i, _ := range this.ConscriptTimeArray {
+			this.ConscriptCntArray[i] = 0
+			this.ConscriptTimeArray[i] = 0
+		}
+		this.Cmd = ArmyCmdIdle
+	}
+}
 
 func (this*Army) IsIdle() bool {
 	return this.Cmd == ArmyCmdIdle

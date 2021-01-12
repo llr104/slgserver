@@ -59,6 +59,7 @@ const CanNotTransfer = 49         //不能调兵
 const HoldIsFull = 50             //坑位已满
 const ArmyIsOutside = 51          //队伍在城外
 const CanNotUpBuild = 52          //不能升级建筑
+const CanNotDestroy = 53          //不能拆除建筑
 
 
 
