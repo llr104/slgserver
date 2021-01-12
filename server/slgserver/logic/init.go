@@ -33,6 +33,7 @@ func Init() {
 	ArmyLogic = &armyLogic{
 		arriveArmys:    make(chan *model.Army, 100),
 		interruptId:    make(chan int, 100),
+		giveUpId: 		make(chan int, 100),
 		updateArmys:    make(chan *model.Army, 100),
 		outArmys:       make(map[int]*model.Army),
 		endTimeArmys:   make(map[int64][]*model.Army),

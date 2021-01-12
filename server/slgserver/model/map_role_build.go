@@ -114,8 +114,10 @@ func (this* MapRoleBuild) Reset() {
 
 func (this* MapRoleBuild) ConvertToRes() {
 	rid := this.RId
+	giveUp := this.GiveUpTime
 	this.Reset()
 	this.RId = rid
+	this.GiveUpTime = giveUp
 }
 
 func (this* MapRoleBuild) IsInGiveUp() bool {
