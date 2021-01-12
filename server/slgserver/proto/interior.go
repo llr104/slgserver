@@ -4,8 +4,8 @@ type CollectionReq struct {
 }
 
 type CollectionRsp struct {
+	Gold	int		`json:"gold"`
 }
-
 
 
 type TransformReq struct {

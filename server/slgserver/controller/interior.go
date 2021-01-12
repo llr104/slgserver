@@ -37,11 +37,12 @@ func (this*Interior) collection(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	if ok == false {
 		rsp.Body.Code = constant.DBError
 		return
-
 	}
-	roleRes.Gold += mgr.GetYield(roleRes.RId).Gold
-	roleRes.SyncExecute()
 
+	gold := mgr.GetYield(roleRes.RId).Gold
+	rspObj.Gold = gold
+	roleRes.Gold += gold
+	roleRes.SyncExecute()
 }
 
 
