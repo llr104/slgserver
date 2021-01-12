@@ -173,7 +173,14 @@ func (this* armyLogic) updatePassBy() {
 func (this *armyLogic) exeUpdate(army *model.Army) {
 	army.SyncExecute()
 	if army.Cmd == model.ArmyCmdBack {
-		this.deleteStopArmy(global.ToPosition(army.ToX, army.ToY))
+		this.stop.Lock()
+		posId := global.ToPosition(army.ToX, army.ToY)
+		armys, ok := this.stopInPosArmys[posId]
+		if ok {
+			delete(armys, army.Id)
+			this.stopInPosArmys[posId] = armys
+		}
+		this.stop.Unlock()
 	}
 
 	this.out.Lock()
