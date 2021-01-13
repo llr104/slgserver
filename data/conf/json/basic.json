@@ -34,7 +34,9 @@
     "depot_capacity": 100000000000,
     "build_limit": 20,
     "recovery_time": 20,
-    "decree_limit": 20
+    "decree_limit": 20,
+    "collect_times_limit": 3,
+    "collect_interval": 30
   },
   "city": {
     "des": "城池的一些配置",

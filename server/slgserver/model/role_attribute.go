@@ -6,6 +6,7 @@ import (
 	"slgserver/db"
 	"slgserver/log"
 	"slgserver/net"
+	"time"
 )
 
 /*******db 操作begin********/
@@ -25,7 +26,7 @@ func (this *roleAttrDBMgr) running()  {
 		case attr := <- this.rattr:
 			if attr.Id >0 {
 				_, err := db.MasterDB.Table(attr).ID(attr.Id).Cols(
-					"parent_id").Update(attr)
+					"parent_id", "collect_times", "last_collect_time").Update(attr)
 				if err != nil{
 					log.DefaultLog.Warn("db error", zap.Error(err))
 				}
@@ -42,10 +43,12 @@ func (this *roleAttrDBMgr) push(attr *RoleAttribute)  {
 /*******db 操作end********/
 
 type RoleAttribute struct {
-	Id			int		`xorm:"id pk autoincr"`
-	RId			int		`xorm:"rid"`
-	UnionId 	int		`xorm:"-"`			//联盟id
-	ParentId	int		`xorm:"parent_id"`	//上级id（被沦陷）
+	Id              int       `xorm:"id pk autoincr"`
+	RId             int       `xorm:"rid"`
+	UnionId         int       `xorm:"-"`					//联盟id
+	ParentId        int       `xorm:"parent_id"`			//上级id（被沦陷）
+	CollectTimes    int8      `xorm:"collect_times"`		//征收次数
+	LastCollectTime time.Time `json:"last_collect_time"`	//最后征收的时间
 }
 
 

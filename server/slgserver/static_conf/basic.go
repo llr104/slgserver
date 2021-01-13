@@ -37,22 +37,24 @@ type general struct {
 }
 
 type role struct {
-	Des           string 	`json:"des"`
-	Wood          int 		`json:"wood"`
-	Iron          int 		`json:"iron"`
-	Stone         int 		`json:"stone"`
-	Grain         int 		`json:"grain"`
-	Gold          int 		`json:"gold"`
-	Decree        int 		`json:"decree"`
-	WoodYield     int 		`json:"wood_yield"`
-	IronYield     int 		`json:"iron_yield"`
-	StoneYield    int 		`json:"stone_yield"`
-	GrainYield    int 		`json:"grain_yield"`
-	GoldYield     int 		`json:"gold_yield"`
-	DepotCapacity int 		`json:"depot_capacity"`
-	BuildLimit    int 		`json:"build_limit"`
-	RecoveryTime  int 		`json:"recovery_time"`
-	DecreeLimit   int 		`json:"decree_limit"`
+	Des           		string 	`json:"des"`
+	Wood          		int 	`json:"wood"`
+	Iron          		int 	`json:"iron"`
+	Stone         		int 	`json:"stone"`
+	Grain         		int 	`json:"grain"`
+	Gold          		int 	`json:"gold"`
+	Decree            	int 	`json:"decree"`
+	WoodYield         	int 	`json:"wood_yield"`
+	IronYield         	int 	`json:"iron_yield"`
+	StoneYield        	int 	`json:"stone_yield"`
+	GrainYield        	int 	`json:"grain_yield"`
+	GoldYield         	int 	`json:"gold_yield"`
+	DepotCapacity     	int 	`json:"depot_capacity"`			//仓库初始容量
+	BuildLimit        	int 	`json:"build_limit"`			//野外建筑上限
+	RecoveryTime      	int 	`json:"recovery_time"`
+	DecreeLimit       	int 	`json:"decree_limit"`			//令牌上限
+	CollectTimesLimit 	int8	`json:"collect_times_limit"`	//每日征收次数上限
+	CollectInterval   	int 	`json:"collect_interval"`		//征收间隔
 }
 
 type city struct {
