@@ -33,6 +33,7 @@ type general struct {
 	ReclamationCost       int    `json:"reclamation_cost"`        //屯田消耗政令
 	DrawGeneralCost       int    `json:"draw_general_cost"`       //抽卡消耗金币
 	PrPoint               int    `json:"pr_pont"`                 //合成一个武将或者的技能点
+	Limit                 int    `json:"limit"`					  //武将数量上限
 
 }
 

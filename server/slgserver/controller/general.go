@@ -70,6 +70,13 @@ func (this*General) drawGenerals(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
+	limit := static_conf.Basic.General.Limit
+	cnt := mgr.GMgr.ActiveCount(role.RId)
+	if cnt + reqObj.DrawTimes > limit{
+		rsp.Body.Code = constant.OutGeneralLimit
+		return
+	}
+
 	gs, ok := mgr.GMgr.RandCreateGeneral(role.RId,reqObj.DrawTimes)
 
 	if ok {
@@ -99,7 +106,7 @@ func (this*General) ComposeGeneral(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 
 
-	gs, ok := mgr.GMgr.HasGenerl(role.RId,reqObj.CompId)
+	gs, ok := mgr.GMgr.HasGeneral(role.RId,reqObj.CompId)
 	//是否有这个武将
 	if ok == false{
 		rsp.Body.Code = constant.GeneralNoHas
@@ -108,7 +115,7 @@ func (this*General) ComposeGeneral(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 
 	//是否都有这个武将
-	gss ,ok := mgr.GMgr.HasGenerls(role.RId,reqObj.GIds)
+	gss ,ok := mgr.GMgr.HasGenerals(role.RId,reqObj.GIds)
 	if ok == false{
 		rsp.Body.Code = constant.GeneralNoHas
 		return
@@ -169,7 +176,7 @@ func (this*General) AddPrGeneral(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
 
-	gs, ok := mgr.GMgr.HasGenerl(role.RId,reqObj.CompId)
+	gs, ok := mgr.GMgr.HasGeneral(role.RId,reqObj.CompId)
 	//是否有这个武将
 	if ok == false{
 		rsp.Body.Code = constant.GeneralNoHas

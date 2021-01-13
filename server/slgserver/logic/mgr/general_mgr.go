@@ -156,7 +156,7 @@ func (this*generalMgr) GetByGId(gid int) (*model.General, bool){
 }
 
 //这个角色是否有这个武将
-func (this*generalMgr) HasGenerl(rid int ,gid int) (*model.General,bool){
+func (this*generalMgr) HasGeneral(rid int ,gid int) (*model.General,bool){
 	r, ok := this.GetByRId(rid)
 	if ok {
 		for _, v := range r {
@@ -169,10 +169,10 @@ func (this*generalMgr) HasGenerl(rid int ,gid int) (*model.General,bool){
 	return nil,false
 }
 
-func (this*generalMgr) HasGenerls(rid int ,gids []int) ([]*model.General,bool){
+func (this*generalMgr) HasGenerals(rid int, gids []int) ([]*model.General,bool){
 	gs := make([]*model.General, 0)
 	for i := 0; i < len(gids); i++ {
-		g,ok := this.HasGenerl(rid,gids[i])
+		g,ok := this.HasGeneral(rid,gids[i])
 		if ok{
 			gs = append(gs,g)
 		}else{
@@ -182,6 +182,18 @@ func (this*generalMgr) HasGenerls(rid int ,gids []int) ([]*model.General,bool){
 	return gs,true
 }
 
+func (this*generalMgr) ActiveCount(rid int) int{
+	gs, ok := this.GetByRId(rid)
+	cnt := 0
+	if ok {
+		for _, g := range gs {
+			if g.ParentId == 0{
+				cnt += 1
+			}
+		}
+	}
+	return cnt
+}
 
 func (this*generalMgr) NewGeneral(cfgId int, rid int) (*model.General, bool) {
 	cfg, ok := general.General.GMap[cfgId]

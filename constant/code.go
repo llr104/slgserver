@@ -62,6 +62,7 @@ const CanNotUpBuild = 52          //不能升级建筑
 const CanNotDestroy = 53          //不能拆除建筑
 const OutCollectTimesLimit = 54   //超过征收次数
 const InCdCanNotOperate = 55	  //cd内不能操作
+const OutGeneralLimit = 56		  //武将超过上限了
 
 
 

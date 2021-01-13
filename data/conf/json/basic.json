@@ -16,7 +16,8 @@
     "reclamation_time": 30,
     "reclamation_cost": 1,
     "draw_general_cost": 30,
-    "pr_pont": 1000
+    "pr_pont": 1000,
+    "limit": 100
   },
   "role": {
     "des": "角色的一些配置",
