@@ -55,14 +55,14 @@ const BuildWarFree = 46           //免战中
 const ArmyConscript  = 47         //征兵中
 const BuildGiveUpAlready = 48     //领地已经在放弃了
 const CanNotBuildNew = 49         //不能再新建建筑在领地上
-const CanNotTransfer = 49         //不能调兵
-const HoldIsFull = 50             //坑位已满
-const ArmyIsOutside = 51          //队伍在城外
-const CanNotUpBuild = 52          //不能升级建筑
-const CanNotDestroy = 53          //不能拆除建筑
-const OutCollectTimesLimit = 54   //超过征收次数
-const InCdCanNotOperate = 55	  //cd内不能操作
-const OutGeneralLimit = 56		  //武将超过上限了
+const CanNotTransfer = 50         //不能调兵
+const HoldIsFull = 51             //坑位已满
+const ArmyIsOutside = 52          //队伍在城外
+const CanNotUpBuild = 53          //不能升级建筑
+const CanNotDestroy = 54          //不能拆除建筑
+const OutCollectTimesLimit = 55   //超过征收次数
+const InCdCanNotOperate = 56	  //cd内不能操作
+const OutGeneralLimit = 57		  //武将超过上限了
 
 
 
