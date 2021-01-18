@@ -28,6 +28,7 @@ func (this*General) InitRouter(r *net.Router) {
 	g.AddRouter("drawGeneral", this.drawGenerals)
 	g.AddRouter("composeGeneral", this.ComposeGeneral)
 	g.AddRouter("addPrGeneral", this.AddPrGeneral)
+	g.AddRouter("convert", this.convert)
 
 }
 
@@ -206,3 +207,35 @@ func (this*General) AddPrGeneral(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 }
 
+func (this*General) convert(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+	reqObj := &proto.ConvertReq{}
+	rspObj := &proto.ConvertRsp{}
+
+	mapstructure.Decode(req.Body.Msg, reqObj)
+	rsp.Body.Msg = rspObj
+	rsp.Body.Code = constant.OK
+
+	r, _ := req.Conn.GetProperty("role")
+	role := r.(*model.Role)
+	roleRes, ok:= mgr.RResMgr.Get(role.RId)
+	if ok == false {
+		rsp.Body.Code = constant.DBError
+		return
+	}
+
+	gold := 0
+	okArray := make([]int, 0)
+	for _, gid := range reqObj.GIds {
+		g, ok := mgr.GMgr.GetByGId(gid)
+		if ok {
+			okArray = append(okArray, gid)
+			gold += 10*g.StarLv
+		}
+	}
+
+	roleRes.Gold += gold
+	rspObj.Gold = roleRes.Gold
+	rspObj.GIds = okArray
+
+	roleRes.SyncExecute()
+}

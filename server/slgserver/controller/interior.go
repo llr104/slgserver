@@ -9,6 +9,7 @@ import (
 	"slgserver/server/slgserver/model"
 	"slgserver/server/slgserver/proto"
 	"slgserver/server/slgserver/static_conf"
+	"slgserver/server/slgserver/static_conf/facility"
 	"time"
 )
 
@@ -24,6 +25,7 @@ func (this*Interior) InitRouter(r *net.Router) {
 	g.AddRouter("collect", this.collect)
 	g.AddRouter("openCollect", this.openCollect)
 	g.AddRouter("transform", this.transform)
+
 }
 
 func (this*Interior) collect(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
@@ -127,6 +129,7 @@ func (this*Interior) openCollect(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	}
 }
 
+
 func (this*Interior) transform(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	reqObj := &proto.TransformReq{}
 	rspObj := &proto.TransformRsp{}
@@ -143,8 +146,13 @@ func (this*Interior) transform(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	//main, ok := logic.RCMgr.GetMainCity(role.RId)
-	//add := logic.RFMgr.GetAdditions(main.CityId, facility.TypeTax)
+	main, _ := mgr.RCMgr.GetMainCity(role.RId)
+
+	lv := mgr.RFMgr.GetFacilityLv(main.CityId, facility.JiShi)
+	if lv <= 0{
+		rsp.Body.Code = constant.NotHasJiShi
+		return
+	}
 
 	len := 4
 	ret := make([]int, len)
@@ -188,5 +196,4 @@ func (this*Interior) transform(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	roleRes.SyncExecute()
 
 }
-
 
