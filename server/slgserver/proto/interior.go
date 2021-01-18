@@ -34,4 +34,5 @@ type ConvertReq struct {
 type ConvertRsp struct {
 	GIds		[]int	`json:"gIds"`
 	Gold		int		`json:"gold"`
+	AddGold		int		`json:"add_gold"`
 }

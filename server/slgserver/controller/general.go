@@ -229,11 +229,12 @@ func (this*General) convert(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		g, ok := mgr.GMgr.GetByGId(gid)
 		if ok {
 			okArray = append(okArray, gid)
-			gold += 10*g.StarLv
+			gold += 10*g.Star*(1 + g.StarLv)
 		}
 	}
 
 	roleRes.Gold += gold
+	rspObj.AddGold = gold
 	rspObj.Gold = roleRes.Gold
 	rspObj.GIds = okArray
 
