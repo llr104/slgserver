@@ -76,8 +76,8 @@ type General struct {
 	DefenseAdded  int  		`xorm:"defense_added"`
 	SpeedAdded    int  		`xorm:"speed_added"`
 	DestroyAdded  int  		`xorm:"destroy_added"`
-	StarLv        int  		`xorm:"star_lv"`
-	Star          int  		`xorm:"star"`
+	StarLv        int8  	`xorm:"star_lv"`
+	Star          int8  	`xorm:"star"`
 	ParentId      int  		`xorm:"parentId"`
 	State         int8 		`xorm:"state"`
 }

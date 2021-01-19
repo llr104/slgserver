@@ -76,7 +76,6 @@ CREATE TABLE IF NOT EXISTS `tb_map_role_build_1` (
    `name` varchar(100) NOT NULL COMMENT '名称',
    `max_durable` int unsigned NOT NULL COMMENT '最大耐久',
    `cur_durable` int unsigned NOT NULL COMMENT '当前耐久',
-   `defender` int unsigned NOT NULL COMMENT '守军强度',
    `end_time` timestamp DEFAULT '2013-03-15 14:38:09' COMMENT '建造、升级、拆除结束时间',
    `occupy_time` timestamp DEFAULT '2013-03-15 14:38:09' COMMENT '占领时间',
    `giveUp_time` int unsigned DEFAULT '0' COMMENT '放弃时间',

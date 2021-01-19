@@ -20,6 +20,36 @@ type sysArmyLogic struct {
 	sysArmys    map[int][]*model.Army //key:posId 系统建筑军队
 }
 
+func (this* sysArmyLogic) getArmyCfg(x, y int) (star int8, lv int8, soilders int) {
+	defender := 1
+	star = 3
+	lv = 5
+	soilders = 100
+
+	if mapBuild, ok := mgr.NMMgr.PositionBuild(x, y); ok{
+		cfg, ok := static_conf.MapBuildConf.BuildConfig(mapBuild.Type, mapBuild.Level)
+		if ok {
+			defender = cfg.Defender
+			if npc, ok := static_conf.Basic.GetNPC(cfg.Level); ok {
+				soilders = npc.Soilders
+			}
+		}
+	}
+
+	if defender == 1{
+		star = 3
+		lv = 5
+	}else if defender == 2{
+		star = 4
+		lv = 10
+	}else {
+		star = 5
+		lv = 20
+	}
+
+	return star, lv, soilders
+}
+
 func (this *sysArmyLogic) GetArmy(x, y int) []*model.Army {
 	posId := global.ToPosition(x, y)
 	this.mutex.Lock()
@@ -28,40 +58,30 @@ func (this *sysArmyLogic) GetArmy(x, y int) []*model.Army {
 	if ok {
 		return a
 	}else{
-		out, ok := mgr.GMgr.GetNPCGenerals(3)
-		gsId := make([]int, 0)
-		gs := make([]*model.General, 3)
-
-		for i := 0; i < len(out) ; i++ {
-			gs[i] = &out[i]
-		}
-
 		armys := make([]*model.Army, 0)
+
+		star, lv, soilders := this.getArmyCfg(x, y)
+		out, ok := mgr.GMgr.GetNPCGenerals(3, star, lv)
 		if ok {
-			if cfg, ok := mgr.NMMgr.PositionBuild(x, y); ok{
-				soilder := 100*int(cfg.Level)
-				npc, ok1 := static_conf.Basic.GetNPC(cfg.Level)
-				if ok1 {
-					soilder = npc.Soilders
-				}
+			gsId := make([]int, 0)
+			gs := make([]*model.General, 3)
 
-				scnt := []int{soilder, soilder, soilder}
-				army := &model.Army{RId: 0, Order: 0, CityId: 0,
-					GeneralArray: gsId, Gens: gs, SoldierArray: scnt}
-				army.ToGeneral()
-				army.ToSoldier()
-
-				armys = append(armys, army)
-				posId := global.ToPosition(x, y)
-				this.sysArmys[posId] = armys
-
-				return armys
-			}else{
-				return armys
+			for i := 0; i < len(out) ; i++ {
+				gs[i] = &out[i]
 			}
-		}else{
-			return armys
+
+			scnt := []int{soilders, soilders, soilders}
+			army := &model.Army{RId: 0, Order: 0, CityId: 0,
+				GeneralArray: gsId, Gens: gs, SoldierArray: scnt}
+			army.ToGeneral()
+			army.ToSoldier()
+
+			armys = append(armys, army)
+			posId := global.ToPosition(x, y)
+			this.sysArmys[posId] = armys
 		}
+
+		return armys
 	}
 }
 

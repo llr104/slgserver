@@ -28,7 +28,7 @@ type g struct {
 	DestroyGrow  	int   	`json:"destroy_grow"`
 	Cost         	int8  	`json:"cost"`
 	Probability  	int   	`json:"probability"`
-	Star         	int   	`json:"star"`
+	Star         	int8   	`json:"star"`
 	Arms         	[]int 	`json:"arms"`
 	Camp         	int8  	`json:"camp"`
 }

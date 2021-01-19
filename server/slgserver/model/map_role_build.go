@@ -64,9 +64,9 @@ type MapRoleBuild struct {
 	Iron       	int       	`xorm:"-"`
 	Stone      	int       	`xorm:"-"`
 	Grain      	int       	`xorm:"-"`
+	Defender   	int       	`xorm:"-"`
 	CurDurable 	int       	`xorm:"cur_durable"`
 	MaxDurable 	int       	`xorm:"max_durable"`
-	Defender   	int       	`xorm:"defender"`
 	OccupyTime 	time.Time 	`xorm:"occupy_time"`
 	EndTime 	time.Time 	`xorm:"end_time"`	//建造或升级完的时间
 	GiveUpTime 	int64 		`xorm:"giveUp_time"`
@@ -86,6 +86,7 @@ func (this* MapRoleBuild) Init() {
 		this.Stone = cfg.Stone
 		this.Grain = cfg.Grain
 		this.MaxDurable = cfg.Durable
+		this.Defender = cfg.Defender
 	}
 }
 
@@ -102,6 +103,7 @@ func (this* MapRoleBuild) Reset() {
 			this.Stone = cfg.Stone
 			this.Grain = cfg.Grain
 			this.MaxDurable = cfg.Durable
+			this.Defender = cfg.Defender
 		}
 	}
 

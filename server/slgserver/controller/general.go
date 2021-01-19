@@ -41,7 +41,7 @@ func (this*General) myGenerals(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
-	gs, ok := mgr.GMgr.TryGetOrCreateByRId(role.RId)
+	gs, ok := mgr.GMgr.GetOrCreateByRId(role.RId)
 	if ok {
 		rsp.Body.Code = constant.OK
 		rspObj.Generals = make([]proto.General, 0)
@@ -133,12 +133,12 @@ func (this*General) ComposeGeneral(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	}
 
 	//是否超过武将星级
-	if gs.Star - gs.StarLv < len(gss){
+	if int(gs.Star - gs.StarLv) < len(gss){
 		rsp.Body.Code = constant.GeneralStarMax
 		return
 	}
 
-	gs.StarLv += len(gss)
+	gs.StarLv += int8(len(gss))
 	gs.HasPrPoint += static_conf.Basic.General.PrPoint * len(gss)
 	gs.SyncExecute()
 
@@ -218,7 +218,7 @@ func (this*General) convert(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		g, ok := mgr.GMgr.GetByGId(gid)
 		if ok && g.Order == 0{
 			okArray = append(okArray, gid)
-			gold += 10*g.Star*(1 + g.StarLv)
+			gold += 10* int(g.Star)*(1 + int(g.StarLv))
 			g.State = model.GeneralConvert
 			g.SyncExecute()
 		}

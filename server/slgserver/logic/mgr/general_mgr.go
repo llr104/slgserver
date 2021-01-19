@@ -40,23 +40,28 @@ func (this*generalMgr) updatePhysicalPower() {
 	}
 }
 
+//创建npc
 func (this*generalMgr) createNPC() ([]*model.General, bool){
-	//创建
+
 	gs := make([]*model.General, 0)
 	sess := db.MasterDB.NewSession()
 	sess.Begin()
 
 	for _, v := range general.General.GMap {
-		if v.Star == 3{
-			r, ok := this.NewGeneral(v.CfgId, 0)
-			if ok == false {
-				sess.Rollback()
-				return nil, false
+		if v.Star >= 3{
+			arr := []int8{1,5,10,20}
+			for _, level := range arr{
+				r, ok := this.NewGeneral(v.CfgId, 0, level)
+				if ok == false {
+					sess.Rollback()
+					return nil, false
+				}
+				gs = append(gs, r)
 			}
-			gs = append(gs, r)
-		}
 
+		}
 	}
+
 	if err := sess.Commit(); err != nil{
 		log.DefaultLog.Warn("db error", zap.Error(err))
 		return nil, false
@@ -207,7 +212,7 @@ func (this*generalMgr) Count(rid int) int{
 	}
 }
 
-func (this*generalMgr) NewGeneral(cfgId int, rid int) (*model.General, bool) {
+func (this*generalMgr) NewGeneral(cfgId int, rid int, level int8) (*model.General, bool) {
 	cfg, ok := general.General.GMap[cfgId]
 	if ok {
 		g := &model.General{
@@ -216,7 +221,7 @@ func (this*generalMgr) NewGeneral(cfgId int, rid int) (*model.General, bool) {
 			CfgId: cfg.CfgId,
 			Order: 0,
 			CityId: 0,
-			Level: 1,
+			Level: level,
 			CreatedAt: time.Now(),
 			CurArms: cfg.Arms[0],
 			HasPrPoint: 0,
@@ -246,9 +251,9 @@ func (this*generalMgr) NewGeneral(cfgId int, rid int) (*model.General, bool) {
 }
 
 /*
-如果不存在尝试去创建
+如果不存在则去创建
 */
-func (this*generalMgr) TryGetOrCreateByRId(rid int) ([]*model.General, bool){
+func (this*generalMgr) GetOrCreateByRId(rid int) ([]*model.General, bool){
 	r, ok := this.GetByRId(rid)
 	if ok {
 		return r, true
@@ -279,7 +284,6 @@ func (this*generalMgr) TryGetOrCreateByRId(rid int) ([]*model.General, bool){
 随机创建一个
 */
 func (this*generalMgr) RandCreateGeneral(rid int, nums int) ([]*model.General, bool){
-	//创建
 	gs := make([]*model.General, 0)
 	sess := db.MasterDB.NewSession()
 	sess.Begin()
@@ -287,7 +291,7 @@ func (this*generalMgr) RandCreateGeneral(rid int, nums int) ([]*model.General, b
 	for i := 0; i < nums; i++ {
 		r := rand.Intn(10) * 10
 		d := this.PrToCfgId(r)
-		g, ok := this.NewGeneral(d, rid)
+		g, ok := this.NewGeneral(d, rid, 1)
 		if ok == false{
 			sess.Rollback()
 			return nil, false
@@ -308,12 +312,10 @@ func (this*generalMgr) PrToCfgId(rate int) (cfgId int){
 	gs := make([]int, 0)
 	defgs := make([]int, 0)
 
-
 	for i := 0;i < len(general.General.GArr);i++{
 		if general.General.GArr[i].Probability >= 80{
 			defgs = append(defgs, general.General.GArr[i].CfgId)
 		}
-
 	}
 
 	for i := 0;i < len(general.General.GArr);i++{
@@ -323,7 +325,6 @@ func (this*generalMgr) PrToCfgId(rate int) (cfgId int){
 
 	}
 
-
 	if len(gs) == 0{
 		return defgs[0]
 	}
@@ -332,25 +333,33 @@ func (this*generalMgr) PrToCfgId(rate int) (cfgId int){
 }
 
 //获取npc武将
-func (this*generalMgr) GetNPCGenerals(cnt int) ([]model.General, bool) {
+func (this*generalMgr) GetNPCGenerals(cnt int, star int8, level int8) ([]model.General, bool) {
 	gs, ok := this.GetByRId(0)
 	if ok == false {
 		return make([]model.General, 0), false
 	}else{
-		if cnt > len(gs){
+		target := make([]model.General, 0)
+		for _, g := range gs {
+			if g.Level == level && g.Star == star{
+				target = append(target, *g)
+			}
+		}
+
+		if len(target) < cnt{
 			return make([]model.General, 0), false
 		}else{
 			m := make(map[int]int)
 			for true {
-				 r := rand.Intn(len(gs))
-				 m[r] = r
-				 if len(m) == cnt{
-				 	break
-				 }
+				r := rand.Intn(len(target))
+				m[r] = r
+				if len(m) == cnt{
+					break
+				}
 			}
+
 			rgs := make([]model.General, 0)
 			for _, v := range m {
-				t := *gs[v]
+				t := target[v]
 				rgs = append(rgs, t)
 			}
 			return rgs, true

@@ -291,7 +291,7 @@ func (this*Role) myProperty(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	}
 
 	//武将
-	gs, ok := mgr.GMgr.TryGetOrCreateByRId(role.RId)
+	gs, ok := mgr.GMgr.GetOrCreateByRId(role.RId)
 	if ok {
 		rspObj.Generals = make([]proto.General, 0)
 		for _, v := range gs {

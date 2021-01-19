@@ -18,8 +18,8 @@ type General struct {
 	DefenseAdded    int     `json:"defense_added"`
 	SpeedAdded      int     `json:"speed_added"`
 	DestroyAdded    int     `json:"destroy_added"`
-	StarLv          int     `json:"star_lv"`
-	Star            int     `json:"star"`
+	StarLv          int8    `json:"star_lv"`
+	Star            int8    `json:"star"`
 	ParentId        int     `json:"parentId"`
 	State     		int8    `json:"state"`
 
@@ -45,8 +45,8 @@ func (this*General) ToArray()[]int {
 	r = append(r, this.SpeedAdded)
 	r = append(r, this.DefenseAdded)
 	r = append(r, this.DestroyAdded)
-	r = append(r, this.StarLv)
-	r = append(r, this.Star)
+	r = append(r, int(this.StarLv))
+	r = append(r, int(this.Star))
 	return r
 }
 
