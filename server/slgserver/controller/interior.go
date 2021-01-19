@@ -82,7 +82,7 @@ func (this*Interior) collect(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 	interval := static_conf.Basic.Role.CollectInterval
 	if roleAttr.CollectTimes >= timeLimit {
-		y, m, d := time.Now().Add(24*time.Hour).Date()
+		y, m, d := roleAttr.LastCollectTime.Add(24*time.Hour).Date()
 		nextTime := time.Date(y, m, d, 0, 0, 0, 0, time.FixedZone("IST", 3600))
 		rspObj.NextTime = nextTime.UnixNano()/1e6
 	}else{
@@ -119,7 +119,7 @@ func (this*Interior) openCollect(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		rspObj.NextTime = 0
 	}else{
 		if roleAttr.CollectTimes >= timeLimit {
-			y, m, d := time.Now().Add(24*time.Hour).Date()
+			y, m, d := roleAttr.LastCollectTime.Add(24*time.Hour).Date()
 			nextTime := time.Date(y, m, d, 0, 0, 0, 0, time.FixedZone("IST", 3600))
 			rspObj.NextTime = nextTime.UnixNano()/1e6
 		}else{
