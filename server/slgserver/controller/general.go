@@ -41,14 +41,12 @@ func (this*General) myGenerals(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
-	gs, ok := mgr.GMgr.GetByRIdTryCreate(role.RId)
+	gs, ok := mgr.GMgr.TryGetOrCreateByRId(role.RId)
 	if ok {
 		rsp.Body.Code = constant.OK
 		rspObj.Generals = make([]proto.General, 0)
 		for _, v := range gs {
-			if v.IsActive(){
-				rspObj.Generals = append(rspObj.Generals, v.ToProto().(proto.General))
-			}
+			rspObj.Generals = append(rspObj.Generals, v.ToProto().(proto.General))
 		}
 	}else{
 		rsp.Body.Code = constant.DBError
@@ -74,7 +72,7 @@ func (this*General) drawGenerals(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	}
 
 	limit := static_conf.Basic.General.Limit
-	cnt := mgr.GMgr.ActiveCount(role.RId)
+	cnt := mgr.GMgr.Count(role.RId)
 	if cnt + reqObj.DrawTimes > limit{
 		rsp.Body.Code = constant.OutGeneralLimit
 		return
@@ -93,9 +91,6 @@ func (this*General) drawGenerals(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		rsp.Body.Code = constant.DBError
 	}
 }
-
-
-
 
 func (this*General) ComposeGeneral(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	reqObj := &proto.ComposeGeneralReq{}
@@ -221,7 +216,7 @@ func (this*General) convert(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	okArray := make([]int, 0)
 	for _, gid := range reqObj.GIds {
 		g, ok := mgr.GMgr.GetByGId(gid)
-		if ok && g.IsActive() && g.Order == 0{
+		if ok && g.Order == 0{
 			okArray = append(okArray, gid)
 			gold += 10*g.Star*(1 + g.StarLv)
 			g.State = model.GeneralConvert

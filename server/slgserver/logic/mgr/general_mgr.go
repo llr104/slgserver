@@ -109,11 +109,19 @@ func (this*generalMgr) GetByRId(rid int) ([]*model.General, bool){
 	this.mutex.Unlock()
 
 	if ok {
-		return r, true
+		out := make([]*model.General, 0)
+		for _, g := range r {
+			if g.IsActive(){
+				out = append(out, g)
+			}
+		}
+		return out, true
 	}
 
 	gs := make([]*model.General, 0)
-	err := db.MasterDB.Table(new(model.General)).Where("rid=?", rid).Find(&gs)
+	err := db.MasterDB.Table(new(model.General)).Where(
+		"rid=? and state=?", rid, model.GeneralNormal).Find(&gs)
+
 	if err == nil {
 		if len(gs) > 0 {
 			for _, g := range gs {
@@ -136,11 +144,17 @@ func (this*generalMgr) GetByGId(gid int) (*model.General, bool){
 	g, ok := this.genByGId[gid]
 	this.mutex.RUnlock()
 	if ok {
-		return g, true
+		if g.IsActive(){
+			return g, true
+		}else{
+			return nil, false
+		}
 	}else{
 
 		g := &model.General{}
-		r, err := db.MasterDB.Table(new(model.General)).Where("id=?", gid).Get(g)
+		r, err := db.MasterDB.Table(new(model.General)).Where(
+			"id=? and state=?", gid, model.GeneralNormal).Get(g)
+
 		if err == nil{
 			if r {
 				this.add(g)
@@ -171,10 +185,10 @@ func (this*generalMgr) HasGeneral(rid int ,gid int) (*model.General,bool){
 	return nil,false
 }
 
-func (this*generalMgr) HasGenerals(rid int, gids []int) ([]*model.General,bool){
+func (this*generalMgr) HasGenerals(rid int, gIds []int) ([]*model.General,bool){
 	gs := make([]*model.General, 0)
-	for i := 0; i < len(gids); i++ {
-		g,ok := this.HasGeneral(rid,gids[i])
+	for i := 0; i < len(gIds); i++ {
+		g,ok := this.HasGeneral(rid, gIds[i])
 		if ok{
 			gs = append(gs,g)
 		}else{
@@ -184,17 +198,13 @@ func (this*generalMgr) HasGenerals(rid int, gids []int) ([]*model.General,bool){
 	return gs,true
 }
 
-func (this*generalMgr) ActiveCount(rid int) int{
+func (this*generalMgr) Count(rid int) int{
 	gs, ok := this.GetByRId(rid)
-	cnt := 0
 	if ok {
-		for _, g := range gs {
-			if g.IsActive(){
-				cnt += 1
-			}
-		}
+		return len(gs)
+	}else{
+		return 0
 	}
-	return cnt
 }
 
 func (this*generalMgr) NewGeneral(cfgId int, rid int) (*model.General, bool) {
@@ -238,7 +248,7 @@ func (this*generalMgr) NewGeneral(cfgId int, rid int) (*model.General, bool) {
 /*
 如果不存在尝试去创建
 */
-func (this*generalMgr) GetByRIdTryCreate(rid int) ([]*model.General, bool){
+func (this*generalMgr) TryGetOrCreateByRId(rid int) ([]*model.General, bool){
 	r, ok := this.GetByRId(rid)
 	if ok {
 		return r, true
