@@ -13,8 +13,9 @@ import (
 
 
 const (
-	ComposeNot   		= 0	//没有合成
-	ComposeStar 		= 1	//星级合成
+	GeneralNormal      	= 0 //正常
+	GeneralComposeStar 	= 1 //星级合成
+	GeneralConvert 		= 2 //转换
 )
 
 /*******db 操作begin********/
@@ -28,15 +29,18 @@ type generalDBMgr struct {
 	gs   chan *General
 }
 
+
 func (this*generalDBMgr) running()  {
 	for true {
 		select {
 		case g := <- this.gs:
 			if g.Id > 0 && g.RId > 0 {
-				_, err := db.MasterDB.Table(g).ID(g.Id).Cols("level",
-					"exp", "order", "cityId", "physical_power","star_lv","has_pr_point",
-					"use_pr_point","force_added","strategy_added","defense_added","speed_added",
-					"destroy_added","parentId","compose_type").Update(g)
+				_, err := db.MasterDB.Table(g).ID(g.Id).Cols(
+					"level", "exp", "order", "cityId",
+					"physical_power", "star_lv", "has_pr_point",
+					"use_pr_point", "force_added", "strategy_added",
+					"defense_added", "speed_added", "destroy_added",
+					"parentId", "compose_type", "state").Update(g)
 				if err != nil{
 					log.DefaultLog.Warn("db error", zap.Error(err))
 				}
@@ -66,16 +70,16 @@ type General struct {
 	CurArms       int       `xorm:"arms"`
 	HasPrPoint    int       `xorm:"has_pr_point"`
 	UsePrPoint    int       `xorm:"use_pr_point"`
-	AttackDis     int       `xorm:"attack_distance"`
-	ForceAdded    int       `xorm:"force_added"`
-	StrategyAdded int       `xorm:"strategy_added"`
-	DefenseAdded  int       `xorm:"defense_added"`
-	SpeedAdded    int       `xorm:"speed_added"`
-	DestroyAdded  int       `xorm:"destroy_added"`
-	StarLv        int       `xorm:"star_lv"`
-	Star          int       `xorm:"star"`
-	ParentId      int       `xorm:"parentId"`
-	ComposeType   int       `xorm:"compose_type"`
+	AttackDis     int  		`xorm:"attack_distance"`
+	ForceAdded    int  		`xorm:"force_added"`
+	StrategyAdded int  		`xorm:"strategy_added"`
+	DefenseAdded  int  		`xorm:"defense_added"`
+	SpeedAdded    int  		`xorm:"speed_added"`
+	DestroyAdded  int  		`xorm:"destroy_added"`
+	StarLv        int  		`xorm:"star_lv"`
+	Star          int  		`xorm:"star"`
+	ParentId      int  		`xorm:"parentId"`
+	State         int8 		`xorm:"state"`
 }
 
 func (this *General) TableName() string {
@@ -88,6 +92,10 @@ func (this *General) GetDestroy() int{
 		return cfg.Destroy+cfg.DestroyGrow*int(this.Level) + this.DestroyAdded
 	}
 	return 0
+}
+
+func (this* General) IsActive() bool  {
+	return this.State == GeneralNormal
 }
 
 func (this *General) GetSpeed() int{
@@ -176,7 +184,7 @@ func (this *General) ToProto() interface{}{
 	p.DestroyAdded = this.DestroyAdded
 	p.StarLv = this.StarLv
 	p.Star = this.Star
-	p.ComposeType = this.ComposeType
+	p.State = this.State
 	p.ParentId = this.ParentId
 	return p
 }

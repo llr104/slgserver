@@ -127,6 +127,7 @@ CREATE TABLE IF NOT EXISTS `tb_general_1` (
    `destroy_added` int NOT NULL DEFAULT 0 COMMENT '已加破坏属性',
    `parentId` int NOT NULL DEFAULT 0 COMMENT '已合成到武将的id',
    `compose_type` int NOT NULL DEFAULT 0 COMMENT '合成类型',
+   `state` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '0:正常，1:转换掉了',
    `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
    PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '将领表';

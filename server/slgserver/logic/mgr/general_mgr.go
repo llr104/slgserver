@@ -81,7 +81,9 @@ func (this*generalMgr) add(g *model.General) {
 
 func (this*generalMgr) Load(){
 
-	err := db.MasterDB.Table(model.General{}).Find(this.genByGId)
+	err := db.MasterDB.Table(model.General{}).Where("state=?",
+		model.GeneralNormal).Find(this.genByGId)
+
 	if err != nil {
 		log.DefaultLog.Warn("db error", zap.Error(err))
 		return
@@ -187,7 +189,7 @@ func (this*generalMgr) ActiveCount(rid int) int{
 	cnt := 0
 	if ok {
 		for _, g := range gs {
-			if g.ParentId == 0{
+			if g.IsActive(){
 				cnt += 1
 			}
 		}
@@ -198,11 +200,27 @@ func (this*generalMgr) ActiveCount(rid int) int{
 func (this*generalMgr) NewGeneral(cfgId int, rid int) (*model.General, bool) {
 	cfg, ok := general.General.GMap[cfgId]
 	if ok {
-		g := &model.General{RId: rid, CfgId: cfg.CfgId, Order: 0, CityId: 0,
+		g := &model.General{
 			PhysicalPower: static_conf.Basic.General.PhysicalPowerLimit,
-			Level:         1, CreatedAt: time.Now(),CurArms: cfg.Arms[0],HasPrPoint: 0,UsePrPoint: 0,
-			AttackDis: 0,ForceAdded: 0,StrategyAdded: 0,DefenseAdded: 0,SpeedAdded: 0,DestroyAdded: 0,
-			Star: cfg.Star,StarLv: 0,ComposeType: 0,ParentId: 0,
+			RId: rid,
+			CfgId: cfg.CfgId,
+			Order: 0,
+			CityId: 0,
+			Level: 1,
+			CreatedAt: time.Now(),
+			CurArms: cfg.Arms[0],
+			HasPrPoint: 0,
+			UsePrPoint: 0,
+			AttackDis: 0,
+			ForceAdded: 0,
+			StrategyAdded: 0,
+			DefenseAdded: 0,
+			SpeedAdded: 0,
+			DestroyAdded: 0,
+			Star: cfg.Star,
+			StarLv: 0,
+			ParentId: 0,
+			State: model.GeneralNormal,
 		}
 
 		if _, err := db.MasterDB.Table(model.General{}).Insert(g); err != nil {

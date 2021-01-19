@@ -21,7 +21,7 @@ type General struct {
 	StarLv          int     `json:"star_lv"`
 	Star            int     `json:"star"`
 	ParentId        int     `json:"parentId"`
-	ComposeType     int     `json:"compose_type"`
+	State     		int8    `json:"state"`
 
 }
 

@@ -44,9 +44,11 @@ func (this*General) myGenerals(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	gs, ok := mgr.GMgr.GetByRIdTryCreate(role.RId)
 	if ok {
 		rsp.Body.Code = constant.OK
-		rspObj.Generals = make([]proto.General, len(gs))
-		for i, v := range gs {
-			rspObj.Generals[i] = v.ToProto().(proto.General)
+		rspObj.Generals = make([]proto.General, 0)
+		for _, v := range gs {
+			if v.IsActive(){
+				rspObj.Generals = append(rspObj.Generals, v.ToProto().(proto.General))
+			}
 		}
 	}else{
 		rsp.Body.Code = constant.DBError
@@ -106,14 +108,12 @@ func (this*General) ComposeGeneral(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	role := r.(*model.Role)
 
 
-
 	gs, ok := mgr.GMgr.HasGeneral(role.RId,reqObj.CompId)
 	//是否有这个武将
 	if ok == false{
 		rsp.Body.Code = constant.GeneralNoHas
 		return
 	}
-
 
 	//是否都有这个武将
 	gss ,ok := mgr.GMgr.HasGenerals(role.RId,reqObj.GIds)
@@ -147,15 +147,12 @@ func (this*General) ComposeGeneral(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	gs.HasPrPoint += static_conf.Basic.General.PrPoint * len(gss)
 	gs.SyncExecute()
 
-
 	for _, v := range gss {
 		t := v
 		t.ParentId = gs.Id
-		t.ComposeType = model.ComposeStar
+		t.State = model.GeneralComposeStar
 		t.SyncExecute()
 	}
-
-	rsp.Body.Code = constant.OK
 
 	rspObj.Generals = make([]proto.General, len(gss))
 	for i, v := range gss {
@@ -164,7 +161,6 @@ func (this*General) ComposeGeneral(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	rspObj.Generals = append(rspObj.Generals,gs.ToProto().(proto.General))
 
 }
-
 
 
 func (this*General) AddPrGeneral(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
@@ -196,8 +192,6 @@ func (this*General) AddPrGeneral(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	gs.SpeedAdded = reqObj.SpeedAdd
 	gs.DestroyAdded = reqObj.DestroyAdd
 
-
-
 	gs.UsePrPoint = all
 	gs.SyncExecute()
 
@@ -227,9 +221,11 @@ func (this*General) convert(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	okArray := make([]int, 0)
 	for _, gid := range reqObj.GIds {
 		g, ok := mgr.GMgr.GetByGId(gid)
-		if ok {
+		if ok && g.IsActive() && g.Order == 0{
 			okArray = append(okArray, gid)
 			gold += 10*g.Star*(1 + g.StarLv)
+			g.State = model.GeneralConvert
+			g.SyncExecute()
 		}
 	}
 

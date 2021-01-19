@@ -293,9 +293,11 @@ func (this*Role) myProperty(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	//武将
 	gs, ok := mgr.GMgr.GetByRIdTryCreate(role.RId)
 	if ok {
-		rspObj.Generals = make([]proto.General, len(gs))
-		for i, v := range gs {
-			rspObj.Generals[i] = v.ToProto().(proto.General)
+		rspObj.Generals = make([]proto.General, 0)
+		for _, v := range gs {
+			if v.IsActive(){
+				rspObj.Generals = append(rspObj.Generals, v.ToProto().(proto.General))
+			}
 		}
 	}else{
 		rsp.Body.Code = constant.DBError
