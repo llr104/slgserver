@@ -137,6 +137,14 @@ func (this* MapRoleBuild) IsResBuild() bool  {
 	return this.Grain > 0 || this.Stone > 0 || this.Iron > 0 || this.Wood > 0
 }
 
+func (this* MapRoleBuild) IsBusy() bool{
+	if this.Level != this.OPLevel{
+		return true
+	}else {
+		return false
+	}
+}
+
 //是否是要塞
 func (this* MapRoleBuild) IsFortress() bool  {
 	return this.Type == MapBuildFortress

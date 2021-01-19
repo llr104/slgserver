@@ -168,7 +168,7 @@ func (this*NationMap) build(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	if b.IsResBuild() == false || b.IsInGiveUp(){
+	if b.IsResBuild() == false || b.IsInGiveUp() || b.IsBusy(){
 		rsp.Body.Code = constant.CanNotBuildNew
 		return
 	}
@@ -224,7 +224,7 @@ func (this*NationMap) upBuild(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	if b.IsResBuild() || b.IsInGiveUp() {
+	if b.IsResBuild() || b.IsInGiveUp() || b.IsBusy(){
 		rsp.Body.Code = constant.CanNotUpBuild
 		return
 	}

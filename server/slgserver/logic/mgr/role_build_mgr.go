@@ -382,7 +382,7 @@ func (this* roleBuildMgr) Destroy(x, y int) int {
 		return constant.BuildNotMe
 	}
 
-	if b.IsResBuild() || b.IsInGiveUp() {
+	if b.IsResBuild() || b.IsInGiveUp() || b.IsBusy() {
 		return constant.CanNotDestroy
 	}
 
