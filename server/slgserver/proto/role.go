@@ -124,3 +124,28 @@ type UpPositionRsp struct {
 	X	int	`json:"x"`
 	Y	int	`json:"y"`
 }
+
+type PosTag struct {
+	X	int	`json:"x"`
+	Y	int	`json:"y"`
+}
+
+type PosTagListReq struct {
+
+}
+
+type PosTagListRsp struct {
+	PosTags	[]PosTag	`json:"pos_tags"`
+}
+
+type PosTagReq struct {
+	Type	int `json:"type"`	//1是标记，0是取消标记
+	X		int	`json:"x"`
+	Y		int	`json:"y"`
+}
+
+type PosTagRsp struct {
+	Type	int `json:"type"`	//1是标记，0是取消标记
+	X		int	`json:"x"`
+	Y		int	`json:"y"`
+}

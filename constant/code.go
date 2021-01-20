@@ -64,6 +64,7 @@ const OutCollectTimesLimit = 55   //超过征收次数
 const InCdCanNotOperate = 56	  //cd内不能操作
 const OutGeneralLimit = 57		  //武将超过上限了
 const NotHasJiShi = 58		  	  //没有集市
+const OutPosTagLimit = 59		  //超过了收藏上限
 
 
 

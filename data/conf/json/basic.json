@@ -37,7 +37,8 @@
     "recovery_time": 20,
     "decree_limit": 20,
     "collect_times_limit": 3,
-    "collect_interval": 30
+    "collect_interval": 30,
+    "pos_tag_limit": 10
   },
   "city": {
     "des": "城池的一些配置",

@@ -36,6 +36,8 @@ func (this*Role) InitRouter(r *net.Router) {
 	g.AddRouter("myRoleBuild", this.myRoleBuild, middleware.CheckRole())
 	g.AddRouter("myProperty", this.myProperty, middleware.CheckRole())
 	g.AddRouter("upPosition", this.upPosition, middleware.CheckRole())
+	g.AddRouter("posTagList", this.posTagList, middleware.CheckRole())
+	g.AddRouter("opPosTag", this.opPosTag, middleware.CheckRole())
 }
 
 func (this*Role) create(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
@@ -353,3 +355,58 @@ func (this*Role) upPosition(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	pos.RPMgr.Push(reqObj.X, reqObj.Y, role.RId)
 
 }
+
+func (this*Role) posTagList(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+	reqObj := &proto.PosTagListReq{}
+	rspObj := &proto.PosTagListRsp{}
+	mapstructure.Decode(req.Body.Msg, reqObj)
+	rsp.Body.Msg = rspObj
+	rsp.Body.Code = constant.OK
+
+	r, _ := req.Conn.GetProperty("role")
+	role := r.(*model.Role)
+	attr, ok := mgr.RAttrMgr.Get(role.RId)
+	if ok == false {
+		rsp.Body.Code = constant.RoleNotExist
+		return
+	}
+
+	rspObj.PosTags = attr.PosTagArray
+
+}
+
+func (this*Role) opPosTag(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+	reqObj := &proto.PosTagReq{}
+	rspObj := &proto.PosTagRsp{}
+	mapstructure.Decode(req.Body.Msg, reqObj)
+	rsp.Body.Msg = rspObj
+	rsp.Body.Code = constant.OK
+
+	rspObj.X = reqObj.X
+	rspObj.Y = reqObj.Y
+	rspObj.Type = reqObj.Type
+
+	r, _ := req.Conn.GetProperty("role")
+	role := r.(*model.Role)
+	attr, ok := mgr.RAttrMgr.Get(role.RId)
+	if ok == false {
+		rsp.Body.Code = constant.RoleNotExist
+		return
+	}
+	if reqObj.Type == 0{
+		attr.RemovePosTag(reqObj.X, reqObj.Y)
+		attr.SyncExecute()
+	}else if reqObj.Type == 1{
+
+		limit := static_conf.Basic.Role.PosTagLimit
+		if int(limit) >= len(attr.PosTagArray){
+			attr.AddPosTag(reqObj.X, reqObj.Y)
+			attr.SyncExecute()
+		}else{
+			rsp.Body.Code = constant.OutPosTagLimit
+		}
+	}else{
+		rsp.Body.Code = constant.InvalidParam
+	}
+}
+
