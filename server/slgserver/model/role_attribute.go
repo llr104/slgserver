@@ -99,7 +99,7 @@ func (this* RoleAttribute) RemovePosTag(x, y int) {
 	this.PosTagArray = tags
 }
 
-func (this* RoleAttribute) AddPosTag(x, y int) {
+func (this* RoleAttribute) AddPosTag(x, y int, name string) {
 	ok := true
 	for _, tag := range this.PosTagArray {
 		if tag.X == x && tag.Y == y{
@@ -108,7 +108,7 @@ func (this* RoleAttribute) AddPosTag(x, y int) {
 		}
 	}
 	if ok{
-		this.PosTagArray = append(this.PosTagArray, proto.PosTag{X: x, Y: y})
+		this.PosTagArray = append(this.PosTagArray, proto.PosTag{X: x, Y: y, Name: name})
 	}
 }
 

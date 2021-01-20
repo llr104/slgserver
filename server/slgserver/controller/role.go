@@ -385,6 +385,7 @@ func (this*Role) opPosTag(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	rspObj.X = reqObj.X
 	rspObj.Y = reqObj.Y
 	rspObj.Type = reqObj.Type
+	rspObj.Name = reqObj.Name
 
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
@@ -400,7 +401,7 @@ func (this*Role) opPosTag(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 		limit := static_conf.Basic.Role.PosTagLimit
 		if int(limit) >= len(attr.PosTagArray){
-			attr.AddPosTag(reqObj.X, reqObj.Y)
+			attr.AddPosTag(reqObj.X, reqObj.Y, reqObj.Name)
 			attr.SyncExecute()
 		}else{
 			rsp.Body.Code = constant.OutPosTagLimit

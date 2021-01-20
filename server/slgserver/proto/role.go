@@ -126,8 +126,9 @@ type UpPositionRsp struct {
 }
 
 type PosTag struct {
-	X	int	`json:"x"`
-	Y	int	`json:"y"`
+	X		int	`json:"x"`
+	Y		int	`json:"y"`
+	Name string `json:"name"`
 }
 
 type PosTagListReq struct {
@@ -139,13 +140,15 @@ type PosTagListRsp struct {
 }
 
 type PosTagReq struct {
-	Type	int `json:"type"`	//1是标记，0是取消标记
-	X		int	`json:"x"`
-	Y		int	`json:"y"`
+	Type	int 	`json:"type"`	//1是标记，0是取消标记
+	X		int		`json:"x"`
+	Y		int		`json:"y"`
+	Name 	string 	`json:"name"`
 }
 
 type PosTagRsp struct {
-	Type	int `json:"type"`	//1是标记，0是取消标记
-	X		int	`json:"x"`
-	Y		int	`json:"y"`
+	Type	int 	`json:"type"`	//1是标记，0是取消标记
+	X		int		`json:"x"`
+	Y		int		`json:"y"`
+	Name 	string 	`json:"name"`
 }
