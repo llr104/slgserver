@@ -61,9 +61,6 @@
      "durable": 10000,
      "defender": 5
    },
-
-
-
    {"type": 53,
      "name": "铁Lv.1",
      "level": 1,
@@ -114,9 +111,6 @@
      "durable": 10000,
      "defender": 5
    },
-
-
-
    {"type": 54,
      "name": "石Lv.1",
      "level": 1,
@@ -220,6 +214,17 @@
      "stone": 0,
      "durable": 10000,
      "defender": 5
-   }
- ]
+   },
+    {"type": 56,
+      "des": "系统要塞",
+      "name": "要塞",
+      "level": 5,
+      "grain": 0,
+      "wood": 0,
+      "iron": 0,
+      "stone": 0,
+      "durable": 10000,
+      "defender": 1
+    }
+  ]
 }

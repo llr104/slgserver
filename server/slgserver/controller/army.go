@@ -550,12 +550,17 @@ func (this*Army) __transfer__(reqObj *proto.AssignArmyReq, army* model.Army, rol
 		return constant.BuildNotMe
 	}
 
-	if b.Level <= 0 || b.IsFortress() == false {
+	if b.Level <= 0 || b.IsHasTransferAuth() == false {
 		return constant.CanNotTransfer
 	}
 
+	cnt := 0
+	if b.IsRoleFortress() {
+		cnt = static_conf.MapBCConf.GetHoldArmyCnt(b.Type, b.Level)
+	}else{
+		cnt = 5
+	}
 
-	cnt := static_conf.MapBCConf.GetHoldArmyCnt(b.Type, b.Level)
 	if cnt > mgr.AMgr.BelongPosArmyCnt(b.RId, b.X, b.Y) {
 		return this.__after__(reqObj, army)
 	}else{

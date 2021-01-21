@@ -13,7 +13,8 @@ import (
 )
 
 const (
-	MapBuildFortress = 50
+	MapBuildFortress = 50		//玩家要塞
+	MapBuildSysFortress = 56	//系统要塞
 )
 
 /*******db 操作begin********/
@@ -139,6 +140,10 @@ func (this* MapRoleBuild) IsResBuild() bool  {
 	return this.Grain > 0 || this.Stone > 0 || this.Iron > 0 || this.Wood > 0
 }
 
+func (this* MapRoleBuild) IsHaveBuildAuth() bool  {
+	return this.Type == MapBuildFortress
+}
+
 func (this* MapRoleBuild) IsBusy() bool{
 	if this.Level != this.OPLevel{
 		return true
@@ -147,9 +152,13 @@ func (this* MapRoleBuild) IsBusy() bool{
 	}
 }
 
-//是否是要塞
-func (this* MapRoleBuild) IsFortress() bool  {
+func (this* MapRoleBuild) IsRoleFortress() bool  {
 	return this.Type == MapBuildFortress
+}
+
+//是否有调兵权限
+func (this* MapRoleBuild) IsHasTransferAuth() bool  {
+	return this.Type == MapBuildFortress || this.Type == MapBuildSysFortress
 }
 
 func (this* MapRoleBuild) BuildOrUp(cfg static_conf.BCLevelCfg) {
@@ -215,7 +224,7 @@ func (this *MapRoleBuild) ToProto() interface{}{
 	p.EndTime = this.EndTime.UnixNano()/1e6
 
 	if this.EndTime.IsZero() == false{
-		if this.IsFortress(){
+		if this.IsHasTransferAuth(){
 			if time.Now().Before(this.EndTime) == false{
 
 				if this.OPLevel == 0{

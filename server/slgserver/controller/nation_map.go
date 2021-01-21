@@ -168,12 +168,12 @@ func (this*NationMap) build(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	if b.IsResBuild() == false || b.IsInGiveUp() || b.IsBusy(){
+	if b.IsHaveBuildAuth() == false || b.IsBusy(){
 		rsp.Body.Code = constant.CanNotBuildNew
 		return
 	}
 
-	cnt := mgr.RBMgr.FortressCnt(role.RId)
+	cnt := mgr.RBMgr.RoleFortressCnt(role.RId)
 	if cnt >= static_conf.Basic.Build.FortressLimit{
 		rsp.Body.Code = constant.CanNotBuildNew
 		return
@@ -224,7 +224,7 @@ func (this*NationMap) upBuild(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	if b.IsResBuild() || b.IsInGiveUp() || b.IsBusy(){
+	if b.IsHaveBuildAuth() == false || b.IsInGiveUp() || b.IsBusy(){
 		rsp.Body.Code = constant.CanNotUpBuild
 		return
 	}

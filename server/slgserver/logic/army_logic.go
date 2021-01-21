@@ -263,7 +263,7 @@ func (this *armyLogic) exeArrive(army *model.Army) {
 				this.ArmyBack(army)
 			}else{
 				b, _ := mgr.RBMgr.PositionBuild(army.ToX, army.ToY)
-				if b.IsFortress(){
+				if b.IsHasTransferAuth(){
 					army.State = model.ArmyStop
 					army.Cmd = model.ArmyCmdIdle
 					x := army.ToX

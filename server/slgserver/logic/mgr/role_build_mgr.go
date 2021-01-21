@@ -160,14 +160,14 @@ func (this*roleBuildMgr) PositionBuild(x, y int) (*model.MapRoleBuild, bool) {
 	}
 }
 
-func (this*roleBuildMgr) FortressCnt(rid int)int{
+func (this*roleBuildMgr) RoleFortressCnt(rid int)int{
 	bs, ok := this.GetRoleBuild(rid)
 	cnt := 0
 	if ok == false {
 		return 0
 	}else{
 		for _, b := range bs {
-			if b.IsFortress(){
+			if b.IsRoleFortress(){
 				cnt +=1
 			}
 		}
@@ -382,7 +382,7 @@ func (this* roleBuildMgr) Destroy(x, y int) int {
 		return constant.BuildNotMe
 	}
 
-	if b.IsResBuild() || b.IsInGiveUp() || b.IsBusy() {
+	if b.IsHaveBuildAuth() == false || b.IsInGiveUp() || b.IsBusy() {
 		return constant.CanNotDestroy
 	}
 
