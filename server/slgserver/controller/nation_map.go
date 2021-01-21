@@ -168,7 +168,7 @@ func (this*NationMap) build(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	if b.IsResBuild() || b.IsBusy(){
+	if b.IsResBuild() == false || b.IsBusy(){
 		rsp.Body.Code = constant.CanNotBuildNew
 		return
 	}
