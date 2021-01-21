@@ -382,7 +382,7 @@ func (this* roleBuildMgr) Destroy(x, y int) int {
 		return constant.BuildNotMe
 	}
 
-	if b.IsHaveBuildAuth() == false || b.IsInGiveUp() || b.IsBusy() {
+	if b.IsHaveModifyLVAuth() == false || b.IsInGiveUp() || b.IsBusy() {
 		return constant.CanNotDestroy
 	}
 

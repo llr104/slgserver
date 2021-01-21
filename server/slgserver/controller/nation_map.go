@@ -168,7 +168,7 @@ func (this*NationMap) build(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	if b.IsHaveBuildAuth() == false || b.IsBusy(){
+	if b.IsResBuild() || b.IsBusy(){
 		rsp.Body.Code = constant.CanNotBuildNew
 		return
 	}
@@ -224,7 +224,7 @@ func (this*NationMap) upBuild(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	if b.IsHaveBuildAuth() == false || b.IsInGiveUp() || b.IsBusy(){
+	if b.IsHaveModifyLVAuth() == false || b.IsInGiveUp() || b.IsBusy(){
 		rsp.Body.Code = constant.CanNotUpBuild
 		return
 	}

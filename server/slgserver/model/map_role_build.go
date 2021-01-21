@@ -140,7 +140,8 @@ func (this* MapRoleBuild) IsResBuild() bool  {
 	return this.Grain > 0 || this.Stone > 0 || this.Iron > 0 || this.Wood > 0
 }
 
-func (this* MapRoleBuild) IsHaveBuildAuth() bool  {
+//是否有修改等级权限
+func (this* MapRoleBuild) IsHaveModifyLVAuth() bool  {
 	return this.Type == MapBuildFortress
 }
 
