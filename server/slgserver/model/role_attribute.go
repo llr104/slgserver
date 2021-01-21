@@ -29,7 +29,7 @@ func (this *roleAttrDBMgr) running()  {
 		case attr := <- this.rattr:
 			if attr.Id >0 {
 				_, err := db.MasterDB.Table(attr).ID(attr.Id).Cols(
-					"parent_id", "collect_times", "last_collect_time", "pos_tag").Update(attr)
+					"parent_id", "collect_times", "last_collect_time", "pos_tags").Update(attr)
 				if err != nil{
 					log.DefaultLog.Warn("db error", zap.Error(err))
 				}
