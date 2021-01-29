@@ -1,7 +1,7 @@
 package global
 
-var MapWith = 40
-var MapHeight = 40
+var MapWith = 200
+var MapHeight = 200
 
 func ToPosition(x, y int) int {
 	return x+ MapHeight*y

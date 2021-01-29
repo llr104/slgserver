@@ -77,6 +77,9 @@ func (this *RoleAttribute) AfterSet(name string, cell xorm.Cell){
 }
 
 func (this *RoleAttribute) beforeModify()  {
+	if this.PosTagArray == nil{
+		this.PosTagArray = make([]proto.PosTag, 0)
+	}
 	data, _ := json.Marshal(this.PosTagArray)
 	this.PosTags = string(data)
 }

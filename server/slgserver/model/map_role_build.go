@@ -14,6 +14,7 @@ import (
 
 const (
 	MapBuildFortress = 50		//玩家要塞
+	MapBuildSysCity = 51		//系统城市
 	MapBuildSysFortress = 56	//系统要塞
 )
 
