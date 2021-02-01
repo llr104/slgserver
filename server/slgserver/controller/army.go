@@ -401,8 +401,8 @@ func (this*Army) __pre__(reqObj *proto.AssignArmyReq, army* model.Army, role *mo
 	}
 
 	if army.IsCanOutWar() == false{
-		if army.Cmd == model.ArmyCmdConscript{
-			return constant.ArmyConscript
+		if army.Cmd != model.ArmyCmdIdle{
+			return constant.ArmyBusy
 		}else{
 			return constant.ArmyNotMain
 		}
