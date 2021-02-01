@@ -83,6 +83,10 @@ func (this *MapRoleCity) Level() int8 {
 	return GetCityLv(this.CityId)
 }
 
+func (this* MapRoleCity) CellRadius() int {
+	return 2
+}
+
 func (this *MapRoleCity) TableName() string {
 	return "tb_map_role_city" + fmt.Sprintf("_%d", ServerId)
 }

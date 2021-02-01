@@ -1,100 +1,46 @@
 package logic
 
 import (
-	"slgserver/server/slgserver/global"
 	"slgserver/server/slgserver/logic/mgr"
 	"slgserver/util"
 )
 
-//是否和玩家领地相连
-func hasNearByRoleBuild(x, y, rid, unionId int) bool {
-	if _, ok := mgr.RCMgr.PositionCity(x, y); ok {
-		for i := util.MaxInt(x-2, 0); i <= util.MinInt(x+2, global.MapWith); i++ {
-			for j := util.MaxInt(y-2, 0); j <= util.MinInt(y+2, global.MapHeight) ; j++ {
-				if i == x && j == y {
-					continue
-				}
-				if rb, ok := mgr.RBMgr.PositionBuild(i, j); ok {
-					tUnionId := getUnionId(rb.RId)
-					if rb.RId == rid || (unionId != 0 && tUnionId == unionId){
-						return true
-					}
-
-					tParentId := getParentId(rb.RId)
-					if tParentId != 0 && tParentId == unionId{
-						return true
-					}
-				}
-			}
-		}
-	}else{
-		for i := util.MaxInt(x-1, 0); i <= util.MinInt(x+1, global.MapWith); i++ {
-			for j := util.MaxInt(y-1, 0); j <= util.MinInt(y+1, global.MapHeight) ; j++ {
-				if i == x && j == y {
-					continue
-				}
-
-				if rb, ok := mgr.RBMgr.PositionBuild(i, j); ok {
-					tUnionId := getUnionId(rb.RId)
-					if rb.RId == rid || (unionId != 0 && tUnionId == unionId){
-						return true
-					}
-
-					tParentId := getParentId(rb.RId)
-					if tParentId != 0 && tParentId == unionId{
-						return true
-					}
-				}
-			}
-		}
-	}
-	return false
-}
-
-func hasNearByRoleCity(x, y, rid, unionId int) bool {
-
-	for i := x-2; i <= x+2; i++ {
-		for j := y-2; j <= y+2; j++ {
-			if rc, ok := mgr.RCMgr.PositionCity(i, j); ok {
-				tUnionId := getUnionId(rc.RId)
-				if rc.RId == rid || (unionId != 0 && tUnionId == unionId) {
-					return true
-				}
-
-				tParentId := getParentId(rc.RId)
-				if tParentId != 0 && tParentId == unionId {
-					return true
-				}
-			}
-		}
-	}
-	return false
-}
-
-
 //是否能到达
 func IsCanArrive(x, y, rid int) bool {
-
+	var radius = 0
 	unionId := getUnionId(rid)
-	//是否和玩家领地相连
-	ok := hasNearByRoleBuild(x, y, rid, unionId)
+	b, ok := mgr.RBMgr.PositionBuild(x, y)
 	if ok {
-		return true
+		radius = b.CellRadius()
 	}
 
-	//是否和玩家城池相连
-	ok = hasNearByRoleCity(x, y, rid, unionId)
+	c, ok := mgr.RCMgr.PositionCity(x, y)
 	if ok {
-		return true
+		radius = c.CellRadius()
 	}
 
-	//再判断是否是系统城池相连
-	if rb, ok := mgr.RBMgr.PositionBuild(x, y); ok {
-		if rb.IsSysCity() {
-			for tx := x-rb.CellRadius(); tx <= x+rb.CellRadius(); tx++ {
-				for ty := y-rb.CellRadius(); ty <= y+rb.CellRadius(); ty++ {
-					ok = hasNearByRoleBuild(tx, ty, rid, unionId)
-					if ok {
+	//查找10格半径
+	for tx := x-10; tx <= x+10; tx++ {
+		for ty := y-10; ty <= y+10; ty++ {
+			b1, ok := mgr.RBMgr.PositionBuild(tx, ty)
+			if ok {
+				absX := util.AbsInt(x-tx)
+				absY := util.AbsInt(y-ty)
+				if absX <= radius+b1.CellRadius()+1 && absY <= radius+b1.CellRadius()+1{
+					unionId1 := getUnionId(b1.RId)
+					if b1.RId == rid || unionId == unionId1{
+						return true
+					}
+				}
+			}
+
+			c1, ok := mgr.RCMgr.PositionCity(tx, ty)
+			if ok {
+				absX := util.AbsInt(x-tx)
+				absY := util.AbsInt(y-ty)
+				if absX <= radius+c1.CellRadius() && absY <= radius+c1.CellRadius(){
+					unionId1 := getUnionId(c1.RId)
+					if c1.RId == rid || unionId == unionId1{
 						return true
 					}
 				}

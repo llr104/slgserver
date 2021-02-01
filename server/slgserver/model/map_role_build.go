@@ -172,7 +172,7 @@ func (this* MapRoleBuild) CellRadius() int {
 			return 1
 		}
 	}else{
-		return 1
+		return 0
 	}
 }
 //是否有调兵权限
