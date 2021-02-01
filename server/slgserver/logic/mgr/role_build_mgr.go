@@ -177,7 +177,7 @@ func (this*roleBuildMgr) PositionBuild(x, y int) (*model.MapRoleBuild, bool) {
 	defer this.baseMutex.RUnlock()
 	posId := global.ToPosition(x, y)
 	b,ok := this.posRB[posId]
-	if ok && b.RId != 0 {
+	if ok {
 		return b, ok
 	}else{
 		return nil, false

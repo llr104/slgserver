@@ -158,6 +158,23 @@ func (this* MapRoleBuild) IsRoleFortress() bool  {
 	return this.Type == MapBuildFortress
 }
 
+func (this* MapRoleBuild) IsSysCity() bool  {
+	return this.Type == MapBuildSysCity
+}
+
+func (this* MapRoleBuild) CellRadius() int {
+	if this.IsSysCity(){
+		if this.Level >= 8{
+			return 3
+		}else if this.Level >= 5{
+			return 2
+		}else {
+			return 1
+		}
+	}else{
+		return 1
+	}
+}
 //是否有调兵权限
 func (this* MapRoleBuild) IsHasTransferAuth() bool  {
 	return this.Type == MapBuildFortress || this.Type == MapBuildSysFortress

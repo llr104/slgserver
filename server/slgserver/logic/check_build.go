@@ -6,22 +6,44 @@ import (
 	"slgserver/util"
 )
 
-func hasRoleBuildNearBy(x, y, rid, unionId int) bool {
+//是否和玩家领地相连
+func hasNearByRoleBuild(x, y, rid, unionId int) bool {
+	if _, ok := mgr.RCMgr.PositionCity(x, y); ok {
+		for i := util.MaxInt(x-2, 0); i <= util.MinInt(x+2, global.MapWith); i++ {
+			for j := util.MaxInt(y-2, 0); j <= util.MinInt(y+2, global.MapHeight) ; j++ {
+				if i == x && j == y {
+					continue
+				}
+				if rb, ok := mgr.RBMgr.PositionBuild(i, j); ok {
+					tUnionId := getUnionId(rb.RId)
+					if rb.RId == rid || (unionId != 0 && tUnionId == unionId){
+						return true
+					}
 
-	for i := util.MaxInt(x-1, 0); i <= util.MinInt(x+1, global.MapWith); i++ {
-		for j := util.MaxInt(y-1, 0); j <= util.MinInt(y+1, global.MapHeight) ; j++ {
-			if i == x && j == y {
-				continue
+					tParentId := getParentId(rb.RId)
+					if tParentId != 0 && tParentId == unionId{
+						return true
+					}
+				}
 			}
-			if rb, ok := mgr.RBMgr.PositionBuild(i, j); ok {
-				tUnionId := getUnionId(rb.RId)
-				if rb.RId == rid || (unionId != 0 && tUnionId == unionId){
-					return true
+		}
+	}else{
+		for i := util.MaxInt(x-1, 0); i <= util.MinInt(x+1, global.MapWith); i++ {
+			for j := util.MaxInt(y-1, 0); j <= util.MinInt(y+1, global.MapHeight) ; j++ {
+				if i == x && j == y {
+					continue
 				}
 
-				tParentId := getParentId(rb.RId)
-				if tParentId != 0 && tParentId == unionId{
-					return true
+				if rb, ok := mgr.RBMgr.PositionBuild(i, j); ok {
+					tUnionId := getUnionId(rb.RId)
+					if rb.RId == rid || (unionId != 0 && tUnionId == unionId){
+						return true
+					}
+
+					tParentId := getParentId(rb.RId)
+					if tParentId != 0 && tParentId == unionId{
+						return true
+					}
 				}
 			}
 		}
@@ -29,21 +51,18 @@ func hasRoleBuildNearBy(x, y, rid, unionId int) bool {
 	return false
 }
 
-func hasRoleBuildNearByCity(x, y, rid, unionId int) bool {
+func hasNearByRoleCity(x, y, rid, unionId int) bool {
 
-	for i := util.MaxInt(x-2, 0); i <= util.MinInt(x+2, global.MapWith); i++ {
-		for j := util.MaxInt(y-2, 0); j <= util.MinInt(y+2, global.MapHeight) ; j++ {
-			if i == x && j == y {
-				continue
-			}
-			if rb, ok := mgr.RBMgr.PositionBuild(i, j); ok {
-				tUnionId := getUnionId(rb.RId)
-				if rb.RId == rid || (unionId != 0 && tUnionId == unionId){
+	for i := x-2; i <= x+2; i++ {
+		for j := y-2; j <= y+2; j++ {
+			if rc, ok := mgr.RCMgr.PositionCity(i, j); ok {
+				tUnionId := getUnionId(rc.RId)
+				if rc.RId == rid || (unionId != 0 && tUnionId == unionId) {
 					return true
 				}
 
-				tParentId := getParentId(rb.RId)
-				if tParentId != 0 && tParentId == unionId{
+				tParentId := getParentId(rc.RId)
+				if tParentId != 0 && tParentId == unionId {
 					return true
 				}
 			}
@@ -55,31 +74,27 @@ func hasRoleBuildNearByCity(x, y, rid, unionId int) bool {
 
 //是否能到达
 func IsCanArrive(x, y, rid int) bool {
+
 	unionId := getUnionId(rid)
-	//目标位置是城池
-	if _, ok := mgr.RCMgr.PositionCity(x, y); ok {
-		//城的四周是否有地相连
-		ok := hasRoleBuildNearByCity(x, y, rid, unionId)
-		return ok
+	//是否和玩家领地相连
+	ok := hasNearByRoleBuild(x, y, rid, unionId)
+	if ok {
+		return true
+	}
 
-	}else{
-		//普通领地
-		ok := hasRoleBuildNearBy(x, y, rid, unionId)
-		if ok {
-			return true
-		}
+	//是否和玩家城池相连
+	ok = hasNearByRoleCity(x, y, rid, unionId)
+	if ok {
+		return true
+	}
 
-		//再判断是否和城市相连， 因为城池占了9格，所以该格子附近两个格子范围内有城池，则该地方是城池
-		for i := x-2; i <= x+2; i++ {
-			for j := y-2; j <= y+2; j++ {
-				if rc, ok := mgr.RCMgr.PositionCity(i, j); ok {
-					tUnionId := getUnionId(rc.RId)
-					if rc.RId == rid || (unionId != 0 && tUnionId == unionId) {
-						return true
-					}
-
-					tParentId := getParentId(rc.RId)
-					if tParentId != 0 && tParentId == unionId {
+	//再判断是否是系统城池相连
+	if rb, ok := mgr.RBMgr.PositionBuild(x, y); ok {
+		if rb.IsSysCity() {
+			for tx := x-rb.CellRadius(); tx <= x+rb.CellRadius(); tx++ {
+				for ty := y-rb.CellRadius(); ty <= y+rb.CellRadius(); ty++ {
+					ok = hasNearByRoleBuild(tx, ty, rid, unionId)
+					if ok {
 						return true
 					}
 				}
