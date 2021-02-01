@@ -339,7 +339,7 @@ func (this*roleBuildMgr) ScanBlock(x, y, length int) []*model.MapRoleBuild {
 		for j := y; j <= maxY; j++ {
 			posId := global.ToPosition(i, j)
 			v, ok := this.posRB[posId]
-			if ok && v.RId != 0 {
+			if ok && (v.RId != 0 || v.IsSysCity()) {
 				rb = append(rb, v)
 			}
 		}
