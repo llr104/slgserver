@@ -16,7 +16,7 @@
     "reclamation_time": 30,
     "reclamation_cost": 1,
     "draw_general_cost": 30,
-    "pr_point": 1000,
+    "pr_pont": 1000,
     "limit": 100
   },
   "role": {
@@ -70,6 +70,21 @@
       },
       {
         "soilders": 500
+      },
+      {
+        "soilders": 600
+      },
+      {
+        "soilders": 700
+      },
+      {
+        "soilders": 800
+      },
+      {
+        "soilders": 900
+      },
+      {
+        "soilders": 1000
       }
     ]
   },
