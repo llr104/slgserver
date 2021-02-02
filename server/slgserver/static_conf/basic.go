@@ -32,7 +32,7 @@ type general struct {
 	ReclamationTime       int    `json:"reclamation_time"`        //屯田消耗时间，单位秒
 	ReclamationCost       int    `json:"reclamation_cost"`        //屯田消耗政令
 	DrawGeneralCost       int    `json:"draw_general_cost"`       //抽卡消耗金币
-	PrPoint               int    `json:"pr_pont"`                 //合成一个武将或者的技能点
+	PrPoint               int    `json:"pr_point"`                //合成一个武将或者的技能点
 	Limit                 int    `json:"limit"`					  //武将数量上限
 
 }
@@ -50,8 +50,8 @@ type role struct {
 	StoneYield        	int  	`json:"stone_yield"`
 	GrainYield        	int  	`json:"grain_yield"`
 	GoldYield         	int  	`json:"gold_yield"`
-	DepotCapacity     	int  	`json:"depot_capacity"`			//仓库初始容量
-	BuildLimit        	int  	`json:"build_limit"`			//野外建筑上限
+	DepotCapacity     	int  	`json:"depot_capacity"`		 //仓库初始容量
+	BuildLimit        	int  	`json:"build_limit"`		 //野外建筑上限
 	RecoveryTime      	int  	`json:"recovery_time"`
 	DecreeLimit       	int  	`json:"decree_limit"`        //令牌上限
 	CollectTimesLimit 	int8 	`json:"collect_times_limit"` //每日征收次数上限
