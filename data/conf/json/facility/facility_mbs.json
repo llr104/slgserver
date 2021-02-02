@@ -28,7 +28,7 @@
       "iron": 1000,
       "stone": 1000
     },
-    "time": 100
+    "time": 10
   },
     {
       "level": 2,
@@ -37,12 +37,12 @@
       ],
       "need": {
         "decree": 0,
-        "grain": 1000,
-        "wood": 1000,
-        "iron": 1000,
-        "stone": 1000
+        "grain": 2000,
+        "wood": 2000,
+        "iron": 2000,
+        "stone": 2000
       },
-      "time": 100
+      "time": 20
     },
     {
       "level": 3,
@@ -51,12 +51,12 @@
       ],
       "need": {
         "decree": 0,
-        "grain": 1000,
-        "wood": 1000,
-        "iron": 1000,
-        "stone": 1000
+        "grain": 3000,
+        "wood": 3000,
+        "iron": 3000,
+        "stone": 3000
       },
-      "time": 100
+      "time": 30
     },
     {
       "level": 4,
@@ -65,12 +65,12 @@
       ],
       "need": {
         "decree": 0,
-        "grain": 1000,
-        "wood": 1000,
-        "iron": 1000,
-        "stone": 1000
+        "grain": 4000,
+        "wood": 4000,
+        "iron": 4000,
+        "stone": 4000
       },
-      "time": 100
+      "time": 40
     },
     {
       "level": 5,
@@ -79,12 +79,12 @@
       ],
       "need": {
         "decree": 0,
-        "grain": 1000,
-        "wood": 1000,
-        "iron": 1000,
-        "stone": 1000
+        "grain": 5000,
+        "wood": 5000,
+        "iron": 5000,
+        "stone": 5000
       },
-      "time": 100
+      "time": 50
     },
     {
       "level": 6,
@@ -93,12 +93,12 @@
       ],
       "need": {
         "decree": 0,
-        "grain": 1000,
-        "wood": 1000,
-        "iron": 1000,
-        "stone": 1000
+        "grain": 6000,
+        "wood": 6000,
+        "iron": 6000,
+        "stone": 6000
       },
-      "time": 100
+      "time": 60
     },
     {
       "level": 7,
@@ -107,12 +107,12 @@
       ],
       "need": {
         "decree": 0,
-        "grain": 1000,
-        "wood": 1000,
-        "iron": 1000,
-        "stone": 1000
+        "grain": 7000,
+        "wood": 7000,
+        "iron": 7000,
+        "stone": 7000
       },
-      "time": 100
+      "time": 70
     },
     {
       "level": 8,
@@ -121,12 +121,12 @@
       ],
       "need": {
         "decree": 0,
-        "grain": 1000,
-        "wood": 1000,
-        "iron": 1000,
-        "stone": 1000
+        "grain": 8000,
+        "wood": 8000,
+        "iron": 8000,
+        "stone": 8000
       },
-      "time": 100
+      "time": 80
     },
     {
       "level": 9,
@@ -135,12 +135,12 @@
       ],
       "need": {
         "decree": 0,
-        "grain": 1000,
-        "wood": 1000,
-        "iron": 1000,
-        "stone": 1000
+        "grain": 9000,
+        "wood": 9000,
+        "iron": 9000,
+        "stone": 9000
       },
-      "time": 100
+      "time": 90
     },
     {
       "level": 10,
@@ -149,10 +149,10 @@
       ],
       "need": {
         "decree": 0,
-        "grain": 1000,
-        "wood": 1000,
-        "iron": 1000,
-        "stone": 1000
+        "grain": 10000,
+        "wood": 10000,
+        "iron": 10000,
+        "stone": 10000
       },
       "time": 100
     }
