@@ -1,6 +1,17 @@
 {
   "title": "地图资源配置",
   "cfg":[
+    {"type": 50,
+      "des": "系统要塞",
+      "name": "要塞",
+      "level": 5,
+      "grain": 0,
+      "wood": 0,
+      "iron": 0,
+      "stone": 0,
+      "durable": 10000,
+      "defender": 1
+    },
     {"type": 51,
     "name": "城区",
     "level": 1,
@@ -304,17 +315,6 @@
      "stone": 0,
      "durable": 10000,
      "defender": 5
-   },
-    {"type": 56,
-      "des": "系统要塞",
-      "name": "要塞",
-      "level": 5,
-      "grain": 0,
-      "wood": 0,
-      "iron": 0,
-      "stone": 0,
-      "durable": 10000,
-      "defender": 1
-    }
+   }
   ]
 }

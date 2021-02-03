@@ -13,9 +13,9 @@ import (
 )
 
 const (
-	MapBuildFortress = 50		//玩家要塞
+	MapBuildSysFortress = 50	//系统要塞
 	MapBuildSysCity = 51		//系统城市
-	MapBuildSysFortress = 56	//系统要塞
+	MapBuildFortress = 56		//玩家要塞
 )
 
 /*******db 操作begin********/
@@ -157,6 +157,10 @@ func (this* MapRoleBuild) IsBusy() bool{
 
 func (this* MapRoleBuild) IsRoleFortress() bool  {
 	return this.Type == MapBuildFortress
+}
+
+func (this* MapRoleBuild) IsSysFortress() bool  {
+	return this.Type == MapBuildSysFortress
 }
 
 func (this* MapRoleBuild) IsSysCity() bool  {
