@@ -262,15 +262,17 @@ func (this*roleBuildMgr) RemoveFromRole(build *model.MapRoleBuild)  {
 	}
 	this.baseMutex.Unlock()
 
-	t := build.EndTime.Unix()
 	//移除放弃事件
+	t := build.GiveUpTime
 	this.giveUpMutex.Lock()
 	if ms, ok := this.giveUpRB[t]; ok{
 		delete(ms, build.Id)
 	}
 	this.giveUpMutex.Unlock()
 
+
 	//移除拆除事件
+	t = build.EndTime.Unix()
 	this.destroyMutex.Lock()
 	if ms, ok := this.destroyRB[t]; ok{
 		delete(ms, build.Id)
