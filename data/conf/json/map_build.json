@@ -9,7 +9,7 @@
       "wood": 0,
       "iron": 0,
       "stone": 0,
-      "durable": 10000,
+      "durable": 30000,
       "defender": 1
     },
     {"type": 51,
@@ -19,7 +19,7 @@
     "wood": 0,
     "iron": 0,
     "stone": 0,
-    "durable": 10000,
+    "durable": 100000,
     "defender": 5
    },
     {"type": 51,
@@ -29,7 +29,7 @@
       "wood": 0,
       "iron": 0,
       "stone": 0,
-      "durable": 10000,
+      "durable": 200000,
       "defender": 5
     },
     {"type": 51,
@@ -39,7 +39,7 @@
       "wood": 0,
       "iron": 0,
       "stone": 0,
-      "durable": 10000,
+      "durable": 300000,
       "defender": 5
     },
     {"type": 51,
@@ -49,7 +49,7 @@
       "wood": 0,
       "iron": 0,
       "stone": 0,
-      "durable": 10000,
+      "durable": 400000,
       "defender": 5
     },
     {"type": 51,
@@ -59,7 +59,7 @@
       "wood": 0,
       "iron": 0,
       "stone": 0,
-      "durable": 10000,
+      "durable": 500000,
       "defender": 5
     },
     {"type": 51,
@@ -69,7 +69,7 @@
       "wood": 0,
       "iron": 0,
       "stone": 0,
-      "durable": 10000,
+      "durable": 600000,
       "defender": 5
     },
     {"type": 51,
@@ -79,7 +79,7 @@
       "wood": 0,
       "iron": 0,
       "stone": 0,
-      "durable": 10000,
+      "durable": 700000,
       "defender": 5
     },
     {"type": 51,
@@ -89,7 +89,7 @@
       "wood": 0,
       "iron": 0,
       "stone": 0,
-      "durable": 10000,
+      "durable": 800000,
       "defender": 5
     },
     {"type": 51,
@@ -99,7 +99,7 @@
       "wood": 0,
       "iron": 0,
       "stone": 0,
-      "durable": 10000,
+      "durable": 900000,
       "defender": 5
     },
     {"type": 51,
@@ -109,7 +109,7 @@
       "wood": 0,
       "iron": 0,
       "stone": 0,
-      "durable": 10000,
+      "durable": 1000000,
       "defender": 5
     },
    {"type": 52,

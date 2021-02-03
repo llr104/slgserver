@@ -545,7 +545,7 @@ func executeBuild(army *model.Army)  {
 			blimit := static_conf.Basic.Role.BuildLimit
 			if blimit > mgr.RBMgr.BuildCnt(army.RId){
 				OccupySystemBuild(army.RId, army.ToX, army.ToY)
-				wr.DestroyDurable = 100
+				wr.DestroyDurable = 10000
 				wr.Occupy = 1
 			}else{
 				wr.Occupy = 0
