@@ -2,7 +2,6 @@ package mgr
 
 import (
 	"encoding/json"
-	"fmt"
 	"go.uber.org/zap"
 	"io/ioutil"
 	"math"
@@ -46,14 +45,14 @@ func TravelTime(speed, begX, begY, endX, endY int) int {
 }
 
 type NationalMapMgr struct {
-	mutex sync.RWMutex
-	conf map[int]model.NationalMap
-	sysCity map[int]model.NationalMap
+	mutex    sync.RWMutex
+	conf     map[int]model.NationalMap
+	sysBuild map[int]model.NationalMap
 }
 
 var NMMgr = &NationalMapMgr{
-	conf: make(map[int]model.NationalMap),
-	sysCity: make(map[int]model.NationalMap),
+	conf:     make(map[int]model.NationalMap),
+	sysBuild: make(map[int]model.NationalMap),
 }
 
 func (this*NationalMapMgr) Load() {
@@ -83,12 +82,13 @@ func (this*NationalMapMgr) Load() {
 		l := int8(v[1])
 		d := model.NationalMap{Y: i/ global.MapHeight, X: i% global.MapWith, MId: i, Type: t, Level: l}
 		this.conf[i] = d
-		if d.Type == model.MapBuildSysCity{
-			this.sysCity[i] = d
+		if	d.Type == model.MapBuildSysCity ||
+			d.Type == model.MapBuildSysFortress{
+			this.sysBuild[i] = d
 		}
 	}
 
-	fmt.Println(this.sysCity)
+	log.DefaultLog.Info("sysBuild len", zap.Int("len", len(this.sysBuild)))
 
 }
 
@@ -111,10 +111,12 @@ func (this*NationalMapMgr) IsCanBuild(x, y int) bool {
 func (this*NationalMapMgr) IsCanBuildCity(x, y int) bool {
 
 	//系统城池附近5格不能有玩家城池
-	for _, nationalMap := range this.sysCity {
-		if x >= nationalMap.X - 5 && x <= nationalMap.X + 5 &&
-			y >= nationalMap.Y - 5 && y <= nationalMap.Y + 5{
-			return false
+	for _, nationalMap := range this.sysBuild {
+		if nationalMap.Type == model.MapBuildSysCity {
+			if x >= nationalMap.X - 5 && x <= nationalMap.X + 5 &&
+				y >= nationalMap.Y - 5 && y <= nationalMap.Y + 5{
+				return false
+			}
 		}
 	}
 

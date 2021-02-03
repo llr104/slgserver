@@ -88,6 +88,7 @@ func (this* MapRoleBuild) Init() {
 		this.Stone = cfg.Stone
 		this.Grain = cfg.Grain
 		this.MaxDurable = cfg.Durable
+		this.CurDurable = cfg.Durable
 		this.Defender = cfg.Defender
 	}
 }

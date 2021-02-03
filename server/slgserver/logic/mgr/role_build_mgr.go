@@ -37,24 +37,26 @@ var RBMgr = &roleBuildMgr{
 
 func (this*roleBuildMgr) Load() {
 
-	if total, err := db.MasterDB.Where("type = ?",
-		model.MapBuildSysCity).Count(new(model.MapRoleBuild)); err != nil{
+	if total, err := db.MasterDB.Where("type = ? or type = ?",
+		model.MapBuildSysCity,
+		model.MapBuildSysFortress).Count(new(model.MapRoleBuild)); err != nil{
 		log.DefaultLog.Panic("db error")
 	}else{
-		//初始化系统城池进数据库
-		if int64(len(NMMgr.sysCity)) != total{
-			db.MasterDB.Where("type = ?",
-				model.MapBuildSysCity).Delete(new(model.MapRoleBuild))
-			for _, sysCity := range NMMgr.sysCity {
+		//初始化系统建筑到数据库
+		if int64(len(NMMgr.sysBuild)) != total{
+			db.MasterDB.Where("type = ? or type = ?",
+				model.MapBuildSysCity,
+				model.MapBuildSysFortress).Delete(new(model.MapRoleBuild))
+			for _, sysBuild := range NMMgr.sysBuild {
 
 				build := model.MapRoleBuild{
-					RId: 0,
-					Type: sysCity.Type,
-					Level: sysCity.Level,
-					X: sysCity.X,
-					Y: sysCity.Y,
+					RId:   0,
+					Type:  sysBuild.Type,
+					Level: sysBuild.Level,
+					X:     sysBuild.X,
+					Y:     sysBuild.Y,
 				}
-				build.ConvertToRes()
+				build.Init()
 				db.MasterDB.InsertOne(&build)
 			}
 		}
