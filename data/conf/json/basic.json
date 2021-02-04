@@ -16,7 +16,7 @@
     "reclamation_time": 30,
     "reclamation_cost": 1,
     "draw_general_cost": 30,
-    "pr_pont": 1000,
+    "pr_point": 1000,
     "limit": 100
   },
   "role": {
@@ -43,7 +43,7 @@
   "city": {
     "des": "城池的一些配置",
     "cost": 75,
-    "durable": 100,
+    "durable": 100000,
     "transform_rate": 50,
     "recovery_time": 600
   },
