@@ -208,7 +208,7 @@ func (this*roleResMgr) TryUseGold(rid int, gold int) bool{
 func (this*roleResMgr) produce() {
 	index := 1
 	for true {
-		t := static_conf.Basic.City.RecoveryTime
+		t := static_conf.Basic.Role.RecoveryTime
 		time.Sleep(time.Duration(t) * time.Second)
 		this.mutex.RLock()
 		for _, v := range this.rolesRes {
