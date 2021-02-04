@@ -28,7 +28,8 @@ func IsCanArrive(x, y, rid int) bool {
 				absY := util.AbsInt(y-ty)
 				if absX <= radius+b1.CellRadius()+1 && absY <= radius+b1.CellRadius()+1{
 					unionId1 := getUnionId(b1.RId)
-					if b1.RId == rid || unionId == unionId1{
+					parentId := getParentId(b1.RId)
+					if b1.RId == rid || (unionId != 0 && (unionId == unionId1 || unionId == parentId)){
 						return true
 					}
 				}
@@ -38,9 +39,10 @@ func IsCanArrive(x, y, rid int) bool {
 			if ok {
 				absX := util.AbsInt(x-tx)
 				absY := util.AbsInt(y-ty)
-				if absX <= radius+c1.CellRadius() && absY <= radius+c1.CellRadius(){
+				if absX <= radius+c1.CellRadius()+1 && absY <= radius+c1.CellRadius()+1{
 					unionId1 := getUnionId(c1.RId)
-					if c1.RId == rid || unionId == unionId1{
+					parentId := getParentId(c1.RId)
+					if c1.RId == rid || (unionId != 0 && (unionId == unionId1 || unionId == parentId)){
 						return true
 					}
 				}

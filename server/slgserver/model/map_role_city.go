@@ -84,7 +84,7 @@ func (this *MapRoleCity) Level() int8 {
 }
 
 func (this* MapRoleCity) CellRadius() int {
-	return 2
+	return 1
 }
 
 func (this *MapRoleCity) TableName() string {
