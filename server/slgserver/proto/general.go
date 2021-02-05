@@ -4,7 +4,6 @@ type General struct {
 	Id        		int     `json:"id"`
 	CfgId     		int		`json:"cfgId"`
 	PhysicalPower 	int     `json:"physical_power"`
-	Cost      		int     `json:"cost"`
 	Order     		int8    `json:"order"`
 	Level			int8    `json:"level"`
 	Exp				int		`json:"exp"`
@@ -31,7 +30,6 @@ func (this*General) ToArray()[]int {
 	r = append(r, this.Id)
 	r = append(r, this.CfgId)
 	r = append(r, this.PhysicalPower)
-	r = append(r, this.Cost)
 	r = append(r, int(this.Order))
 	r = append(r, int(this.Level))
 	r = append(r, this.Exp)
