@@ -5,10 +5,12 @@ import (
 	"fmt"
 	"go.uber.org/zap"
 	"io/ioutil"
+	"math/rand"
 	"os"
 	"path"
 	"slgserver/config"
 	"slgserver/log"
+	"time"
 )
 
 var General general
@@ -34,9 +36,10 @@ type g struct {
 }
 
 type general struct {
-	Title string `json:"title"`
-	GArr  []g    `json:"list"`
+	Title string 	`json:"title"`
+	GArr  []g    	`json:"list"`
 	GMap  map[int]g
+	totalProbability int
 }
 
 func (this *general) Load()  {
@@ -50,10 +53,13 @@ func (this *general) Load()  {
 		os.Exit(0)
 	}
 
+	this.totalProbability = 0
+
 	json.Unmarshal(jdata, this)
 	this.GMap = make(map[int]g)
 	for _, v := range this.GArr {
 		this.GMap[v.CfgId] = v
+		this.totalProbability += v.Probability
 	}
 	fmt.Println(this)
 }
@@ -65,5 +71,18 @@ func (this *general) Cost(cfgId int) int8 {
 	}else{
 		return 0
 	}
+}
 
+func (this *general) Draw () int {
+	rand.Seed(time.Now().UnixNano())
+	rate := rand.Intn(this.totalProbability)
+
+	cur := 0
+	for _, g := range this.GArr {
+		if rate >= cur && rate < cur+g.Probability {
+			return g.CfgId
+		}
+		cur += g.Probability
+	}
+	return 0
 }
