@@ -17,6 +17,7 @@
 			"destroy_grow": 40,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 7,
 			"star": 5,
 			"arms": [
 				2,
@@ -41,6 +42,7 @@
 			"destroy_grow": 50,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 12,
 			"star": 5,
 			"arms": [
 				3,
@@ -65,6 +67,7 @@
 			"destroy_grow": 55.00000000000001,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 21,
 			"star": 5,
 			"arms": [
 				3,
@@ -89,6 +92,7 @@
 			"destroy_grow": 80,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 22,
 			"star": 5,
 			"arms": [
 				3,
@@ -113,6 +117,7 @@
 			"destroy_grow": 50,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 24,
 			"star": 5,
 			"arms": [
 				1,
@@ -137,6 +142,7 @@
 			"destroy_grow": 50,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 5,
 			"star": 5,
 			"arms": [
 				3,
@@ -161,6 +167,7 @@
 			"destroy_grow": 84,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 10,
 			"star": 5,
 			"arms": [
 				3,
@@ -185,6 +192,7 @@
 			"destroy_grow": 89,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 18,
 			"star": 5,
 			"arms": [
 				3,
@@ -209,6 +217,7 @@
 			"destroy_grow": 80,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 10,
 			"star": 5,
 			"arms": [
 				3,
@@ -233,6 +242,7 @@
 			"destroy_grow": 80,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 15,
 			"star": 5,
 			"arms": [
 				2,
@@ -257,6 +267,7 @@
 			"destroy_grow": 91,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 10,
 			"star": 5,
 			"arms": [
 				3,
@@ -281,6 +292,7 @@
 			"destroy_grow": 50,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 20,
 			"star": 5,
 			"arms": [
 				2,
@@ -305,6 +317,7 @@
 			"destroy_grow": 82,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 23,
 			"star": 5,
 			"arms": [
 				1,
@@ -329,6 +342,7 @@
 			"destroy_grow": 90,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 23,
 			"star": 5,
 			"arms": [
 				1,
@@ -353,6 +367,7 @@
 			"destroy_grow": 80,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 11,
 			"star": 5,
 			"arms": [
 				3,
@@ -377,6 +392,7 @@
 			"destroy_grow": 95,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 13,
 			"star": 5,
 			"arms": [
 				1,
@@ -401,6 +417,7 @@
 			"destroy_grow": 90,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 11,
 			"star": 5,
 			"arms": [
 				1,
@@ -425,6 +442,7 @@
 			"destroy_grow": 88,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 21,
 			"star": 5,
 			"arms": [
 				3,
@@ -449,6 +467,7 @@
 			"destroy_grow": 89,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 10,
 			"star": 5,
 			"arms": [
 				3,
@@ -473,6 +492,7 @@
 			"destroy_grow": 95,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 22,
 			"star": 5,
 			"arms": [
 				3,
@@ -497,6 +517,7 @@
 			"destroy_grow": 81,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 7,
 			"star": 5,
 			"arms": [
 				2,
@@ -521,6 +542,7 @@
 			"destroy_grow": 92,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 7,
 			"star": 5,
 			"arms": [
 				3,
@@ -545,6 +567,7 @@
 			"destroy_grow": 97,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 10,
 			"star": 5,
 			"arms": [
 				3,
@@ -569,6 +592,7 @@
 			"destroy_grow": 81,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 24,
 			"star": 5,
 			"arms": [
 				2,
@@ -593,6 +617,7 @@
 			"destroy_grow": 81,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 6,
 			"star": 5,
 			"arms": [
 				2,
@@ -617,6 +642,7 @@
 			"destroy_grow": 91,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 5,
 			"star": 5,
 			"arms": [
 				2,
@@ -641,6 +667,7 @@
 			"destroy_grow": 92,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 11,
 			"star": 5,
 			"arms": [
 				2,
@@ -665,6 +692,7 @@
 			"destroy_grow": 87,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 8,
 			"star": 5,
 			"arms": [
 				2,
@@ -689,6 +717,7 @@
 			"destroy_grow": 87,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 5,
 			"star": 5,
 			"arms": [
 				1,
@@ -713,6 +742,7 @@
 			"destroy_grow": 26,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 19,
 			"star": 5,
 			"arms": [
 				2,
@@ -737,6 +767,7 @@
 			"destroy_grow": 24,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 18,
 			"star": 5,
 			"arms": [
 				2,
@@ -761,6 +792,7 @@
 			"destroy_grow": 24,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 21,
 			"star": 5,
 			"arms": [
 				2,
@@ -785,6 +817,7 @@
 			"destroy_grow": 28,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 23,
 			"star": 5,
 			"arms": [
 				2,
@@ -809,6 +842,7 @@
 			"destroy_grow": 19,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 10,
 			"star": 5,
 			"arms": [
 				3,
@@ -833,6 +867,7 @@
 			"destroy_grow": 19,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 17,
 			"star": 5,
 			"arms": [
 				3,
@@ -857,6 +892,7 @@
 			"destroy_grow": 25,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 19,
 			"star": 5,
 			"arms": [
 				1,
@@ -881,6 +917,7 @@
 			"destroy_grow": 29,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 24,
 			"star": 5,
 			"arms": [
 				1,
@@ -905,6 +942,7 @@
 			"destroy_grow": 19,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 22,
 			"star": 5,
 			"arms": [
 				2,
@@ -929,6 +967,7 @@
 			"destroy_grow": 29,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 20,
 			"star": 5,
 			"arms": [
 				2,
@@ -953,6 +992,7 @@
 			"destroy_grow": 31,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 6,
 			"star": 5,
 			"arms": [
 				1,
@@ -977,6 +1017,7 @@
 			"destroy_grow": 30,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 6,
 			"star": 5,
 			"arms": [
 				3,
@@ -1001,6 +1042,7 @@
 			"destroy_grow": 30,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 18,
 			"star": 5,
 			"arms": [
 				2,
@@ -1025,6 +1067,7 @@
 			"destroy_grow": 30,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 19,
 			"star": 5,
 			"arms": [
 				2,
@@ -1049,6 +1092,7 @@
 			"destroy_grow": 30,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 13,
 			"star": 5,
 			"arms": [
 				2,
@@ -1073,6 +1117,7 @@
 			"destroy_grow": 30,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 6,
 			"star": 5,
 			"arms": [
 				2,
@@ -1097,6 +1142,7 @@
 			"destroy_grow": 30,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 22,
 			"star": 5,
 			"arms": [
 				2,
@@ -1121,6 +1167,7 @@
 			"destroy_grow": 13,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 16,
 			"star": 5,
 			"arms": [
 				2,
@@ -1145,6 +1192,7 @@
 			"destroy_grow": 13,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 20,
 			"star": 5,
 			"arms": [
 				3,
@@ -1169,6 +1217,7 @@
 			"destroy_grow": 13,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 7,
 			"star": 5,
 			"arms": [
 				2,
@@ -1193,6 +1242,7 @@
 			"destroy_grow": 13,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 22,
 			"star": 5,
 			"arms": [
 				3,
@@ -1217,6 +1267,7 @@
 			"destroy_grow": 13,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 16,
 			"star": 5,
 			"arms": [
 				2,
@@ -1241,6 +1292,7 @@
 			"destroy_grow": 13,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 12,
 			"star": 5,
 			"arms": [
 				3,
@@ -1265,6 +1317,7 @@
 			"destroy_grow": 13,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 10,
 			"star": 5,
 			"arms": [
 				3,
@@ -1289,6 +1342,7 @@
 			"destroy_grow": 13,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 9,
 			"star": 5,
 			"arms": [
 				3,
@@ -1313,6 +1367,7 @@
 			"destroy_grow": 13,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 5,
 			"star": 5,
 			"arms": [
 				3,
@@ -1337,6 +1392,7 @@
 			"destroy_grow": 22,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 9,
 			"star": 5,
 			"arms": [
 				2,
@@ -1361,6 +1417,7 @@
 			"destroy_grow": 22,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 10,
 			"star": 5,
 			"arms": [
 				1,
@@ -1385,6 +1442,7 @@
 			"destroy_grow": 13,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 20,
 			"star": 5,
 			"arms": [
 				3,
@@ -1409,6 +1467,7 @@
 			"destroy_grow": 22,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 15,
 			"star": 5,
 			"arms": [
 				1,
@@ -1433,6 +1492,7 @@
 			"destroy_grow": 22,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 11,
 			"star": 5,
 			"arms": [
 				2,
@@ -1457,6 +1517,7 @@
 			"destroy_grow": 22,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 8,
 			"star": 5,
 			"arms": [
 				1,
@@ -1481,6 +1542,7 @@
 			"destroy_grow": 22,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 13,
 			"star": 5,
 			"arms": [
 				2,
@@ -1505,6 +1567,7 @@
 			"destroy_grow": 22,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 19,
 			"star": 5,
 			"arms": [
 				2,
@@ -1529,6 +1592,7 @@
 			"destroy_grow": 13,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 14,
 			"star": 5,
 			"arms": [
 				3,
@@ -1553,6 +1617,7 @@
 			"destroy_grow": 13,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 22,
 			"star": 5,
 			"arms": [
 				3,
@@ -1577,6 +1642,7 @@
 			"destroy_grow": 13,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 8,
 			"star": 5,
 			"arms": [
 				3,
@@ -1601,6 +1667,7 @@
 			"destroy_grow": 12,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 6,
 			"star": 5,
 			"arms": [
 				1,
@@ -1625,6 +1692,7 @@
 			"destroy_grow": 24,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 13,
 			"star": 5,
 			"arms": [
 				2,
@@ -1649,6 +1717,7 @@
 			"destroy_grow": 24,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 23,
 			"star": 5,
 			"arms": [
 				2,
@@ -1673,6 +1742,7 @@
 			"destroy_grow": 12,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 23,
 			"star": 5,
 			"arms": [
 				1,
@@ -1697,6 +1767,7 @@
 			"destroy_grow": 13,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 12,
 			"star": 5,
 			"arms": [
 				3,
@@ -1721,6 +1792,7 @@
 			"destroy_grow": 13,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 18,
 			"star": 5,
 			"arms": [
 				3,
@@ -1745,6 +1817,7 @@
 			"destroy_grow": 13,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 15,
 			"star": 5,
 			"arms": [
 				3,
@@ -1769,6 +1842,7 @@
 			"destroy_grow": 39,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 8,
 			"star": 5,
 			"arms": [
 				2,
@@ -1793,6 +1867,7 @@
 			"destroy_grow": 13,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 9,
 			"star": 5,
 			"arms": [
 				3,
@@ -1817,6 +1892,7 @@
 			"destroy_grow": 13,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 8,
 			"star": 5,
 			"arms": [
 				3,
@@ -1841,6 +1917,7 @@
 			"destroy_grow": 11,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 19,
 			"star": 5,
 			"arms": [
 				2,
@@ -1865,6 +1942,7 @@
 			"destroy_grow": 39,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 12,
 			"star": 5,
 			"arms": [
 				2,
@@ -1889,6 +1967,7 @@
 			"destroy_grow": 11,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 16,
 			"star": 5,
 			"arms": [
 				3,
@@ -1913,6 +1992,7 @@
 			"destroy_grow": 13,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 17,
 			"star": 5,
 			"arms": [
 				3,
@@ -1937,6 +2017,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 22,
 			"star": 5,
 			"arms": [
 				3,
@@ -1961,6 +2042,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 6,
 			"star": 5,
 			"arms": [
 				3,
@@ -1985,6 +2067,7 @@
 			"destroy_grow": 11,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 14,
 			"star": 5,
 			"arms": [
 				2,
@@ -2009,6 +2092,7 @@
 			"destroy_grow": 29,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 18,
 			"star": 5,
 			"arms": [
 				1,
@@ -2033,6 +2117,7 @@
 			"destroy_grow": 11,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 13,
 			"star": 5,
 			"arms": [
 				3,
@@ -2057,6 +2142,7 @@
 			"destroy_grow": 11,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 5,
 			"star": 5,
 			"arms": [
 				1,
@@ -2081,6 +2167,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 10,
 			"star": 5,
 			"arms": [
 				3,
@@ -2105,6 +2192,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 7,
 			"star": 5,
 			"arms": [
 				3,
@@ -2129,6 +2217,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 13,
 			"star": 5,
 			"arms": [
 				2,
@@ -2153,6 +2242,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 18,
 			"star": 5,
 			"arms": [
 				2,
@@ -2177,6 +2267,7 @@
 			"destroy_grow": 11,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 15,
 			"star": 5,
 			"arms": [
 				1,
@@ -2201,6 +2292,7 @@
 			"destroy_grow": 11,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 18,
 			"star": 5,
 			"arms": [
 				1,
@@ -2225,6 +2317,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 33,
 			"star": 4,
 			"arms": [
 				2,
@@ -2249,6 +2342,7 @@
 			"destroy_grow": 14,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 47,
 			"star": 4,
 			"arms": [
 				3,
@@ -2273,6 +2367,7 @@
 			"destroy_grow": 24,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 30,
 			"star": 4,
 			"arms": [
 				3,
@@ -2297,6 +2392,7 @@
 			"destroy_grow": 18,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 40,
 			"star": 4,
 			"arms": [
 				3,
@@ -2321,6 +2417,7 @@
 			"destroy_grow": 28,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 20,
 			"star": 4,
 			"arms": [
 				1,
@@ -2345,6 +2442,7 @@
 			"destroy_grow": 18,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 27,
 			"star": 4,
 			"arms": [
 				3,
@@ -2369,6 +2467,7 @@
 			"destroy_grow": 21,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 44,
 			"star": 4,
 			"arms": [
 				3,
@@ -2393,6 +2492,7 @@
 			"destroy_grow": 41,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 40,
 			"star": 4,
 			"arms": [
 				1,
@@ -2417,6 +2517,7 @@
 			"destroy_grow": 22,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 47,
 			"star": 4,
 			"arms": [
 				2,
@@ -2441,6 +2542,7 @@
 			"destroy_grow": 17,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 45,
 			"star": 4,
 			"arms": [
 				3,
@@ -2465,6 +2567,7 @@
 			"destroy_grow": 19,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 26,
 			"star": 4,
 			"arms": [
 				3,
@@ -2489,6 +2592,7 @@
 			"destroy_grow": 30,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 29,
 			"star": 4,
 			"arms": [
 				1,
@@ -2513,6 +2617,7 @@
 			"destroy_grow": 37,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 44,
 			"star": 4,
 			"arms": [
 				1,
@@ -2537,6 +2642,7 @@
 			"destroy_grow": 17,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 27,
 			"star": 4,
 			"arms": [
 				3,
@@ -2561,6 +2667,7 @@
 			"destroy_grow": 25,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 46,
 			"star": 4,
 			"arms": [
 				1,
@@ -2585,6 +2692,7 @@
 			"destroy_grow": 19,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 28,
 			"star": 4,
 			"arms": [
 				3,
@@ -2609,6 +2717,7 @@
 			"destroy_grow": 26,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 31,
 			"star": 4,
 			"arms": [
 				1,
@@ -2633,6 +2742,7 @@
 			"destroy_grow": 26,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 42,
 			"star": 4,
 			"arms": [
 				1,
@@ -2657,6 +2767,7 @@
 			"destroy_grow": 26,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 33,
 			"star": 4,
 			"arms": [
 				1,
@@ -2681,6 +2792,7 @@
 			"destroy_grow": 26,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 37,
 			"star": 4,
 			"arms": [
 				2,
@@ -2705,6 +2817,7 @@
 			"destroy_grow": 13,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 29,
 			"star": 4,
 			"arms": [
 				3,
@@ -2729,6 +2842,7 @@
 			"destroy_grow": 19,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 36,
 			"star": 4,
 			"arms": [
 				3,
@@ -2753,6 +2867,7 @@
 			"destroy_grow": 13,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 34,
 			"star": 4,
 			"arms": [
 				3,
@@ -2777,6 +2892,7 @@
 			"destroy_grow": 19,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 26,
 			"star": 4,
 			"arms": [
 				3,
@@ -2801,6 +2917,7 @@
 			"destroy_grow": 15,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 35,
 			"star": 4,
 			"arms": [
 				3,
@@ -2825,6 +2942,7 @@
 			"destroy_grow": 31,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 44,
 			"star": 4,
 			"arms": [
 				1,
@@ -2849,6 +2967,7 @@
 			"destroy_grow": 28,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 29,
 			"star": 4,
 			"arms": [
 				1,
@@ -2873,6 +2992,7 @@
 			"destroy_grow": 36,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 37,
 			"star": 4,
 			"arms": [
 				1,
@@ -2897,6 +3017,7 @@
 			"destroy_grow": 36,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 49,
 			"star": 4,
 			"arms": [
 				1,
@@ -2921,6 +3042,7 @@
 			"destroy_grow": 13,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 38,
 			"star": 4,
 			"arms": [
 				3,
@@ -2945,6 +3067,7 @@
 			"destroy_grow": 37,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 49,
 			"star": 4,
 			"arms": [
 				1,
@@ -2969,6 +3092,7 @@
 			"destroy_grow": 39,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 46,
 			"star": 4,
 			"arms": [
 				1,
@@ -2993,6 +3117,7 @@
 			"destroy_grow": 31,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 23,
 			"star": 4,
 			"arms": [
 				1,
@@ -3017,6 +3142,7 @@
 			"destroy_grow": 19,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 27,
 			"star": 4,
 			"arms": [
 				3,
@@ -3041,6 +3167,7 @@
 			"destroy_grow": 37,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 24,
 			"star": 4,
 			"arms": [
 				1,
@@ -3065,6 +3192,7 @@
 			"destroy_grow": 9,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 49,
 			"star": 4,
 			"arms": [
 				3,
@@ -3089,6 +3217,7 @@
 			"destroy_grow": 12,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 24,
 			"star": 4,
 			"arms": [
 				3,
@@ -3113,6 +3242,7 @@
 			"destroy_grow": 19,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 42,
 			"star": 4,
 			"arms": [
 				3,
@@ -3137,6 +3267,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 49,
 			"star": 4,
 			"arms": [
 				3,
@@ -3161,6 +3292,7 @@
 			"destroy_grow": 19,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 44,
 			"star": 4,
 			"arms": [
 				3,
@@ -3185,6 +3317,7 @@
 			"destroy_grow": 29,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 20,
 			"star": 4,
 			"arms": [
 				1,
@@ -3209,6 +3342,7 @@
 			"destroy_grow": 16,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 33,
 			"star": 4,
 			"arms": [
 				3,
@@ -3233,6 +3367,7 @@
 			"destroy_grow": 17,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 48,
 			"star": 4,
 			"arms": [
 				3,
@@ -3257,6 +3392,7 @@
 			"destroy_grow": 26,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 32,
 			"star": 4,
 			"arms": [
 				2,
@@ -3281,6 +3417,7 @@
 			"destroy_grow": 27,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 39,
 			"star": 4,
 			"arms": [
 				2,
@@ -3305,6 +3442,7 @@
 			"destroy_grow": 26,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 29,
 			"star": 4,
 			"arms": [
 				3,
@@ -3329,6 +3467,7 @@
 			"destroy_grow": 16,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 32,
 			"star": 4,
 			"arms": [
 				2,
@@ -3353,6 +3492,7 @@
 			"destroy_grow": 26,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 47,
 			"star": 4,
 			"arms": [
 				2,
@@ -3377,6 +3517,7 @@
 			"destroy_grow": 24,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 27,
 			"star": 4,
 			"arms": [
 				2,
@@ -3401,6 +3542,7 @@
 			"destroy_grow": 29,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 23,
 			"star": 4,
 			"arms": [
 				2,
@@ -3425,6 +3567,7 @@
 			"destroy_grow": 26,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 47,
 			"star": 4,
 			"arms": [
 				2,
@@ -3449,6 +3592,7 @@
 			"destroy_grow": 26,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 48,
 			"star": 4,
 			"arms": [
 				2,
@@ -3473,6 +3617,7 @@
 			"destroy_grow": 36,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 39,
 			"star": 4,
 			"arms": [
 				2,
@@ -3497,6 +3642,7 @@
 			"destroy_grow": 26,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 34,
 			"star": 4,
 			"arms": [
 				2,
@@ -3521,6 +3667,7 @@
 			"destroy_grow": 13,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 42,
 			"star": 4,
 			"arms": [
 				3,
@@ -3545,6 +3692,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 20,
 			"star": 4,
 			"arms": [
 				3,
@@ -3569,6 +3717,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 26,
 			"star": 4,
 			"arms": [
 				3,
@@ -3593,6 +3742,7 @@
 			"destroy_grow": 26,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 38,
 			"star": 4,
 			"arms": [
 				2,
@@ -3617,6 +3767,7 @@
 			"destroy_grow": 26,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 38,
 			"star": 4,
 			"arms": [
 				2,
@@ -3641,6 +3792,7 @@
 			"destroy_grow": 6,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 23,
 			"star": 4,
 			"arms": [
 				3,
@@ -3665,6 +3817,7 @@
 			"destroy_grow": 38,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 48,
 			"star": 4,
 			"arms": [
 				2,
@@ -3689,6 +3842,7 @@
 			"destroy_grow": 9,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 36,
 			"star": 4,
 			"arms": [
 				3,
@@ -3713,6 +3867,7 @@
 			"destroy_grow": 19,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 47,
 			"star": 4,
 			"arms": [
 				3,
@@ -3737,6 +3892,7 @@
 			"destroy_grow": 39,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 21,
 			"star": 4,
 			"arms": [
 				1,
@@ -3761,6 +3917,7 @@
 			"destroy_grow": 16,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 30,
 			"star": 4,
 			"arms": [
 				3,
@@ -3785,6 +3942,7 @@
 			"destroy_grow": 29,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 38,
 			"star": 4,
 			"arms": [
 				1,
@@ -3809,6 +3967,7 @@
 			"destroy_grow": 29,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 33,
 			"star": 4,
 			"arms": [
 				1,
@@ -3833,6 +3992,7 @@
 			"destroy_grow": 19,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 23,
 			"star": 4,
 			"arms": [
 				2,
@@ -3857,6 +4017,7 @@
 			"destroy_grow": 19,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 36,
 			"star": 4,
 			"arms": [
 				2,
@@ -3881,6 +4042,7 @@
 			"destroy_grow": 9,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 32,
 			"star": 4,
 			"arms": [
 				3,
@@ -3905,6 +4067,7 @@
 			"destroy_grow": 39,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 35,
 			"star": 4,
 			"arms": [
 				1,
@@ -3929,6 +4092,7 @@
 			"destroy_grow": 11,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 42,
 			"star": 4,
 			"arms": [
 				1,
@@ -3953,6 +4117,7 @@
 			"destroy_grow": 12,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 21,
 			"star": 4,
 			"arms": [
 				3,
@@ -3977,6 +4142,7 @@
 			"destroy_grow": 12,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 22,
 			"star": 4,
 			"arms": [
 				2,
@@ -4001,6 +4167,7 @@
 			"destroy_grow": 8,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 35,
 			"star": 4,
 			"arms": [
 				2,
@@ -4025,6 +4192,7 @@
 			"destroy_grow": 8,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 25,
 			"star": 4,
 			"arms": [
 				3,
@@ -4049,6 +4217,7 @@
 			"destroy_grow": 22,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 37,
 			"star": 4,
 			"arms": [
 				1,
@@ -4073,6 +4242,7 @@
 			"destroy_grow": 12,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 33,
 			"star": 4,
 			"arms": [
 				1,
@@ -4097,6 +4267,7 @@
 			"destroy_grow": 3,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 44,
 			"star": 4,
 			"arms": [
 				3,
@@ -4121,6 +4292,7 @@
 			"destroy_grow": 7,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 49,
 			"star": 4,
 			"arms": [
 				3,
@@ -4145,6 +4317,7 @@
 			"destroy_grow": 13,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 41,
 			"star": 4,
 			"arms": [
 				3,
@@ -4169,6 +4342,7 @@
 			"destroy_grow": 3,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 49,
 			"star": 4,
 			"arms": [
 				3,
@@ -4193,6 +4367,7 @@
 			"destroy_grow": 3,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 26,
 			"star": 4,
 			"arms": [
 				1,
@@ -4217,6 +4392,7 @@
 			"destroy_grow": 13,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 23,
 			"star": 4,
 			"arms": [
 				2,
@@ -4241,6 +4417,7 @@
 			"destroy_grow": 9,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 40,
 			"star": 4,
 			"arms": [
 				3,
@@ -4265,6 +4442,7 @@
 			"destroy_grow": 26,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 22,
 			"star": 4,
 			"arms": [
 				2,
@@ -4289,6 +4467,7 @@
 			"destroy_grow": 26,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 44,
 			"star": 4,
 			"arms": [
 				2,
@@ -4313,6 +4492,7 @@
 			"destroy_grow": 26,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 25,
 			"star": 4,
 			"arms": [
 				2,
@@ -4337,6 +4517,7 @@
 			"destroy_grow": 26,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 47,
 			"star": 4,
 			"arms": [
 				2,
@@ -4361,6 +4542,7 @@
 			"destroy_grow": 2,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 33,
 			"star": 4,
 			"arms": [
 				2,
@@ -4385,6 +4567,7 @@
 			"destroy_grow": 20,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 24,
 			"star": 4,
 			"arms": [
 				2,
@@ -4409,6 +4592,7 @@
 			"destroy_grow": 6,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 24,
 			"star": 4,
 			"arms": [
 				2,
@@ -4433,6 +4617,7 @@
 			"destroy_grow": 26,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 48,
 			"star": 4,
 			"arms": [
 				2,
@@ -4457,6 +4642,7 @@
 			"destroy_grow": 16,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 35,
 			"star": 4,
 			"arms": [
 				2,
@@ -4481,6 +4667,7 @@
 			"destroy_grow": 26,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 49,
 			"star": 4,
 			"arms": [
 				2,
@@ -4505,6 +4692,7 @@
 			"destroy_grow": 16,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 23,
 			"star": 4,
 			"arms": [
 				2,
@@ -4529,6 +4717,7 @@
 			"destroy_grow": 16,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 35,
 			"star": 4,
 			"arms": [
 				2,
@@ -4553,6 +4742,7 @@
 			"destroy_grow": 16,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 47,
 			"star": 4,
 			"arms": [
 				2,
@@ -4577,6 +4767,7 @@
 			"destroy_grow": 20,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 41,
 			"star": 4,
 			"arms": [
 				3,
@@ -4601,6 +4792,7 @@
 			"destroy_grow": 20,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 44,
 			"star": 4,
 			"arms": [
 				3,
@@ -4625,6 +4817,7 @@
 			"destroy_grow": 20,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 28,
 			"star": 4,
 			"arms": [
 				3,
@@ -4649,6 +4842,7 @@
 			"destroy_grow": 20,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 40,
 			"star": 4,
 			"arms": [
 				3,
@@ -4673,6 +4867,7 @@
 			"destroy_grow": 20,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 33,
 			"star": 4,
 			"arms": [
 				3,
@@ -4697,6 +4892,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 43,
 			"star": 4,
 			"arms": [
 				2,
@@ -4721,6 +4917,7 @@
 			"destroy_grow": 15,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 30,
 			"star": 4,
 			"arms": [
 				3,
@@ -4745,6 +4942,7 @@
 			"destroy_grow": 15,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 38,
 			"star": 4,
 			"arms": [
 				3,
@@ -4769,6 +4967,7 @@
 			"destroy_grow": 15,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 22,
 			"star": 4,
 			"arms": [
 				3,
@@ -4793,6 +4992,7 @@
 			"destroy_grow": 15,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 43,
 			"star": 4,
 			"arms": [
 				3,
@@ -4817,6 +5017,7 @@
 			"destroy_grow": 15,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 46,
 			"star": 4,
 			"arms": [
 				3,
@@ -4841,6 +5042,7 @@
 			"destroy_grow": 15,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 21,
 			"star": 4,
 			"arms": [
 				3,
@@ -4865,6 +5067,7 @@
 			"destroy_grow": 30,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 49,
 			"star": 4,
 			"arms": [
 				3,
@@ -4889,6 +5092,7 @@
 			"destroy_grow": 30,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 23,
 			"star": 4,
 			"arms": [
 				3,
@@ -4913,6 +5117,7 @@
 			"destroy_grow": 30,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 27,
 			"star": 4,
 			"arms": [
 				3,
@@ -4937,6 +5142,7 @@
 			"destroy_grow": 30,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 35,
 			"star": 4,
 			"arms": [
 				3,
@@ -4961,6 +5167,7 @@
 			"destroy_grow": 30,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 34,
 			"star": 4,
 			"arms": [
 				3,
@@ -4985,6 +5192,7 @@
 			"destroy_grow": 30,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 41,
 			"star": 4,
 			"arms": [
 				3,
@@ -5009,6 +5217,7 @@
 			"destroy_grow": 30,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 48,
 			"star": 4,
 			"arms": [
 				3,
@@ -5033,6 +5242,7 @@
 			"destroy_grow": 30,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 48,
 			"star": 4,
 			"arms": [
 				3,
@@ -5057,6 +5267,7 @@
 			"destroy_grow": 30,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 21,
 			"star": 4,
 			"arms": [
 				3,
@@ -5081,6 +5292,7 @@
 			"destroy_grow": 30,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 47,
 			"star": 4,
 			"arms": [
 				3,
@@ -5105,6 +5317,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 25,
 			"star": 4,
 			"arms": [
 				3,
@@ -5129,6 +5342,7 @@
 			"destroy_grow": 30,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 31,
 			"star": 4,
 			"arms": [
 				3,
@@ -5153,6 +5367,7 @@
 			"destroy_grow": 30,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 33,
 			"star": 4,
 			"arms": [
 				2,
@@ -5177,6 +5392,7 @@
 			"destroy_grow": 30,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 22,
 			"star": 4,
 			"arms": [
 				2,
@@ -5201,6 +5417,7 @@
 			"destroy_grow": 30,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 32,
 			"star": 4,
 			"arms": [
 				2,
@@ -5225,6 +5442,7 @@
 			"destroy_grow": 30,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 25,
 			"star": 4,
 			"arms": [
 				2,
@@ -5249,6 +5467,7 @@
 			"destroy_grow": 30,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 48,
 			"star": 4,
 			"arms": [
 				2,
@@ -5273,6 +5492,7 @@
 			"destroy_grow": 12,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 21,
 			"star": 4,
 			"arms": [
 				2,
@@ -5297,6 +5517,7 @@
 			"destroy_grow": 12,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 28,
 			"star": 4,
 			"arms": [
 				2,
@@ -5321,6 +5542,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 38,
 			"star": 4,
 			"arms": [
 				2,
@@ -5345,6 +5567,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 25,
 			"star": 4,
 			"arms": [
 				2,
@@ -5369,6 +5592,7 @@
 			"destroy_grow": 13,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 43,
 			"star": 4,
 			"arms": [
 				2,
@@ -5393,6 +5617,7 @@
 			"destroy_grow": 13,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 35,
 			"star": 4,
 			"arms": [
 				2,
@@ -5417,6 +5642,7 @@
 			"destroy_grow": 13,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 41,
 			"star": 4,
 			"arms": [
 				2,
@@ -5441,6 +5667,7 @@
 			"destroy_grow": 13,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 47,
 			"star": 4,
 			"arms": [
 				2,
@@ -5465,6 +5692,7 @@
 			"destroy_grow": 13,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 49,
 			"star": 4,
 			"arms": [
 				3,
@@ -5489,6 +5717,7 @@
 			"destroy_grow": 12,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 34,
 			"star": 4,
 			"arms": [
 				3,
@@ -5513,6 +5742,7 @@
 			"destroy_grow": 9,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 41,
 			"star": 4,
 			"arms": [
 				3,
@@ -5537,6 +5767,7 @@
 			"destroy_grow": 9,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 45,
 			"star": 4,
 			"arms": [
 				3,
@@ -5561,6 +5792,7 @@
 			"destroy_grow": 13,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 33,
 			"star": 4,
 			"arms": [
 				2,
@@ -5585,6 +5817,7 @@
 			"destroy_grow": 13,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 32,
 			"star": 4,
 			"arms": [
 				2,
@@ -5609,6 +5842,7 @@
 			"destroy_grow": 13,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 36,
 			"star": 4,
 			"arms": [
 				2,
@@ -5633,6 +5867,7 @@
 			"destroy_grow": 13,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 29,
 			"star": 4,
 			"arms": [
 				2,
@@ -5657,6 +5892,7 @@
 			"destroy_grow": 13,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 35,
 			"star": 4,
 			"arms": [
 				3,
@@ -5681,6 +5917,7 @@
 			"destroy_grow": 13,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 36,
 			"star": 4,
 			"arms": [
 				3,
@@ -5705,6 +5942,7 @@
 			"destroy_grow": 13,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 40,
 			"star": 4,
 			"arms": [
 				3,
@@ -5729,6 +5967,7 @@
 			"destroy_grow": 13,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 22,
 			"star": 4,
 			"arms": [
 				3,
@@ -5753,6 +5992,7 @@
 			"destroy_grow": 13,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 36,
 			"star": 4,
 			"arms": [
 				3,
@@ -5777,6 +6017,7 @@
 			"destroy_grow": 13,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 23,
 			"star": 4,
 			"arms": [
 				3,
@@ -5801,6 +6042,7 @@
 			"destroy_grow": 39,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 32,
 			"star": 4,
 			"arms": [
 				2,
@@ -5825,6 +6067,7 @@
 			"destroy_grow": 39,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 37,
 			"star": 4,
 			"arms": [
 				2,
@@ -5849,6 +6092,7 @@
 			"destroy_grow": 11,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 33,
 			"star": 4,
 			"arms": [
 				3,
@@ -5873,6 +6117,7 @@
 			"destroy_grow": 11,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 43,
 			"star": 4,
 			"arms": [
 				3,
@@ -5897,6 +6142,7 @@
 			"destroy_grow": 25,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 31,
 			"star": 4,
 			"arms": [
 				1,
@@ -5921,6 +6167,7 @@
 			"destroy_grow": 16,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 41,
 			"star": 4,
 			"arms": [
 				2,
@@ -5945,6 +6192,7 @@
 			"destroy_grow": 16,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 38,
 			"star": 4,
 			"arms": [
 				2,
@@ -5969,6 +6217,7 @@
 			"destroy_grow": 26,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 467,
 			"star": 3,
 			"arms": [
 				3,
@@ -5993,6 +6242,7 @@
 			"destroy_grow": 29,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 449,
 			"star": 3,
 			"arms": [
 				1,
@@ -6017,6 +6267,7 @@
 			"destroy_grow": 6,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 363,
 			"star": 3,
 			"arms": [
 				3,
@@ -6041,6 +6292,7 @@
 			"destroy_grow": 30,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 318,
 			"star": 3,
 			"arms": [
 				2,
@@ -6065,6 +6317,7 @@
 			"destroy_grow": 31,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 363,
 			"star": 3,
 			"arms": [
 				2,
@@ -6089,6 +6342,7 @@
 			"destroy_grow": 8,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 390,
 			"star": 3,
 			"arms": [
 				1,
@@ -6113,6 +6367,7 @@
 			"destroy_grow": 15,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 474,
 			"star": 3,
 			"arms": [
 				1,
@@ -6137,6 +6392,7 @@
 			"destroy_grow": 12,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 376,
 			"star": 3,
 			"arms": [
 				1,
@@ -6161,6 +6417,7 @@
 			"destroy_grow": 22,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 318,
 			"star": 3,
 			"arms": [
 				1,
@@ -6185,6 +6442,7 @@
 			"destroy_grow": 3,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 318,
 			"star": 3,
 			"arms": [
 				3,
@@ -6209,6 +6467,7 @@
 			"destroy_grow": 15,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 384,
 			"star": 3,
 			"arms": [
 				1,
@@ -6233,6 +6492,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 438,
 			"star": 3,
 			"arms": [
 				1,
@@ -6257,6 +6517,7 @@
 			"destroy_grow": 5,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 376,
 			"star": 3,
 			"arms": [
 				3,
@@ -6281,6 +6542,7 @@
 			"destroy_grow": 11,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 470,
 			"star": 3,
 			"arms": [
 				1,
@@ -6305,6 +6567,7 @@
 			"destroy_grow": 15,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 480,
 			"star": 3,
 			"arms": [
 				1,
@@ -6329,6 +6592,7 @@
 			"destroy_grow": 3,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 342,
 			"star": 3,
 			"arms": [
 				3,
@@ -6353,6 +6617,7 @@
 			"destroy_grow": 11,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 448,
 			"star": 3,
 			"arms": [
 				1,
@@ -6377,6 +6642,7 @@
 			"destroy_grow": 6,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 307,
 			"star": 3,
 			"arms": [
 				2,
@@ -6401,6 +6667,7 @@
 			"destroy_grow": 26,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 455,
 			"star": 3,
 			"arms": [
 				2,
@@ -6425,6 +6692,7 @@
 			"destroy_grow": 2,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 496,
 			"star": 3,
 			"arms": [
 				3,
@@ -6449,6 +6717,7 @@
 			"destroy_grow": 2,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 493,
 			"star": 3,
 			"arms": [
 				3,
@@ -6473,6 +6742,7 @@
 			"destroy_grow": 2,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 313,
 			"star": 3,
 			"arms": [
 				3,
@@ -6497,6 +6767,7 @@
 			"destroy_grow": 2,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 302,
 			"star": 3,
 			"arms": [
 				3,
@@ -6521,6 +6792,7 @@
 			"destroy_grow": 2,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 413,
 			"star": 3,
 			"arms": [
 				3,
@@ -6545,6 +6817,7 @@
 			"destroy_grow": 2,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 427,
 			"star": 3,
 			"arms": [
 				3,
@@ -6569,6 +6842,7 @@
 			"destroy_grow": 2,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 330,
 			"star": 3,
 			"arms": [
 				3,
@@ -6593,6 +6867,7 @@
 			"destroy_grow": 2,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 385,
 			"star": 3,
 			"arms": [
 				3,
@@ -6617,6 +6892,7 @@
 			"destroy_grow": 2,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 404,
 			"star": 3,
 			"arms": [
 				3,
@@ -6641,6 +6917,7 @@
 			"destroy_grow": 20,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 334,
 			"star": 3,
 			"arms": [
 				3,
@@ -6665,6 +6942,7 @@
 			"destroy_grow": 20,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 315,
 			"star": 3,
 			"arms": [
 				3,
@@ -6689,6 +6967,7 @@
 			"destroy_grow": 20,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 303,
 			"star": 3,
 			"arms": [
 				3,
@@ -6713,6 +6992,7 @@
 			"destroy_grow": 20,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 393,
 			"star": 3,
 			"arms": [
 				3,
@@ -6737,6 +7017,7 @@
 			"destroy_grow": 20,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 345,
 			"star": 3,
 			"arms": [
 				3,
@@ -6761,6 +7042,7 @@
 			"destroy_grow": 20,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 425,
 			"star": 3,
 			"arms": [
 				3,
@@ -6785,6 +7067,7 @@
 			"destroy_grow": 20,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 346,
 			"star": 3,
 			"arms": [
 				1,
@@ -6809,6 +7092,7 @@
 			"destroy_grow": 20,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 407,
 			"star": 3,
 			"arms": [
 				2,
@@ -6833,6 +7117,7 @@
 			"destroy_grow": 16,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 431,
 			"star": 3,
 			"arms": [
 				2,
@@ -6857,6 +7142,7 @@
 			"destroy_grow": 16,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 465,
 			"star": 3,
 			"arms": [
 				2,
@@ -6881,6 +7167,7 @@
 			"destroy_grow": 16,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 481,
 			"star": 3,
 			"arms": [
 				2,
@@ -6905,6 +7192,7 @@
 			"destroy_grow": 16,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 375,
 			"star": 3,
 			"arms": [
 				2,
@@ -6929,6 +7217,7 @@
 			"destroy_grow": 16,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 331,
 			"star": 3,
 			"arms": [
 				2,
@@ -6953,6 +7242,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 442,
 			"star": 3,
 			"arms": [
 				3,
@@ -6977,6 +7267,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 495,
 			"star": 3,
 			"arms": [
 				3,
@@ -7001,6 +7292,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 355,
 			"star": 3,
 			"arms": [
 				3,
@@ -7025,6 +7317,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 421,
 			"star": 3,
 			"arms": [
 				3,
@@ -7049,6 +7342,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 423,
 			"star": 3,
 			"arms": [
 				3,
@@ -7073,6 +7367,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 340,
 			"star": 3,
 			"arms": [
 				3,
@@ -7097,6 +7392,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 364,
 			"star": 3,
 			"arms": [
 				3,
@@ -7121,6 +7417,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 439,
 			"star": 3,
 			"arms": [
 				3,
@@ -7145,6 +7442,7 @@
 			"destroy_grow": 13,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 416,
 			"star": 3,
 			"arms": [
 				1,
@@ -7169,6 +7467,7 @@
 			"destroy_grow": 13,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 362,
 			"star": 3,
 			"arms": [
 				1,
@@ -7193,6 +7492,7 @@
 			"destroy_grow": 13,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 310,
 			"star": 3,
 			"arms": [
 				1,
@@ -7217,6 +7517,7 @@
 			"destroy_grow": 13,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 483,
 			"star": 3,
 			"arms": [
 				1,
@@ -7241,6 +7542,7 @@
 			"destroy_grow": 13,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 338,
 			"star": 3,
 			"arms": [
 				1,
@@ -7265,6 +7567,7 @@
 			"destroy_grow": 20,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 435,
 			"star": 3,
 			"arms": [
 				1,
@@ -7289,6 +7592,7 @@
 			"destroy_grow": 20,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 412,
 			"star": 3,
 			"arms": [
 				1,
@@ -7313,6 +7617,7 @@
 			"destroy_grow": 20,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 328,
 			"star": 3,
 			"arms": [
 				1,
@@ -7337,6 +7642,7 @@
 			"destroy_grow": 20,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 384,
 			"star": 3,
 			"arms": [
 				1,
@@ -7361,6 +7667,7 @@
 			"destroy_grow": 2,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 363,
 			"star": 3,
 			"arms": [
 				3,
@@ -7385,6 +7692,7 @@
 			"destroy_grow": 13,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 481,
 			"star": 3,
 			"arms": [
 				2,
@@ -7409,6 +7717,7 @@
 			"destroy_grow": 12,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 341,
 			"star": 3,
 			"arms": [
 				1,
@@ -7433,6 +7742,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 439,
 			"star": 2,
 			"arms": [
 				1,
@@ -7457,6 +7767,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 574,
 			"star": 2,
 			"arms": [
 				1,
@@ -7481,6 +7792,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 412,
 			"star": 2,
 			"arms": [
 				1,
@@ -7505,6 +7817,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 470,
 			"star": 2,
 			"arms": [
 				1,
@@ -7529,6 +7842,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 512,
 			"star": 2,
 			"arms": [
 				1,
@@ -7553,6 +7867,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 505,
 			"star": 2,
 			"arms": [
 				1,
@@ -7577,6 +7892,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 570,
 			"star": 2,
 			"arms": [
 				3,
@@ -7601,6 +7917,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 535,
 			"star": 2,
 			"arms": [
 				3,
@@ -7625,6 +7942,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 556,
 			"star": 2,
 			"arms": [
 				3,
@@ -7649,6 +7967,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 553,
 			"star": 2,
 			"arms": [
 				3,
@@ -7673,6 +7992,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 414,
 			"star": 2,
 			"arms": [
 				3,
@@ -7697,6 +8017,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 588,
 			"star": 2,
 			"arms": [
 				3,
@@ -7721,6 +8042,7 @@
 			"destroy_grow": 16,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 421,
 			"star": 2,
 			"arms": [
 				2,
@@ -7745,6 +8067,7 @@
 			"destroy_grow": 16,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 513,
 			"star": 2,
 			"arms": [
 				2,
@@ -7769,6 +8092,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 428,
 			"star": 2,
 			"arms": [
 				3,
@@ -7793,6 +8117,7 @@
 			"destroy_grow": 16,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 507,
 			"star": 2,
 			"arms": [
 				2,
@@ -7817,6 +8142,7 @@
 			"destroy_grow": 16,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 540,
 			"star": 2,
 			"arms": [
 				2,
@@ -7841,6 +8167,7 @@
 			"destroy_grow": 16,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 540,
 			"star": 2,
 			"arms": [
 				2,
@@ -7865,6 +8192,7 @@
 			"destroy_grow": 16,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 424,
 			"star": 2,
 			"arms": [
 				2,
@@ -7889,6 +8217,7 @@
 			"destroy_grow": 16,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 470,
 			"star": 2,
 			"arms": [
 				2,
@@ -7913,6 +8242,7 @@
 			"destroy_grow": 16,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 516,
 			"star": 2,
 			"arms": [
 				2,
@@ -7937,6 +8267,7 @@
 			"destroy_grow": 20,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 500,
 			"star": 2,
 			"arms": [
 				1,
@@ -7961,6 +8292,7 @@
 			"destroy_grow": 20,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 518,
 			"star": 2,
 			"arms": [
 				1,
@@ -7985,6 +8317,7 @@
 			"destroy_grow": 20,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 449,
 			"star": 2,
 			"arms": [
 				1,
@@ -8009,6 +8342,7 @@
 			"destroy_grow": 20,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 494,
 			"star": 2,
 			"arms": [
 				1,
@@ -8033,6 +8367,7 @@
 			"destroy_grow": 20,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 554,
 			"star": 2,
 			"arms": [
 				1,
@@ -8057,6 +8392,7 @@
 			"destroy_grow": 20,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 507,
 			"star": 2,
 			"arms": [
 				1,
@@ -8081,6 +8417,7 @@
 			"destroy_grow": 20,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 562,
 			"star": 2,
 			"arms": [
 				1,
@@ -8105,6 +8442,7 @@
 			"destroy_grow": 20,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 401,
 			"star": 2,
 			"arms": [
 				1,
@@ -8129,6 +8467,7 @@
 			"destroy_grow": 20,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 580,
 			"star": 2,
 			"arms": [
 				1,
@@ -8153,6 +8492,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 592,
 			"star": 1,
 			"arms": [
 				3,
@@ -8177,6 +8517,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 547,
 			"star": 1,
 			"arms": [
 				3,
@@ -8201,6 +8542,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 670,
 			"star": 1,
 			"arms": [
 				2,
@@ -8225,6 +8567,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 656,
 			"star": 1,
 			"arms": [
 				2,
@@ -8249,6 +8592,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 577,
 			"star": 1,
 			"arms": [
 				1,
@@ -8273,6 +8617,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 591,
 			"star": 1,
 			"arms": [
 				2,
@@ -8297,6 +8642,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 682,
 			"star": 1,
 			"arms": [
 				3,
@@ -8321,6 +8667,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 534,
 			"star": 1,
 			"arms": [
 				3,
@@ -8345,6 +8692,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 610,
 			"star": 1,
 			"arms": [
 				1,
@@ -8369,6 +8717,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 524,
 			"star": 1,
 			"arms": [
 				2,
@@ -8393,6 +8742,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 682,
 			"star": 1,
 			"arms": [
 				2,
@@ -8417,6 +8767,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 564,
 			"star": 1,
 			"arms": [
 				2,
@@ -8441,6 +8792,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 649,
 			"star": 1,
 			"arms": [
 				2,
@@ -8465,6 +8817,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 697,
 			"star": 1,
 			"arms": [
 				2,
@@ -8489,6 +8842,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 552,
 			"star": 1,
 			"arms": [
 				2,
@@ -8513,6 +8867,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 600,
 			"star": 1,
 			"arms": [
 				2,
@@ -8537,6 +8892,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 663,
 			"star": 1,
 			"arms": [
 				3,
@@ -8561,6 +8917,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 617,
 			"star": 1,
 			"arms": [
 				1,
@@ -8585,6 +8942,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 600,
 			"star": 1,
 			"arms": [
 				2,
@@ -8609,6 +8967,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 613,
 			"star": 1,
 			"arms": [
 				3,
@@ -8633,6 +8992,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 538,
 			"star": 1,
 			"arms": [
 				1,
@@ -8657,6 +9017,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 576,
 			"star": 1,
 			"arms": [
 				2,
@@ -8681,6 +9042,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 626,
 			"star": 1,
 			"arms": [
 				3,
@@ -8705,6 +9067,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 641,
 			"star": 1,
 			"arms": [
 				1,
@@ -8729,6 +9092,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 604,
 			"star": 1,
 			"arms": [
 				2,
@@ -8753,6 +9117,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 686,
 			"star": 1,
 			"arms": [
 				2,
@@ -8777,6 +9142,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 562,
 			"star": 1,
 			"arms": [
 				1,
@@ -8801,6 +9167,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 530,
 			"star": 1,
 			"arms": [
 				1,
@@ -8825,6 +9192,7 @@
 			"destroy_grow": 10,
 			"physical_power_limit": 100,
 			"cost_physical_power": 1,
+			"probability": 599,
 			"star": 1,
 			"arms": [
 				1,
