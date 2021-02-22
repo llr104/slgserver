@@ -197,76 +197,58 @@ func (this*armyWar) round() (*warRound, bool) {
 		defenseArmy = this.attack
 	}
 
-	//攻击方回合
-	for _, posAttack := range attack {
-		if posAttack == nil || posAttack.soldiers == 0{
+
+	for _, att := range attack {
+
+		////////攻击方begin//////////
+		if att == nil || att.soldiers == 0{
 			continue
 		}
 
-		//计算
-		posDefense, index := this.randArmyPosition(defense)
-		if posDefense == nil{
+		def, index := this.randArmyPosition(defense)
+		if def == nil{
 			isEnd = true
 			goto end
 		}
 
-		hurm := posAttack.soldiers *posAttack.force /1000
-		def := posDefense.soldiers *posDefense.defense /1000
+		attHarm := float64(util.AbsInt(att.force-def.defense)*att.soldiers)*0.0005
+		attKill := int(attHarm)
+		attKill = util.MinInt(attKill, def.soldiers)
+		def.soldiers -= attKill
+		defenseArmy.SoldierArray[index] -= attKill
+		att.general.Exp += attKill*5
 
-		kill := hurm-def
-		if kill > 0{
-			kill = util.MinInt(kill, posDefense.soldiers)
-			posDefense.soldiers -= kill
-			defenseArmy.SoldierArray[index] -= kill
-			posAttack.general.Exp += kill*5
-		}else{
-			kill = 0
-		}
-
-		b := battle{AId: posAttack.general.Id, ALoss: 0, DId: posDefense.general.Id, DLoss: kill}
-		war.Battle = append(war.Battle, b.to())
 
 		//大营干死了，直接结束
-		if posDefense.position == 0 && posDefense.soldiers == 0 {
+		if def.position == 0 && def.soldiers == 0 {
 			isEnd = true
 			goto end
 		}
-	}
+		////////攻击方end//////////
 
-	//防守方回合
-	for _, posAttack := range defense {
-		if posAttack == nil || posAttack.soldiers == 0{
+		////////防守方begin//////////
+		if def.soldiers == 0 || att.soldiers == 0{
 			continue
 		}
 
-		//计算
-		posDefense, index := this.randArmyPosition(attack)
-		if posDefense == nil{
-			isEnd = true
-			goto end
-		}
+		defHarm := float64(util.AbsInt(def.force-att.defense)*att.soldiers)*0.0005
+		defKill := int(defHarm)
 
-		hurm := posAttack.soldiers *posAttack.force /10000
-		def := posDefense.soldiers *posDefense.defense /10000
+		defKill = util.MinInt(defKill, att.soldiers)
+		att.soldiers -= defKill
+		attackArmy.SoldierArray[index] -= defKill
+		def.general.Exp += defKill*5
 
-		kill := hurm-def
-		if kill > 0{
-			kill = util.MinInt(kill, posDefense.soldiers)
-			posDefense.soldiers -= kill
-			attackArmy.SoldierArray[index] -= kill
-			posAttack.general.Exp += kill*10
-		}else{
-			kill = 0
-		}
-
-		b := battle{AId: posAttack.general.Id, ALoss: 0, DId: posDefense.general.Id, DLoss: kill}
+		b := battle{AId: att.general.Id, ALoss: defKill, DId: def.general.Id, DLoss: attKill}
 		war.Battle = append(war.Battle, b.to())
 
 		//大营干死了，直接结束
-		if posDefense.position == 0 && posDefense.soldiers == 0 {
+		if att.position == 0 && att.soldiers == 0 {
 			isEnd = true
 			goto end
 		}
+		////////防守方end//////////
+
 	}
 
 	end:
