@@ -1,0 +1,68 @@
+{
+  "name": "突击",
+  "trigger": 1,
+  "target": 5,
+  "des": "对敌军单体发动一次攻击（伤害率`%d%%`)",
+  "limit": 3,
+  "arms": [
+    3,
+    6,
+    9
+  ],
+
+  "include_effect": [
+    1
+  ],
+  "levels": [
+    {
+      "probability":30,
+      "effect_value": [50],
+      "effect_round": [0]
+    },
+    {
+      "probability":30,
+      "effect_value": [50],
+      "effect_round": [0]
+    },
+    {
+      "probability":30,
+      "effect_value": [50],
+      "effect_round": [0]
+    },
+    {
+      "probability":30,
+      "effect_value": [50],
+      "effect_round": [0]
+    },
+    {
+      "probability":30,
+      "effect_value": [50],
+      "effect_round": [0]
+    },
+    {
+      "probability":30,
+      "effect_value": [50],
+      "effect_round": [0]
+    },
+    {
+      "probability":30,
+      "effect_value": [50],
+      "effect_round": [0]
+    },
+    {
+      "probability":30,
+      "effect_value": [50],
+      "effect_round": [0]
+    },
+    {
+      "probability":30,
+      "effect_value": [50],
+      "effect_round": [0]
+    },
+    {
+      "probability":30,
+      "effect_value": [50],
+      "effect_round": [0]
+    }
+  ]
+}

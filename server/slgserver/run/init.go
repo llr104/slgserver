@@ -11,6 +11,7 @@ import (
 	"slgserver/server/slgserver/static_conf"
 	"slgserver/server/slgserver/static_conf/facility"
 	"slgserver/server/slgserver/static_conf/general"
+	"slgserver/server/slgserver/static_conf/skill"
 )
 
 var MyRouter = &net.Router{}
@@ -20,6 +21,8 @@ func Init() {
 
 	facility.FConf.Load()
 	general.GenBasic.Load()
+	skill.Skill.Load()
+
 	general.General.Load()
 	static_conf.Basic.Load()
 	static_conf.MapBuildConf.Load()
