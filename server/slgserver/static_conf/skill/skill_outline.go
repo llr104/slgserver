@@ -6,8 +6,8 @@ type trigger struct {
 }
 
 type triggerType struct {
-	des string `json:"des"`
-	list [] trigger `json:"list"`
+	Des  string     `json:"des"`
+	List [] trigger `json:"list"`
 }
 
 type effect struct {
@@ -17,8 +17,8 @@ type effect struct {
 }
 
 type effectType struct {
-	des string `json:"des"`
-	list [] effect `json:"list"`
+	Des  string    `json:"des"`
+	List [] effect `json:"list"`
 }
 
 type target struct {
@@ -27,13 +27,13 @@ type target struct {
 }
 
 type targetType struct {
-	des string `json:"des"`
-	list [] effect `json:"list"`
+	Des  string    `json:"des"`
+	List [] target `json:"list"`
 }
 
 
 type outline struct {
-	TriggerType triggerType `json:"trigger_type"`
-	EffectType  effectType  `json:"effect_type"`
-	TargetType  targetType  `json:"target_type"`
+	TriggerType triggerType `json:"trigger_type"`	//触发类型
+	EffectType  effectType  `json:"effect_type"`	//效果类型
+	TargetType  targetType  `json:"target_type"`	//目标类型
 }

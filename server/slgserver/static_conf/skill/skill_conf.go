@@ -11,7 +11,7 @@ type Conf struct {
 	Trigger       int     `json:"trigger"` 			//发起类型
 	Target        int     `json:"target"`  			//目标类型
 	Des           string  `json:"des"`
-	Limit         int     `json:"limit"`          	//武将装备数量上限
+	Limit         int     `json:"limit"`          	//可以被武将装备上限
 	Arms          []int   `json:"arms"`           	//可以装备的兵种
 	IncludeEffect []int   `json:"include_effect"` 	//技能包括的效果
 	Levels        []level `json:"levels"`
