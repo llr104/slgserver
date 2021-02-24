@@ -1,0 +1,68 @@
+{
+  "name": "百战精兵",
+  "trigger": 2,
+  "target": 2,
+  "des": "使自身攻击属性提升%n%、防御属性提升%n%、谋略属性提升%n%、速度属性提升%n%",
+  "limit": 3,
+  "arms": [
+    3,
+    6,
+    9
+  ],
+
+  "include_effect": [
+    2,3,4,5
+  ],
+  "levels": [
+    {
+      "probability":30,
+      "effect_value": [50,50,50,50],
+      "effect_round": [0]
+    },
+    {
+      "probability":30,
+      "effect_value": [50,50,50,50],
+      "effect_round": [0]
+    },
+    {
+      "probability":30,
+      "effect_value": [50,50,50,50],
+      "effect_round": [0]
+    },
+    {
+      "probability":30,
+      "effect_value": [50,50,50,50],
+      "effect_round": [0]
+    },
+    {
+      "probability":30,
+      "effect_value": [50,50,50,50],
+      "effect_round": [0]
+    },
+    {
+      "probability":30,
+      "effect_value": [50,50,50,50],
+      "effect_round": [0]
+    },
+    {
+      "probability":30,
+      "effect_value": [50,50,50,50],
+      "effect_round": [0]
+    },
+    {
+      "probability":30,
+      "effect_value": [50,50,50,50],
+      "effect_round": [0]
+    },
+    {
+      "probability":30,
+      "effect_value": [50,50,50,50],
+      "effect_round": [0]
+    },
+    {
+      "probability":30,
+      "effect_value": [50,50,50,50],
+      "effect_round": [0]
+    }
+  ]
+}

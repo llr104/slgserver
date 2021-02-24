@@ -1,0 +1,68 @@
+{
+  "name": "重斩",
+  "trigger": 3,
+  "target": 5,
+  "des": "普通攻击后，对攻击目标再次发动攻击（伤害率%n%%）",
+  "limit": 3,
+  "arms": [
+    3,
+    6,
+    9
+  ],
+
+  "include_effect": [
+    1
+  ],
+  "levels": [
+    {
+      "probability":30,
+      "effect_value": [50],
+      "effect_round": [0]
+    },
+    {
+      "probability":30,
+      "effect_value": [50],
+      "effect_round": [0]
+    },
+    {
+      "probability":30,
+      "effect_value": [50],
+      "effect_round": [0]
+    },
+    {
+      "probability":30,
+      "effect_value": [50],
+      "effect_round": [0]
+    },
+    {
+      "probability":30,
+      "effect_value": [50],
+      "effect_round": [0]
+    },
+    {
+      "probability":30,
+      "effect_value": [50],
+      "effect_round": [0]
+    },
+    {
+      "probability":30,
+      "effect_value": [50],
+      "effect_round": [0]
+    },
+    {
+      "probability":30,
+      "effect_value": [50],
+      "effect_round": [0]
+    },
+    {
+      "probability":30,
+      "effect_value": [50],
+      "effect_round": [0]
+    },
+    {
+      "probability":30,
+      "effect_value": [50],
+      "effect_round": [0]
+    }
+  ]
+}

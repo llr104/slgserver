@@ -1,0 +1,68 @@
+{
+  "name": "锋矢",
+  "trigger": 4,
+  "target": 2,
+  "des": "战斗中，使我军全体进行普通攻击的伤害提升%n%",
+  "limit": 3,
+  "arms": [
+    3,
+    6,
+    9
+  ],
+
+  "include_effect": [
+    1
+  ],
+  "levels": [
+    {
+      "probability":30,
+      "effect_value": [50],
+      "effect_round": [0]
+    },
+    {
+      "probability":30,
+      "effect_value": [50],
+      "effect_round": [0]
+    },
+    {
+      "probability":30,
+      "effect_value": [50],
+      "effect_round": [0]
+    },
+    {
+      "probability":30,
+      "effect_value": [50],
+      "effect_round": [0]
+    },
+    {
+      "probability":30,
+      "effect_value": [50],
+      "effect_round": [0]
+    },
+    {
+      "probability":30,
+      "effect_value": [50],
+      "effect_round": [0]
+    },
+    {
+      "probability":30,
+      "effect_value": [50],
+      "effect_round": [0]
+    },
+    {
+      "probability":30,
+      "effect_value": [50],
+      "effect_round": [0]
+    },
+    {
+      "probability":30,
+      "effect_value": [50],
+      "effect_round": [0]
+    },
+    {
+      "probability":30,
+      "effect_value": [50],
+      "effect_round": [0]
+    }
+  ]
+}

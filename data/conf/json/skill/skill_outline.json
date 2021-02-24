@@ -27,6 +27,26 @@
         "type": 1,
         "des": "伤害率",
         "isRate": true
+      },
+      {
+        "type": 2,
+        "des": "攻击",
+        "isRate": false
+      },
+      {
+        "type": 3,
+        "des": "防御",
+        "isRate": false
+      },
+      {
+        "type": 4,
+        "des": "谋略",
+        "isRate": false
+      },
+      {
+        "type": 5,
+        "des": "速度",
+        "isRate": false
       }
     ]
   },
