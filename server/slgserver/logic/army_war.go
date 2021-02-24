@@ -174,6 +174,16 @@ func (this*armyWar) battle() []*warRound {
 			break
 		}
 	}
+
+	for i := 0; i < 3; i++ {
+		if this.attackPos[i] != nil {
+			this.attack.SoldierArray[i] = this.attackPos[i].soldiers
+		}
+		if this.defensePos[i] != nil {
+			this.defense.SoldierArray[i] = this.defensePos[i].soldiers
+		}
+	}
+
 	return rounds
 }
 
@@ -184,20 +194,14 @@ func (this*armyWar) round() (*warRound, bool) {
 	n := rand.Intn(10)
 	attack := this.attackPos
 	defense := this.defensePos
-	attackArmy := this.attack
-	defenseArmy := this.defense
-
+	
 	isEnd := false
 	//随机先手
 	if n % 2 == 0{
 		attack = this.defensePos
 		defense = this.attackPos
-
-		attackArmy = this.defense
-		defenseArmy = this.attack
 	}
-
-
+	
 	for _, att := range attack {
 
 		////////攻击方begin//////////
@@ -205,7 +209,7 @@ func (this*armyWar) round() (*warRound, bool) {
 			continue
 		}
 
-		def, index := this.randArmyPosition(defense)
+		def, _ := this.randArmyPosition(defense)
 		if def == nil{
 			isEnd = true
 			goto end
@@ -215,7 +219,6 @@ func (this*armyWar) round() (*warRound, bool) {
 		attKill := int(attHarm)
 		attKill = util.MinInt(attKill, def.soldiers)
 		def.soldiers -= attKill
-		defenseArmy.SoldierArray[index] -= attKill
 		att.general.Exp += attKill*5
 
 
@@ -231,12 +234,11 @@ func (this*armyWar) round() (*warRound, bool) {
 			continue
 		}
 
-		defHarm := float64(util.AbsInt(def.force-att.defense)*att.soldiers)*0.0005
+		defHarm := float64(util.AbsInt(def.force-att.defense)*def.soldiers)*0.0005
 		defKill := int(defHarm)
 
 		defKill = util.MinInt(defKill, att.soldiers)
 		att.soldiers -= defKill
-		attackArmy.SoldierArray[index] -= defKill
 		def.general.Exp += defKill*5
 
 		b := battle{AId: att.general.Id, ALoss: defKill, DId: def.general.Id, DLoss: attKill}
