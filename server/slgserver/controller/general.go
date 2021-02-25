@@ -276,7 +276,7 @@ func (this*General) upSkill(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	if g.UpSkill(skill.Id, reqObj.Pos) == false{
+	if g.UpSkill(skill.Id, reqObj.CfgId, reqObj.Pos) == false{
 		rsp.Body.Code = constant.UpSkillError
 		return
 	}

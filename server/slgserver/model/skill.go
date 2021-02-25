@@ -76,7 +76,6 @@ func (this *Skill) AfterSet(name string, cell xorm.Cell){
 			gs, ok := (*cell).([]uint8)
 			if ok {
 				json.Unmarshal(gs, &this.BelongGenerals)
-				fmt.Println(this.Generals)
 			}
 		}
 	}

@@ -60,16 +60,12 @@ func (this*generalDBMgr) push(g *General)  {
 /*******db 操作end********/
 
 const SkillLimit = 3
-type gSkill struct {
-	Id int `json:"id"`
-	Lv int `json:"lv"`
-}
 
 func NewGeneral(cfgId int, rid int, level int8) (*General, bool) {
 
 	cfg, ok := general.General.GMap[cfgId]
 	if ok {
-		sa := make([]*gSkill, SkillLimit)
+		sa := make([]*proto.GSkill, SkillLimit)
 		ss, _ := json.Marshal(sa)
 		g := &General{
 			PhysicalPower: static_conf.Basic.General.PhysicalPowerLimit,
@@ -108,30 +104,30 @@ func NewGeneral(cfgId int, rid int, level int8) (*General, bool) {
 }
 
 type General struct {
-	Id            int       `xorm:"id pk autoincr"`
-	RId           int       `xorm:"rid"`
-	CfgId         int       `xorm:"cfgId"`
-	PhysicalPower int       `xorm:"physical_power"`
-	Level         int8      `xorm:"level"`
-	Exp           int       `xorm:"exp"`
-	Order         int8      `xorm:"order"`
-	CityId        int       `xorm:"cityId"`
-	CreatedAt     time.Time `xorm:"created_at"`
-	CurArms       int       `xorm:"arms"`
-	HasPrPoint    int       `xorm:"has_pr_point"`
-	UsePrPoint    int       `xorm:"use_pr_point"`
-	AttackDis     int  		`xorm:"attack_distance"`
-	ForceAdded    int  		`xorm:"force_added"`
-	StrategyAdded int  		`xorm:"strategy_added"`
-	DefenseAdded  int  		`xorm:"defense_added"`
-	SpeedAdded    int  		`xorm:"speed_added"`
-	DestroyAdded  int  		`xorm:"destroy_added"`
-	StarLv        int8  	`xorm:"star_lv"`
-	Star          int8  	`xorm:"star"`
-	ParentId      int  		`xorm:"parentId"`
-	Skills		  string	`xorm:"skills"`
-	SkillsArray   []*gSkill	`xorm:"-"`
-	State         int8 		`xorm:"state"`
+	Id            int       		`xorm:"id pk autoincr"`
+	RId           int       		`xorm:"rid"`
+	CfgId         int       		`xorm:"cfgId"`
+	PhysicalPower int       		`xorm:"physical_power"`
+	Level         int8      		`xorm:"level"`
+	Exp           int       		`xorm:"exp"`
+	Order         int8      		`xorm:"order"`
+	CityId        int       		`xorm:"cityId"`
+	CreatedAt     time.Time 		`xorm:"created_at"`
+	CurArms       int       		`xorm:"arms"`
+	HasPrPoint    int       		`xorm:"has_pr_point"`
+	UsePrPoint    int       		`xorm:"use_pr_point"`
+	AttackDis     int  				`xorm:"attack_distance"`
+	ForceAdded    int  				`xorm:"force_added"`
+	StrategyAdded int  				`xorm:"strategy_added"`
+	DefenseAdded  int  				`xorm:"defense_added"`
+	SpeedAdded    int  				`xorm:"speed_added"`
+	DestroyAdded  int  				`xorm:"destroy_added"`
+	StarLv        int8  			`xorm:"star_lv"`
+	Star          int8  			`xorm:"star"`
+	ParentId      int  				`xorm:"parentId"`
+	Skills		  string			`xorm:"skills"`
+	SkillsArray   []*proto.GSkill	`xorm:"-"`
+	State         int8 				`xorm:"state"`
 }
 
 func (this *General) TableName() string {
@@ -140,7 +136,7 @@ func (this *General) TableName() string {
 
 func (this *General) AfterSet(name string, cell xorm.Cell){
 	if name == "skills"{
-		this.SkillsArray = make([]*gSkill, 3)
+		this.SkillsArray = make([]*proto.GSkill, 3)
 		if cell != nil{
 			gs, ok := (*cell).([]uint8)
 			if ok {
@@ -218,7 +214,7 @@ func (this*General) GetCamp() int8 {
 	return 0
 }
 
-func (this*General) UpSkill(skillId int, pos int) bool{
+func (this*General) UpSkill(skillId int, cfgId int, pos int) bool{
 	if pos < 0 || pos >= SkillLimit {
 		return false
 	}
@@ -232,11 +228,12 @@ func (this*General) UpSkill(skillId int, pos int) bool{
 
 	s := this.SkillsArray[pos]
 	if s == nil {
-		this.SkillsArray[pos] = &gSkill{Id: skillId, Lv: 1}
+		this.SkillsArray[pos] = &proto.GSkill{Id: skillId, Lv: 1, CfgId: cfgId}
 		return true
 	}else {
 		if s.Id == 0 {
 			s.Id = skillId
+			s.CfgId = cfgId
 			s.Lv = 1
 			return true
 		}else{
@@ -306,6 +303,7 @@ func (this *General) ToProto() interface{}{
 	p.Star = this.Star
 	p.State = this.State
 	p.ParentId = this.ParentId
+	p.Skills = this.SkillsArray
 	return p
 }
 

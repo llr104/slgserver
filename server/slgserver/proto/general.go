@@ -1,26 +1,32 @@
 package proto
 
+type GSkill struct {
+	Id    int `json:"id"`
+	Lv    int `json:"lv"`
+	CfgId int `json:"cfgId"`
+}
 type General struct {
-	Id        		int     `json:"id"`
-	CfgId     		int		`json:"cfgId"`
-	PhysicalPower 	int     `json:"physical_power"`
-	Order     		int8    `json:"order"`
-	Level			int8    `json:"level"`
-	Exp				int		`json:"exp"`
-	CityId    		int     `json:"cityId"`
-	CurArms         int     `json:"curArms"`
-	HasPrPoint      int     `json:"hasPrPoint"`
-	UsePrPoint      int     `json:"usePrPoint"`
-	AttackDis       int     `json:"attack_distance"`
-	ForceAdded      int     `json:"force_added"`
-	StrategyAdded   int     `json:"strategy_added"`
-	DefenseAdded    int     `json:"defense_added"`
-	SpeedAdded      int     `json:"speed_added"`
-	DestroyAdded    int     `json:"destroy_added"`
-	StarLv          int8    `json:"star_lv"`
-	Star            int8    `json:"star"`
-	ParentId        int     `json:"parentId"`
-	State     		int8    `json:"state"`
+	Id        		int     	`json:"id"`
+	CfgId     		int			`json:"cfgId"`
+	PhysicalPower 	int     	`json:"physical_power"`
+	Order     		int8    	`json:"order"`
+	Level			int8    	`json:"level"`
+	Exp				int			`json:"exp"`
+	CityId    		int     	`json:"cityId"`
+	CurArms         int     	`json:"curArms"`
+	HasPrPoint      int     	`json:"hasPrPoint"`
+	UsePrPoint      int     	`json:"usePrPoint"`
+	AttackDis       int     	`json:"attack_distance"`
+	ForceAdded      int     	`json:"force_added"`
+	StrategyAdded   int     	`json:"strategy_added"`
+	DefenseAdded    int     	`json:"defense_added"`
+	SpeedAdded      int     	`json:"speed_added"`
+	DestroyAdded    int     	`json:"destroy_added"`
+	StarLv          int8    	`json:"star_lv"`
+	Star            int8    	`json:"star"`
+	ParentId        int     	`json:"parentId"`
+	Skills			[]*GSkill	`json:"skills"`
+	State     		int8    	`json:"state"`
 
 }
 
