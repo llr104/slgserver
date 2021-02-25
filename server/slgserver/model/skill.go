@@ -158,6 +158,7 @@ func (this *Skill) DownSkill(gId int) {
 			gs = append(gs, general)
 		}
 	}
+	this.Generals = gs
 
 	data, _ := json.Marshal(this.Generals)
 	this.BelongGenerals = string(data)

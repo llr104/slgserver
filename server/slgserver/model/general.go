@@ -250,6 +250,7 @@ func (this*General) DownSkill(skillId int, pos int) bool{
 	if s != nil && s.Id == skillId{
 		s.Id = 0
 		s.Lv = 0
+		s.CfgId = 0
 		return true
 	}else{
 		return false
