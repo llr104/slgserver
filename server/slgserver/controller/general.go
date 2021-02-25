@@ -26,9 +26,11 @@ func (this*General) InitRouter(r *net.Router) {
 
 	g.AddRouter("myGenerals", this.myGenerals)
 	g.AddRouter("drawGeneral", this.drawGenerals)
-	g.AddRouter("composeGeneral", this.ComposeGeneral)
-	g.AddRouter("addPrGeneral", this.AddPrGeneral)
+	g.AddRouter("composeGeneral", this.composeGeneral)
+	g.AddRouter("addPrGeneral", this.addPrGeneral)
 	g.AddRouter("convert", this.convert)
+	g.AddRouter("upSkill", this.upSkill)
+	g.AddRouter("downSkill", this.downSkill)
 
 }
 
@@ -92,7 +94,7 @@ func (this*General) drawGenerals(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	}
 }
 
-func (this*General) ComposeGeneral(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+func (this*General) composeGeneral(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	reqObj := &proto.ComposeGeneralReq{}
 	rspObj := &proto.ComposeGeneralRsp{}
 	mapstructure.Decode(req.Body.Msg, reqObj)
@@ -158,7 +160,7 @@ func (this*General) ComposeGeneral(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 }
 
 
-func (this*General) AddPrGeneral(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+func (this*General) addPrGeneral(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	reqObj := &proto.AddPrGeneralReq{}
 	rspObj := &proto.AddPrGeneralRsp{}
 	mapstructure.Decode(req.Body.Msg, reqObj)
@@ -230,4 +232,101 @@ func (this*General) convert(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	rspObj.GIds = okArray
 
 	roleRes.SyncExecute()
+}
+
+func (this*General) upSkill(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+	reqObj := &proto.UpDownSkillReq{}
+	rspObj := &proto.UpDownSkillRsp{}
+
+	mapstructure.Decode(req.Body.Msg, reqObj)
+	rsp.Body.Msg = rspObj
+	rsp.Body.Code = constant.OK
+
+	rspObj.Pos = reqObj.Pos
+	rspObj.CfgId = reqObj.CfgId
+	rspObj.GId = reqObj.GId
+
+	r, _ := req.Conn.GetProperty("role")
+	role := r.(*model.Role)
+
+	if reqObj.Pos <0 || reqObj.Pos >= model.SkillLimit {
+		rsp.Body.Code = constant.InvalidParam
+		return
+	}
+
+	g,ok := mgr.GMgr.GetByGId(reqObj.GId)
+	if ok == false{
+		rsp.Body.Code = constant.GeneralNotFound
+		return
+	}
+
+	if g.RId != role.RId{
+		rsp.Body.Code = constant.GeneralNotMe
+		return
+	}
+
+	skill, ok := mgr.SkillMgr.GetSkillOrCreate(role.RId, reqObj.CfgId)
+	if ok == false {
+		rsp.Body.Code = constant.DBError
+		return
+	}
+
+	if skill.IsCanUp() == false{
+		rsp.Body.Code = constant.OutSkillLimit
+		return
+	}
+
+	if g.UpSkill(skill.Id, reqObj.Pos) == false{
+		rsp.Body.Code = constant.UpSkillError
+		return
+	}
+	skill.UpSkill(g.Id)
+	g.SyncExecute()
+	skill.SyncExecute()
+}
+
+func (this*General) downSkill(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+	reqObj := &proto.UpDownSkillReq{}
+	rspObj := &proto.UpDownSkillRsp{}
+
+	mapstructure.Decode(req.Body.Msg, reqObj)
+	rsp.Body.Msg = rspObj
+	rsp.Body.Code = constant.OK
+
+	rspObj.Pos = reqObj.Pos
+	rspObj.CfgId = reqObj.CfgId
+	rspObj.GId = reqObj.GId
+
+	r, _ := req.Conn.GetProperty("role")
+	role := r.(*model.Role)
+
+	if reqObj.Pos <0 || reqObj.Pos >= model.SkillLimit {
+		rsp.Body.Code = constant.InvalidParam
+		return
+	}
+
+	g,ok := mgr.GMgr.GetByGId(reqObj.GId)
+	if ok == false{
+		rsp.Body.Code = constant.GeneralNotFound
+		return
+	}
+
+	if g.RId != role.RId{
+		rsp.Body.Code = constant.GeneralNotMe
+		return
+	}
+
+	skill, ok := mgr.SkillMgr.GetSkillOrCreate(role.RId, reqObj.CfgId)
+	if ok == false{
+		rsp.Body.Code = constant.DBError
+		return
+	}
+
+	if g.DownSkill(skill.Id, reqObj.Pos) == false{
+		rsp.Body.Code = constant.DownSkillError
+		return
+	}
+	skill.DownSkill(g.Id)
+	g.SyncExecute()
+	skill.SyncExecute()
 }

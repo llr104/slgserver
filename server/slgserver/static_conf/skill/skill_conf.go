@@ -7,6 +7,7 @@ type level struct {
 }
 
 type Conf struct {
+	CfgId		  int	  `json:"cfgId"`
 	Name          string  `json:"name"`
 	Trigger       int     `json:"trigger"` 			//发起类型
 	Target        int     `json:"target"`  			//目标类型

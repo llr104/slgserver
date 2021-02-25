@@ -1,4 +1,5 @@
 {
+  "cfgId": 101,
   "name": "突击",
   "trigger": 1,
   "target": 5,

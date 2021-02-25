@@ -126,6 +126,7 @@ CREATE TABLE IF NOT EXISTS `tb_general_1` (
    `destroy_added` int NOT NULL DEFAULT 0 COMMENT '已加破坏属性',
    `parentId` int NOT NULL DEFAULT 0 COMMENT '已合成到武将的id',
    `compose_type` int NOT NULL DEFAULT 0 COMMENT '合成类型',
+   `skills` varchar(64) NOT NULL DEFAULT '[0, 0, 0]' COMMENT '携带的技能',
    `state` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '0:正常，1:转换掉了',
    `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
    PRIMARY KEY (`id`)
@@ -218,6 +219,15 @@ CREATE TABLE IF NOT EXISTS `tb_coalition_log_1` (
     `ctime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '发生时间',
     PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '联盟日志表';
+
+CREATE TABLE IF NOT EXISTS `tb_skill_1` (
+    `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+    `rid` int unsigned NOT NULL COMMENT 'rid',
+    `cfgId` int unsigned NOT NULL COMMENT '技能id',
+    `belong_generals` varchar(256) NOT NULL Default '[]' COMMENT '归属武将数组',
+    `ctime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '获得技能时间',
+    PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '技能表';
 
 
 

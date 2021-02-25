@@ -61,10 +61,13 @@ const ArmyIsOutside = 52          //队伍在城外
 const CanNotUpBuild = 53          //不能升级建筑
 const CanNotDestroy = 54          //不能拆除建筑
 const OutCollectTimesLimit = 55   //超过征收次数
-const InCdCanNotOperate = 56	  //cd内不能操作
-const OutGeneralLimit = 57		  //武将超过上限了
-const NotHasJiShi = 58		  	  //没有集市
-const OutPosTagLimit = 59		  //超过了收藏上限
+const InCdCanNotOperate = 56      //cd内不能操作
+const OutGeneralLimit = 57        //武将超过上限了
+const NotHasJiShi = 58            //没有集市
+const OutPosTagLimit = 59         //超过了收藏上限
+const OutSkillLimit = 60          //超过了技能上限
+const UpSkillError = 61          //装备技能失败
+const DownSkillError = 62          //取下技能失败
 
 
 

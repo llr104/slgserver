@@ -152,8 +152,6 @@ type ComposeGeneralRsp struct {
 	Generals []General `json:"generals"`
 }
 
-
-
 //加点
 type AddPrGeneralReq struct {
 	CompId       		int     `json:"compId"`
@@ -167,3 +165,26 @@ type AddPrGeneralReq struct {
 type AddPrGeneralRsp struct {
 	Generals General `json:"general"`
 }
+
+type ConvertReq struct {
+	GIds		[]int	`json:"gIds"`
+}
+
+type ConvertRsp struct {
+	GIds		[]int	`json:"gIds"`
+	Gold		int		`json:"gold"`
+	AddGold		int		`json:"add_gold"`
+}
+
+type UpDownSkillReq struct {
+	GId   int `json:"gId"`   //武将id
+	CfgId int `json:"cfgId"` //技能配置id
+	Pos   int `json:"pos"`   //位置0-2
+}
+
+type UpDownSkillRsp struct {
+	GId   int `json:"gId"`   //武将id
+	CfgId int `json:"cfgId"` //技能配置id
+	Pos   int `json:"pos"`   //位置0-2
+}
+

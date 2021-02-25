@@ -1,14 +1,17 @@
 package model
 
 import (
+	"encoding/json"
 	"fmt"
 	"go.uber.org/zap"
 	"slgserver/db"
 	"slgserver/log"
 	"slgserver/net"
 	"slgserver/server/slgserver/proto"
+	"slgserver/server/slgserver/static_conf"
 	"slgserver/server/slgserver/static_conf/general"
 	"time"
+	"xorm.io/xorm"
 )
 
 
@@ -40,7 +43,7 @@ func (this*generalDBMgr) running()  {
 					"physical_power", "star_lv", "has_pr_point",
 					"use_pr_point", "force_added", "strategy_added",
 					"defense_added", "speed_added", "destroy_added",
-					"parentId", "compose_type", "state").Update(g)
+					"parentId", "compose_type", "skills", "state").Update(g)
 				if err != nil{
 					log.DefaultLog.Warn("db error", zap.Error(err))
 				}
@@ -56,6 +59,53 @@ func (this*generalDBMgr) push(g *General)  {
 }
 /*******db 操作end********/
 
+const SkillLimit = 3
+type gSkill struct {
+	Id int `json:"id"`
+	Lv int `json:"lv"`
+}
+
+func NewGeneral(cfgId int, rid int, level int8) (*General, bool) {
+
+	cfg, ok := general.General.GMap[cfgId]
+	if ok {
+		sa := make([]*gSkill, SkillLimit)
+		ss, _ := json.Marshal(sa)
+		g := &General{
+			PhysicalPower: static_conf.Basic.General.PhysicalPowerLimit,
+			RId: rid,
+			CfgId: cfg.CfgId,
+			Order: 0,
+			CityId: 0,
+			Level: level,
+			CreatedAt: time.Now(),
+			CurArms: cfg.Arms[0],
+			HasPrPoint: 0,
+			UsePrPoint: 0,
+			AttackDis: 0,
+			ForceAdded: 0,
+			StrategyAdded: 0,
+			DefenseAdded: 0,
+			SpeedAdded: 0,
+			DestroyAdded: 0,
+			Star: cfg.Star,
+			StarLv: 0,
+			ParentId: 0,
+			SkillsArray: sa,
+			Skills: string(ss),
+			State: GeneralNormal,
+		}
+
+		if _, err := db.MasterDB.Table(General{}).Insert(g); err != nil {
+			log.DefaultLog.Warn("db error", zap.Error(err))
+			return nil, false
+		}else{
+			return g, true
+		}
+	}else{
+		return nil, false
+	}
+}
 
 type General struct {
 	Id            int       `xorm:"id pk autoincr"`
@@ -79,12 +129,41 @@ type General struct {
 	StarLv        int8  	`xorm:"star_lv"`
 	Star          int8  	`xorm:"star"`
 	ParentId      int  		`xorm:"parentId"`
+	Skills		  string	`xorm:"skills"`
+	SkillsArray   []*gSkill	`xorm:"-"`
 	State         int8 		`xorm:"state"`
 }
 
 func (this *General) TableName() string {
 	return "tb_general" + fmt.Sprintf("_%d", ServerId)
 }
+
+func (this *General) AfterSet(name string, cell xorm.Cell){
+	if name == "skills"{
+		this.SkillsArray = make([]*gSkill, 3)
+		if cell != nil{
+			gs, ok := (*cell).([]uint8)
+			if ok {
+				json.Unmarshal(gs, &this.Skills)
+				fmt.Println(this.SkillsArray)
+			}
+		}
+	}
+}
+
+func (this *General) beforeModify()  {
+	data, _ := json.Marshal(this.SkillsArray)
+	this.Skills = string(data)
+}
+
+func (this *General) BeforeInsert() {
+	this.beforeModify()
+}
+
+func (this *General) BeforeUpdate() {
+	this.beforeModify()
+}
+
 
 func (this *General) GetDestroy() int{
 	cfg, ok := general.General.GMap[this.CfgId]
@@ -137,6 +216,47 @@ func (this*General) GetCamp() int8 {
 		return cfg.Camp
 	}
 	return 0
+}
+
+func (this*General) UpSkill(skillId int, pos int) bool{
+	if pos < 0 || pos >= SkillLimit {
+		return false
+	}
+
+	for _, skill := range this.SkillsArray {
+		if skill != nil && skill.Id == skillId {
+			//已经上过同类型的技能了
+			return false
+		}
+	}
+
+	s := this.SkillsArray[pos]
+	if s == nil {
+		this.SkillsArray[pos] = &gSkill{Id: skillId, Lv: 1}
+		return true
+	}else {
+		if s.Id == 0 {
+			s.Id = skillId
+			s.Lv = 1
+			return true
+		}else{
+			return false
+		}
+	}
+}
+
+func (this*General) DownSkill(skillId int, pos int) bool{
+	if pos < 0 || pos >= SkillLimit {
+		return false
+	}
+	s := this.SkillsArray[pos]
+	if s != nil && s.Id == skillId{
+		s.Id = 0
+		s.Lv = 0
+		return true
+	}else{
+		return false
+	}
 }
 
 /* 推送同步 begin */

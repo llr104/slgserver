@@ -41,6 +41,7 @@ func Init() {
 	mgr.RBMgr.Load()
 	mgr.RFMgr.Load()
 	mgr.RResMgr.Load()
+	mgr.SkillMgr.Load()
 	mgr.GMgr.Load()
 	mgr.AMgr.Load()
 	logic.Init()

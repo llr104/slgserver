@@ -15,12 +15,14 @@ var Skill skill
 
 type skill struct {
 	skills []Conf
+	skillConfMap map[int]Conf
 	outline outline
 }
 
 
 func (this *skill) Load()  {
 	this.skills = make([]Conf, 0)
+	this.skillConfMap = make(map[int]Conf)
 
 	jsonDir := config.File.MustValue("logic", "json_data", "../data/conf/")
 	fileName := path.Join(jsonDir, "skill", "skill_outline.json")
@@ -58,6 +60,7 @@ func (this *skill) readSkill(dir string) {
 					conf := Conf{}
 					if err := json.Unmarshal(jdata, &conf); err == nil{
 						this.skills = append(this.skills, conf)
+						this.skillConfMap[conf.CfgId] = conf
 					}else{
 						log.DefaultLog.Warn("Unmarshal skill error", zap.Error(err),
 							zap.String("file", path.Join(dir, r.Name())))
@@ -67,4 +70,9 @@ func (this *skill) readSkill(dir string) {
 		}
 	}
 
+}
+
+func (this *skill) GetCfg(cfgId int) (Conf, bool) {
+	cfg, ok := this.skillConfMap[cfgId]
+	return cfg, ok
 }

@@ -213,41 +213,11 @@ func (this*generalMgr) Count(rid int) int{
 }
 
 func (this*generalMgr) NewGeneral(cfgId int, rid int, level int8) (*model.General, bool) {
-	cfg, ok := general.General.GMap[cfgId]
+	g, ok := model.NewGeneral(cfgId, rid, level)
 	if ok {
-		g := &model.General{
-			PhysicalPower: static_conf.Basic.General.PhysicalPowerLimit,
-			RId: rid,
-			CfgId: cfg.CfgId,
-			Order: 0,
-			CityId: 0,
-			Level: level,
-			CreatedAt: time.Now(),
-			CurArms: cfg.Arms[0],
-			HasPrPoint: 0,
-			UsePrPoint: 0,
-			AttackDis: 0,
-			ForceAdded: 0,
-			StrategyAdded: 0,
-			DefenseAdded: 0,
-			SpeedAdded: 0,
-			DestroyAdded: 0,
-			Star: cfg.Star,
-			StarLv: 0,
-			ParentId: 0,
-			State: model.GeneralNormal,
-		}
-
-		if _, err := db.MasterDB.Table(model.General{}).Insert(g); err != nil {
-			log.DefaultLog.Warn("db error", zap.Error(err))
-			return nil, false
-		}else{
-			this.add(g)
-			return g, true
-		}
-	}else{
-		return nil, false
+		this.add(g)
 	}
+	return g, ok
 }
 
 /*
