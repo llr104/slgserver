@@ -7,6 +7,7 @@ import (
 	"slgserver/db"
 	"slgserver/log"
 	"slgserver/net"
+	"slgserver/server/slgserver/proto"
 	"slgserver/server/slgserver/static_conf/skill"
 	"xorm.io/xorm"
 )
@@ -122,9 +123,12 @@ func (this *Skill) TPosition() (int, int){
 }
 
 func (this *Skill) ToProto() interface{}{
-	return nil
+	p := proto.Skill{}
+	p.Id = this.Id
+	p.CfgId = this.CfgId
+	p.Generals = this.Generals
+	return p
 }
-
 func (this *Skill) Push(){
 	net.ConnMgr.Push(this)
 }

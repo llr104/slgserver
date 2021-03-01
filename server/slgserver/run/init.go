@@ -61,4 +61,5 @@ func initRouter() {
 	controller.DefaultWar.InitRouter(MyRouter)
 	controller.DefaultCoalition.InitRouter(MyRouter)
 	controller.DefaultInterior.InitRouter(MyRouter)
+	controller.DefaultSkill.InitRouter(MyRouter)
 }
