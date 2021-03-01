@@ -215,7 +215,8 @@ func (this*armyWar) round() (*warRound, bool) {
 			goto end
 		}
 
-		attHarm := float64(util.AbsInt(att.force-def.defense)*att.soldiers)*0.0005
+		attHarmRatio := general.GenArms.GetHarmRatio(att.arms, def.arms)
+		attHarm := float64(util.AbsInt(att.force-def.defense)*att.soldiers)*attHarmRatio*0.0005
 		attKill := int(attHarm)
 		attKill = util.MinInt(attKill, def.soldiers)
 		def.soldiers -= attKill
@@ -234,7 +235,8 @@ func (this*armyWar) round() (*warRound, bool) {
 			continue
 		}
 
-		defHarm := float64(util.AbsInt(def.force-att.defense)*def.soldiers)*0.0005
+		defHarmRatio := general.GenArms.GetHarmRatio(def.arms, att.arms)
+		defHarm := float64(util.AbsInt(def.force-att.defense)*def.soldiers)*defHarmRatio*0.0005
 		defKill := int(defHarm)
 
 		defKill = util.MinInt(defKill, att.soldiers)

@@ -14,7 +14,7 @@ import (
 var GenArms Arms
 
 
-type gArmsCondit struct {
+type gArmsCondition struct {
 	Level		    int     `json:"level"`
 	StarLevel		int     `json:"star_lv"`
 }
@@ -26,11 +26,11 @@ type gArmsCost struct {
 
 
 type gArms struct {
-	Id         int         `json:"id"`
-	Name       string      `json:"name"`
-	Condition  gArmsCondit `json:"condition"`
-	ChangeCost gArmsCost   `json:"change_cost"`
-	HarmRatio  [][]int     `json:"harm_ratio"`
+	Id         int         		`json:"id"`
+	Name       string      		`json:"name"`
+	Condition  gArmsCondition 	`json:"condition"`
+	ChangeCost gArmsCost   		`json:"change_cost"`
+	HarmRatio  []int     		`json:"harm_ratio"`
 }
 
 
@@ -64,6 +64,15 @@ func (this *Arms) GetArm(id int) (gArms, error){
 	return this.AMap[id], nil
 }
 
+func (this* Arms) GetHarmRatio(attId, defId int) float64{
+	attArm, ok1 := this.AMap[attId]
+	_, ok2 := this.AMap[defId]
+	if ok1 && ok2 {
+		return float64(attArm.HarmRatio[defId-1])/100.0
+	}else{
+		return 1.0
+	}
+}
 
 
 
