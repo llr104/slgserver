@@ -271,8 +271,13 @@ func (this*General) upSkill(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	if skill.IsCanUp() == false{
+	if skill.IsInLimit() == false{
 		rsp.Body.Code = constant.OutSkillLimit
+		return
+	}
+
+	if skill.ArmyIsIn(g.CurArms) == false{
+		rsp.Body.Code = constant.OutArmNotMatch
 		return
 	}
 

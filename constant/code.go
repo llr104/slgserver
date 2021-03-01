@@ -67,7 +67,8 @@ const NotHasJiShi = 58            //没有集市
 const OutPosTagLimit = 59         //超过了收藏上限
 const OutSkillLimit = 60          //超过了技能上限
 const UpSkillError = 61          //装备技能失败
-const DownSkillError = 62          //取下技能失败
+const DownSkillError = 62        //取下技能失败
+const OutArmNotMatch = 63          //兵种不符
 
 
 

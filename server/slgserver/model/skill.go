@@ -140,9 +140,19 @@ func (this *Skill) Limit() int {
 	return cfg.Limit
 }
 
-func (this *Skill) IsCanUp() bool{
-	fmt.Println("this.BelongGenerals", this.BelongGenerals)
+func (this *Skill) IsInLimit() bool{
+	//fmt.Println("this.BelongGenerals", this.BelongGenerals)
 	return len(this.Generals) < this.Limit()
+}
+
+func (this *Skill) ArmyIsIn(armId int) bool  {
+	cfg, _ := skill.Skill.GetCfg(this.CfgId)
+	for _, arm := range cfg.Arms {
+		if arm == armId{
+			return true
+		}
+	}
+	return false
 }
 
 func (this *Skill) UpSkill(gId int) {
