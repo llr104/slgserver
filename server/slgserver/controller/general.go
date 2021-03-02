@@ -9,6 +9,7 @@ import (
 	"slgserver/server/slgserver/model"
 	"slgserver/server/slgserver/proto"
 	"slgserver/server/slgserver/static_conf"
+	"slgserver/server/slgserver/static_conf/skill"
 )
 
 var DefaultGeneral = General{
@@ -31,6 +32,7 @@ func (this*General) InitRouter(r *net.Router) {
 	g.AddRouter("convert", this.convert)
 	g.AddRouter("upSkill", this.upSkill)
 	g.AddRouter("downSkill", this.downSkill)
+	g.AddRouter("lvSkill", this.lvSkill)
 
 }
 
@@ -334,4 +336,50 @@ func (this*General) downSkill(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	skill.DownSkill(g.Id)
 	g.SyncExecute()
 	skill.SyncExecute()
+}
+
+func (this*General) lvSkill(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+	reqObj := &proto.LvSkillReq{}
+	rspObj := &proto.LvSkillRsp{}
+
+	mapstructure.Decode(req.Body.Msg, reqObj)
+	rsp.Body.Msg = rspObj
+	rsp.Body.Code = constant.OK
+
+	rspObj.Pos = reqObj.Pos
+	rspObj.GId = reqObj.GId
+
+	r, _ := req.Conn.GetProperty("role")
+	role := r.(*model.Role)
+
+	g, ok := mgr.GMgr.GetByGId(reqObj.GId)
+	if ok == false{
+		rsp.Body.Code = constant.GeneralNotFound
+		return
+	}
+
+	if g.RId != role.RId {
+		rsp.Body.Code = constant.GeneralNotMe
+		return
+	}
+
+	gSkill, err := g.PosSkill(reqObj.Pos)
+	if  err != nil{
+		rsp.Body.Code = constant.PosNotSkill
+		return
+	}
+
+	skillCfg, ok := skill.Skill.GetCfg(gSkill.CfgId)
+	if ok == false{
+		rsp.Body.Code = constant.PosNotSkill
+		return
+	}
+
+	if gSkill.Lv > len(skillCfg.Levels){
+		rsp.Body.Code = constant.SkillLevelFull
+		return
+	}
+
+	gSkill.Lv += 1
+	g.SyncExecute()
 }

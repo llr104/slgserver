@@ -194,3 +194,14 @@ type UpDownSkillRsp struct {
 	Pos   int `json:"pos"`   //位置0-2
 }
 
+
+type LvSkillReq struct {
+	GId   int `json:"gId"`   //武将id
+	Pos   int `json:"pos"`   //位置0-2
+}
+
+type LvSkillRsp struct {
+	GId   int `json:"gId"`   //武将id
+	Pos   int `json:"pos"`   //位置0-2
+}
+

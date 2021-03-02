@@ -2,6 +2,7 @@ package model
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"go.uber.org/zap"
 	"slgserver/db"
@@ -256,6 +257,14 @@ func (this*General) DownSkill(skillId int, pos int) bool{
 		return false
 	}
 }
+
+func (this *General) PosSkill(pos int) (*proto.GSkill, error){
+	if pos >= len(this.SkillsArray){
+		return nil, errors.New("skill index out of range")
+	}
+	return this.SkillsArray[pos], nil
+}
+
 
 /* 推送同步 begin */
 func (this *General) IsCellView() bool{

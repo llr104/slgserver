@@ -68,7 +68,8 @@ const OutPosTagLimit = 59         //超过了收藏上限
 const OutSkillLimit = 60          //超过了技能上限
 const UpSkillError = 61          //装备技能失败
 const DownSkillError = 62        //取下技能失败
-const OutArmNotMatch = 63          //兵种不符
-
+const OutArmNotMatch = 63        //兵种不符
+const PosNotSkill = 64           //该位置没有技能
+const SkillLevelFull = 65        //技能等级已满
 
 
