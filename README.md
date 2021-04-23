@@ -1,5 +1,12 @@
 # slg游戏服务器demo
 
+### 概要
+- 1.mysql数据落地，orm映射
+- 2.事件处理支持中间件
+- 3.服务器与服务器之间websocket连接
+- 4.服务器与服务器之间rpc调用
+- 5.高并发
+
 ### 多进程服务
 - 1.httpserver  提供一些api调用
 - 2.gateserver  网关，可以部署多个进行负债均衡，客户端的所有loginserver、chatserver、slgserver的消息都通过该服进行转发
@@ -7,12 +14,6 @@
 - 4.chatserver  聊天服，可以部署多个，原则上一个slgserver对应一个chatserver
 - 5.slgserver   游戏服，可以部署多个，不同服之间的玩家数据不共通
 
-### 概要
-- 1.mysql数据落地，orm映射
-- 2.事件处理支持中间件 
-- 3.服务器与服务器之间websocket连接
-- 4.服务器与服务器之间rpc调用
-- 5.高并发
 
 # 客户端截图（因图片素材非自主生产，所以暂未公布仓库）
 ### 队伍征兵
