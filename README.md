@@ -1,5 +1,8 @@
 # slg游戏服务器demo
 
+## 客户端demo：https://github.com/llr104/slgclient
+<br>
+
 ### 概要
 - 1.mysql数据落地，orm映射
 - 2.事件处理支持中间件
@@ -14,8 +17,7 @@
 - 4.chatserver  聊天服，可以部署多个，原则上一个slgserver对应一个chatserver
 - 5.slgserver   游戏服，可以部署多个，不同服之间的玩家数据不共通
 
-
-# 客户端截图（因图片素材非自主生产，所以暂未公布仓库）
+# 客户端截图
 ### 队伍征兵
 ![队伍征兵](https://s1.imagehub.cc/images/2021/04/23/d56cd91ba46b9ffd7b097dc4cb07bf5a.png)
 
