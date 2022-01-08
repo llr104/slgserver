@@ -1,0 +1,1 @@
+xcopy ..\data\*.* ..\bin /e
