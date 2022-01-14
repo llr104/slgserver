@@ -40,13 +40,13 @@ CREATE TABLE IF NOT EXISTS `tb_role_1` (
    `uid` int unsigned NOT NULL COMMENT '用户UID',
    `headId` int unsigned NOT NULL DEFAULT 0 COMMENT '头像Id',
    `sex` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '性别，0:女 1男',
-   `nick_name` varchar(100) COMMENT 'nick_name',
+   `nick_name` varchar(100) COMMENT 'nick_name' ,
    `balance` int unsigned NOT NULL DEFAULT 0 COMMENT '余额',
    `login_time` timestamp COMMENT '登录时间',
    `logout_time` timestamp COMMENT '登出时间',
    `profile` varchar(500) COMMENT '个人简介',
    `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-   UNIQUE KEY (`uid`),
+   UNIQUE KEY (`uid`, `nick_name`),
    PRIMARY KEY (`rid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '玩家表';
 

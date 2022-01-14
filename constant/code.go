@@ -1,9 +1,9 @@
 package constant
 
-const ProxyConnectError = -4 	  //代理连接失败
-const ProxyNotInConnect = -3 	  //代理错误
-const UserNotInConnect = -2 	  //链接没有找到用户
-const RoleNotInConnect = -1 	  //链接没有找到角色
+const ProxyConnectError = -4 //代理连接失败
+const ProxyNotInConnect = -3 //代理错误
+const UserNotInConnect = -2  //链接没有找到用户
+const RoleNotInConnect = -1  //链接没有找到角色
 const OK = 0
 const InvalidParam = 1            //参数有误
 const DBError = 2                 //数据库异常
@@ -34,7 +34,7 @@ const DecreeNotEnough = 25        //政令不足
 const GoldNotEnough = 26          //金币不足
 const GeneralRepeat = 27          //重复上阵
 const CostNotEnough = 28          //cost不足
-const GeneralNoHas =  29          //没有该合成武将
+const GeneralNoHas = 29           //没有该合成武将
 const GeneralNoSame = 30          //合成武将非同名
 const ArmyNotEnough = 31          //队伍数不足
 const TongShuaiNotEnough = 32     //统帅不足
@@ -52,7 +52,7 @@ const BuildCanNotDefend = 43      //不能驻守
 const BuildCanNotAttack = 44      //不能占领
 const BuildMBSNotFound = 45       //没有军营
 const BuildWarFree = 46           //免战中
-const ArmyConscript  = 47         //征兵中
+const ArmyConscript = 47          //征兵中
 const BuildGiveUpAlready = 48     //领地已经在放弃了
 const CanNotBuildNew = 49         //不能再新建建筑在领地上
 const CanNotTransfer = 50         //不能调兵
@@ -66,10 +66,9 @@ const OutGeneralLimit = 57        //武将超过上限了
 const NotHasJiShi = 58            //没有集市
 const OutPosTagLimit = 59         //超过了收藏上限
 const OutSkillLimit = 60          //超过了技能上限
-const UpSkillError = 61          //装备技能失败
-const DownSkillError = 62        //取下技能失败
-const OutArmNotMatch = 63        //兵种不符
-const PosNotSkill = 64           //该位置没有技能
-const SkillLevelFull = 65        //技能等级已满
-
-
+const UpSkillError = 61           //装备技能失败
+const DownSkillError = 62         //取下技能失败
+const OutArmNotMatch = 63         //兵种不符
+const PosNotSkill = 64            //该位置没有技能
+const SkillLevelFull = 65         //技能等级已满
+const RoleNameExist = 66          //昵称已经存在
