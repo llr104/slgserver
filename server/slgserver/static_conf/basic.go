@@ -10,9 +10,8 @@ import (
 	"slgserver/config"
 	"slgserver/log"
 )
+
 var Basic basic
-
-
 
 type conscript struct {
 	Des       string `json:"des"`
@@ -21,7 +20,7 @@ type conscript struct {
 	CostStone int    `json:"cost_stone"`
 	CostGrain int    `json:"cost_grain"`
 	CostGold  int    `json:"cost_gold"`
-	CostTime  int    `json:"cost_time"`	//每征一个兵需要花费时间
+	CostTime  int    `json:"cost_time"` //每征一个兵需要花费时间
 }
 
 type general struct {
@@ -33,30 +32,30 @@ type general struct {
 	ReclamationCost       int    `json:"reclamation_cost"`        //屯田消耗政令
 	DrawGeneralCost       int    `json:"draw_general_cost"`       //抽卡消耗金币
 	PrPoint               int    `json:"pr_point"`                //合成一个武将或者的技能点
-	Limit                 int    `json:"limit"`					  //武将数量上限
+	Limit                 int    `json:"limit"`                   //武将数量上限
 
 }
 
 type role struct {
-	Des  				string 	`json:"des"`
-	Wood 				int 	`json:"wood"`
-	Iron 				int 	`json:"iron"`
-	Stone				int 	`json:"stone"`
-	Grain				int 	`json:"grain"`
-	Gold 				int 	`json:"gold"`
-	Decree            	int 	`json:"decree"`
-	WoodYield         	int 	`json:"wood_yield"`
-	IronYield         	int  	`json:"iron_yield"`
-	StoneYield        	int  	`json:"stone_yield"`
-	GrainYield        	int  	`json:"grain_yield"`
-	GoldYield         	int  	`json:"gold_yield"`
-	DepotCapacity     	int  	`json:"depot_capacity"`		 //仓库初始容量
-	BuildLimit        	int  	`json:"build_limit"`		 //野外建筑上限
-	RecoveryTime      	int  	`json:"recovery_time"`
-	DecreeLimit       	int  	`json:"decree_limit"`        //令牌上限
-	CollectTimesLimit 	int8 	`json:"collect_times_limit"` //每日征收次数上限
-	CollectInterval   	int  	`json:"collect_interval"`    //征收间隔
-	PosTagLimit       	int8 	`json:"pos_tag_limit"`       //位置标签上限
+	Des               string `json:"des"`
+	Wood              int    `json:"wood"`
+	Iron              int    `json:"iron"`
+	Stone             int    `json:"stone"`
+	Grain             int    `json:"grain"`
+	Gold              int    `json:"gold"`
+	Decree            int    `json:"decree"`
+	WoodYield         int    `json:"wood_yield"`
+	IronYield         int    `json:"iron_yield"`
+	StoneYield        int    `json:"stone_yield"`
+	GrainYield        int    `json:"grain_yield"`
+	GoldYield         int    `json:"gold_yield"`
+	DepotCapacity     int    `json:"depot_capacity"` //仓库初始容量
+	BuildLimit        int    `json:"build_limit"`    //野外建筑上限
+	RecoveryTime      int    `json:"recovery_time"`
+	DecreeLimit       int    `json:"decree_limit"`        //令牌上限
+	CollectTimesLimit int8   `json:"collect_times_limit"` //每日征收次数上限
+	CollectInterval   int    `json:"collect_interval"`    //征收间隔
+	PosTagLimit       int8   `json:"pos_tag_limit"`       //位置标签上限
 }
 
 type city struct {
@@ -78,11 +77,6 @@ type npcLevel struct {
 	Soilders int `json:"soilders"`
 }
 
-type npc struct {
-	Des    string     `json:"des"`
-	Levels []npcLevel `json:"levels"`
-}
-
 type union struct {
 	Des         string `json:"des"`
 	MemberLimit int    `json:"member_limit"`
@@ -93,12 +87,11 @@ type basic struct {
 	General   general   `json:"general"`
 	Role      role      `json:"role"`
 	City      city      `json:"city"`
-	Npc       npc       `json:"npc"`
 	Union     union     `json:"union"`
 	Build     build     `json:"build"`
 }
 
-func (this *basic) Load()  {
+func (this *basic) Load() {
 	jsonDir := config.File.MustValue("logic", "json_data", "../data/conf/")
 	fileName := path.Join(jsonDir, "basic.json")
 	jdata, err := ioutil.ReadFile(fileName)
@@ -110,14 +103,4 @@ func (this *basic) Load()  {
 	json.Unmarshal(jdata, this)
 
 	fmt.Println(this)
-}
-
-func (this *basic) GetNPC(level int8) (*npcLevel, bool){
-	if level <= 0{
-		return nil, false
-	}
-	if len(this.Npc.Levels) >= int(level){
-		return &this.Npc.Levels[level-1], true
-	}
-	return nil, false
 }

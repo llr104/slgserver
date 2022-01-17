@@ -11,6 +11,7 @@ import (
 	"slgserver/server/slgserver/static_conf"
 	"slgserver/server/slgserver/static_conf/facility"
 	"slgserver/server/slgserver/static_conf/general"
+	"slgserver/server/slgserver/static_conf/npc"
 	"slgserver/server/slgserver/static_conf/skill"
 )
 
@@ -19,14 +20,15 @@ var MyRouter = &net.Router{}
 func Init() {
 	db.TestDB()
 
-	facility.FConf.Load()
-	general.GenBasic.Load()
-	skill.Skill.Load()
-
-	general.General.Load()
 	static_conf.Basic.Load()
 	static_conf.MapBuildConf.Load()
 	static_conf.MapBCConf.Load()
+
+	facility.FConf.Load()
+	general.GenBasic.Load()
+	skill.Skill.Load()
+	general.General.Load()
+	npc.Cfg.Load()
 
 	serverId := config.File.MustInt("logic", "server_id", 1)
 	model.ServerId = serverId

@@ -32,7 +32,7 @@
     "stone_yield": 1000000,
     "grain_yield": 1000000,
     "gold_yield": 1000000,
-    "depot_capacity": 100000000000,
+    "depot_capacity": 100000000,
     "build_limit": 20,
     "recovery_time": 20,
     "decree_limit": 20,
@@ -52,41 +52,6 @@
     "war_free": 20,
     "giveUp_time": 30,
     "fortress_limit": 10
-  },
-  "npc": {
-    "des": "npc一些配置",
-    "levels": [
-      {
-        "soilders": 100
-      },
-      {
-        "soilders": 200
-      },
-      {
-        "soilders": 300
-      },
-      {
-        "soilders": 400
-      },
-      {
-        "soilders": 500
-      },
-      {
-        "soilders": 600
-      },
-      {
-        "soilders": 700
-      },
-      {
-        "soilders": 800
-      },
-      {
-        "soilders": 900
-      },
-      {
-        "soilders": 1000
-      }
-    ]
   },
   "union": {
     "des": "联盟的一些配置",
