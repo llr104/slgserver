@@ -5,7 +5,19 @@ import (
 	"slgserver/server/slgserver/logic/mgr"
 	"slgserver/server/slgserver/model"
 	"slgserver/server/slgserver/static_conf/facility"
+	"slgserver/server/slgserver/static_conf/skill"
 )
+
+type attachSkill struct {
+	cfg      skill.Conf
+	id       int
+	lv       int
+	duration int //剩余轮数
+}
+
+func newAttachSkill(cfg skill.Conf, id int, lv int) *attachSkill {
+	return &attachSkill{cfg: cfg, id: id, lv: lv, duration: cfg.Duration}
+}
 
 //战斗位置的属性
 type armyPosition struct {
@@ -18,6 +30,83 @@ type armyPosition struct {
 	destroy  int //破坏
 	arms     int //兵种
 	position int //位置
+
+	skills []*attachSkill
+}
+
+//攻击前触发技能
+func (this *armyPosition) hitBefore() []*attachSkill {
+	ret := make([]*attachSkill, 0)
+
+	skills := this.general.SkillsArray
+	for _, s := range skills {
+		skillCfg, ok := skill.Skill.GetCfg(s.CfgId)
+		if ok {
+			if !skillCfg.IsHitBefore() {
+				continue
+			}
+			l := skillCfg.Levels[s.Lv-1]
+			b := rand.Intn(100)
+			if b >= 100-l.Probability {
+				as := newAttachSkill(skillCfg, s.Id, s.Lv)
+				ret = append(ret, as)
+			}
+		}
+	}
+	return ret
+}
+
+//攻击后触发技能
+func (this *armyPosition) hitAfter() []*attachSkill {
+	ret := make([]*attachSkill, 0)
+
+	skills := this.general.SkillsArray
+	for _, s := range skills {
+		skillCfg, ok := skill.Skill.GetCfg(s.CfgId)
+		if ok {
+			if !skillCfg.IsHitAfter() {
+				continue
+			}
+			l := skillCfg.Levels[s.Lv-1]
+			b := rand.Intn(100)
+			if b >= 100-l.Probability {
+				as := newAttachSkill(skillCfg, s.Id, s.Lv)
+				ret = append(ret, as)
+			}
+		}
+	}
+	return ret
+}
+
+func (this *armyPosition) acceptSkill(s *attachSkill) {
+	if this.skills == nil {
+		this.skills = make([]*attachSkill, 0)
+	}
+
+	this.skills = append(this.skills, s)
+}
+
+func (this *armyPosition) checkHit() {
+	skills := make([]*attachSkill, 0)
+	for _, skill := range this.skills {
+		if skill.duration > 0 {
+			//瞬时技能，当前攻击完成后移除
+			skills = append(skills, skill)
+		}
+	}
+	this.skills = skills
+}
+
+func (this *armyPosition) checkNextRound() {
+	skills := make([]*attachSkill, 0)
+	for _, skill := range this.skills {
+		skill.duration -= 1
+		if skill.duration <= 0 {
+			//持续技能，当前回合结束后持续到期移除
+			skills = append(skills, skill)
+		}
+	}
+	this.skills = skills
 }
 
 type warCamp struct {

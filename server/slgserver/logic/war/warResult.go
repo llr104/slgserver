@@ -48,6 +48,17 @@ func (this *warResult) battle() {
 	}
 }
 
+func (this *warResult) beforeSkill(att *armyPosition) {
+	if nil == att {
+		return
+	}
+
+	//beforeSkills := att.hitBefore()
+	//for _, bs := range beforeSkills {
+	//
+	//}
+}
+
 //回合
 func (this *warResult) runRound() (*warRound, bool) {
 
@@ -69,6 +80,9 @@ func (this *warResult) runRound() (*warRound, bool) {
 		if att == nil || att.soldiers == 0 {
 			continue
 		}
+
+		//释放技能
+		this.beforeSkill(att)
 
 		def, _ := this.camp.randArmyPosition(defense)
 		if def == nil {
