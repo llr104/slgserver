@@ -1,7 +1,6 @@
 package army
 
 import (
-	"slgserver/server/slgserver/ILogic"
 	"slgserver/server/slgserver/global"
 	"slgserver/server/slgserver/logic/check"
 	"slgserver/server/slgserver/logic/mgr"
@@ -43,7 +42,7 @@ func newArmyLogic() *ArmyLogic {
 }
 
 type ArmyLogic struct {
-	sys     ILogic.ISysArmyLogic
+	sys     *sysArmyLogic
 	passBy  sync.RWMutex
 	stop    sync.RWMutex
 	out     sync.RWMutex
@@ -58,10 +57,6 @@ type ArmyLogic struct {
 	endTimeArmys   map[int64][]*model.Army     //key:到达时间
 	stopInPosArmys map[int]map[int]*model.Army //玩家停留位置的军队 key:posId,armyId
 	passByPosArmys map[int]map[int]*model.Army //玩家路过位置的军队 key:posId,armyId
-}
-
-func (this *ArmyLogic) Sys() ILogic.ISysArmyLogic {
-	return this.sys
 }
 
 func (this *ArmyLogic) init() {
@@ -488,4 +483,12 @@ func (this *ArmyLogic) Reclamation(army *model.Army) {
 	army.State = model.ArmyStop
 	army.Cmd = model.ArmyCmdReclamation
 	this.PushAction(army)
+}
+
+func (this *ArmyLogic) GetSysArmy(x, y int) []*model.Army {
+	return this.sys.GetArmy(x, y)
+}
+
+func (this *ArmyLogic) DelSysArmy(x, y int) {
+	this.sys.DelArmy(x, y)
 }

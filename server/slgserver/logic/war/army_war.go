@@ -506,7 +506,7 @@ func (this *Battle) executeBuild(army *model.Army) {
 	isRoleEnemy := len(posArmys) != 0
 	var enemys []*model.Army
 	if isRoleEnemy == false {
-		enemys = this.IArmyLogic.Sys().GetArmy(army.ToX, army.ToY)
+		enemys = this.IArmyLogic.GetSysArmy(army.ToX, army.ToY)
 	} else {
 		for _, v := range posArmys {
 			enemys = append(enemys, v)
@@ -547,7 +547,7 @@ func (this *Battle) executeBuild(army *model.Army) {
 			} else {
 				wr.Occupy = 0
 			}
-			this.IArmyLogic.Sys().DelArmy(army.ToX, army.ToY)
+			this.IArmyLogic.DelSysArmy(army.ToX, army.ToY)
 		}
 	}
 
