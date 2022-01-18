@@ -1,4 +1,4 @@
-package logic
+package army
 
 import (
 	"slgserver/server/slgserver/global"

@@ -7,6 +7,7 @@ import (
 	"slgserver/net"
 	"slgserver/server/slgserver/global"
 	"slgserver/server/slgserver/logic"
+	"slgserver/server/slgserver/logic/check"
 	"slgserver/server/slgserver/logic/mgr"
 	"slgserver/server/slgserver/model"
 	"slgserver/server/slgserver/proto"
@@ -16,16 +17,12 @@ import (
 	"time"
 )
 
-var DefaultArmy = Army{
-
-}
+var DefaultArmy = Army{}
 
 type Army struct {
-
 }
 
-
-func (this*Army) InitRouter(r *net.Router) {
+func (this *Army) InitRouter(r *net.Router) {
 	g := r.Group("army").Use(middleware.ElapsedTime(), middleware.Log(),
 		middleware.CheckLogin(), middleware.CheckRole())
 
@@ -38,7 +35,7 @@ func (this*Army) InitRouter(r *net.Router) {
 }
 
 //我的军队列表
-func (this*Army) myList(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+func (this *Army) myList(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	reqObj := &proto.ArmyListReq{}
 	rspObj := &proto.ArmyListRsp{}
 	mapstructure.Decode(req.Body.Msg, reqObj)
@@ -48,8 +45,8 @@ func (this*Army) myList(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
-	city,ok := mgr.RCMgr.Get(reqObj.CityId)
-	if ok == false{
+	city, ok := mgr.RCMgr.Get(reqObj.CityId)
+	if ok == false {
 		rsp.Body.Code = constant.CityNotExist
 		return
 	}
@@ -67,7 +64,7 @@ func (this*Army) myList(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 }
 
 //我的某一个军队
-func (this*Army) myOne(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+func (this *Army) myOne(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	reqObj := &proto.ArmyOneReq{}
 	rspObj := &proto.ArmyOneRsp{}
 	mapstructure.Decode(req.Body.Msg, reqObj)
@@ -77,7 +74,7 @@ func (this*Army) myOne(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
 	city, ok := mgr.RCMgr.Get(reqObj.CityId)
-	if ok == false{
+	if ok == false {
 		rsp.Body.Code = constant.CityNotExist
 		return
 	}
@@ -90,14 +87,14 @@ func (this*Army) myOne(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	a, ok := mgr.AMgr.GetByCityOrder(reqObj.CityId, reqObj.Order)
 	if ok {
 		rspObj.Army = a.ToProto().(proto.Army)
-	}else{
+	} else {
 		rsp.Body.Code = constant.ArmyNotFound
 	}
 
 }
 
 //配置武将
-func (this*Army) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+func (this *Army) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 	reqObj := &proto.DisposeReq{}
 	rspObj := &proto.DisposeRsp{}
@@ -108,7 +105,7 @@ func (this*Army) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
 
-	if reqObj.Order <= 0 || reqObj.Order > 5 || reqObj.Position < -1 || reqObj.Position >2 {
+	if reqObj.Order <= 0 || reqObj.Order > 5 || reqObj.Position < -1 || reqObj.Position > 2 {
 		rsp.Body.Code = constant.InvalidParam
 		return
 	}
@@ -132,18 +129,18 @@ func (this*Army) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	}
 
 	newG, ok := mgr.GMgr.GetByGId(reqObj.GeneralId)
-	if ok == false{
+	if ok == false {
 		rsp.Body.Code = constant.GeneralNotFound
 		return
 	}
 
-	if newG.RId != role.RId{
+	if newG.RId != role.RId {
 		rsp.Body.Code = constant.GeneralNotMe
 		return
 	}
 
 	army, err := mgr.AMgr.GetOrCreate(role.RId, reqObj.CityId, reqObj.Order)
-	if err != nil{
+	if err != nil {
 		rsp.Body.Code = constant.DBError
 		return
 	}
@@ -154,15 +151,15 @@ func (this*Army) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	}
 
 	//下阵
-	if reqObj.Position == -1{
+	if reqObj.Position == -1 {
 		for pos, g := range army.Gens {
-			if g != nil && g.Id == newG.Id{
+			if g != nil && g.Id == newG.Id {
 
 				//征兵中不能下阵
-				if army.PositionCanModify(pos) == false{
-					if army.Cmd == model.ArmyCmdConscript{
+				if army.PositionCanModify(pos) == false {
+					if army.Cmd == model.ArmyCmdConscript {
 						rsp.Body.Code = constant.GeneralBusy
-					}else{
+					} else {
 						rsp.Body.Code = constant.ArmyBusy
 					}
 					return
@@ -178,31 +175,31 @@ func (this*Army) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		newG.Order = 0
 		newG.CityId = 0
 		newG.SyncExecute()
-	}else{
+	} else {
 
 		//征兵中不能下阵
-		if army.PositionCanModify(reqObj.Position) == false{
-			if army.Cmd == model.ArmyCmdConscript{
+		if army.PositionCanModify(reqObj.Position) == false {
+			if army.Cmd == model.ArmyCmdConscript {
 				rsp.Body.Code = constant.GeneralBusy
-			}else{
+			} else {
 				rsp.Body.Code = constant.ArmyBusy
 			}
 			return
 		}
 
-		if newG.CityId != 0{
+		if newG.CityId != 0 {
 			rsp.Body.Code = constant.GeneralBusy
 			return
 		}
 
-		if mgr.AMgr.IsRepeat(role.RId, newG.CfgId) == false{
+		if mgr.AMgr.IsRepeat(role.RId, newG.CfgId) == false {
 			rsp.Body.Code = constant.GeneralRepeat
 			return
 		}
 
 		//判断是否能配前锋
 		tst, ok := mgr.RFMgr.GetFacility(city.CityId, facility.TongShuaiTing)
-		if reqObj.Position == 2 && ( ok == false || tst.GetLevel() < reqObj.Order) {
+		if reqObj.Position == 2 && (ok == false || tst.GetLevel() < reqObj.Order) {
 			rsp.Body.Code = constant.TongShuaiNotEnough
 			return
 		}
@@ -216,7 +213,7 @@ func (this*Army) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 			cost += general.General.Cost(g.CfgId)
 		}
 
-		if mgr.GetCityCost(city.CityId) < cost{
+		if mgr.GetCityCost(city.CityId) < cost {
 			rsp.Body.Code = constant.CostNotEnough
 			return
 		}
@@ -247,7 +244,7 @@ func (this*Army) dispose(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 }
 
 //征兵
-func (this*Army) conscript(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+func (this *Army) conscript(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	reqObj := &proto.ConscriptReq{}
 	rspObj := &proto.ConscriptRsp{}
 	mapstructure.Decode(req.Body.Msg, reqObj)
@@ -255,7 +252,7 @@ func (this*Army) conscript(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	rsp.Body.Code = constant.OK
 
 	if reqObj.ArmyId <= 0 || len(reqObj.Cnts) != 3 ||
-		reqObj.Cnts[0] < 0 || reqObj.Cnts[1] < 0 || reqObj.Cnts[2] < 0{
+		reqObj.Cnts[0] < 0 || reqObj.Cnts[1] < 0 || reqObj.Cnts[2] < 0 {
 		rsp.Body.Code = constant.InvalidParam
 		return
 	}
@@ -263,25 +260,25 @@ func (this*Army) conscript(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
 
-	army,ok := mgr.AMgr.Get(reqObj.ArmyId)
-	if ok == false{
+	army, ok := mgr.AMgr.Get(reqObj.ArmyId)
+	if ok == false {
 		rsp.Body.Code = constant.ArmyNotFound
 		return
 	}
 
-	if role.RId != army.RId{
+	if role.RId != army.RId {
 		rsp.Body.Code = constant.ArmyNotMe
 		return
 	}
 
 	//判断该位置是否能征兵
 	for pos, cnt := range reqObj.Cnts {
-		if cnt > 0{
-			if army.Gens[pos] == nil{
+		if cnt > 0 {
+			if army.Gens[pos] == nil {
 				rsp.Body.Code = constant.InvalidParam
 				return
 			}
-			if army.PositionCanModify(pos) == false{
+			if army.PositionCanModify(pos) == false {
 				rsp.Body.Code = constant.GeneralBusy
 				return
 			}
@@ -289,7 +286,7 @@ func (this*Army) conscript(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	}
 
 	lv := mgr.RFMgr.GetFacilityLv(army.CityId, facility.MBS)
-	if lv <= 0{
+	if lv <= 0 {
 		rsp.Body.Code = constant.BuildMBSNotFound
 		return
 	}
@@ -302,12 +299,12 @@ func (this*Army) conscript(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 		l, e := general.GenBasic.GetLevel(g.Level)
 		add := mgr.RFMgr.GetAdditions(army.CityId, facility.TypeSoldierLimit)
-		if e == nil{
-			if l.Soldiers + add[0] < reqObj.Cnts[i]+army.SoldierArray[i]{
+		if e == nil {
+			if l.Soldiers+add[0] < reqObj.Cnts[i]+army.SoldierArray[i] {
 				rsp.Body.Code = constant.OutArmyLimit
 				return
 			}
-		}else{
+		} else {
 			rsp.Body.Code = constant.InvalidParam
 			return
 		}
@@ -320,11 +317,11 @@ func (this*Army) conscript(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	}
 
 	conscript := static_conf.Basic.ConScript
-	needWood := total*conscript.CostWood
-	needGrain := total*conscript.CostGrain
-	needIron := total*conscript.CostIron
-	needStone := total*conscript.CostStone
-	needGold := total*conscript.CostGold
+	needWood := total * conscript.CostWood
+	needGrain := total * conscript.CostGrain
+	needIron := total * conscript.CostIron
+	needStone := total * conscript.CostStone
+	needGold := total * conscript.CostGold
 
 	nr := facility.NeedRes{Grain: needGrain, Wood: needWood,
 		Gold: needGold, Iron: needIron, Decree: 0,
@@ -333,7 +330,7 @@ func (this*Army) conscript(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	if code := mgr.RResMgr.TryUseNeed(army.RId, nr); code == constant.OK {
 		curTime := time.Now().Unix()
 		for i, _ := range army.SoldierArray {
-			if reqObj.Cnts[i] > 0{
+			if reqObj.Cnts[i] > 0 {
 				army.ConscriptCntArray[i] = reqObj.Cnts[i]
 				army.ConscriptTimeArray[i] = int64(reqObj.Cnts[i]*conscript.CostTime) + curTime - 2
 			}
@@ -350,13 +347,13 @@ func (this*Army) conscript(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 			rspObj.RoleRes = rRes.ToProto().(proto.RoleRes)
 		}
 		rsp.Body.Code = constant.OK
-	}else{
+	} else {
 		rsp.Body.Code = constant.ResNotEnough
 	}
 }
 
 //派遣队伍
-func (this*Army) assign(req *net.WsMsgReq, rsp *net.WsMsgRsp){
+func (this *Army) assign(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	reqObj := &proto.AssignArmyReq{}
 	rspObj := &proto.AssignArmyRsp{}
 	mapstructure.Decode(req.Body.Msg, reqObj)
@@ -366,44 +363,43 @@ func (this*Army) assign(req *net.WsMsgReq, rsp *net.WsMsgRsp){
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
 
-	army,ok := mgr.AMgr.Get(reqObj.ArmyId)
-	if ok == false{
+	army, ok := mgr.AMgr.Get(reqObj.ArmyId)
+	if ok == false {
 		rsp.Body.Code = constant.ArmyNotFound
 		return
 	}
 
-	if role.RId != army.RId{
+	if role.RId != army.RId {
 		rsp.Body.Code = constant.ArmyNotMe
 		return
 	}
 
-	if reqObj.Cmd == model.ArmyCmdBack{
+	if reqObj.Cmd == model.ArmyCmdBack {
 		rsp.Body.Code = this.__back__(army)
-	}else if reqObj.Cmd == model.ArmyCmdAttack {
+	} else if reqObj.Cmd == model.ArmyCmdAttack {
 		rsp.Body.Code = this.__attack__(reqObj, army, role)
-	}else if reqObj.Cmd == model.ArmyCmdDefend {
+	} else if reqObj.Cmd == model.ArmyCmdDefend {
 		rsp.Body.Code = this.__defend__(reqObj, army, role)
-	}else if reqObj.Cmd == model.ArmyCmdReclamation {
+	} else if reqObj.Cmd == model.ArmyCmdReclamation {
 		rsp.Body.Code = this.__reclamation__(reqObj, army, role)
-	}else if reqObj.Cmd == model.ArmyCmdTransfer {
+	} else if reqObj.Cmd == model.ArmyCmdTransfer {
 		rsp.Body.Code = this.__transfer__(reqObj, army, role)
 	}
 
 	rspObj.Army = army.ToProto().(proto.Army)
 }
 
-
-func (this*Army) __pre__(reqObj *proto.AssignArmyReq, army* model.Army, role *model.Role) int{
+func (this *Army) __pre__(reqObj *proto.AssignArmyReq, army *model.Army, role *model.Role) int {
 
 	if reqObj.X < 0 || reqObj.X >= global.MapWith ||
 		reqObj.Y < 0 || reqObj.Y >= global.MapHeight {
 		return constant.InvalidParam
 	}
 
-	if army.IsCanOutWar() == false{
-		if army.Cmd != model.ArmyCmdIdle{
+	if army.IsCanOutWar() == false {
+		if army.Cmd != model.ArmyCmdIdle {
 			return constant.ArmyBusy
-		}else{
+		} else {
 			return constant.ArmyNotMain
 		}
 	}
@@ -418,26 +414,26 @@ func (this*Army) __pre__(reqObj *proto.AssignArmyReq, army* model.Army, role *mo
 		return constant.InvalidParam
 	}
 
-	if logic.IsCanArrive(reqObj.X, reqObj.Y, role.RId) == false{
+	if check.IsCanArrive(reqObj.X, reqObj.Y, role.RId) == false {
 		return constant.UnReachable
 	}
 
 	return constant.OK
 }
 
-func (this*Army) __after__(reqObj *proto.AssignArmyReq, army* model.Army) int{
+func (this *Army) __after__(reqObj *proto.AssignArmyReq, army *model.Army) int {
 	//最后才消耗体力
 	cost := static_conf.Basic.General.CostPhysicalPower
 	ok := mgr.GMgr.PhysicalPowerIsEnough(army, cost)
-	if ok == false{
+	if ok == false {
 		return constant.PhysicalPowerNotEnough
 	}
 
 	if reqObj.Cmd == model.ArmyCmdReclamation || reqObj.Cmd == model.ArmyCmdTransfer {
 		cost := static_conf.Basic.General.ReclamationCost
-		if mgr.RResMgr.DecreeIsEnough(army.RId, cost) == false{
+		if mgr.RResMgr.DecreeIsEnough(army.RId, cost) == false {
 			return constant.DecreeNotEnough
-		}else{
+		} else {
 			mgr.RResMgr.TryUseDecree(army.RId, cost)
 		}
 	}
@@ -453,22 +449,22 @@ func (this*Army) __after__(reqObj *proto.AssignArmyReq, army* model.Army) int{
 	//t := mgr.TravelTime(speed, army.FromX, army.FromY, army.ToX, army.ToY)
 	army.Start = time.Now()
 	//army.End = time.Now().Add(time.Duration(t) * time.Millisecond)
-	army.End = time.Now().Add(40*time.Second)
+	army.End = time.Now().Add(40 * time.Second)
 	logic.ArmyLogic.PushAction(army)
 
 	return constant.OK
 }
 
 //返回
-func (this*Army) __back__(army* model.Army) int{
+func (this *Army) __back__(army *model.Army) int {
 	if army.Cmd == model.ArmyCmdAttack ||
 		army.Cmd == model.ArmyCmdDefend ||
 		army.Cmd == model.ArmyCmdReclamation {
 		logic.ArmyLogic.ArmyBack(army)
-	}else if army.IsIdle(){
+	} else if army.IsIdle() {
 		city, ok := mgr.RCMgr.Get(army.CityId)
 		if ok {
-			if city.X != army.FromX || city.Y != army.FromY{
+			if city.X != army.FromX || city.Y != army.FromY {
 				logic.ArmyLogic.ArmyBack(army)
 			}
 		}
@@ -478,23 +474,23 @@ func (this*Army) __back__(army* model.Army) int{
 }
 
 //攻击
-func (this*Army) __attack__(reqObj *proto.AssignArmyReq, army* model.Army, role *model.Role) int{
+func (this *Army) __attack__(reqObj *proto.AssignArmyReq, army *model.Army, role *model.Role) int {
 
 	code := this.__pre__(reqObj, army, role)
 	if code != constant.OK {
 		return code
 	}
 
-	if logic.IsCanArrive(reqObj.X, reqObj.Y, role.RId) == false{
+	if check.IsCanArrive(reqObj.X, reqObj.Y, role.RId) == false {
 		return constant.UnReachable
 	}
 
 	//免战
-	if logic.IsWarFree(reqObj.X, reqObj.Y){
+	if check.IsWarFree(reqObj.X, reqObj.Y) {
 		return constant.BuildWarFree
 	}
 
-	if logic.IsCanDefend(reqObj.X, reqObj.Y, role.RId) == true {
+	if check.IsCanDefend(reqObj.X, reqObj.Y, role.RId) == true {
 		return constant.BuildCanNotAttack
 	}
 
@@ -502,21 +498,21 @@ func (this*Army) __attack__(reqObj *proto.AssignArmyReq, army* model.Army, role 
 }
 
 //驻守
-func (this*Army) __defend__(reqObj *proto.AssignArmyReq, army* model.Army, role *model.Role) int{
+func (this *Army) __defend__(reqObj *proto.AssignArmyReq, army *model.Army, role *model.Role) int {
 
 	code := this.__pre__(reqObj, army, role)
 	if code != constant.OK {
 		return code
 	}
 
-	if logic.IsCanDefend(reqObj.X, reqObj.Y, role.RId) == false {
+	if check.IsCanDefend(reqObj.X, reqObj.Y, role.RId) == false {
 		return constant.BuildCanNotDefend
 	}
 
 	return this.__after__(reqObj, army)
 }
 
-func (this*Army) __reclamation__(reqObj *proto.AssignArmyReq, army* model.Army, role *model.Role) int{
+func (this *Army) __reclamation__(reqObj *proto.AssignArmyReq, army *model.Army, role *model.Role) int {
 
 	code := this.__pre__(reqObj, army, role)
 	if code != constant.OK {
@@ -530,14 +526,14 @@ func (this*Army) __reclamation__(reqObj *proto.AssignArmyReq, army* model.Army, 
 	return this.__after__(reqObj, army)
 }
 
-func (this*Army) __transfer__(reqObj *proto.AssignArmyReq, army* model.Army, role *model.Role) int{
+func (this *Army) __transfer__(reqObj *proto.AssignArmyReq, army *model.Army, role *model.Role) int {
 
 	code := this.__pre__(reqObj, army, role)
 	if code != constant.OK {
 		return code
 	}
 
-	if army.FromX == reqObj.X && army.FromY == reqObj.Y{
+	if army.FromX == reqObj.X && army.FromY == reqObj.Y {
 		return constant.CanNotTransfer
 	}
 
@@ -557,13 +553,13 @@ func (this*Army) __transfer__(reqObj *proto.AssignArmyReq, army* model.Army, rol
 	cnt := 0
 	if b.IsRoleFortress() {
 		cnt = static_conf.MapBCConf.GetHoldArmyCnt(b.Type, b.Level)
-	}else{
+	} else {
 		cnt = 5
 	}
 
 	if cnt > mgr.AMgr.BelongPosArmyCnt(b.RId, b.X, b.Y) {
 		return this.__after__(reqObj, army)
-	}else{
+	} else {
 		return constant.HoldIsFull
 	}
 

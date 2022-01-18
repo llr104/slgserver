@@ -1,4 +1,4 @@
-package logic
+package union
 
 import (
 	"go.uber.org/zap"
@@ -8,84 +8,92 @@ import (
 	"sync"
 )
 
-func getUnionId(rid int) int {
+func GetUnionId(rid int) int {
 	attr, ok := mgr.RAttrMgr.Get(rid)
 	if ok {
 		return attr.UnionId
-	}else{
+	} else {
 		return 0
 	}
 }
 
-func getUnionName(unionId int) string {
-	if unionId <= 0{
+func GetUnionName(unionId int) string {
+	if unionId <= 0 {
 		return ""
 	}
 
 	u, ok := mgr.UnionMgr.Get(unionId)
 	if ok {
 		return u.Name
-	}else{
+	} else {
 		return ""
 	}
 }
 
-func getParentId(rid int) int {
+func GetParentId(rid int) int {
 	attr, ok := mgr.RAttrMgr.Get(rid)
 	if ok {
 		return attr.ParentId
-	}else{
+	} else {
 		return 0
 	}
 }
 
-func getMainMembers(unionId int) []int {
+func GetMainMembers(unionId int) []int {
 	u, ok := mgr.UnionMgr.Get(unionId)
 	r := make([]int, 0)
 	if ok {
-		if u.Chairman != 0{
+		if u.Chairman != 0 {
 			r = append(r, u.Chairman)
 		}
-		if u.ViceChairman != 0{
+		if u.ViceChairman != 0 {
 			r = append(r, u.ViceChairman)
 		}
 	}
 	return r
 }
 
+var _unionLogic *UnionLogic = nil
 
-type coalitionLogic struct {
-	mutex sync.RWMutex
-	children map[int]map[int]int	//key:unionId,key&value:child rid
+func Instance() *UnionLogic {
+	if _unionLogic == nil {
+		_unionLogic = newUnionLogic()
+	}
+	return _unionLogic
 }
 
-func NewCoalitionLogic() *coalitionLogic {
-	c := &coalitionLogic{
+type UnionLogic struct {
+	mutex    sync.RWMutex
+	children map[int]map[int]int //key:unionId,key&value:child rid
+}
+
+func newUnionLogic() *UnionLogic {
+	c := &UnionLogic{
 		children: make(map[int]map[int]int),
 	}
 	c.init()
 	return c
 }
 
-func (this*coalitionLogic) init()  {
+func (this *UnionLogic) init() {
 	//初始化下属玩家
 	attrs := mgr.RAttrMgr.List()
 	for _, attr := range attrs {
-		if attr.ParentId !=0 {
+		if attr.ParentId != 0 {
 			this.PutChild(attr.ParentId, attr.RId)
 		}
 	}
 }
 
-func (this*coalitionLogic) MemberEnter(rid, unionId int)  {
+func (this *UnionLogic) MemberEnter(rid, unionId int) {
 
 	attr, ok := mgr.RAttrMgr.TryCreate(rid)
 	if ok {
 		attr.UnionId = unionId
-		if attr.ParentId == unionId{
+		if attr.ParentId == unionId {
 			this.DelChild(unionId, attr.RId)
 		}
-	}else{
+	} else {
 		log.DefaultLog.Warn("EnterUnion not found roleAttribute", zap.Int("rid", rid))
 	}
 
@@ -96,7 +104,7 @@ func (this*coalitionLogic) MemberEnter(rid, unionId int)  {
 	}
 }
 
-func (this*coalitionLogic) MemberExit(rid int) {
+func (this *UnionLogic) MemberExit(rid int) {
 
 	if ra, ok := mgr.RAttrMgr.Get(rid); ok {
 		ra.UnionId = 0
@@ -110,7 +118,7 @@ func (this*coalitionLogic) MemberExit(rid int) {
 }
 
 //解散
-func (this*coalitionLogic) Dismiss(unionId int) {
+func (this *UnionLogic) Dismiss(unionId int) {
 	u, ok := mgr.UnionMgr.Get(unionId)
 	if ok {
 		mgr.UnionMgr.Remove(unionId)
@@ -124,7 +132,7 @@ func (this*coalitionLogic) Dismiss(unionId int) {
 	}
 }
 
-func (this*coalitionLogic) PutChild(unionId, rid int) {
+func (this *UnionLogic) PutChild(unionId, rid int) {
 	this.mutex.Lock()
 	_, ok := this.children[unionId]
 	if ok == false {
@@ -134,7 +142,7 @@ func (this*coalitionLogic) PutChild(unionId, rid int) {
 	this.mutex.Unlock()
 }
 
-func (this*coalitionLogic) DelChild(unionId, rid int) {
+func (this *UnionLogic) DelChild(unionId, rid int) {
 	this.mutex.Lock()
 	children, ok := this.children[unionId]
 	if ok {
@@ -148,7 +156,7 @@ func (this*coalitionLogic) DelChild(unionId, rid int) {
 	this.mutex.Unlock()
 }
 
-func (this*coalitionLogic) DelUnionAllChild(unionId int) {
+func (this *UnionLogic) DelUnionAllChild(unionId int) {
 	this.mutex.Lock()
 	children, ok := this.children[unionId]
 	if ok {

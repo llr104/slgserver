@@ -1,23 +1,24 @@
 package logic
 
 import (
+	"slgserver/server/slgserver/logic/army"
 	"slgserver/server/slgserver/logic/mgr"
+	"slgserver/server/slgserver/logic/union"
 	"slgserver/server/slgserver/model"
 	"time"
 )
 
+var Union *union.UnionLogic
+var ArmyLogic *army.ArmyLogic
 
-var Union *coalitionLogic
-var ArmyLogic *armyLogic
-
-func BeforeInit()  {
+func BeforeInit() {
 	//初始化一些方法
-	model.ArmyIsInView = armyIsInView
-	model.GetUnionId = getUnionId
+	model.ArmyIsInView = army.ArmyIsInView
+	model.GetUnionId = union.GetUnionId
 	model.GetRoleNickName = mgr.RoleNickName
-	model.GetParentId = getParentId
-	model.GetMainMembers = getMainMembers
-	model.GetUnionName = getUnionName
+	model.GetParentId = union.GetParentId
+	model.GetMainMembers = union.GetMainMembers
+	model.GetUnionName = union.GetUnionName
 	model.GetYield = mgr.GetYield
 	model.GetDepotCapacity = mgr.GetDepotCapacity
 	model.GetCityCost = mgr.GetCityCost
@@ -28,29 +29,14 @@ func BeforeInit()  {
 
 //逻辑相关的初始化放在这里
 func Init() {
-
-	Union = NewCoalitionLogic()
-	ArmyLogic = &armyLogic{
-		arriveArmys:    make(chan *model.Army, 100),
-		interruptId:    make(chan int, 100),
-		giveUpId: 		make(chan int, 100),
-		updateArmys:    make(chan *model.Army, 100),
-		outArmys:       make(map[int]*model.Army),
-		endTimeArmys:   make(map[int64][]*model.Army),
-		stopInPosArmys: make(map[int]map[int]*model.Army),
-		passByPosArmys: make(map[int]map[int]*model.Army),
-		sys:            NewSysArmy()}
-
-	ArmyLogic.init()
-	go ArmyLogic.check()
-	go ArmyLogic.running()
-
+	Union = union.Instance()
+	ArmyLogic = army.Instance()
 }
 
 func AfterInit() {
 	go func() {
 		for true {
-			time.Sleep(1*time.Second)
+			time.Sleep(1 * time.Second)
 			buildIds := mgr.RBMgr.CheckGiveUp()
 			for _, buildId := range buildIds {
 				ArmyLogic.GiveUp(buildId)
