@@ -2,9 +2,7 @@ package war
 
 import (
 	"encoding/json"
-	"fmt"
 	"go.uber.org/zap"
-	"math/rand"
 	"slgserver/log"
 	"slgserver/server/slgserver/ILogic"
 	"slgserver/server/slgserver/global"
@@ -13,42 +11,19 @@ import (
 	"slgserver/server/slgserver/model"
 	"slgserver/server/slgserver/proto"
 	"slgserver/server/slgserver/static_conf"
-	"slgserver/server/slgserver/static_conf/facility"
 	"slgserver/server/slgserver/static_conf/general"
 	"slgserver/util"
 	"time"
 )
 
-//战斗位置的属性
-type armyPosition struct {
-	general  *model.General
-	soldiers int //兵力
-	force    int //武力
-	strategy int //策略
-	defense  int //防御
-	speed    int //速度
-	destroy  int //破坏
-	arms     int //兵种
-	position int //位置
-}
-
-const maxRound = 10
-
-type armyWar struct {
-	attack     *model.Army
-	defense    *model.Army
-	attackPos  []*armyPosition
-	defensePos []*armyPosition
-}
-
-type battle struct {
+type hit struct {
 	AId   int `json:"a_id"`   //本回合发起攻击的武将id
 	DId   int `json:"d_id"`   //本回合防御方的武将id
 	ALoss int `json:"a_loss"` //本回合攻击方损失的兵力
 	DLoss int `json:"d_loss"` //本回合防守方损失的兵力
 }
 
-func (this *battle) to() []int {
+func (this *hit) to() []int {
 	r := make([]int, 0)
 	r = append(r, this.AId)
 	r = append(r, this.DId)
@@ -61,226 +36,14 @@ type warRound struct {
 	Battle [][]int `json:"b"`
 }
 
-type WarResult struct {
-	round  []*warRound
-	result int //0失败，1平，2胜利
-}
+func NewWar(attack *model.Army, defense *model.Army) *warResult {
 
-func NewWar(attack *model.Army, defense *model.Army) *WarResult {
+	c := newCamp(attack, defense)
 
-	w := armyWar{attack: attack, defense: defense}
-	w.init()
-	wars := w.battle()
-
-	result := &WarResult{round: wars}
-	if w.attackPos[0].soldiers == 0 {
-		result.result = 0
-	} else if w.defensePos[0] != nil && w.defensePos[0].soldiers != 0 {
-		result.result = 1
-	} else {
-		result.result = 2
-	}
+	result := newWarResult(c)
+	result.battle()
 
 	return result
-}
-
-//初始化军队和武将属性、兵种、加成等
-func (this *armyWar) init() {
-
-	//城内设施加成
-	attackAdds := []int{0, 0, 0, 0}
-	if this.attack.CityId > 0 {
-		attackAdds = mgr.RFMgr.GetAdditions(this.attack.CityId,
-			facility.TypeForce,
-			facility.TypeDefense,
-			facility.TypeSpeed,
-			facility.TypeStrategy)
-	}
-
-	defenseAdds := []int{0, 0, 0, 0}
-	if this.defense.CityId > 0 {
-		defenseAdds = mgr.RFMgr.GetAdditions(this.defense.CityId,
-			facility.TypeForce,
-			facility.TypeDefense,
-			facility.TypeSpeed,
-			facility.TypeStrategy)
-	}
-
-	//阵营加成
-	aCampAdds := []int{0}
-	aCamp := this.attack.GetCamp()
-	if aCamp > 0 {
-		aCampAdds = mgr.RFMgr.GetAdditions(this.attack.CityId, facility.TypeHanAddition-1+aCamp)
-	}
-
-	dCampAdds := []int{0}
-	dCamp := this.attack.GetCamp()
-	if dCamp > 0 {
-		dCampAdds = mgr.RFMgr.GetAdditions(this.defense.CityId, facility.TypeHanAddition-1+aCamp)
-	}
-
-	this.attackPos = make([]*armyPosition, 0)
-	this.defensePos = make([]*armyPosition, 0)
-
-	for i, g := range this.attack.Gens {
-		if g == nil {
-			this.attackPos = append(this.attackPos, nil)
-		} else {
-			pos := &armyPosition{
-				general:  g,
-				soldiers: this.attack.SoldierArray[i],
-				force:    g.GetForce() + attackAdds[0] + aCampAdds[0],
-				defense:  g.GetDefense() + attackAdds[1] + aCampAdds[0],
-				speed:    g.GetSpeed() + attackAdds[2] + aCampAdds[0],
-				strategy: g.GetStrategy() + attackAdds[3] + aCampAdds[0],
-				destroy:  g.GetDestroy() + aCampAdds[0],
-				arms:     g.CurArms,
-				position: i,
-			}
-			this.attackPos = append(this.attackPos, pos)
-		}
-	}
-
-	for i, g := range this.defense.Gens {
-		if g == nil {
-			this.defensePos = append(this.defensePos, nil)
-		} else {
-			pos := &armyPosition{
-				general:  g,
-				soldiers: this.defense.SoldierArray[i],
-				force:    g.GetForce() + defenseAdds[0] + dCampAdds[0],
-				defense:  g.GetDefense() + defenseAdds[1] + dCampAdds[0],
-				speed:    g.GetSpeed() + defenseAdds[2] + dCampAdds[0],
-				strategy: g.GetStrategy() + defenseAdds[3] + dCampAdds[0],
-				destroy:  g.GetDestroy() + dCampAdds[0],
-				arms:     g.CurArms,
-				position: i,
-			}
-			this.defensePos = append(this.defensePos, pos)
-		}
-	}
-
-	fmt.Println(this.defensePos)
-}
-
-func (this *armyWar) battle() []*warRound {
-	rounds := make([]*warRound, 0)
-	cur := 0
-	for true {
-		r, isEnd := this.round()
-		rounds = append(rounds, r)
-		cur += 1
-		if cur >= maxRound || isEnd {
-			break
-		}
-	}
-
-	for i := 0; i < 3; i++ {
-		if this.attackPos[i] != nil {
-			this.attack.SoldierArray[i] = this.attackPos[i].soldiers
-		}
-		if this.defensePos[i] != nil {
-			this.defense.SoldierArray[i] = this.defensePos[i].soldiers
-		}
-	}
-
-	return rounds
-}
-
-//回合
-func (this *armyWar) round() (*warRound, bool) {
-
-	war := &warRound{}
-	n := rand.Intn(10)
-	attack := this.attackPos
-	defense := this.defensePos
-
-	isEnd := false
-	//随机先手
-	if n%2 == 0 {
-		attack = this.defensePos
-		defense = this.attackPos
-	}
-
-	for _, att := range attack {
-
-		////////攻击方begin//////////
-		if att == nil || att.soldiers == 0 {
-			continue
-		}
-
-		def, _ := this.randArmyPosition(defense)
-		if def == nil {
-			isEnd = true
-			goto end
-		}
-
-		attHarmRatio := general.GenArms.GetHarmRatio(att.arms, def.arms)
-		attHarm := float64(util.AbsInt(att.force-def.defense)*att.soldiers) * attHarmRatio * 0.0005
-		attKill := int(attHarm)
-		attKill = util.MinInt(attKill, def.soldiers)
-		def.soldiers -= attKill
-		att.general.Exp += attKill * 5
-
-		//大营干死了，直接结束
-		if def.position == 0 && def.soldiers == 0 {
-			isEnd = true
-			goto end
-		}
-		////////攻击方end//////////
-
-		////////防守方begin//////////
-		if def.soldiers == 0 || att.soldiers == 0 {
-			continue
-		}
-
-		defHarmRatio := general.GenArms.GetHarmRatio(def.arms, att.arms)
-		defHarm := float64(util.AbsInt(def.force-att.defense)*def.soldiers) * defHarmRatio * 0.0005
-		defKill := int(defHarm)
-
-		defKill = util.MinInt(defKill, att.soldiers)
-		att.soldiers -= defKill
-		def.general.Exp += defKill * 5
-
-		b := battle{AId: att.general.Id, ALoss: defKill, DId: def.general.Id, DLoss: attKill}
-		war.Battle = append(war.Battle, b.to())
-
-		//大营干死了，直接结束
-		if att.position == 0 && att.soldiers == 0 {
-			isEnd = true
-			goto end
-		}
-		////////防守方end//////////
-
-	}
-
-end:
-	return war, isEnd
-}
-
-//随机一个目标队伍
-func (this *armyWar) randArmyPosition(pos []*armyPosition) (*armyPosition, int) {
-	isEmpty := true
-	for _, v := range pos {
-		if v != nil && v.soldiers != 0 {
-			isEmpty = false
-			break
-		}
-	}
-
-	if isEmpty {
-		return nil, -1
-	}
-
-	for true {
-		r := rand.Intn(100)
-		index := r % len(pos)
-		if pos[index] != nil && pos[index].soldiers != 0 {
-			return pos[index], index
-		}
-	}
-
-	return nil, -1
 }
 
 func NewEmptyWar(attack *model.Army) *model.WarReport {
@@ -397,11 +160,11 @@ func (this *Battle) checkCityOccupy(wr *model.WarReport, attackArmy *model.Army,
 	city.SyncExecute()
 }
 
-func (this *Battle) trigger(army *model.Army, enemys []*model.Army, isRoleEnemy bool) (*WarResult, []*model.WarReport) {
+func (this *Battle) trigger(army *model.Army, enemys []*model.Army, isRoleEnemy bool) (*warResult, []*model.WarReport) {
 
 	posId := global.ToPosition(army.ToX, army.ToY)
 	warReports := make([]*model.WarReport, 0)
-	var lastWar *WarResult = nil
+	var lastWar *warResult = nil
 
 	for _, enemy := range enemys {
 		//战报处理
@@ -464,7 +227,7 @@ func (this *Battle) trigger(army *model.Army, enemys []*model.Army, isRoleEnemy 
 		endArmy1, _ := json.Marshal(pArmy)
 		endArmy2, _ := json.Marshal(pEnemy)
 
-		rounds, _ := json.Marshal(lastWar.round)
+		rounds, _ := json.Marshal(lastWar.getRounds())
 		wr := &model.WarReport{X: army.ToX, Y: army.ToY, AttackRid: army.RId,
 			AttackIsRead: false, DefenseIsRead: false, DefenseRid: enemy.RId,
 			BegAttackArmy: string(begArmy1), BegDefenseArmy: string(begArmy2),
@@ -570,7 +333,7 @@ func (this *Battle) OccupyRoleBuild(rid, x, y int) {
 		b.OccupyTime = time.Now()
 
 		oldId := b.RId
-		log.DefaultLog.Info("battle in role build",
+		log.DefaultLog.Info("hit in role build",
 			zap.Int("oldRId", oldId),
 			zap.Int("newRId", newId))
 		b.RId = rid
