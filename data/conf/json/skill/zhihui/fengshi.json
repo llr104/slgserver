@@ -2,7 +2,7 @@
   "cfgId": 401,
   "name": "锋矢",
   "trigger": 4,
-  "target": 2,
+  "target": 5,
   "des": "战斗中，使我军全体进行普通攻击的伤害提升%n%",
   "limit": 3,
   "duration": 0,

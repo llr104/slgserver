@@ -1,18 +1,19 @@
 package war
 
 import (
-	"math/rand"
 	"slgserver/server/slgserver/static_conf"
 	"slgserver/server/slgserver/static_conf/general"
+	"slgserver/server/slgserver/static_conf/skill"
 	"slgserver/util"
 )
 
 const maxRound = 10
 
 type warResult struct {
-	camp   *warCamp
-	rounds []*warRound
-	result int //0失败，1平，2胜利
+	camp     *warCamp
+	rounds   []*warRound
+	curRound *warRound
+	result   int //0失败，1平，2胜利
 }
 
 func newWarResult(camp *warCamp) *warResult {
@@ -48,89 +49,132 @@ func (this *warResult) battle() {
 	}
 }
 
-func (this *warResult) beforeSkill(att *armyPosition) {
-	if nil == att {
-		return
-	}
+//打击前技能
+func (this *warResult) beforeSkill(att *armyPosition, our []*armyPosition, enemy []*armyPosition) []skillHit {
+	beforeSkills := att.hitBefore()
+	return this.acceptSkill(beforeSkills, att, our, enemy)
+}
 
-	//beforeSkills := att.hitBefore()
-	//for _, bs := range beforeSkills {
-	//
-	//}
+//打击后技能
+func (this *warResult) afterSkill(att *armyPosition, our []*armyPosition, enemy []*armyPosition) []skillHit {
+	afterSkills := att.hitAfter()
+	return this.acceptSkill(afterSkills, att, our, enemy)
+}
+
+func (this *warResult) acceptSkill(skills []*attachSkill, att *armyPosition, our []*armyPosition, enemy []*armyPosition) []skillHit {
+	ret := make([]skillHit, 0)
+	for _, bs := range skills {
+		sh := skillHit{Lv: bs.lv, CfgId: bs.cfg.CfgId, FromId: att.general.Id}
+
+		switch skill.TargetType(bs.cfg.Target) {
+		case skill.MySelf:
+		case skill.OurSingle:
+		case skill.OurMostTwo:
+		case skill.OurMostThree:
+		case skill.OurAll:
+			att.acceptSkill(bs)
+			sh.ToId = append(sh.ToId, att.general.Id)
+			break
+		case skill.EnemySingle:
+		case skill.EnemyMostTwo:
+		case skill.EnemyMostThree:
+		case skill.EnemyAll:
+			o, _ := this.camp.randArmyPosition(enemy)
+			o.acceptSkill(bs)
+			sh.ToId = append(sh.ToId, o.general.Id)
+			break
+		}
+		ret = append(ret, sh)
+	}
+	return ret
 }
 
 //回合
 func (this *warResult) runRound() (*warRound, bool) {
 
-	war := &warRound{}
-	n := rand.Intn(10)
-	attack := this.camp.attackPos
-	defense := this.camp.defensePos
+	this.curRound = &warRound{}
+	attacks := this.camp.attackPos
+	defenses := this.camp.defensePos
 
-	isEnd := false
 	//随机先手
-	if n%2 == 0 {
-		attack = this.camp.defensePos
-		defense = this.camp.attackPos
-	}
+	//n := rand.Intn(10)
+	//if n%2 == 0 {
+	//	attacks = this.camp.defensePos
+	//	defenses = this.camp.attackPos
+	//}
 
-	for _, att := range attack {
+	for _, hitA := range attacks {
 
 		////////攻击方begin//////////
-		if att == nil || att.soldiers == 0 {
+		if hitA == nil || hitA.soldiers == 0 {
 			continue
 		}
-
-		//释放技能
-		this.beforeSkill(att)
-
-		def, _ := this.camp.randArmyPosition(defense)
-		if def == nil {
-			isEnd = true
+		hitB, _ := this.camp.randArmyPosition(defenses)
+		if hitB == nil {
 			goto end
 		}
-
-		attHarmRatio := general.GenArms.GetHarmRatio(att.arms, def.arms)
-		attHarm := float64(util.AbsInt(att.force-def.defense)*att.soldiers) * attHarmRatio * 0.0005
-		attKill := int(attHarm)
-		attKill = util.MinInt(attKill, def.soldiers)
-		def.soldiers -= attKill
-		att.general.Exp += attKill * 5
-
-		//大营干死了，直接结束
-		if def.position == 0 && def.soldiers == 0 {
-			isEnd = true
+		if this.hit(hitA, hitB, attacks, defenses) {
 			goto end
 		}
 		////////攻击方end//////////
 
 		////////防守方begin//////////
-		if def.soldiers == 0 || att.soldiers == 0 {
+		if hitB.soldiers == 0 || hitA.soldiers == 0 {
 			continue
 		}
-
-		defHarmRatio := general.GenArms.GetHarmRatio(def.arms, att.arms)
-		defHarm := float64(util.AbsInt(def.force-att.defense)*def.soldiers) * defHarmRatio * 0.0005
-		defKill := int(defHarm)
-
-		defKill = util.MinInt(defKill, att.soldiers)
-		att.soldiers -= defKill
-		def.general.Exp += defKill * 5
-
-		b := hit{AId: att.general.Id, ALoss: defKill, DId: def.general.Id, DLoss: attKill}
-		war.Battle = append(war.Battle, b.to())
-
-		//大营干死了，直接结束
-		if att.position == 0 && att.soldiers == 0 {
-			isEnd = true
+		if this.hit(hitB, hitA, defenses, attacks) {
 			goto end
 		}
 		////////防守方end//////////
-
+	}
+	//清理过期的技能功能效果
+	for _, attack := range attacks {
+		attack.checkNextRound()
 	}
 
+	for _, defense := range defenses {
+		defense.checkNextRound()
+	}
+
+	return this.curRound, false
+
 end:
-	return war, isEnd
+	return this.curRound, true
+}
+
+func (this *warResult) hit(hitA *armyPosition, hitB *armyPosition, attacks []*armyPosition, defenses []*armyPosition) bool {
+	//释放技能
+	h := hit{}
+	h.ABeforeSkill = this.beforeSkill(hitA, attacks, defenses)
+	realA := hitA.calRealBattleAttr()
+	realB := hitB.calRealBattleAttr()
+
+	attHarmRatio := general.GenArms.GetHarmRatio(hitA.arms, hitB.arms)
+	attHarm := float64(util.AbsInt(realA.force-realB.defense)*hitA.soldiers) * attHarmRatio * 0.0005
+	attKill := int(attHarm)
+	attKill = util.MinInt(attKill, hitB.soldiers)
+	hitB.soldiers -= attKill
+	hitA.general.Exp += attKill * 5
+
+	//清理瞬时技能
+	hitA.checkHit()
+	hitB.checkHit()
+
+	//战报
+	h.AId = hitA.general.Id
+	h.DId = hitB.general.Id
+	h.DLoss = attKill
+
+	//大营干死了，直接结束
+	if hitB.position == 0 && hitB.soldiers == 0 {
+		this.curRound.Battle = append(this.curRound.Battle, h)
+		return true
+	} else {
+		h.AAfterSkill = this.afterSkill(hitB, defenses, attacks)
+		h.BAfterSkill = this.afterSkill(hitA, attacks, defenses)
+		this.curRound.Battle = append(this.curRound.Battle, h)
+		return false
+	}
 }
 
 func (this *warResult) getRounds() []*warRound {

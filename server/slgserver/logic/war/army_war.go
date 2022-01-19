@@ -17,23 +17,24 @@ import (
 )
 
 type hit struct {
-	AId   int `json:"a_id"`   //本回合发起攻击的武将id
-	DId   int `json:"d_id"`   //本回合防御方的武将id
-	ALoss int `json:"a_loss"` //本回合攻击方损失的兵力
-	DLoss int `json:"d_loss"` //本回合防守方损失的兵力
+	AId          int        `json:"a_id"`   //本回合发起攻击的武将id
+	DId          int        `json:"d_id"`   //本回合防御方的武将id
+	ALoss        int        `json:"a_loss"` //本回合攻击方损失的兵力
+	DLoss        int        `json:"d_loss"` //本回合防守方损失的兵力
+	ABeforeSkill []skillHit `json:"a_bs"`   //攻击方攻击前技能
+	AAfterSkill  []skillHit `json:"a_as"`   //攻击方攻击后技能
+	BAfterSkill  []skillHit `json:"d_as"`   //防守方被攻击后触发技能
 }
 
-func (this *hit) to() []int {
-	r := make([]int, 0)
-	r = append(r, this.AId)
-	r = append(r, this.DId)
-	r = append(r, this.ALoss)
-	r = append(r, this.DLoss)
-	return r
+type skillHit struct {
+	FromId int   `json:"f_id"` //发起的id
+	ToId   []int `json:"t_id"` //作用目标id
+	CfgId  int   `json:"c_id"` //技能配置id
+	Lv     int   `json:"lv"`   //技能等级
 }
 
 type warRound struct {
-	Battle [][]int `json:"b"`
+	Battle []hit `json:"b"`
 }
 
 func NewWar(attack *model.Army, defense *model.Army) *warResult {

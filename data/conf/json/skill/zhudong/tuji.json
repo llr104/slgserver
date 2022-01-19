@@ -2,7 +2,7 @@
   "cfgId": 101,
   "name": "突击",
   "trigger": 1,
-  "target": 5,
+  "target": 6,
   "des": "对敌军单体发动一次攻击（伤害率`%n%%`)",
   "limit": 3,
   "duration": 0,

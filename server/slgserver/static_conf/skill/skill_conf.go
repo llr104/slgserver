@@ -9,6 +9,31 @@ const (
 	command                          //指挥
 )
 
+type TargetType int
+
+const (
+	MySelf         TargetType = iota + 1 //自己
+	OurSingle                            //我军单体
+	OurMostTwo                           //我军1-2个目标
+	OurMostThree                         //我军1-3个目标
+	OurAll                               //我军全体
+	EnemySingle                          //敌军单体
+	EnemyMostTwo                         //敌军1-2个目标
+	EnemyMostThree                       //我军1-3个目标
+	EnemyAll                             //敌军全体
+)
+
+type EffectType int
+
+const (
+	HurtRate EffectType = iota + 1 //伤害率
+	Force
+	Defense
+	Strategy
+	Speed
+	Destroy
+)
+
 type level struct {
 	Probability int   `json:"probability"`  //发动概率
 	EffectValue []int `json:"effect_value"` //效果值
