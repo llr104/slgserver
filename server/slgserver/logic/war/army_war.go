@@ -17,13 +17,12 @@ import (
 )
 
 type hit struct {
-	AId          int        `json:"a_id"`   //本回合发起攻击的武将id
-	DId          int        `json:"d_id"`   //本回合防御方的武将id
-	ALoss        int        `json:"a_loss"` //本回合攻击方损失的兵力
-	DLoss        int        `json:"d_loss"` //本回合防守方损失的兵力
-	ABeforeSkill []skillHit `json:"a_bs"`   //攻击方攻击前技能
-	AAfterSkill  []skillHit `json:"a_as"`   //攻击方攻击后技能
-	BAfterSkill  []skillHit `json:"d_as"`   //防守方被攻击后触发技能
+	AId          int         `json:"a_id"`   //本回合发起攻击的武将id
+	DId          int         `json:"d_id"`   //本回合防御方的武将id
+	DLoss        int         `json:"d_loss"` //本回合防守方损失的兵力
+	ABeforeSkill []*skillHit `json:"a_bs"`   //攻击方攻击前技能
+	AAfterSkill  []*skillHit `json:"a_as"`   //攻击方攻击后技能
+	BAfterSkill  []*skillHit `json:"d_as"`   //防守方被攻击后触发技能
 }
 
 type skillHit struct {
@@ -34,6 +33,7 @@ type skillHit struct {
 	IEffect []int `json:"i_e"`  //技能包括的效果
 	EValue  []int `json:"e_v"`  //效果值
 	ERound  []int `json:"e_r"`  //效果持续回合数
+	Kill    []int `json:"kill"` //技能杀死数量
 }
 
 type warRound struct {
@@ -283,7 +283,7 @@ func (this *Battle) executeBuild(army *model.Army) {
 	lastWar, warReports := this.trigger(army, enemys, isRoleEnemy)
 
 	if lastWar.result > 1 {
-		if roleBuild != nil {
+		if roleBuild != nil && roleBuild.RId > 0 {
 			destory := mgr.GMgr.GetDestroy(army)
 			wr := warReports[len(warReports)-1]
 			wr.DestroyDurable = util.MinInt(destory, roleBuild.CurDurable)
@@ -346,7 +346,7 @@ func (this *Battle) OccupyRoleBuild(rid, x, y int) {
 
 func (this *Battle) OccupySystemBuild(rid, x, y int) {
 
-	if _, ok := mgr.RBMgr.PositionBuild(x, y); ok {
+	if r, _ := mgr.RBMgr.PositionBuild(x, y); r != nil && r.RId > 0 {
 		return
 	}
 

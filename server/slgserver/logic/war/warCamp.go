@@ -13,6 +13,7 @@ type attachSkill struct {
 	id       int
 	lv       int
 	duration int //剩余轮数
+	isEnemy  bool
 }
 
 func newAttachSkill(cfg skill.Conf, id int, lv int) *attachSkill {
@@ -133,4 +134,67 @@ func (this *warCamp) randArmyPosition(pos []*armyPosition) (*armyPosition, int) 
 	}
 
 	return nil, -1
+}
+
+//最多2个
+func (this *warCamp) randMostTwoArmyPosition(pos []*armyPosition) ([]*armyPosition, []int) {
+	i := make([]int, 0)
+	a := make([]*armyPosition, 0)
+	o1, i1 := this.randArmyPosition(pos)
+	if o1 != nil {
+		i = append(i, i1)
+		a = append(a, o1)
+		o2, i2 := this.randArmyPosition(pos)
+		if o2 != nil && o1 != o2 {
+			i = append(i, i2)
+			a = append(a, o2)
+		}
+	}
+	return a, i
+}
+
+//最多3个
+func (this *warCamp) randMostThreeArmyPosition(pos []*armyPosition) ([]*armyPosition, []int) {
+	i := make([]int, 0)
+	a := make([]*armyPosition, 0)
+	o1, i1 := this.randArmyPosition(pos)
+	if o1 != nil {
+		i = append(i, i1)
+		a = append(a, o1)
+		o2, i2 := this.randArmyPosition(pos)
+		if o2 != nil && o1 != o2 {
+			i = append(i, i2)
+			a = append(a, o2)
+
+			o3, i3 := this.randArmyPosition(pos)
+			if o3 != nil && o3 != o1 && o3 != o2 {
+				i = append(i, i3)
+				a = append(a, o3)
+			}
+		}
+	}
+	return a, i
+}
+
+func (this *warCamp) allArmyPosition(pos []*armyPosition) ([]*armyPosition, []int) {
+	i := make([]int, 0)
+	a := make([]*armyPosition, 0)
+
+	for index, v := range pos {
+		if v != nil && v.soldiers != 0 {
+			i = append(i, index)
+			a = append(a, v)
+		}
+	}
+
+	return a, i
+}
+
+func (this *warCamp) findByGiId(pos []*armyPosition, gId int) *armyPosition {
+	for _, p := range pos {
+		if p != nil && p.general.Id == gId {
+			return p
+		}
+	}
+	return nil
 }

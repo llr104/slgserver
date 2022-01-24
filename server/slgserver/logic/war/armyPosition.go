@@ -133,7 +133,6 @@ func (this *armyPosition) calRealBattleAttr() realBattleAttr {
 			v := lvData.EffectValue[i]
 			switch skill.EffectType(effect) {
 			case skill.HurtRate:
-				attr.force += int(float32(attr.force*v) / float32(100))
 				break
 			case skill.Force:
 				attr.force += v
