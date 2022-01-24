@@ -64,8 +64,13 @@ func (this *warResult) afterSkill(att *armyPosition, our []*armyPosition, enemy 
 func (this *warResult) acceptSkill(skills []*attachSkill, att *armyPosition, our []*armyPosition, enemy []*armyPosition) []skillHit {
 	ret := make([]skillHit, 0)
 	for _, bs := range skills {
-		sh := skillHit{Lv: bs.lv, CfgId: bs.cfg.CfgId, FromId: att.general.Id}
 
+		cfg := bs.cfg
+		sh := skillHit{Lv: bs.lv, CfgId: cfg.CfgId, FromId: att.general.Id}
+		sh.IEffect = cfg.IncludeEffect
+		sh.EValue = cfg.Levels[bs.lv-1].EffectValue
+		sh.ERound = cfg.Levels[bs.lv-1].EffectRound
+		
 		switch skill.TargetType(bs.cfg.Target) {
 		case skill.MySelf:
 		case skill.OurSingle:

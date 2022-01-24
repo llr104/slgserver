@@ -27,10 +27,13 @@ type hit struct {
 }
 
 type skillHit struct {
-	FromId int   `json:"f_id"` //发起的id
-	ToId   []int `json:"t_id"` //作用目标id
-	CfgId  int   `json:"c_id"` //技能配置id
-	Lv     int   `json:"lv"`   //技能等级
+	FromId  int   `json:"f_id"` //发起的id
+	ToId    []int `json:"t_id"` //作用目标id
+	CfgId   int   `json:"c_id"` //技能配置id
+	Lv      int   `json:"lv"`   //技能等级
+	IEffect []int `json:"i_e"`  //技能包括的效果
+	EValue  []int `json:"e_v"`  //效果值
+	ERound  []int `json:"e_r"`  //效果持续回合数
 }
 
 type warRound struct {
