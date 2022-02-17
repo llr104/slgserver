@@ -9,7 +9,7 @@
           "level": 1,
           "durable": 10000,
           "defender": 5,
-          "time": 20,
+          "time": 100,
           "need": {
             "decree": 2,
             "grain": 1000,
@@ -25,13 +25,13 @@
           "level": 2,
           "durable": 10000,
           "defender": 5,
-          "time": 20,
+          "time": 200,
           "need": {
             "decree": 3,
-            "grain": 1000,
-            "wood": 1000,
-            "iron": 1000,
-            "stone": 1000
+            "grain": 2000,
+            "wood": 2000,
+            "iron": 2000,
+            "stone": 2000
           },
           "result": {
             "army_cnt": 2
