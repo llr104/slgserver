@@ -445,11 +445,16 @@ func (this *Army) __after__(reqObj *proto.AssignArmyReq, army *model.Army) int {
 	army.Cmd = reqObj.Cmd
 	army.State = model.ArmyRunning
 
-	//speed := mgr.AMgr.GetSpeed(army)
-	//t := mgr.TravelTime(speed, army.FromX, army.FromY, army.ToX, army.ToY)
-	army.Start = time.Now()
-	//army.End = time.Now().Add(time.Duration(t) * time.Millisecond)
-	army.End = time.Now().Add(40 * time.Second)
+	if global.IsDev() {
+		army.Start = time.Now()
+		army.End = time.Now().Add(40 * time.Second)
+	} else {
+		speed := mgr.AMgr.GetSpeed(army)
+		t := mgr.TravelTime(speed, army.FromX, army.FromY, army.ToX, army.ToY)
+		army.Start = time.Now()
+		army.End = time.Now().Add(time.Duration(t) * time.Millisecond)
+	}
+
 	logic.ArmyLogic.PushAction(army)
 
 	return constant.OK

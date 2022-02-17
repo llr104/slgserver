@@ -433,11 +433,15 @@ func (this *ArmyLogic) PushAction(army *model.Army) {
 				army.FromY = city.Y
 
 				//计算回去的时间
-				//speed := mgr.AMgr.GetSpeed(army)
-				//t := mgr.TravelTime(speed, army.FromX, army.FromY, army.ToX, army.ToY)
-				army.Start = time.Now()
-				//army.End = time.Now().Add(time.Duration(t) * time.Millisecond)
-				army.End = time.Now().Add(40 * time.Second)
+				if global.IsDev() {
+					army.Start = time.Now()
+					army.End = time.Now().Add(40 * time.Second)
+				} else {
+					speed := mgr.AMgr.GetSpeed(army)
+					t := mgr.TravelTime(speed, army.FromX, army.FromY, army.ToX, army.ToY)
+					army.Start = time.Now()
+					army.End = time.Now().Add(time.Duration(t) * time.Millisecond)
+				}
 			}
 
 		} else {

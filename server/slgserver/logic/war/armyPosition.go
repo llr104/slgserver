@@ -1,6 +1,8 @@
 package war
 
 import (
+	"math/rand"
+	"slgserver/server/slgserver/global"
 	"slgserver/server/slgserver/model"
 	"slgserver/server/slgserver/static_conf/skill"
 )
@@ -44,14 +46,17 @@ func (this *armyPosition) hitBefore() []*attachSkill {
 			if !skillCfg.IsHitBefore() {
 				continue
 			}
-			//l := skillCfg.Levels[s.Lv-1]
-			//b := rand.Intn(100)
-			//if b >= 100-l.Probability {
-			//	as := newAttachSkill(skillCfg, s.Id, s.Lv)
-			//	ret = append(ret, as)
-			//}
-			as := newAttachSkill(skillCfg, s.Id, s.Lv)
-			ret = append(ret, as)
+			if global.IsDev() {
+				as := newAttachSkill(skillCfg, s.Id, s.Lv)
+				ret = append(ret, as)
+			} else {
+				l := skillCfg.Levels[s.Lv-1]
+				b := rand.Intn(100)
+				if b >= 100-l.Probability {
+					as := newAttachSkill(skillCfg, s.Id, s.Lv)
+					ret = append(ret, as)
+				}
+			}
 		}
 	}
 	return ret
@@ -72,14 +77,17 @@ func (this *armyPosition) hitAfter() []*attachSkill {
 			if !skillCfg.IsHitAfter() {
 				continue
 			}
-			//l := skillCfg.Levels[s.Lv-1]
-			//b := rand.Intn(100)
-			//if b >= 100-l.Probability {
-			//	as := newAttachSkill(skillCfg, s.Id, s.Lv)
-			//	ret = append(ret, as)
-			//}
-			as := newAttachSkill(skillCfg, s.Id, s.Lv)
-			ret = append(ret, as)
+			if global.IsDev() {
+				as := newAttachSkill(skillCfg, s.Id, s.Lv)
+				ret = append(ret, as)
+			} else {
+				l := skillCfg.Levels[s.Lv-1]
+				b := rand.Intn(100)
+				if b >= 100-l.Probability {
+					as := newAttachSkill(skillCfg, s.Id, s.Lv)
+					ret = append(ret, as)
+				}
+			}
 		}
 	}
 	return ret

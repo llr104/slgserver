@@ -164,7 +164,7 @@ CREATE TABLE IF NOT EXISTS `tb_war_report_1` (
    `b_d_general` varchar(512) NOT NULL COMMENT '开始防守方武将',
    `e_a_general` varchar(512) NOT NULL COMMENT '结束攻击方武将',
    `e_d_general` varchar(512) NOT NULL COMMENT '结束防守方武将',
-   `rounds` varchar(1024) NOT NULL COMMENT '回合战报数据',
+   `rounds` varchar(10240) NOT NULL COMMENT '回合战报数据',
    `result` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '0失败，1打平，2胜利',
    `a_is_read` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '攻击方战报是否已阅 0:未阅 1:已阅',
    `d_is_read` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '攻击方战报是否已阅 0:未阅 1:已阅',

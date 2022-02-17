@@ -14,7 +14,7 @@ import (
 )
 
 type roleResMgr struct {
-	mutex  sync.RWMutex
+	mutex    sync.RWMutex
 	rolesRes map[int]*model.RoleRes
 }
 
@@ -32,7 +32,7 @@ func GetYield(rid int) model.Yield {
 	y.Stone = by.Stone + cy.Stone + static_conf.Basic.Role.StoneYield
 	y.Iron = by.Iron + cy.Iron + static_conf.Basic.Role.IronYield
 	y.Grain = by.Grain + cy.Grain + static_conf.Basic.Role.GrainYield
-	y.Wood = by.Wood + cy.Wood +  static_conf.Basic.Role.WoodYield
+	y.Wood = by.Wood + cy.Wood + static_conf.Basic.Role.WoodYield
 
 	return y
 }
@@ -42,7 +42,7 @@ func GetDepotCapacity(rid int) int {
 	return RFMgr.GetDepotCapacity(rid) + static_conf.Basic.Role.DepotCapacity
 }
 
-func (this*roleResMgr) Load() {
+func (this *roleResMgr) Load() {
 
 	rr := make([]*model.RoleRes, 0)
 	err := db.MasterDB.Find(&rr)
@@ -58,13 +58,12 @@ func (this*roleResMgr) Load() {
 
 }
 
+func (this *roleResMgr) Get(rid int) (*model.RoleRes, bool) {
 
-func (this*roleResMgr) Get(rid int) (*model.RoleRes, bool){
-	
 	this.mutex.RLock()
 	r, ok := this.rolesRes[rid]
 	this.mutex.RUnlock()
-	
+
 	if ok {
 		return r, true
 	}
@@ -72,36 +71,36 @@ func (this*roleResMgr) Get(rid int) (*model.RoleRes, bool){
 	m := &model.RoleRes{}
 	ok, err := db.MasterDB.Table(new(model.RoleRes)).Where("rid=?", rid).Get(m)
 	if ok {
-		
+
 		this.mutex.Lock()
 		this.rolesRes[rid] = m
 		this.mutex.Unlock()
-		
+
 		return m, true
-	}else{
-		if err == nil{
+	} else {
+		if err == nil {
 			log.DefaultLog.Warn("RoleRes not found", zap.Int("rid", rid))
 			return nil, false
-		}else{
+		} else {
 			log.DefaultLog.Warn("db error", zap.Error(err))
 			return nil, false
 		}
 	}
 }
 
-func (this*roleResMgr) Add(res *model.RoleRes) (){
-	
+func (this *roleResMgr) Add(res *model.RoleRes) {
+
 	this.mutex.Lock()
 	this.rolesRes[res.RId] = res
 	this.mutex.Unlock()
 }
 
-func (this*roleResMgr) TryUseNeed(rid int, need facility.NeedRes) int{
-	
+func (this *roleResMgr) TryUseNeed(rid int, need facility.NeedRes) int {
+
 	this.mutex.RLock()
 	rr, ok := this.rolesRes[rid]
 	this.mutex.RUnlock()
-	
+
 	if ok {
 		if need.Decree <= rr.Decree && need.Grain <= rr.Grain &&
 			need.Stone <= rr.Stone && need.Wood <= rr.Wood &&
@@ -115,60 +114,58 @@ func (this*roleResMgr) TryUseNeed(rid int, need facility.NeedRes) int{
 
 			rr.SyncExecute()
 			return constant.OK
-		}else{
-			if need.Decree > rr.Decree{
+		} else {
+			if need.Decree > rr.Decree {
 				return constant.DecreeNotEnough
-			}else{
+			} else {
 				return constant.ResNotEnough
 			}
 		}
-	}else {
+	} else {
 		return constant.RoleNotExist
 	}
 }
 
 //政令是否足够
-func (this*roleResMgr) DecreeIsEnough(rid int, cost int) bool {
-	
+func (this *roleResMgr) DecreeIsEnough(rid int, cost int) bool {
+
 	this.mutex.RLock()
 	rr, ok := this.rolesRes[rid]
 	this.mutex.RUnlock()
-	
+
 	if ok {
 		if rr.Decree >= cost {
 			return true
-		}else{
+		} else {
 			return false
 		}
-	}else{
+	} else {
 		return false
 	}
 }
 
-func (this*roleResMgr) TryUseDecree(rid int, decree int) bool{
-	
+func (this *roleResMgr) TryUseDecree(rid int, decree int) bool {
+
 	this.mutex.RLock()
 	rr, ok := this.rolesRes[rid]
 	this.mutex.RUnlock()
-	
+
 	if ok {
 		if rr.Decree >= decree {
 			rr.Decree -= decree
 			rr.SyncExecute()
 			return true
-		}else{
+		} else {
 			return false
 		}
-	}else{
+	} else {
 		return false
 	}
 }
 
-
-
 //金币是否足够
-func (this*roleResMgr) GoldIsEnough(rid int, cost int) bool {
-	
+func (this *roleResMgr) GoldIsEnough(rid int, cost int) bool {
+
 	this.mutex.RLock()
 	rr, ok := this.rolesRes[rid]
 	this.mutex.RUnlock()
@@ -176,36 +173,34 @@ func (this*roleResMgr) GoldIsEnough(rid int, cost int) bool {
 	if ok {
 		if rr.Gold >= cost {
 			return true
-		}else{
+		} else {
 			return false
 		}
-	}else{
+	} else {
 		return false
 	}
 }
 
+func (this *roleResMgr) TryUseGold(rid int, gold int) bool {
 
-func (this*roleResMgr) TryUseGold(rid int, gold int) bool{
-	
 	this.mutex.RLock()
 	rr, ok := this.rolesRes[rid]
 	this.mutex.RUnlock()
-	
+
 	if ok {
 		if rr.Gold >= gold {
 			rr.Gold -= gold
 			rr.SyncExecute()
 			return true
-		}else{
+		} else {
 			return false
 		}
-	}else{
+	} else {
 		return false
 	}
 }
 
-
-func (this*roleResMgr) produce() {
+func (this *roleResMgr) produce() {
 	index := 1
 	for true {
 		t := static_conf.Basic.Role.RecoveryTime
@@ -215,29 +210,28 @@ func (this*roleResMgr) produce() {
 			//加判断是因为爆仓了，资源不无故减少
 			capacity := GetDepotCapacity(v.RId)
 			yield := GetYield(v.RId)
-			if v.Wood < capacity{
-				v.Wood += util.MinInt(yield.Wood/6, capacity)
+			if v.Wood < capacity {
+				v.Wood = util.MinInt(v.Wood+yield.Wood/6, capacity)
+			}
+			if v.Iron < capacity {
+				v.Iron = util.MinInt(v.Iron+yield.Iron/6, capacity)
 			}
 
-			if v.Iron < capacity{
-				v.Iron += util.MinInt(yield.Iron/6, capacity)
+			if v.Stone < capacity {
+				v.Stone = util.MinInt(v.Stone+yield.Stone/6, capacity)
 			}
 
-			if v.Stone < capacity{
-				v.Stone += util.MinInt(yield.Stone/6, capacity)
+			if v.Grain < capacity {
+				v.Grain = util.MinInt(v.Grain+yield.Grain/6, capacity)
 			}
 
-			if v.Grain < capacity{
-				v.Grain += util.MinInt(yield.Grain/6, capacity)
+			if v.Gold < capacity {
+				v.Gold = util.MinInt(v.Gold+yield.Gold/6, capacity)
 			}
 
-			if v.Gold < capacity{
-				v.Grain += util.MinInt(yield.Grain/6, capacity)
-			}
-
-			if index%6 == 0{
-				if v.Decree < static_conf.Basic.Role.DecreeLimit{
-					v.Decree+=1
+			if index%6 == 0 {
+				if v.Decree < static_conf.Basic.Role.DecreeLimit {
+					v.Decree += 1
 				}
 			}
 			v.SyncExecute()
@@ -246,4 +240,3 @@ func (this*roleResMgr) produce() {
 		this.mutex.RUnlock()
 	}
 }
-
