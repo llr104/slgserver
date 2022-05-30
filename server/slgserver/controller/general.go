@@ -12,16 +12,12 @@ import (
 	"slgserver/server/slgserver/static_conf/skill"
 )
 
-var DefaultGeneral = General{
-
-}
+var DefaultGeneral = General{}
 
 type General struct {
-
 }
 
-
-func (this*General) InitRouter(r *net.Router) {
+func (this *General) InitRouter(r *net.Router) {
 	g := r.Group("general").Use(middleware.ElapsedTime(), middleware.Log(),
 		middleware.CheckLogin(), middleware.CheckRole())
 
@@ -36,7 +32,7 @@ func (this*General) InitRouter(r *net.Router) {
 
 }
 
-func (this*General) myGenerals(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+func (this *General) myGenerals(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	reqObj := &proto.MyGeneralReq{}
 	rspObj := &proto.MyGeneralRsp{}
 	mapstructure.Decode(req.Body.Msg, reqObj)
@@ -52,13 +48,12 @@ func (this*General) myGenerals(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		for _, v := range gs {
 			rspObj.Generals = append(rspObj.Generals, v.ToProto().(proto.General))
 		}
-	}else{
+	} else {
 		rsp.Body.Code = constant.DBError
 	}
 }
 
-
-func (this*General) drawGenerals(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+func (this *General) drawGenerals(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	reqObj := &proto.DrawGeneralReq{}
 	rspObj := &proto.DrawGeneralRsp{}
 	mapstructure.Decode(req.Body.Msg, reqObj)
@@ -69,20 +64,20 @@ func (this*General) drawGenerals(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	role := r.(*model.Role)
 
 	cost := static_conf.Basic.General.DrawGeneralCost * reqObj.DrawTimes
-	ok := mgr.RResMgr.GoldIsEnough(role.RId,cost)
-	if ok == false{
+	ok := mgr.RResMgr.GoldIsEnough(role.RId, cost)
+	if ok == false {
 		rsp.Body.Code = constant.GoldNotEnough
 		return
 	}
 
 	limit := static_conf.Basic.General.Limit
 	cnt := mgr.GMgr.Count(role.RId)
-	if cnt + reqObj.DrawTimes > limit{
+	if cnt+reqObj.DrawTimes > limit {
 		rsp.Body.Code = constant.OutGeneralLimit
 		return
 	}
 
-	gs, ok := mgr.GMgr.RandCreateGeneral(role.RId,reqObj.DrawTimes)
+	gs, ok := mgr.GMgr.RandCreateGeneral(role.RId, reqObj.DrawTimes)
 
 	if ok {
 		mgr.RResMgr.TryUseGold(role.RId, cost)
@@ -91,12 +86,12 @@ func (this*General) drawGenerals(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		for i, v := range gs {
 			rspObj.Generals[i] = v.ToProto().(proto.General)
 		}
-	}else{
+	} else {
 		rsp.Body.Code = constant.DBError
 	}
 }
 
-func (this*General) composeGeneral(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+func (this *General) composeGeneral(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	reqObj := &proto.ComposeGeneralReq{}
 	rspObj := &proto.ComposeGeneralRsp{}
 	mapstructure.Decode(req.Body.Msg, reqObj)
@@ -106,21 +101,19 @@ func (this*General) composeGeneral(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
 
-
-	gs, ok := mgr.GMgr.HasGeneral(role.RId,reqObj.CompId)
+	gs, ok := mgr.GMgr.HasGeneral(role.RId, reqObj.CompId)
 	//是否有这个武将
-	if ok == false{
+	if ok == false {
 		rsp.Body.Code = constant.GeneralNoHas
 		return
 	}
 
 	//是否都有这个武将
-	gss ,ok := mgr.GMgr.HasGenerals(role.RId,reqObj.GIds)
-	if ok == false{
+	gss, ok := mgr.GMgr.HasGenerals(role.RId, reqObj.GIds)
+	if ok == false {
 		rsp.Body.Code = constant.GeneralNoHas
 		return
 	}
-
 
 	ok = true
 	for _, v := range gss {
@@ -137,7 +130,7 @@ func (this*General) composeGeneral(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	}
 
 	//是否超过武将星级
-	if int(gs.Star - gs.StarLv) < len(gss){
+	if int(gs.Star-gs.StarLv) < len(gss) {
 		rsp.Body.Code = constant.GeneralStarMax
 		return
 	}
@@ -157,12 +150,11 @@ func (this*General) composeGeneral(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	for i, v := range gss {
 		rspObj.Generals[i] = v.ToProto().(proto.General)
 	}
-	rspObj.Generals = append(rspObj.Generals,gs.ToProto().(proto.General))
+	rspObj.Generals = append(rspObj.Generals, gs.ToProto().(proto.General))
 
 }
 
-
-func (this*General) addPrGeneral(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+func (this *General) addPrGeneral(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	reqObj := &proto.AddPrGeneralReq{}
 	rspObj := &proto.AddPrGeneralRsp{}
 	mapstructure.Decode(req.Body.Msg, reqObj)
@@ -172,15 +164,15 @@ func (this*General) addPrGeneral(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
 
-	gs, ok := mgr.GMgr.HasGeneral(role.RId,reqObj.CompId)
+	gs, ok := mgr.GMgr.HasGeneral(role.RId, reqObj.CompId)
 	//是否有这个武将
-	if ok == false{
+	if ok == false {
 		rsp.Body.Code = constant.GeneralNoHas
 		return
 	}
 
-	all:= reqObj.ForceAdd + reqObj.StrategyAdd +  reqObj.DefenseAdd + reqObj.SpeedAdd + reqObj.DestroyAdd
-	if gs.HasPrPoint < all{
+	all := reqObj.ForceAdd + reqObj.StrategyAdd + reqObj.DefenseAdd + reqObj.SpeedAdd + reqObj.DestroyAdd
+	if gs.HasPrPoint < all {
 		rsp.Body.Code = constant.DBError
 		return
 	}
@@ -200,7 +192,7 @@ func (this*General) addPrGeneral(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 }
 
-func (this*General) convert(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+func (this *General) convert(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	reqObj := &proto.ConvertReq{}
 	rspObj := &proto.ConvertRsp{}
 
@@ -210,7 +202,7 @@ func (this*General) convert(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
-	roleRes, ok:= mgr.RResMgr.Get(role.RId)
+	roleRes, ok := mgr.RResMgr.Get(role.RId)
 	if ok == false {
 		rsp.Body.Code = constant.DBError
 		return
@@ -220,9 +212,9 @@ func (this*General) convert(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	okArray := make([]int, 0)
 	for _, gid := range reqObj.GIds {
 		g, ok := mgr.GMgr.GetByGId(gid)
-		if ok && g.Order == 0{
+		if ok && g.Order == 0 {
 			okArray = append(okArray, gid)
-			gold += 10* int(g.Star)*(1 + int(g.StarLv))
+			gold += 10 * int(g.Star) * (1 + int(g.StarLv))
 			g.State = model.GeneralConvert
 			g.SyncExecute()
 		}
@@ -236,7 +228,7 @@ func (this*General) convert(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	roleRes.SyncExecute()
 }
 
-func (this*General) upSkill(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+func (this *General) upSkill(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	reqObj := &proto.UpDownSkillReq{}
 	rspObj := &proto.UpDownSkillRsp{}
 
@@ -251,18 +243,18 @@ func (this*General) upSkill(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
 
-	if reqObj.Pos <0 || reqObj.Pos >= model.SkillLimit {
+	if reqObj.Pos < 0 || reqObj.Pos >= model.SkillLimit {
 		rsp.Body.Code = constant.InvalidParam
 		return
 	}
 
-	g,ok := mgr.GMgr.GetByGId(reqObj.GId)
-	if ok == false{
+	g, ok := mgr.GMgr.GetByGId(reqObj.GId)
+	if ok == false {
 		rsp.Body.Code = constant.GeneralNotFound
 		return
 	}
 
-	if g.RId != role.RId{
+	if g.RId != role.RId {
 		rsp.Body.Code = constant.GeneralNotMe
 		return
 	}
@@ -273,17 +265,17 @@ func (this*General) upSkill(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	if skill.IsInLimit() == false{
+	if skill.IsInLimit() == false {
 		rsp.Body.Code = constant.OutSkillLimit
 		return
 	}
 
-	if skill.ArmyIsIn(g.CurArms) == false{
+	if skill.ArmyIsIn(g.CurArms) == false {
 		rsp.Body.Code = constant.OutArmNotMatch
 		return
 	}
 
-	if g.UpSkill(skill.Id, reqObj.CfgId, reqObj.Pos) == false{
+	if g.UpSkill(skill.Id, reqObj.CfgId, reqObj.Pos) == false {
 		rsp.Body.Code = constant.UpSkillError
 		return
 	}
@@ -292,7 +284,7 @@ func (this*General) upSkill(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	skill.SyncExecute()
 }
 
-func (this*General) downSkill(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+func (this *General) downSkill(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	reqObj := &proto.UpDownSkillReq{}
 	rspObj := &proto.UpDownSkillRsp{}
 
@@ -307,29 +299,29 @@ func (this*General) downSkill(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
 
-	if reqObj.Pos <0 || reqObj.Pos >= model.SkillLimit {
+	if reqObj.Pos < 0 || reqObj.Pos >= model.SkillLimit {
 		rsp.Body.Code = constant.InvalidParam
 		return
 	}
 
-	g,ok := mgr.GMgr.GetByGId(reqObj.GId)
-	if ok == false{
+	g, ok := mgr.GMgr.GetByGId(reqObj.GId)
+	if ok == false {
 		rsp.Body.Code = constant.GeneralNotFound
 		return
 	}
 
-	if g.RId != role.RId{
+	if g.RId != role.RId {
 		rsp.Body.Code = constant.GeneralNotMe
 		return
 	}
 
 	skill, ok := mgr.SkillMgr.GetSkillOrCreate(role.RId, reqObj.CfgId)
-	if ok == false{
+	if ok == false {
 		rsp.Body.Code = constant.DBError
 		return
 	}
 
-	if g.DownSkill(skill.Id, reqObj.Pos) == false{
+	if g.DownSkill(skill.Id, reqObj.Pos) == false {
 		rsp.Body.Code = constant.DownSkillError
 		return
 	}
@@ -338,7 +330,7 @@ func (this*General) downSkill(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	skill.SyncExecute()
 }
 
-func (this*General) lvSkill(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+func (this *General) lvSkill(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	reqObj := &proto.LvSkillReq{}
 	rspObj := &proto.LvSkillRsp{}
 
@@ -353,7 +345,7 @@ func (this*General) lvSkill(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	role := r.(*model.Role)
 
 	g, ok := mgr.GMgr.GetByGId(reqObj.GId)
-	if ok == false{
+	if ok == false {
 		rsp.Body.Code = constant.GeneralNotFound
 		return
 	}
@@ -364,18 +356,18 @@ func (this*General) lvSkill(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	}
 
 	gSkill, err := g.PosSkill(reqObj.Pos)
-	if  err != nil{
+	if err != nil {
 		rsp.Body.Code = constant.PosNotSkill
 		return
 	}
 
 	skillCfg, ok := skill.Skill.GetCfg(gSkill.CfgId)
-	if ok == false{
+	if ok == false {
 		rsp.Body.Code = constant.PosNotSkill
 		return
 	}
 
-	if gSkill.Lv > len(skillCfg.Levels){
+	if gSkill.Lv > len(skillCfg.Levels) {
 		rsp.Body.Code = constant.SkillLevelFull
 		return
 	}

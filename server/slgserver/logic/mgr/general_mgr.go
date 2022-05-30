@@ -44,15 +44,12 @@ func (this *generalMgr) updatePhysicalPower() {
 func (this *generalMgr) createNPC() ([]*model.General, bool) {
 
 	gs := make([]*model.General, 0)
-	sess := db.MasterDB.NewSession()
-	sess.Begin()
 
 	for _, armys := range npc.Cfg.Armys {
 		for _, cfgs := range armys.ArmyCfg {
 			for i, cfgId := range cfgs.CfgIds {
 				r, ok := this.NewGeneral(cfgId, 0, cfgs.Lvs[i])
 				if ok == false {
-					sess.Rollback()
 					return nil, false
 				}
 				gs = append(gs, r)
@@ -61,12 +58,7 @@ func (this *generalMgr) createNPC() ([]*model.General, bool) {
 
 	}
 
-	if err := sess.Commit(); err != nil {
-		log.DefaultLog.Warn("db error", zap.Error(err))
-		return nil, false
-	} else {
-		return gs, true
-	}
+	return gs, true
 }
 
 func (this *generalMgr) add(g *model.General) {
@@ -226,23 +218,11 @@ func (this *generalMgr) GetOrCreateByRId(rid int) ([]*model.General, bool) {
 		return r, true
 	} else {
 		//创建
-		gs := make([]*model.General, 0)
-		sess := db.MasterDB.NewSession()
-		sess.Begin()
-
-		g, ok := this.RandCreateGeneral(rid, 3)
+		gs, ok := this.RandCreateGeneral(rid, 3)
 		if ok == false {
-			sess.Rollback()
 			return nil, false
 		}
-		gs = g
-
-		if err := sess.Commit(); err != nil {
-			log.DefaultLog.Warn("db error", zap.Error(err))
-			return nil, false
-		} else {
-			return gs, true
-		}
+		return gs, true
 	}
 }
 
@@ -251,25 +231,17 @@ func (this *generalMgr) GetOrCreateByRId(rid int) ([]*model.General, bool) {
 */
 func (this *generalMgr) RandCreateGeneral(rid int, nums int) ([]*model.General, bool) {
 	gs := make([]*model.General, 0)
-	sess := db.MasterDB.NewSession()
-	sess.Begin()
 
 	for i := 0; i < nums; i++ {
 		cfgId := general.General.Draw()
 		g, ok := this.NewGeneral(cfgId, rid, 1)
 		if ok == false {
-			sess.Rollback()
 			return nil, false
 		}
 		gs = append(gs, g)
 	}
 
-	if err := sess.Commit(); err != nil {
-		log.DefaultLog.Warn("db error", zap.Error(err))
-		return nil, false
-	} else {
-		return gs, true
-	}
+	return gs, true
 }
 
 //获取npc武将
