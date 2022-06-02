@@ -17,6 +17,19 @@
 - 4.chatserver  聊天服，可以部署多个，原则上一个slgserver对应一个chatserver
 - 5.slgserver   游戏服，可以部署多个，不同服之间的玩家数据不共通
 
+### 服务端使用简要介绍
+- 项目已经使用go mod管理，推荐使用goland打开
+- 创建MySQL数据库：在MySQL中执行 data/conf/db.sql 文件创建服务所需的数据库，库名默认为slgdb
+- 修改配置： 修改 data/conf/env.ini 中数据库的配置，主要是密码、端口修改成自己所使用的一致即可，其他保持默认即可
+- 生成可执行程序： main 目录下包含了 httpserver、gateserver、loginserver、chatserver、slgserver 5个进程的代码，
+通过 go build xxxserver.go(上方5个进程源代码)即可生成 5个进程执行文件，在windows环境下也可以在直接执行 shell/build.bat
+生成5个进程可执行文件，可执行文件会存放在bin目录下
+- 复制配置文件到工作目录：将data文件夹拷贝到bin目录下，5个进程会用到data里的配置， window环境可以运行shell/copydata.bat完成拷贝操作
+- 启动运行：启动5个进程，无顺序要求，windows环境下可以运行shell/run.bat代劳
+- 客户端联调：cocos creator打开客户端运行即可联机测试
+- 注意在goland中点击对应的进程 run 或者 debug 前需要将输出路径和工作路径都设置成bin目录，
+并且data目录已经拷贝到bin目录下，否则进程找不到运行的配置文件会异常终止
+
 # 客户端截图
 ### 队伍征兵
 ![队伍征兵](https://s1.imagehub.cc/images/2021/04/23/d56cd91ba46b9ffd7b097dc4cb07bf5a.png)

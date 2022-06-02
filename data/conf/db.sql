@@ -1,4 +1,5 @@
-
+CREATE DATABASE IF NOT EXISTS `slgdb`;
+USE `slgdb`;
 CREATE TABLE IF NOT EXISTS `tb_user_info` (
   `uid` int unsigned NOT NULL AUTO_INCREMENT,
   `username` varchar(20) NOT NULL COMMENT '用户名',
