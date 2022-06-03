@@ -21,6 +21,7 @@
 - 项目已经使用go mod管理，推荐使用goland打开
 - 创建MySQL数据库：在MySQL中执行 data/conf/db.sql 文件创建服务所需的数据库，库名默认为slgdb
 - 修改配置： 修改 data/conf/env.ini 中数据库的配置，主要是密码、端口修改成自己所使用的一致即可，其他保持默认即可
+- 拉取依赖包：命令行执行 go mod tidy
 - 生成可执行程序： main 目录下包含了 httpserver、gateserver、loginserver、chatserver、slgserver 5个进程的代码，
   通过 go build xxxserver.go(上方5个进程源代码)即可生成 5个进程执行文件，在windows环境下也可以在直接执行 shell/build.bat
   生成5个进程可执行文件，可执行文件会存放在bin目录下
