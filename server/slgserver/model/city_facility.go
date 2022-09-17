@@ -3,11 +3,12 @@ package model
 import (
 	"encoding/json"
 	"fmt"
-	"go.uber.org/zap"
-	"slgserver/db"
-	"slgserver/log"
-	"slgserver/server/slgserver/static_conf/facility"
 	"time"
+
+	"github.com/llr104/slgserver/db"
+	"github.com/llr104/slgserver/log"
+	"github.com/llr104/slgserver/server/slgserver/static_conf/facility"
+	"go.uber.org/zap"
 )
 
 /*******db 操作begin********/

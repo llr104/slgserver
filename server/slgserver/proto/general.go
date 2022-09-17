@@ -1,6 +1,6 @@
 package proto
 
-import "slgserver/server/slgserver/static_conf"
+import "github.com/llr104/slgserver/server/slgserver/static_conf"
 
 type GSkill struct {
 	Id    int `json:"id"`

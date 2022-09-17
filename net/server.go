@@ -1,10 +1,11 @@
 package net
 
 import (
-	"github.com/gorilla/websocket"
-	"go.uber.org/zap"
 	"net/http"
-	"slgserver/log"
+
+	"github.com/gorilla/websocket"
+	"github.com/llr104/slgserver/log"
+	"go.uber.org/zap"
 )
 
 // http升级websocket协议的配置

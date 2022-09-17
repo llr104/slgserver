@@ -1,9 +1,9 @@
 package chatserver
 
 import (
-	"slgserver/db"
-	"slgserver/net"
-	"slgserver/server/chatserver/controller"
+	"github.com/llr104/slgserver/db"
+	"github.com/llr104/slgserver/net"
+	"github.com/llr104/slgserver/server/chatserver/controller"
 )
 
 var MyRouter = &net.Router{}

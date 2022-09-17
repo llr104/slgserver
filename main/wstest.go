@@ -2,13 +2,14 @@ package main
 
 import (
 	"fmt"
+	"time"
+
 	"github.com/forgoer/openssl"
 	"github.com/goinggo/mapstructure"
 	"github.com/gorilla/websocket"
-	"slgserver/net"
-	proto2 "slgserver/server/loginserver/proto"
-	"slgserver/util"
-	"time"
+	"github.com/llr104/slgserver/net"
+	proto2 "github.com/llr104/slgserver/server/loginserver/proto"
+	"github.com/llr104/slgserver/util"
 )
 
 var origin = "httpserver://127.0.0.1:8002/"

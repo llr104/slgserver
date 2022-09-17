@@ -1,13 +1,14 @@
 package controller
 
 import (
-	"github.com/labstack/echo/v4"
 	"net/http"
-	"slgserver/constant"
-	"slgserver/log"
-	myhttp "slgserver/server/httpserver"
-	"slgserver/server/httpserver/logic"
-	"slgserver/server/httpserver/middleware"
+
+	"github.com/labstack/echo/v4"
+	"github.com/llr104/slgserver/constant"
+	"github.com/llr104/slgserver/log"
+	myhttp "github.com/llr104/slgserver/server/httpserver"
+	"github.com/llr104/slgserver/server/httpserver/logic"
+	"github.com/llr104/slgserver/server/httpserver/middleware"
 )
 
 type AccountController struct{}

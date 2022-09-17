@@ -1,12 +1,13 @@
 package main
 
 import (
+	"log"
+
 	"github.com/labstack/echo/v4"
 	mw "github.com/labstack/echo/v4/middleware"
-	"log"
-	"slgserver/config"
-	"slgserver/db"
-	"slgserver/server/httpserver/controller"
+	"github.com/llr104/slgserver/config"
+	"github.com/llr104/slgserver/db"
+	"github.com/llr104/slgserver/server/httpserver/controller"
 )
 
 func main() {

@@ -1,9 +1,9 @@
 package check
 
 import (
-	"slgserver/server/slgserver/logic/mgr"
-	"slgserver/server/slgserver/logic/union"
-	"slgserver/util"
+	"github.com/llr104/slgserver/server/slgserver/logic/mgr"
+	"github.com/llr104/slgserver/server/slgserver/logic/union"
+	"github.com/llr104/slgserver/util"
 )
 
 //是否能到达

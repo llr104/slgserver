@@ -2,9 +2,10 @@ package middleware
 
 import (
 	"fmt"
+
+	"github.com/llr104/slgserver/log"
+	"github.com/llr104/slgserver/net"
 	"go.uber.org/zap"
-	"slgserver/log"
-	"slgserver/net"
 )
 
 func Log() net.MiddlewareFunc {

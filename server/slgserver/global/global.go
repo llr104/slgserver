@@ -1,6 +1,6 @@
 package global
 
-import "slgserver/config"
+import "github.com/llr104/slgserver/config"
 
 var MapWith = 200
 var MapHeight = 200

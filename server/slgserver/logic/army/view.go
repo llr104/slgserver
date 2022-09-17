@@ -1,10 +1,10 @@
 package army
 
 import (
-	"slgserver/server/slgserver/global"
-	"slgserver/server/slgserver/logic/mgr"
-	"slgserver/server/slgserver/logic/union"
-	"slgserver/util"
+	"github.com/llr104/slgserver/server/slgserver/global"
+	"github.com/llr104/slgserver/server/slgserver/logic/mgr"
+	"github.com/llr104/slgserver/server/slgserver/logic/union"
+	"github.com/llr104/slgserver/util"
 )
 
 var ViewWidth = 5

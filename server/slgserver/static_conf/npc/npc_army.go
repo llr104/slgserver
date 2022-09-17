@@ -3,13 +3,14 @@ package npc
 import (
 	"encoding/json"
 	"fmt"
-	"go.uber.org/zap"
 	"io/ioutil"
 	"math/rand"
 	"os"
 	"path"
-	"slgserver/config"
-	"slgserver/log"
+
+	"github.com/llr104/slgserver/config"
+	"github.com/llr104/slgserver/log"
+	"go.uber.org/zap"
 )
 
 var Cfg npc

@@ -1,10 +1,11 @@
 package logic
 
 import (
-	"slgserver/net"
-	"slgserver/server/chatserver/proto"
 	"sync"
 	"time"
+
+	"github.com/llr104/slgserver/net"
+	"github.com/llr104/slgserver/server/chatserver/proto"
 )
 
 type Group struct {

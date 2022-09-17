@@ -1,10 +1,10 @@
 package middleware
 
 import (
+	"github.com/llr104/slgserver/constant"
+	"github.com/llr104/slgserver/log"
+	"github.com/llr104/slgserver/net"
 	"go.uber.org/zap"
-	"slgserver/constant"
-	"slgserver/log"
-	"slgserver/net"
 )
 
 func CheckRole() net.MiddlewareFunc {

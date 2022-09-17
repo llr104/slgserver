@@ -1,15 +1,16 @@
 package army
 
 import (
-	"slgserver/server/slgserver/global"
-	"slgserver/server/slgserver/logic/check"
-	"slgserver/server/slgserver/logic/mgr"
-	"slgserver/server/slgserver/logic/war"
-	"slgserver/server/slgserver/model"
-	"slgserver/server/slgserver/static_conf"
-	"slgserver/util"
 	"sync"
 	"time"
+
+	"github.com/llr104/slgserver/server/slgserver/global"
+	"github.com/llr104/slgserver/server/slgserver/logic/check"
+	"github.com/llr104/slgserver/server/slgserver/logic/mgr"
+	"github.com/llr104/slgserver/server/slgserver/logic/war"
+	"github.com/llr104/slgserver/server/slgserver/model"
+	"github.com/llr104/slgserver/server/slgserver/static_conf"
+	"github.com/llr104/slgserver/util"
 )
 
 var _armyLogic *ArmyLogic = nil

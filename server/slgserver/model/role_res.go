@@ -2,11 +2,12 @@ package model
 
 import (
 	"fmt"
+
+	"github.com/llr104/slgserver/db"
+	"github.com/llr104/slgserver/log"
+	"github.com/llr104/slgserver/net"
+	"github.com/llr104/slgserver/server/slgserver/proto"
 	"go.uber.org/zap"
-	"slgserver/db"
-	"slgserver/log"
-	"slgserver/net"
-	"slgserver/server/slgserver/proto"
 )
 
 type Yield struct {

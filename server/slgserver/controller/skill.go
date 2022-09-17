@@ -2,22 +2,20 @@ package controller
 
 import (
 	"github.com/goinggo/mapstructure"
-	"slgserver/constant"
-	"slgserver/middleware"
-	"slgserver/net"
-	"slgserver/server/slgserver/logic/mgr"
-	"slgserver/server/slgserver/model"
-	"slgserver/server/slgserver/proto"
+	"github.com/llr104/slgserver/constant"
+	"github.com/llr104/slgserver/middleware"
+	"github.com/llr104/slgserver/net"
+	"github.com/llr104/slgserver/server/slgserver/logic/mgr"
+	"github.com/llr104/slgserver/server/slgserver/model"
+	"github.com/llr104/slgserver/server/slgserver/proto"
 )
 
-var DefaultSkill = Skill{
+var DefaultSkill = Skill{}
 
-}
 type Skill struct {
-
 }
 
-func (this*Skill) InitRouter(r *net.Router) {
+func (this *Skill) InitRouter(r *net.Router) {
 	g := r.Group("skill").Use(middleware.ElapsedTime(), middleware.Log(),
 		middleware.CheckLogin(), middleware.CheckRole())
 
@@ -25,7 +23,7 @@ func (this*Skill) InitRouter(r *net.Router) {
 
 }
 
-func (this*Skill) list(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+func (this *Skill) list(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	reqObj := &proto.SkillListReq{}
 	rspObj := &proto.SkillListRsp{}
 	mapstructure.Decode(req.Body.Msg, reqObj)

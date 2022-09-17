@@ -2,12 +2,13 @@ package model
 
 import (
 	"fmt"
-	"go.uber.org/zap"
-	"slgserver/db"
-	"slgserver/log"
-	"slgserver/net"
-	"slgserver/server/slgserver/proto"
 	"time"
+
+	"github.com/llr104/slgserver/db"
+	"github.com/llr104/slgserver/log"
+	"github.com/llr104/slgserver/net"
+	"github.com/llr104/slgserver/server/slgserver/proto"
+	"go.uber.org/zap"
 )
 
 type WarReport struct {

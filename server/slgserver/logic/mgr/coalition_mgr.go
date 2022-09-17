@@ -1,12 +1,13 @@
 package mgr
 
 import (
-	"go.uber.org/zap"
-	"slgserver/db"
-	"slgserver/log"
-	"slgserver/server/slgserver/model"
 	"sync"
 	"time"
+
+	"github.com/llr104/slgserver/db"
+	"github.com/llr104/slgserver/log"
+	"github.com/llr104/slgserver/server/slgserver/model"
+	"go.uber.org/zap"
 )
 
 type coalitionMgr struct {

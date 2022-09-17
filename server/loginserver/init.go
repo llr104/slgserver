@@ -1,11 +1,10 @@
 package loginserver
 
 import (
-	"slgserver/db"
-	"slgserver/net"
-	"slgserver/server/loginserver/controller"
+	"github.com/llr104/slgserver/db"
+	"github.com/llr104/slgserver/net"
+	"github.com/llr104/slgserver/server/loginserver/controller"
 )
-
 
 var MyRouter = &net.Router{}
 
@@ -18,4 +17,3 @@ func Init() {
 func initRouter() {
 	controller.DefaultAccount.InitRouter(MyRouter)
 }
-

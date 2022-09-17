@@ -1,18 +1,18 @@
 package run
 
 import (
-	"slgserver/config"
-	"slgserver/db"
-	"slgserver/net"
-	"slgserver/server/slgserver/controller"
-	"slgserver/server/slgserver/logic"
-	"slgserver/server/slgserver/logic/mgr"
-	"slgserver/server/slgserver/model"
-	"slgserver/server/slgserver/static_conf"
-	"slgserver/server/slgserver/static_conf/facility"
-	"slgserver/server/slgserver/static_conf/general"
-	"slgserver/server/slgserver/static_conf/npc"
-	"slgserver/server/slgserver/static_conf/skill"
+	"github.com/llr104/slgserver/config"
+	"github.com/llr104/slgserver/db"
+	"github.com/llr104/slgserver/net"
+	"github.com/llr104/slgserver/server/slgserver/controller"
+	"github.com/llr104/slgserver/server/slgserver/logic"
+	"github.com/llr104/slgserver/server/slgserver/logic/mgr"
+	"github.com/llr104/slgserver/server/slgserver/model"
+	"github.com/llr104/slgserver/server/slgserver/static_conf"
+	"github.com/llr104/slgserver/server/slgserver/static_conf/facility"
+	"github.com/llr104/slgserver/server/slgserver/static_conf/general"
+	"github.com/llr104/slgserver/server/slgserver/static_conf/npc"
+	"github.com/llr104/slgserver/server/slgserver/static_conf/skill"
 )
 
 var MyRouter = &net.Router{}

@@ -2,10 +2,11 @@ package middleware
 
 import (
 	"fmt"
-	"go.uber.org/zap"
-	"slgserver/log"
-	"slgserver/net"
 	"time"
+
+	"github.com/llr104/slgserver/log"
+	"github.com/llr104/slgserver/net"
+	"go.uber.org/zap"
 )
 
 func ElapsedTime() net.MiddlewareFunc {

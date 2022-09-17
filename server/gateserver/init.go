@@ -1,8 +1,8 @@
 package gateserver
 
 import (
-	"slgserver/net"
-	"slgserver/server/gateserver/controller"
+	"github.com/llr104/slgserver/net"
+	"github.com/llr104/slgserver/server/gateserver/controller"
 )
 
 var MyRouter = &net.Router{}
@@ -15,5 +15,3 @@ func Init() {
 func initRouter() {
 	controller.GHandle.InitRouter(MyRouter)
 }
-
-
