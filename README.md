@@ -33,7 +33,15 @@
 - 注意在goland中点击对应的进程 run 或者 debug 前需要将输出路径和工作路径都设置成bin目录，
   并且data目录已经拷贝到bin目录下，否则进程找不到运行的配置文件会异常终止
 
+### 服务部署
+
+**支持docker compose 一键部署，数据库和表都会创建好的，步骤如下：**
+
+1. **cd slgserver**
+2. **docker compose up**
+
 # 客户端截图
+
 ### 队伍征兵
 ![队伍征兵](https://s1.imagehub.cc/images/2021/04/23/d56cd91ba46b9ffd7b097dc4cb07bf5a.png)
 
