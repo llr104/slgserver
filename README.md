@@ -6,26 +6,27 @@
 **代码交流群：1054084192**
 
 ## 概要
-- 1.mysql数据落地，orm映射
-- 2.事件处理支持中间件
-- 3.服务器与服务器之间websocket连接
-- 4.服务器与服务器之间rpc调用
-- 5.高并发
+- mysql数据落地，orm映射
+- 事件处理支持中间件
+- 服务器与服务器之间websocket连接
+- 服务器与服务器之间rpc调用
+- 高并发
 
 ### 多进程服务
-- 1.httpserver  提供一些api调用
-- 2.gateserver  网关，可以部署多个进行负债均衡，客户端的所有loginserver、chatserver、slgserver的消息都通过该服进行转发
-- 3.loginserver 登录服，可以部署多个进行负债均衡
-- 4.chatserver  聊天服，可以部署多个，原则上一个slgserver对应一个chatserver
-- 5.slgserver   游戏服，可以部署多个，不同服之间的玩家数据不共通
+- httpserver  提供一些api调用
+- gateserver  网关，可以部署多个进行负债均衡，客户端的所有loginserver、chatserver、slgserver的消息都通过该服进行转发
+- loginserver 登录服，可以部署多个进行负债均衡
+- chatserver  聊天服，可以部署多个，原则上一个slgserver对应一个chatserver
+- slgserver   游戏服，可以部署多个，不同服之间的玩家数据不共通
 
 ### 服务端使用简要介绍
+- cd slgserver
 - 项目已经使用go mod管理，推荐使用goland打开
 - 创建MySQL数据库：在MySQL中执行 data/conf/db.sql 文件创建服务所需的数据库，库名默认为slgdb
 - 修改配置： 修改 data/conf/env.ini 中数据库的配置，主要是密码、端口修改成自己所使用的一致即可，其他保持默认即可
 - 拉取依赖包：命令行执行 go mod tidy
 - 生成可执行程序： main 目录下包含了 httpserver、gateserver、loginserver、chatserver、slgserver 5个进程的代码，
-  通过 go build xxxserver.go(上方5个进程源代码)即可生成 5个进程执行文件，在windows环境下也可以在直接执行 shell/build.bat
+  通过 go build main/xxxserver.go(上方5个进程源代码)即可生成 5个进程执行文件，在windows环境下也可以在直接执行 shell/build.bat
   生成5个进程可执行文件，可执行文件会存放在bin目录下
 - 复制配置文件到工作目录：将data文件夹拷贝到bin目录下，5个进程会用到data里的配置， window环境可以运行shell/copydata.bat完成拷贝操作
 - 启动运行：启动5个进程，无顺序要求，windows环境下可以运行shell/run.bat代劳
