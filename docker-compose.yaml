@@ -8,7 +8,7 @@ networks:
         - subnet: '177.8.0.0/16'
 
 services:
-  slg_mysql:
+  mysql:
     build:
       context: ./
       dockerfile: ./Dockerfile-mysql
@@ -69,7 +69,7 @@ services:
       - ./data:/go/src/github.com/llr104/slgserver/data
       - ./logs:/go/src/github.com/llr104/slgserver/logs
     depends_on:
-      - slg_mysql
+      - mysql
     networks:
       network:
         ipv4_address: 177.8.0.14
@@ -86,7 +86,7 @@ services:
       - ./data:/go/src/github.com/llr104/slgserver/data
       - ./logs:/go/src/github.com/llr104/slgserver/logs
     depends_on:
-      - slg_mysql
+      - mysql
     networks:
       network:
         ipv4_address: 177.8.0.15
@@ -103,7 +103,7 @@ services:
       - ./data:/go/src/github.com/llr104/slgserver/data
       - ./logs:/go/src/github.com/llr104/slgserver/logs
     depends_on:
-      - slg_mysql
+      - mysql
     networks:
       network:
         ipv4_address: 177.8.0.16

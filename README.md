@@ -5,7 +5,7 @@
 
 **代码交流群：1054084192**
 
-### 概要
+## 概要
 - 1.mysql数据落地，orm映射
 - 2.事件处理支持中间件
 - 3.服务器与服务器之间websocket连接
@@ -35,12 +35,29 @@
 
 ### 服务部署
 
-**支持docker compose 一键部署，数据库和表都会创建好的，步骤如下：**
+**支持docker-compose 一键部署，数据库和表都会创建好的，步骤如下：**
 
-1. **cd slgserver**
-2. **docker compose up**
+1. **部署需要编译go源码，编译比较占内存，内存2G以下有可能编译不成功，请保证编译内存在2G以上**
 
-# 客户端截图
+2. **cd slgserver**
+
+3. **docker-compose up**
+
+4. **修改客户端 GameConfig.ts 文件中的连接地址**
+
+   ```typescript
+   import { _decorator } from 'cc';
+   const GameConfig = {
+       serverUrl: "ws://127.0.0.1:8004", //httpserver 地址
+       webUrl: "http://127.0.0.1:8088",  //gateserver 地址
+   }
+   export { GameConfig };
+   
+   ```
+
+   
+
+## 客户端截图
 
 ### 队伍征兵
 ![队伍征兵](https://s1.imagehub.cc/images/2021/04/23/d56cd91ba46b9ffd7b097dc4cb07bf5a.png)
