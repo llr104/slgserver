@@ -3,8 +3,6 @@ package config
 import (
 	"fmt"
 	"os"
-	"os/exec"
-	"path/filepath"
 	"strings"
 
 	"github.com/Unknwon/goconfig"
@@ -18,33 +16,15 @@ var (
 const mainIniPath = "/data/conf/env.ini"
 
 func init() {
-	curFilename := os.Args[0]
-	binaryPath, err := exec.LookPath(curFilename)
-	if err != nil {
-		panic(err)
-	}
 
-	binaryPath, err = filepath.Abs(binaryPath)
-	if err != nil {
-		panic(err)
-	}
-
-	ROOT = filepath.Dir(filepath.Dir(binaryPath))
+	curDir, _ := os.Getwd()
+	ROOT = curDir
 
 	configPath := ROOT + mainIniPath
 
-	if !fileExist(configPath) {
-		curDir, _ := os.Getwd()
-		pos := strings.LastIndex(curDir, "src")
-		if pos == -1 {
-			fmt.Println("can't find " + mainIniPath)
-		} else {
-			ROOT = curDir[:pos]
-			configPath = ROOT + mainIniPath
-		}
-	}
+	file, err := goconfig.LoadConfigFile(configPath)
+	File = file
 
-	File, err = goconfig.LoadConfigFile(configPath)
 	if err != nil {
 		fmt.Println("load config file error:", err)
 		File, _ = goconfig.LoadFromData([]byte(""))

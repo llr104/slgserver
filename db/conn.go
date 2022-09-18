@@ -2,7 +2,6 @@ package db
 
 import (
 	"database/sql"
-	"errors"
 	"fmt"
 	"os"
 
@@ -15,11 +14,6 @@ import (
 var MasterDB *xorm.Engine
 
 var dns string
-
-var (
-	ConnectDBErr = errors.New("connect db error")
-	UseDBErr     = errors.New("use db error")
-)
 
 // TestDB 测试数据库
 func TestDB() error {
@@ -45,7 +39,7 @@ func TestDB() error {
 	// 测试数据库连接是否 OK
 	if err = egnine.Ping(); err != nil {
 		fmt.Println("ping db error:", err)
-		return ConnectDBErr
+		panic(err)
 	}
 
 	_, err = egnine.Exec("use " + mysqlConfig["dbname"])
@@ -54,8 +48,7 @@ func TestDB() error {
 		_, err = egnine.Exec("CREATE DATABASE " + mysqlConfig["dbname"] + " DEFAULT CHARACTER SET " + mysqlConfig["charset"])
 		if err != nil {
 			fmt.Println("create database error:", err)
-
-			return UseDBErr
+			panic(err)
 		}
 
 		fmt.Println("create database successfully!")
@@ -71,7 +64,6 @@ func Init() error {
 		fmt.Println("get mysql config error:", err)
 		return err
 	}
-
 
 	// 启动时就打开数据库连接
 	if err = initEngine(mysqlConfig); err != nil {
@@ -112,7 +104,7 @@ func initEngine(mysqlConfig map[string]string) error {
 	logLevel := config.File.MustInt("xorm", "log_level", 1)
 	logFile := config.File.MustValue("xorm", "log_file", "")
 
-	if logFile != ""{
+	if logFile != "" {
 		f, _ := os.Create(logFile)
 		MasterDB.SetLogger(log.NewSimpleLogger(f))
 	}
