@@ -1,0 +1,109 @@
+version: "3"
+
+networks:
+  network:
+    ipam:
+      driver: default
+      config:
+        - subnet: '177.8.0.0/16'
+
+services:
+  slg_mysql:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile-mysql
+    container_name: slg-mysql
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci #设置utf8字符集
+    restart: always
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456abc
+      - MYSQL_USER=slg
+      - MYSQL_PASSWORD=123456abc
+    networks:
+      network:
+        ipv4_address: 177.8.0.11
+
+  chat:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile-chat
+    container_name: slg-chat
+    restart: always
+    ports:
+      - '8002:8002'
+    volumes:
+      - ./data:/go/src/github.com/llr104/slgserver/data
+      - ./logs:/go/src/github.com/llr104/slgserver/logs
+    networks:
+      network:
+        ipv4_address: 177.8.0.12
+
+  gate:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile-gate
+    container_name: slg-gate
+    restart: always
+    ports:
+      - '8004:8004'
+    volumes:
+      - ./data:/go/src/github.com/llr104/slgserver/data
+      - ./logs:/go/src/github.com/llr104/slgserver/logs
+    networks:
+      network:
+        ipv4_address: 177.8.0.13
+
+  http:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile-http
+    container_name: slg-http
+    restart: always
+    ports:
+      - '8088:8088'
+    volumes:
+      - ./data:/go/src/github.com/llr104/slgserver/data
+      - ./logs:/go/src/github.com/llr104/slgserver/logs
+    depends_on:
+      - slg_mysql
+    networks:
+      network:
+        ipv4_address: 177.8.0.14
+
+  login:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile-login
+    container_name: slg-login
+    restart: always
+    ports:
+      - '8003:8003'
+    volumes:
+      - ./data:/go/src/github.com/llr104/slgserver/data
+      - ./logs:/go/src/github.com/llr104/slgserver/logs
+    depends_on:
+      - slg_mysql
+    networks:
+      network:
+        ipv4_address: 177.8.0.15
+
+  slg:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile-slg
+    container_name: slg-slg
+    restart: always
+    ports:
+      - '8001:8001'
+    volumes:
+      - ./data:/go/src/github.com/llr104/slgserver/data
+      - ./logs:/go/src/github.com/llr104/slgserver/logs
+    depends_on:
+      - slg_mysql
+    networks:
+      network:
+        ipv4_address: 177.8.0.16
