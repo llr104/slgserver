@@ -4,14 +4,15 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"go.uber.org/zap"
-	"slgserver/db"
-	"slgserver/log"
-	"slgserver/net"
-	"slgserver/server/slgserver/proto"
-	"slgserver/server/slgserver/static_conf"
-	"slgserver/server/slgserver/static_conf/general"
 	"time"
+
+	"github.com/llr104/slgserver/db"
+	"github.com/llr104/slgserver/log"
+	"github.com/llr104/slgserver/net"
+	"github.com/llr104/slgserver/server/slgserver/proto"
+	"github.com/llr104/slgserver/server/slgserver/static_conf"
+	"github.com/llr104/slgserver/server/slgserver/static_conf/general"
+	"go.uber.org/zap"
 	"xorm.io/xorm"
 )
 

@@ -2,14 +2,15 @@ package logic
 
 import (
 	"fmt"
-	"github.com/labstack/echo/v4"
 	"math/rand"
-	"slgserver/constant"
-	"slgserver/db"
-	myhttp "slgserver/server/httpserver"
-	"slgserver/server/loginserver/model"
-	"slgserver/util"
 	"time"
+
+	"github.com/labstack/echo/v4"
+	"github.com/llr104/slgserver/constant"
+	"github.com/llr104/slgserver/db"
+	myhttp "github.com/llr104/slgserver/server/httpserver"
+	"github.com/llr104/slgserver/server/loginserver/model"
+	"github.com/llr104/slgserver/util"
 )
 
 type UserLogic struct{}

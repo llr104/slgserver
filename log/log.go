@@ -1,14 +1,15 @@
 package log
 
 import (
-	"go.uber.org/zap"
-	"go.uber.org/zap/zapcore"
-	"gopkg.in/natefinch/lumberjack.v2"
 	"os"
 	"path"
 	"path/filepath"
-	"slgserver/config"
 	"strings"
+
+	"github.com/llr104/slgserver/config"
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
+	"gopkg.in/natefinch/lumberjack.v2"
 )
 
 var DefaultLog *zap.Logger

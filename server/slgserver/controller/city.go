@@ -2,22 +2,20 @@ package controller
 
 import (
 	"github.com/goinggo/mapstructure"
-	"slgserver/constant"
-	"slgserver/middleware"
-	"slgserver/net"
-	"slgserver/server/slgserver/logic/mgr"
-	"slgserver/server/slgserver/model"
-	"slgserver/server/slgserver/proto"
+	"github.com/llr104/slgserver/constant"
+	"github.com/llr104/slgserver/middleware"
+	"github.com/llr104/slgserver/net"
+	"github.com/llr104/slgserver/server/slgserver/logic/mgr"
+	"github.com/llr104/slgserver/server/slgserver/model"
+	"github.com/llr104/slgserver/server/slgserver/proto"
 )
 
-var DefaultCity = City{
+var DefaultCity = City{}
 
-}
 type City struct {
-
 }
 
-func (this*City) InitRouter(r *net.Router) {
+func (this *City) InitRouter(r *net.Router) {
 	g := r.Group("city").Use(middleware.ElapsedTime(), middleware.Log(),
 		middleware.CheckLogin(), middleware.CheckRole())
 
@@ -26,7 +24,7 @@ func (this*City) InitRouter(r *net.Router) {
 
 }
 
-func (this*City) facilities(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+func (this *City) facilities(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	reqObj := &proto.FacilitiesReq{}
 	rspObj := &proto.FacilitiesRsp{}
 	mapstructure.Decode(req.Body.Msg, reqObj)
@@ -66,7 +64,7 @@ func (this*City) facilities(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 }
 
 //升级需要耗费时间，为了减少定时任务，升级这里做成被动触发产生，不做定时任务
-func (this*City) upFacility(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+func (this *City) upFacility(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	reqObj := &proto.UpFacilityReq{}
 	rspObj := &proto.UpFacilityRsp{}
 	mapstructure.Decode(req.Body.Msg, reqObj)
@@ -93,15 +91,15 @@ func (this*City) upFacility(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	out, errCode := mgr.RFMgr.UpFacility(role.RId ,reqObj.CityId, reqObj.FType)
+	out, errCode := mgr.RFMgr.UpFacility(role.RId, reqObj.CityId, reqObj.FType)
 	rsp.Body.Code = errCode
-	if errCode == constant.OK{
+	if errCode == constant.OK {
 		rspObj.Facility.Level = out.GetLevel()
 		rspObj.Facility.Type = out.Type
 		rspObj.Facility.Name = out.Name
 		rspObj.Facility.UpTime = out.UpTime
 
-		if roleRes, ok:= mgr.RResMgr.Get(role.RId); ok {
+		if roleRes, ok := mgr.RResMgr.Get(role.RId); ok {
 			rspObj.RoleRes = roleRes.ToProto().(proto.RoleRes)
 		}
 	}

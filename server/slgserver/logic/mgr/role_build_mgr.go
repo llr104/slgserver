@@ -1,16 +1,17 @@
 package mgr
 
 import (
-	"go.uber.org/zap"
-	"slgserver/constant"
-	"slgserver/db"
-	"slgserver/log"
-	"slgserver/server/slgserver/global"
-	"slgserver/server/slgserver/model"
-	"slgserver/server/slgserver/static_conf"
-	"slgserver/util"
 	"sync"
 	"time"
+
+	"github.com/llr104/slgserver/constant"
+	"github.com/llr104/slgserver/db"
+	"github.com/llr104/slgserver/log"
+	"github.com/llr104/slgserver/server/slgserver/global"
+	"github.com/llr104/slgserver/server/slgserver/model"
+	"github.com/llr104/slgserver/server/slgserver/static_conf"
+	"github.com/llr104/slgserver/util"
+	"go.uber.org/zap"
 )
 
 

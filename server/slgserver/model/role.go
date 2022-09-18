@@ -2,8 +2,9 @@ package model
 
 import (
 	"fmt"
-	"slgserver/server/slgserver/proto"
 	"time"
+
+	"github.com/llr104/slgserver/server/slgserver/proto"
 )
 
 type Role struct {

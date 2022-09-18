@@ -3,17 +3,16 @@ package net
 import (
 	"errors"
 	"fmt"
+	"sync"
+	"time"
+
 	"github.com/forgoer/openssl"
 	"github.com/goinggo/mapstructure"
 	"github.com/gorilla/websocket"
+	"github.com/llr104/slgserver/log"
+	"github.com/llr104/slgserver/util"
 	"go.uber.org/zap"
-	"slgserver/log"
-	"slgserver/util"
-	"sync"
-	"time"
 )
-
-
 
 // 客户端连接
 type ServerConn struct {

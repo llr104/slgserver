@@ -3,15 +3,16 @@ package model
 import (
 	"encoding/json"
 	"fmt"
-	"go.uber.org/zap"
-	"slgserver/db"
-	"slgserver/log"
-	"slgserver/net"
-	"slgserver/server/slgserver/global"
-	"slgserver/server/slgserver/proto"
-	"slgserver/server/slgserver/static_conf"
-	"slgserver/util"
 	"time"
+
+	"github.com/llr104/slgserver/db"
+	"github.com/llr104/slgserver/log"
+	"github.com/llr104/slgserver/net"
+	"github.com/llr104/slgserver/server/slgserver/global"
+	"github.com/llr104/slgserver/server/slgserver/proto"
+	"github.com/llr104/slgserver/server/slgserver/static_conf"
+	"github.com/llr104/slgserver/util"
+	"go.uber.org/zap"
 	"xorm.io/xorm"
 )
 

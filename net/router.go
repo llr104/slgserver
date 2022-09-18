@@ -1,9 +1,10 @@
 package net
 
 import (
-	"go.uber.org/zap"
-	"slgserver/log"
 	"strings"
+
+	"github.com/llr104/slgserver/log"
+	"go.uber.org/zap"
 )
 
 type HandlerFunc func(req *WsMsgReq, rsp *WsMsgRsp)

@@ -1,13 +1,13 @@
-
 package db
 
 import (
 	"database/sql"
 	"errors"
 	"fmt"
-	_ "github.com/go-sql-driver/mysql"
 	"os"
-	"slgserver/config"
+
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/llr104/slgserver/config"
 	"xorm.io/xorm"
 	"xorm.io/xorm/log"
 )

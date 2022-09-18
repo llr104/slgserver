@@ -1,17 +1,18 @@
 package controller
 
 import (
-	"github.com/goinggo/mapstructure"
-	"go.uber.org/zap"
-	"slgserver/config"
-	"slgserver/constant"
-	"slgserver/log"
-	"slgserver/middleware"
-	"slgserver/net"
-	chat_proto "slgserver/server/chatserver/proto"
-	"slgserver/server/slgserver/proto"
 	"strings"
 	"sync"
+
+	"github.com/goinggo/mapstructure"
+	"github.com/llr104/slgserver/config"
+	"github.com/llr104/slgserver/constant"
+	"github.com/llr104/slgserver/log"
+	"github.com/llr104/slgserver/middleware"
+	"github.com/llr104/slgserver/net"
+	chat_proto "github.com/llr104/slgserver/server/chatserver/proto"
+	"github.com/llr104/slgserver/server/slgserver/proto"
+	"go.uber.org/zap"
 )
 
 var GHandle = Handle{

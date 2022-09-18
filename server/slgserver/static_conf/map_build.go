@@ -3,15 +3,14 @@ package static_conf
 import (
 	"encoding/json"
 	"fmt"
-	"go.uber.org/zap"
 	"io/ioutil"
 	"os"
 	"path"
-	"slgserver/config"
-	"slgserver/log"
+
+	"github.com/llr104/slgserver/config"
+	"github.com/llr104/slgserver/log"
+	"go.uber.org/zap"
 )
-
-
 
 //地图资源配置
 var MapBuildConf mapBuildConf

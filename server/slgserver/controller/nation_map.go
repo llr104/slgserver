@@ -2,23 +2,22 @@ package controller
 
 import (
 	"github.com/goinggo/mapstructure"
-	"slgserver/constant"
-	"slgserver/middleware"
-	"slgserver/net"
-	"slgserver/server/slgserver/logic"
-	"slgserver/server/slgserver/logic/mgr"
-	"slgserver/server/slgserver/model"
-	"slgserver/server/slgserver/proto"
-	"slgserver/server/slgserver/static_conf"
+	"github.com/llr104/slgserver/constant"
+	"github.com/llr104/slgserver/middleware"
+	"github.com/llr104/slgserver/net"
+	"github.com/llr104/slgserver/server/slgserver/logic"
+	"github.com/llr104/slgserver/server/slgserver/logic/mgr"
+	"github.com/llr104/slgserver/server/slgserver/model"
+	"github.com/llr104/slgserver/server/slgserver/proto"
+	"github.com/llr104/slgserver/server/slgserver/static_conf"
 )
 
 var DefaultMap = NationMap{}
 
 type NationMap struct {
-
 }
 
-func (this*NationMap) InitRouter(r *net.Router) {
+func (this *NationMap) InitRouter(r *net.Router) {
 	g := r.Group("nationMap").Use(middleware.ElapsedTime(), middleware.Log())
 	g.AddRouter("config", this.config)
 	g.AddRouter("scan", this.scan, middleware.CheckRole())
@@ -33,7 +32,7 @@ func (this*NationMap) InitRouter(r *net.Router) {
 /*
 获取配置
 */
-func (this*NationMap) config(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+func (this *NationMap) config(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	reqObj := &proto.ConfigReq{}
 	rspObj := &proto.ConfigRsp{}
 	mapstructure.Decode(req.Body.Msg, reqObj)
@@ -60,7 +59,7 @@ func (this*NationMap) config(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 /*
 扫描地图
 */
-func (this*NationMap) scan(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+func (this *NationMap) scan(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	reqObj := &proto.ScanReq{}
 	rspObj := &proto.ScanRsp{}
 	mapstructure.Decode(req.Body.Msg, reqObj)
@@ -83,7 +82,7 @@ func (this*NationMap) scan(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	}
 }
 
-func (this*NationMap) scanBlock(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+func (this *NationMap) scanBlock(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	reqObj := &proto.ScanBlockReq{}
 	rspObj := &proto.ScanRsp{}
 	mapstructure.Decode(req.Body.Msg, reqObj)
@@ -116,7 +115,7 @@ func (this*NationMap) scanBlock(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 }
 
-func (this*NationMap) giveUp(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+func (this *NationMap) giveUp(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	reqObj := &proto.GiveUpReq{}
 	rspObj := &proto.GiveUpRsp{}
 	mapstructure.Decode(req.Body.Msg, reqObj)
@@ -132,7 +131,7 @@ func (this*NationMap) giveUp(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
 
-	if mgr.RBMgr.BuildIsRId(x, y, role.RId) == false{
+	if mgr.RBMgr.BuildIsRId(x, y, role.RId) == false {
 		rsp.Body.Code = constant.BuildNotMe
 		return
 	}
@@ -141,7 +140,7 @@ func (this*NationMap) giveUp(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 }
 
 //建造
-func (this*NationMap) build(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+func (this *NationMap) build(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	reqObj := &proto.BuildReq{}
 	rspObj := &proto.BuildRsp{}
 	mapstructure.Decode(req.Body.Msg, reqObj)
@@ -157,7 +156,7 @@ func (this*NationMap) build(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
 
-	if mgr.RBMgr.BuildIsRId(x, y, role.RId) == false{
+	if mgr.RBMgr.BuildIsRId(x, y, role.RId) == false {
 		rsp.Body.Code = constant.BuildNotMe
 		return
 	}
@@ -168,19 +167,19 @@ func (this*NationMap) build(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	if b.IsResBuild() == false || b.IsBusy(){
+	if b.IsResBuild() == false || b.IsBusy() {
 		rsp.Body.Code = constant.CanNotBuildNew
 		return
 	}
 
 	cnt := mgr.RBMgr.RoleFortressCnt(role.RId)
-	if cnt >= static_conf.Basic.Build.FortressLimit{
+	if cnt >= static_conf.Basic.Build.FortressLimit {
 		rsp.Body.Code = constant.CanNotBuildNew
 		return
 	}
 
 	cfg, ok := static_conf.MapBCConf.BuildConfig(reqObj.Type, 1)
-	if ok == false{
+	if ok == false {
 		rsp.Body.Code = constant.InvalidParam
 		return
 	}
@@ -196,8 +195,7 @@ func (this*NationMap) build(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 
 }
 
-
-func (this*NationMap) upBuild(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+func (this *NationMap) upBuild(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	reqObj := &proto.UpBuildReq{}
 	rspObj := &proto.UpBuildRsp{}
 	mapstructure.Decode(req.Body.Msg, reqObj)
@@ -213,7 +211,7 @@ func (this*NationMap) upBuild(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
 
-	if mgr.RBMgr.BuildIsRId(x, y, role.RId) == false{
+	if mgr.RBMgr.BuildIsRId(x, y, role.RId) == false {
 		rsp.Body.Code = constant.BuildNotMe
 		return
 	}
@@ -224,14 +222,13 @@ func (this*NationMap) upBuild(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 		return
 	}
 
-	if b.IsHaveModifyLVAuth() == false || b.IsInGiveUp() || b.IsBusy(){
+	if b.IsHaveModifyLVAuth() == false || b.IsInGiveUp() || b.IsBusy() {
 		rsp.Body.Code = constant.CanNotUpBuild
 		return
 	}
 
-
 	cfg, ok := static_conf.MapBCConf.BuildConfig(b.Type, b.Level+1)
-	if ok == false{
+	if ok == false {
 		rsp.Body.Code = constant.InvalidParam
 		return
 	}
@@ -246,7 +243,7 @@ func (this*NationMap) upBuild(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	rspObj.Build = b.ToProto().(proto.MapRoleBuild)
 }
 
-func (this*NationMap) delBuild(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
+func (this *NationMap) delBuild(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	reqObj := &proto.UpBuildReq{}
 	rspObj := &proto.UpBuildRsp{}
 	mapstructure.Decode(req.Body.Msg, reqObj)
@@ -262,7 +259,7 @@ func (this*NationMap) delBuild(req *net.WsMsgReq, rsp *net.WsMsgRsp) {
 	r, _ := req.Conn.GetProperty("role")
 	role := r.(*model.Role)
 
-	if mgr.RBMgr.BuildIsRId(x, y, role.RId) == false{
+	if mgr.RBMgr.BuildIsRId(x, y, role.RId) == false {
 		rsp.Body.Code = constant.BuildNotMe
 		return
 	}

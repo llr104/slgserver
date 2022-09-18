@@ -3,9 +3,10 @@ package main
 import (
 	"fmt"
 	"os"
-	"slgserver/config"
-	"slgserver/net"
-	"slgserver/server/chatserver"
+
+	"github.com/llr104/slgserver/config"
+	"github.com/llr104/slgserver/net"
+	"github.com/llr104/slgserver/server/chatserver"
 )
 
 func getChatServerAddr() string {

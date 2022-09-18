@@ -1,11 +1,12 @@
 package logic
 
 import (
-	"slgserver/server/slgserver/logic/army"
-	"slgserver/server/slgserver/logic/mgr"
-	"slgserver/server/slgserver/logic/union"
-	"slgserver/server/slgserver/model"
 	"time"
+
+	"github.com/llr104/slgserver/server/slgserver/logic/army"
+	"github.com/llr104/slgserver/server/slgserver/logic/mgr"
+	"github.com/llr104/slgserver/server/slgserver/logic/union"
+	"github.com/llr104/slgserver/server/slgserver/model"
 )
 
 var Union *union.UnionLogic

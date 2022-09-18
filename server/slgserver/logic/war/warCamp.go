@@ -2,10 +2,11 @@ package war
 
 import (
 	"math/rand"
-	"slgserver/server/slgserver/logic/mgr"
-	"slgserver/server/slgserver/model"
-	"slgserver/server/slgserver/static_conf/facility"
-	"slgserver/server/slgserver/static_conf/skill"
+
+	"github.com/llr104/slgserver/server/slgserver/logic/mgr"
+	"github.com/llr104/slgserver/server/slgserver/model"
+	"github.com/llr104/slgserver/server/slgserver/static_conf/facility"
+	"github.com/llr104/slgserver/server/slgserver/static_conf/skill"
 )
 
 type attachSkill struct {
