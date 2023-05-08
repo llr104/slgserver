@@ -61,43 +61,44 @@
 ## 客户端截图
 
 ### 队伍征兵
-![队伍征兵](./img/01.png)
+![队伍征兵](https://s1.imagehub.cc/images/2023/05/08/01.png)
 
 ### 占领领地
-![占领领地](./img/02.png)
+![占领领地](https://s1.imagehub.cc/images/2023/05/08/02.png)
 
 ### 出征返回
-![出征返回](./img/03.png)
+![出征返回](https://s1.imagehub.cc/images/2023/05/08/03.png)
 
 ### 城内设施
-![城内设施](./img/10.png)
+![城内设施](https://s1.imagehub.cc/images/2023/05/08/10.png)
 
 ### 武将
-![武将](./img/11.png)
+![武将](https://s1.imagehub.cc/images/2023/05/08/11a2c81d5956c6dee0.png)
 
 ### 武将详情
-![武将详情](./img/12.png)
+![武将详情](https://s1.imagehub.cc/images/2023/05/08/12.png)
 
 ### 友方主城
-![友方主城](./img/04.png)
+![友方主城](https://s1.imagehub.cc/images/2023/05/08/04.png)
 
 ### 敌方主城
-![敌方主城](./img/05.png)
+![敌方主城](https://s1.imagehub.cc/images/2023/05/08/05.png)
 
 ### 军队前往敌方主城
-![军队前往敌方主城](./img/06.png)
+![军队前往敌方主城](https://s1.imagehub.cc/images/2023/05/08/06.png)
 
 ### 抽卡结果
-![抽卡结果](./img/07.png)
+![抽卡结果](https://s1.imagehub.cc/images/2023/05/08/07.png)
 
 ### 战报
-![战报](./img/13.png)
+![战报](https://s1.imagehub.cc/images/2023/05/08/13.png)
 
 ### 技能
-![技能](./img/08.png)
+![技能](https://s1.imagehub.cc/images/2023/05/08/08.png)
 
 ### 联盟
-![联盟](./img/09.png)
+![联盟](https://s1.imagehub.cc/images/2023/05/08/09.png)
 
 ### 聊天
-![聊天](./img/14.png)
+![聊天](https://s1.imagehub.cc/images/2023/05/08/14.png)
+
