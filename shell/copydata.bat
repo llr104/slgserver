@@ -1,2 +1,2 @@
-xcopy ..\data\*.* ..\bin /e
+xcopy ..\data\*.* ..\bin\data /e
 pause
