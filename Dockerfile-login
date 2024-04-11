@@ -10,7 +10,7 @@ RUN go env -w GO111MODULE=on \
     && go mod tidy \
     && go build -o loginserver ./main/loginserver.go
 
-FROM golang:alpine
+FROM scratch
 
 
 WORKDIR /go/src/github.com/llr104/slgserver
@@ -19,4 +19,4 @@ COPY --from=0 /go/src/github.com/llr104/slgserver/loginserver ./
 COPY --from=0 /go/src/github.com/llr104/slgserver/data ./data/
 
 EXPOSE 8003
-ENTRYPOINT ./loginserver
+CMD ["./loginserver"]

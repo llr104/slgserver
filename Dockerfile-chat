@@ -11,7 +11,7 @@ RUN go env -w GO111MODULE=on \
     && go mod tidy \
     && go build -o chatserver ./main/chatserver.go
 
-FROM golang:alpine
+FROM scratch
 
 
 
@@ -21,4 +21,4 @@ COPY --from=0 /go/src/github.com/llr104/slgserver/chatserver ./
 COPY --from=0 /go/src/github.com/llr104/slgserver/data ./data/
 
 EXPOSE 8002
-ENTRYPOINT ./chatserver
+CMD ["./chatserver"]
