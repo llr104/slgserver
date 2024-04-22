@@ -11,13 +11,13 @@ RUN go env -w GO111MODULE=on \
     && go mod tidy \
     && go build -o httpserver ./main/httpserver.go
 
-FROM golang:alpine
+FROM alpine as final
 
 
 WORKDIR /go/src/github.com/llr104/slgserver
 
-COPY --from=0 /go/src/github.com/llr104/slgserver/httpserver ./
-COPY --from=0 /go/src/github.com/llr104/slgserver/data ./data/
+COPY --from=builder /go/src/github.com/llr104/slgserver/httpserver ./
+COPY --from=builder /go/src/github.com/llr104/slgserver/data ./data/
 
 EXPOSE 8088
 ENTRYPOINT ./httpserver
