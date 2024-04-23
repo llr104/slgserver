@@ -3,7 +3,8 @@ FROM golang:alpine as builder
 WORKDIR /go/src/github.com/llr104/slgserver
 COPY . .
 
-RUN go env -w GO111MODULE=on \
+RUN apk --no-cache add tzdata \
+    && go env -w GO111MODULE=on \
     && go env -w GOPROXY=https://goproxy.cn,direct \
     && go env -w CGO_ENABLED=0 \
     && go env \
@@ -16,6 +17,8 @@ WORKDIR /go/src/github.com/llr104/slgserver
 
 COPY --from=builder /go/src/github.com/llr104/slgserver/slgserver ./
 COPY --from=builder /go/src/github.com/llr104/slgserver/data ./data/
+COPY --from=builder /usr/share/zoneinfo /usr/share/zoneinfo
+ENV TZ=Asia/Shanghai
 
 EXPOSE 8001
 ENTRYPOINT ./slgserver
